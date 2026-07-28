@@ -19,9 +19,9 @@ class ProductService {
                 p.unit_type As unitType,
                 p.is_active As isActive,
                 p.created_at As createdAt,
-                p.update_at As updateAt,
+                p.updated_at As updateAt,
                 c.category_name As categoryName
-            FROM product As p
+            FROM products As p
             LEFT JOIN product_categories AS c
             ON p.id_category = c.id_category
             ORDER BY p.product_name
@@ -70,7 +70,6 @@ class ProductService {
 
 
 
-
     //Add new Product
     public async addProduct(product:ProductModel):Promise<ProductModel>{
         const sql = `
@@ -115,10 +114,11 @@ class ProductService {
                 catalog_number = ?,
                 id_category = ?,
                 product_cost = ?,
+                product_price =?,
                 product_stock = ?,
                 minimum_stock = ?,
                 unit_type = ?,
-                is_active = ?,
+                is_active = ?
             WHERE id_product = ?
         `
 
@@ -168,7 +168,7 @@ class ProductService {
                 p.id_product AS idProduct,
                 p.product_name AS productName,
                 p.catalog_number As catalogNumber,
-                p.id_category Ad idCategory,
+                p.id_category As idCategory,
                 p.product_cost AS productCost,
                 p.product_price AS productPrice,
                 p.product_stock AS productStock,
