@@ -6,6 +6,7 @@ import { userController } from "./controllers/users-controller";
 import { eventController } from "./controllers/events-controller";
 import { categoriesController } from "./controllers/categories-controller";
 import { productController } from "./controllers/product-controller";
+import { supplierController } from "./controllers/supplier-controller";
 
 
 
@@ -23,6 +24,7 @@ class App {
             server.use(userController.router);
             server.use(categoriesController.router);
             server.use(productController.router);
+            server.use(supplierController.router);
 
             server.listen(appConfig.port, ()=> console.log("Listening on http://localhost:  " + appConfig.port));
     
