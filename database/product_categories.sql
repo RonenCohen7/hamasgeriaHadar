@@ -1,0 +1,8 @@
+CREATE TABLE product_categories (
+    id_category INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+
+    category_name VARCHAR(100) NOT NULL UNIQUE,
+    description VARCHAR(255),
+
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
