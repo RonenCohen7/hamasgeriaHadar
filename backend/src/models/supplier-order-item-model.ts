@@ -11,20 +11,14 @@ export class SupplierOrderItemModel {
     catalogNumber?: string;
 }
 
-
 export class AddSupplierOrderItemDto {
     idProduct!: number;
     quantityOrdered!: number;
-    unitConst!: number;
+    unitCost!: number;
 }
 
 export class UpdateSupplierOrderItemDto {
     idProduct?: number;
     quantityReceived?: number;
     unitCost?: number;
-}
-
-export class SupplierOrderDetailModel extends SupplierOrderItemModel {
-    productName!: string;
-    catalogNumber!: string;
 }

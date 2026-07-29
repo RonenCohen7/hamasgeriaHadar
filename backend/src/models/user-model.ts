@@ -34,7 +34,7 @@ export class UpdatedUserDto {
 
 
 export class SafeUserModel {
-    idUser!: number,
+    idUser!: number;
     fullName!:string;
     email!:string;
     role!:UserRole;

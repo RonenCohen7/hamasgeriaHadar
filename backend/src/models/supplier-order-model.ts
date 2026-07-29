@@ -40,7 +40,3 @@ export class UpdateSupplierOrderDto {
     notes?: string | null;
 }
 
-export class SupplierOrderDetailsModel extends SupplierOrderModel {
-    supplierName!: string;
-    createdByName!: string;
-}
