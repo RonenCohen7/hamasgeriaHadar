@@ -1,0 +1,267 @@
+.products-page {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    padding: 18px;
+
+    color: #12314b;
+    overflow: hidden;
+}
+
+/* Header */
+
+.products-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+
+    padding: 20px 22px;
+
+    border: 1px solid #7eb3f4;
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(238, 247, 255, 0.98),
+            rgba(255, 255, 255, 0.98)
+        );
+
+    box-shadow: 0 12px 28px rgba(42, 105, 180, 0.08);
+}
+
+.products-header h1 {
+    margin: 5px 0 7px;
+
+    color: #174f59;
+    font-size: clamp(28px, 3vw, 40px);
+    line-height: 1;
+}
+
+.products-header p {
+    margin: 0;
+
+    color: #557185;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.products-eyebrow {
+    color: #6f43ef;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+}
+
+.add-product-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    min-height: 44px;
+    padding: 0 17px;
+
+    border: 1px solid #7c3aed61;
+    border-radius: 12px;
+    color: hwb(206 5% 26% / 0.961);
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow: 0 12px 26px rgba(124, 58, 237, 0.22);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.add-product-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 32px rgba(124, 58, 237, 0.3);
+}
+
+.add-product-button svg {
+    width: 14px;
+    height: 14px;
+}
+
+/* Toolbar */
+
+.products-toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 170px;
+    gap: 14px;
+    align-items: stretch;
+}
+
+.products-search {
+    min-width: 0;
+    max-width: none;
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 0 14px;
+
+    border: 1px solid #b8d5f6;
+    border-radius: 13px;
+
+    background: #ffffff;
+}
+
+.products-search svg {
+    color: #6f43ef;
+}
+
+.products-search input {
+    width: 100%;
+    height: 42px;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+    color: #17324a;
+
+    font-size: 13px;
+}
+
+.products-search input::placeholder {
+    color: #90a4b7;
+}
+
+.products-count {
+    min-width: 150px;
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    padding: 8px 14px;
+
+    border: 1px solid #b8d5f6;
+    border-radius: 13px;
+
+    background: #f7fbff;
+}
+
+.products-count > svg {
+    flex-shrink: 0;
+    color: #7c3aed;
+    font-size: 18px;
+}
+
+.products-count > div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.products-count strong {
+    color: #12314b;
+    font-size: 18px;
+    line-height: 1;
+}
+
+.products-count span {
+    color: #71879a;
+    font-size: 10px;
+    white-space: nowrap;
+}
+/* Content */
+
+.products-content {
+    min-height: 0;
+    flex: 1;
+
+    padding: 16px;
+
+    border: 1px solid #7eb3f4;
+    border-radius: 18px;
+
+    background: rgba(255, 255, 255, 0.96);
+
+    overflow: hidden;
+}
+
+.products-placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: 300px;
+
+    display: grid;
+    place-items: center;
+
+    color: #7b8fa2;
+    font-size: 14px;
+
+    border: 1px dashed #bdd4ee;
+    border-radius: 14px;
+
+    background: #f9fcff;
+}
+
+/* Laptop */
+
+@media (max-width: 1100px) {
+    .products-page {
+        padding: 14px;
+    }
+
+    .products-header {
+        padding: 18px;
+    }
+}
+
+/* Mobile */
+
+@media (max-width: 700px) {
+    .products-page {
+        height: auto;
+        min-height: 100%;
+
+        padding: 12px;
+        overflow-y: auto;
+    }
+
+    .products-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .add-product-button {
+        width: 100%;
+    }
+
+    .products-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .products-search {
+        min-width: 0;
+        max-width: none;
+    }
+
+    .products-count {
+        width: 100%;
+    }
+
+    .products-content {
+        min-height: 320px;
+        overflow: visible;
+    }
+}

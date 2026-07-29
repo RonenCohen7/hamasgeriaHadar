@@ -1,0 +1,24 @@
+.copyrights {
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 20px;
+
+   
+    border-top: 1px solid rgba(148, 163, 184, 0.12);
+
+    color: #64748b;
+    font-size: 12px;
+}
+
+.copyrights p {
+    margin: 0;
+}
+
+.copyrights p::before {
+    content: "🍺";
+    margin-right: 8px;
+}

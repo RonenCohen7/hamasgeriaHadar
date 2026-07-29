@@ -1,24 +1,44 @@
-# Dependencies
-node_modules/
-**/node_modules/
+# ==========================
+# Node modules
+# ==========================
+backend/node_modules/
+frontend/node_modules/
 
-# Build
-dist/
-build/
+# ==========================
+# Build folders
+# ==========================
+backend/dist/
+frontend/dist/
+frontend/build/
 
-# Environment
-.env
-**/.env
+# ==========================
+# Environment files
+# ==========================
+backend/.env
+frontend/.env
 
-# Uploads
-backend/src/assets/
+# ==========================
+# Uploaded images
+# ==========================
+backend/src/assets/images/
 
+# ==========================
 # Logs
-logs/
+# ==========================
 *.log
+logs/
 
-# Mac
+# ==========================
+# macOS
+# ==========================
 .DS_Store
 
-# VSCode
+# ==========================
+# VS Code
+# ==========================
 .vscode/
+
+# ==========================
+# npm
+# ==========================
+npm-debug.log*
