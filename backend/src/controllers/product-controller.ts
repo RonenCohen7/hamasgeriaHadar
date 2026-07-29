@@ -1,7 +1,8 @@
 import express, { Request, Response, NextFunction } from "express";
 import { productService } from "../services/products-service";
 import { ProductModel } from "../models/product-model";
-import { responseEncoding } from "axios";
+
+import { UploadedFile } from "express-fileupload";
 
 
 
@@ -58,6 +59,8 @@ class ProductController {
 
             const product:ProductModel = request.body;
 
+            product.image = request.files?.image as UploadedFile;
+
             const addProduct = await productService.addProduct(product);
 
             response.status(200).json(addProduct);
@@ -74,12 +77,15 @@ class ProductController {
         try{
 
             const id = Number(request.params.id);
+
             if(!Number.isInteger(id) || id <= 0){
                 response.status(400).json({ message: "Id must be a positive number"});
                 return;
             }
             const product: ProductModel = request.body
             product.idProduct = id;
+
+            product.image = request.files?.image as UploadedFile;
 
             const updateProduct = await productService.updateProduct(product);
             response.json(updateProduct);

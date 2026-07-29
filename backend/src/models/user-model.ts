@@ -1,30 +1,30 @@
 import { UserRole } from "./enum";
 
-export interface UserModel {
-    idUser: number;
-    fullName:string;
-    email:string;
-    passwordHash:string;
-    role:UserRole;
-    isActive:boolean;
-    createdAt:Date;
-    updatedAt:Date;
+export class UserModel {
+    idUser!: number;
+    fullName!:string;
+    email!:string;
+    passwordHash!:string;
+    role!:UserRole;
+    isActive!:boolean;
+    createdAt!:Date;
+    updatedAt!:Date;
 }
 
 
-export interface RegisterUserDto {
-    fullName: string;
-    email:string;
-    password: string;
-    role:UserRole;
+export class RegisterUserDto {
+    fullName!: string;
+    email!:string;
+    password!: string;
+    role!:UserRole;
 }
 
-export interface LoginUserDto {
-    email:string;
-    password: string;
+export class LoginUserDto {
+    email!:string;
+    password!: string;
 }
 
-export interface UpdatedUserDto {
+export class UpdatedUserDto {
     fullName?:string;
     email?: string;
     password?:string;
@@ -33,17 +33,17 @@ export interface UpdatedUserDto {
 }
 
 
-export interface SafeUserModel {
-    idUser: number,
-    fullName:string;
-    email:string;
-    role:UserRole;
-    isActive: boolean;
-    createdAt:Date;
+export class SafeUserModel {
+    idUser!: number,
+    fullName!:string;
+    email!:string;
+    role!:UserRole;
+    isActive!: boolean;
+    createdAt!:Date;
 }
 
 
-export interface AuthResponseModel {
-    token: string;
-    user : SafeUserModel;
+export class AuthResponseModel {
+    token!: string;
+    user!: SafeUserModel;
 }

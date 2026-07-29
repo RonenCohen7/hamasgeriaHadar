@@ -10,6 +10,9 @@ class AppConfig {
     public readonly mysqlUser = process.env.MYSQL_USER;
     public readonly mysqlPassword = process.env.MYSQL_PASSWORD;
     public readonly mysqlDatabase = process.env.MYSQL_DATABASE;
+
+    public readonly productImages = "src/assets/images/products";
+    public readonly baseImageUrl = "http://localhost:4000/api/products/images/";
 }
 
 export const appConfig = new AppConfig();

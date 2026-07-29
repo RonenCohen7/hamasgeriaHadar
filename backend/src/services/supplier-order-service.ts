@@ -5,7 +5,7 @@ import { dal } from "../utils/dal";
 
 class SupplierOrderService {
     //Get All supplier orders;
-    public async getAllSupplierOrders():Promise<SupplierOrderModel[]>{
+    public async getAllSupplierOrders(): Promise<SupplierOrderModel[]> {
         const sql = `
             SELECT 
                 so.id_order AS idOrder,
@@ -15,15 +15,18 @@ class SupplierOrderService {
                 so.order_date AS orderDate,
                 so.expected_delivery_date AS exceptedDeliveryDate,
                 so.received_date AS receivedDate,
+                so.order_status AS orderStatus,
                 so.total_cost AS totalCost,
                 so.notes,
                 so.created_at As createdAt,
-                so.updated_at As supplierName,
-                s,supplier_name As supplierName
+                so.updated_at As updatedAt,
+                s.supplier_name As supplierName,
                 u.full_name As createdByName
-            FROM supplier_order As so
-            JOIN suppliersAS s
-            ON so.id_supplier = s.id_user
+            FROM supplier_orders As so
+            JOIN suppliers s
+            ON so.id_supplier = s.id_supplier
+            JOIN users AS u
+            ON so.created_by = u.id_user
             ORDER BY so.order_date DESC
         `;
         const order = await dal.execute(sql) as SupplierOrderModel[];
@@ -33,7 +36,7 @@ class SupplierOrderService {
 
 
     //Get One supplier order
-   
+
     public async getOneSupplierOrder(
         id: number
     ): Promise<SupplierOrderModel> {
@@ -86,8 +89,8 @@ class SupplierOrderService {
             INSERT INTO supplier_orders(
                 order_number,
                 id_supplier,
-                createdByName,
-                expectedDate,
+                created_by,
+                expected_delivery_date,
                 order_status,
                 total_cost,
                 notes
@@ -98,8 +101,8 @@ class SupplierOrderService {
         const values = [
             order.orderNumber,
             order.idSupplier,
-            order.createdByName,
-            order.expectedDate,
+            order.createdBy,
+            order.expectedDeliveryDate,
             order.orderStatus,
             order.totalCost,
             order.notes
@@ -135,7 +138,7 @@ class SupplierOrderService {
         const values = [
             order.orderNumber,
             order.idSupplier,
-            order.expectedDate,
+            order.expectedDeliveryDate,
             order.receivedDate,
             order.orderStatus,
             order.totalCost,

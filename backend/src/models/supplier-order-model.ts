@@ -1,23 +1,23 @@
 import { SupplierOrderStatus } from "./enum";
 
-export interface SupplierOrderModel {
-    idOrder: number;
-    orderNumber: string;
+export class SupplierOrderModel {
+    idOrder!: number;
+    orderNumber!: string;
 
-    idSupplier: number;
-    createBy: number;
+    idSupplier!: number;
+    createdBy!: number;
 
-    orderDate: Date;
-    expectedDate: Date;
-    receivedDate: Date;
+    orderDate!: Date;
+    expectedDeliveryDate!: Date;
+    receivedDate!: Date;
 
-    orderStatus: SupplierOrderStatus;
+    orderStatus!: SupplierOrderStatus;
 
-    totalCost: number;
+    totalCost!: number;
     notes: any;
 
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt!: Date;
+    updatedAt!: Date;
 
     supplierName?: string;
     createdByName?: string;
@@ -25,22 +25,22 @@ export interface SupplierOrderModel {
 }
 
 
-export interface AddSupplierOrderDto {
-    orderNumber: string;
-    idSupplier: number;
+export class AddSupplierOrderDto {
+    orderNumber!: string;
+    idSupplier!: number;
     expectedDeliveryDate?: Date | null;
     notes?: string;
-    items: AddSupplierOrderDto[];
+    items!: AddSupplierOrderDto[];
 }
 
-export interface UpdateSupplierOrderDto {
+export class UpdateSupplierOrderDto {
     expectedDeliveryDate?: string | null;
     receivedDate?: string | null;
     orderStatus?: SupplierOrderStatus;
     notes?: string | null;
 }
 
-export interface SupplierOrderDetailsModel extends SupplierOrderModel {
-    supplierName: string;
-    createdByName: string;
+export class SupplierOrderDetailsModel extends SupplierOrderModel {
+    supplierName!: string;
+    createdByName!: string;
 }

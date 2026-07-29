@@ -1,27 +1,33 @@
+import { UploadedFile } from "express-fileupload";
 import { UnitType } from "./enum";
 
-export interface ProductModel {
-    idProduct: number;
-    productName: string;
-    catalogNumber: string;
-    idCategory: number | null;
-    productCost: number;
-    productPrice: number;
-    productStock: number;
-    minimumStock:number;
-    unitType: UnitType;
-    isActive: boolean;
-    createdAt: Date;
-    updatedAt: Date;
+export class ProductModel {
+    idProduct!: number;
+    productName!: string;
+    catalogNumber!: string;
+    idCategory!: number | null;
+    productCost!: number;
+    productPrice!: number;
+    productStock!: number;
+    minimumStock!:number;
+    unitType!: UnitType;
+    isActive!: boolean;
+    createdAt!: Date;
+    updatedAt!: Date;
     categoryName?: string | null;
+    
+    
+    image?: UploadedFile;
+    imageName?: string;
+    imageUrl?: string | null;
 }
 
-export interface AddProductDto {
-    productName: string;
-    catalogNumber:string;
+export class AddProductDto {
+    productName!: string;
+    catalogNumber!:string;
     idCategory?:number | null;
-    productCost: number;
-    productPrice: number;
+    productCost!: number;
+    productPrice!: number;
     productStock?: number;
     minimumStock?: number;
     unitType?: UnitType;
@@ -29,7 +35,7 @@ export interface AddProductDto {
 
 
 
-export interface UpdateProductDto {
+export class UpdateProductDto {
     productName?:string;
     catalogNumber?:string;
     idCategory?:number;
@@ -41,16 +47,14 @@ export interface UpdateProductDto {
     isActive?: boolean;
 }
 
-export interface ProductWithCategoryModel extends ProductModel {
-    categoryName: string | null
-}
 
-export interface LowStockProductModel {
-    idProduct: number;
-    productName: string;
-    catalogNumber:string;
-    productStock: number;
-    minimumStock: number;
-    unitType: UnitType;
-    categoryName: string | null;
+
+export class LowStockProductModel {
+    idProduct!: number;
+    productName!: string;
+    catalogNumber!:string;
+    productStock!: number;
+    minimumStock!: number;
+    unitType!: UnitType;
+    categoryName!: string | null;
 }

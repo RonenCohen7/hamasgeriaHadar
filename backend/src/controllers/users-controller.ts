@@ -6,7 +6,7 @@ import express, {
 
 import { RegisterUserDto, UpdatedUserDto } from "../models/user-model";
 import { userService } from "../services/users-service";
-import { dal } from "../utils/dal";
+
 
 
 

@@ -2,6 +2,8 @@ import { OkPacketParams } from "mysql2";
 import { ProductModel } from "../models/product-model"
 import { dal } from "../utils/dal"
 import { ResourceNotFoundError } from "../models/client-errors";
+import { fileSaver } from "uploaded-file-saver";
+import { appConfig } from "../utils/app-config";
 
 class ProductService {
 
@@ -11,6 +13,7 @@ class ProductService {
             SELECT 
                 p.id_product As idProduct,
                 p.product_name As productName,
+                p.image_name As imageName,
                 p.catalog_number As catalogNumber,
                 p.product_cost As productCost,
                 p.product_price As productPrice,
@@ -20,14 +23,22 @@ class ProductService {
                 p.is_active As isActive,
                 p.created_at As createdAt,
                 p.updated_at As updateAt,
-                c.category_name As categoryName
+                c.category_name As categoryName,
+                CASE
+                    WHEN p.image_name IS NOT NULL
+                    THEN CONCAT(?, p.image_name)
+                    ELSE NULL
+                END As imageUrl
+
             FROM products As p
             LEFT JOIN product_categories AS c
             ON p.id_category = c.id_category
             ORDER BY p.product_name
-        `
+        `;
 
-        const products = await dal.execute(sql) as ProductModel[];
+        const values = [appConfig.baseImageUrl];
+
+        const products = await dal.execute(sql, values) as ProductModel[];
 
         return products;
     }
@@ -39,6 +50,7 @@ class ProductService {
             SELECT 
                 p.id_product AS idProduct,
                 p.product_name AS productName,
+                p.image_name AS imageName,
                 p.catalog_number AS catalogNumber,
                 p.id_category AS idCategory,
                 p.product_cost AS productCost,
@@ -49,14 +61,19 @@ class ProductService {
                 p.is_active AS isActive,
                 p.created_at AS createdAt,
                 p.updated_at AS updatedAt,
-                c.category_name AS categoryName
+                c.category_name AS categoryName,
+                CASE
+                    WHEN p.image_name IS NOT NULL
+                    THEN CONCAT(?, p.image_name)
+                    ELSE NULL
+                END As imageUrl
             FROM products AS p
             LEFT JOIN product_categories AS c
                 ON p.id_category = c.id_category
             WHERE p.id_product = ?
         `
 
-        const values = [id];
+        const values = [appConfig.baseImageUrl,id];
         const products = await dal.execute(sql,values) as ProductModel[];
         
         const product = products[0];
@@ -72,6 +89,10 @@ class ProductService {
 
     //Add new Product
     public async addProduct(product:ProductModel):Promise<ProductModel>{
+        if(product.image) {
+            product.imageName = product.image ? await fileSaver.add(product.image, appConfig.productImages) : null!;
+        }
+
         const sql = `
             INSERT INTO products (
             product_Name,
@@ -81,9 +102,10 @@ class ProductService {
             product_price,
             product_stock,
             minimum_stock,
-            unit_type
+            unit_type,
+            image_name
             )
-            VALUES (?,?,?,?,?,?,?,?);
+            VALUES (?,?,?,?,?,?,?,?,?);
         `
 
         const values = [
@@ -94,7 +116,8 @@ class ProductService {
             product.productPrice,
             product.productStock,
             product.minimumStock,
-            product.unitType
+            product.unitType,
+            product.imageName ?? null
         ]
 
         const info = await dal.execute(sql,values) as OkPacketParams;
@@ -107,6 +130,22 @@ class ProductService {
 
     //update product;
     public async updateProduct(product:ProductModel): Promise<ProductModel>{
+
+        const existingProduct = await this.getOneProduct(product.idProduct);
+        if (product.image){
+            if(existingProduct.imageName){
+                await fileSaver.delete(existingProduct.imageName, appConfig.productImages);
+            }
+        
+
+        product.imageName = await fileSaver.add(product.image,appConfig.productImages);
+
+        }
+        else {
+            product.imageName = existingProduct.imageName;
+        }
+
+
         const sql = `
             UPDATE products
             SET
@@ -118,7 +157,8 @@ class ProductService {
                 product_stock = ?,
                 minimum_stock = ?,
                 unit_type = ?,
-                is_active = ?
+                is_active = ?,
+                image_name = ?
             WHERE id_product = ?
         `
 
@@ -132,6 +172,7 @@ class ProductService {
             product.minimumStock,
             product.unitType,
             product.isActive,
+            product.imageName ?? null,
             product.idProduct
         ]
 
@@ -146,6 +187,12 @@ class ProductService {
 
     //delete Products
     public async deleteProduct(id:number):Promise<void>{
+
+        const product = await this.getOneProduct(id);
+        if(product.imageName){
+            await fileSaver.delete(product.imageName, appConfig.productImages);
+        }
+
         const sql = `
             DELETE FROM products
             WHERE id_product = ?

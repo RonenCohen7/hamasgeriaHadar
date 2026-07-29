@@ -1,18 +1,18 @@
-export interface ProductCategoryModel {
-    idCategory:number;
-    categoryName:string;
-    description:string | null;
-    createdAt: Date;
+export class ProductCategoryModel {
+    idCategory!:number;
+    categoryName!:string;
+    description!:string | null;
+    createdAt!: Date;
 }
 
 
 
-export interface AddProductCategoryDto {
-    categoryName:string;
-    description: string;
+export class AddProductCategoryDto {
+    categoryName!:string;
+    description!: string;
 }
 
-export interface UpdateProductCategoryDto {
+export class UpdateProductCategoryDto {
     categoryName?: string;
     description?:string | null;
 }

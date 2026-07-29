@@ -32,34 +32,36 @@ class SupplierOrderItemService {
 
 
     //Get One supplier order item
-    public async getOneSupplierOrderItem(id: number): Promise<SupplierOrderItemModel> {
+public async getOneSupplierOrderItem(id: number): Promise<SupplierOrderItemModel> {
 
-        const sql = `
-            SELECT
-                soi.id_order_item AS idOrderItem,
-                soi.id_order AS idOrder,
-                soi.id_product AS idProduct,
-                soi.quantity_ordered AS quantityOrdered,
-                soi.unit_cost As unitCost,
-                soi.created_at As CreatesAt,
-                p.product_name As productName,
-                p.catalog_number As catalogNumber
-            FROM supplier_order AS soi
-            JOIN products AS p
+    const sql = `
+        SELECT
+            soi.id_order_item AS idOrderItem,
+            soi.id_order AS idOrder,
+            soi.id_product AS idProduct,
+            soi.quantity_ordered AS quantityOrdered,
+            soi.quantity_received AS quantityReceived,
+            soi.unit_cost AS unitCost,
+            soi.line_total AS lineTotal,
+            soi.created_at AS createdAt,
+            p.product_name AS productName,
+            p.catalog_number AS catalogNumber
+        FROM supplier_order_items AS soi
+        JOIN products AS p
             ON soi.id_product = p.id_product
-            WHERE soi.id_order_item = ?
-        `;
-        const values = [id];
-        const orderItems = await dal.execute(sql, values) as SupplierOrderItemModel[];
+        WHERE soi.id_order_item = ?
+    `;
 
-        const orderItem = orderItems[0];
+    const orderItems = await dal.execute(sql, [id]) as SupplierOrderItemModel[];
 
-        if (!orderItem) {
-            throw new ResourceNotFoundError(id);
-        }
-        return orderItem;
+    const orderItem = orderItems[0];
 
+    if (!orderItem) {
+        throw new ResourceNotFoundError(id);
     }
+
+    return orderItem;
+}
 
     //Get All items by supplier order
     public async getItemsByOrder(orderId: number): Promise<SupplierOrderItemModel[]> {
