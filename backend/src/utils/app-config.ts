@@ -12,7 +12,7 @@ class AppConfig {
     public readonly mysqlDatabase = process.env.MYSQL_DATABASE;
 
     public readonly productImages = "src/assets/images/products";
-    public readonly baseImageUrl = "http://localhost:4000/api/products/images/";
+    public readonly baseImageUrl = process.env.BASE_IMAGE_URL!;
 }
 
 export const appConfig = new AppConfig();
