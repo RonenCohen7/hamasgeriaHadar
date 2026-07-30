@@ -1,4 +1,4 @@
-export class supplierModel {
+export class SupplierModel {
     idSupplier!: number;
     supplierName!: string;
     supplierEmail!:string;
@@ -7,10 +7,11 @@ export class supplierModel {
     isActive!:boolean;
     createdAt!:Date;
     updatedAt!:Date;
+    
 }
 
 
-export class AddSuppliersDto {
+export class AddSupplierDto {
     supplierName!:string;
     supplierEmail!:string;
     supplierMobile!:string;
@@ -19,8 +20,10 @@ export class AddSuppliersDto {
 
 
 export class UpdateSupplierDto {
+    idSupplier!: number;
     supplierName?: string;
     supplierEmail?:string;
     supplierMobile?:string;
     supplierAddress?:string;
+    isActive?: boolean;
 }

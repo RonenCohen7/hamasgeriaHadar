@@ -1,4 +1,4 @@
-import mysql2, { PoolOptions, QueryError, QueryResult } from "mysql2";
+import mysql2, { PoolOptions, QueryError, QueryResult, SqlValue } from "mysql2";
 import { appConfig } from "./app-config";
 
 class Dal {
@@ -13,6 +13,7 @@ class Dal {
     private readonly connection = mysql2.createPool(this.options);
 
     public execute(sql: string, values?: (string | boolean | number | Date | null)[]): Promise<QueryResult> {
+        
         return new Promise<QueryResult>((resolve, reject) => {
             this.connection.query(sql, values, (err: QueryError | null, result: QueryResult) => {
                 if (err) {

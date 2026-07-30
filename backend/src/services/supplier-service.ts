@@ -1,14 +1,15 @@
-import { OkPacketParams } from "mysql2";
+import { OkPacketParams, ResultSetHeader } from "mysql2";
 import { ResourceNotFoundError } from "../models/client-errors";
-import { supplierModel } from "../models/supplier-model";
+
 import { dal } from "../utils/dal";
+import { SupplierModel } from "../models/supplier-model";
 
 
 class SupplierService {
 
 
     // Get all suppliers:
-    public async getAllSuppliers(): Promise<supplierModel[]> {
+    public async getAllSuppliers(): Promise<SupplierModel[]> {
 
         const sql = `
             SELECT
@@ -25,7 +26,7 @@ class SupplierService {
         `;
 
         const suppliers =
-            await dal.execute(sql) as supplierModel[];
+            await dal.execute(sql) as SupplierModel[];
 
         return suppliers;
     }
@@ -34,7 +35,7 @@ class SupplierService {
     // Get one supplier:
     public async getOneSupplier(
         id: number
-    ): Promise<supplierModel> {
+    ): Promise<SupplierModel> {
 
         const sql = `
             SELECT
@@ -53,7 +54,7 @@ class SupplierService {
         const values = [id];
 
         const suppliers =
-            await dal.execute(sql, values) as supplierModel[];
+            await dal.execute(sql, values) as SupplierModel[];
 
         const supplier = suppliers[0];
 
@@ -67,8 +68,8 @@ class SupplierService {
 
     // Add new supplier:
     public async addNewSupplier(
-        supplier: supplierModel
-    ): Promise<supplierModel> {
+        supplier: SupplierModel
+    ): Promise<SupplierModel> {
 
         const sql = `
             INSERT INTO suppliers(
@@ -97,41 +98,64 @@ class SupplierService {
 
 
     // Update supplier:
-    public async updateSupplier(
-        supplier: supplierModel
-    ): Promise<supplierModel> {
+    public async updateSupplier(supplier: SupplierModel): Promise<SupplierModel> {
+         const fields: string[] = [];
 
-        const sql = `
-            UPDATE suppliers
-            SET
-                supplier_name = ?,
-                supplier_email = ?,
-                supplier_mobile = ?,
-                supplier_address = ?,
-                is_active = ?
-            WHERE id_supplier = ?
-        `;
+    const values:
+        (string | number | boolean | Date | null)[] = [];
 
-        const values = [
-            supplier.supplierName,
-            supplier.supplierEmail,
-            supplier.supplierMobile,
-            supplier.supplierAddress,
-            supplier.isActive,
-            supplier.idSupplier
-        ];
-
-        const info =
-            await dal.execute(sql, values) as OkPacketParams;
-
-        if (info.affectedRows === 0) {
-            throw new ResourceNotFoundError(
-                supplier.idSupplier
-            );
-        }
-
-        return supplier;
+    if (supplier.supplierName !== undefined) {
+        fields.push("supplier_name = ?");
+        values.push(supplier.supplierName);
     }
+
+    if (supplier.supplierEmail !== undefined) {
+        fields.push("supplier_email = ?");
+        values.push(supplier.supplierEmail);
+    }
+
+    if (supplier.supplierMobile !== undefined) {
+        fields.push("supplier_mobile = ?");
+        values.push(supplier.supplierMobile);
+    }
+
+    if (supplier.supplierAddress !== undefined) {
+        fields.push("supplier_address = ?");
+        values.push(supplier.supplierAddress);
+    }
+
+    if (supplier.isActive !== undefined) {
+        fields.push("is_active = ?");
+        values.push(supplier.isActive);
+    }
+
+    if (fields.length === 0) {
+        return await this.getOneSupplier(
+            supplier.idSupplier
+        );
+    }
+
+    const sql = `
+        UPDATE suppliers
+        SET ${fields.join(", ")}
+        WHERE id_supplier = ?
+    `;
+
+    values.push(supplier.idSupplier);
+
+    const info =
+        await dal.execute(sql, values) as OkPacketParams;
+
+    if (info.affectedRows === 0) {
+        throw new ResourceNotFoundError(
+            supplier.idSupplier
+        );
+    }
+
+    return await this.getOneSupplier(
+        supplier.idSupplier
+    );
+}
 
 
     // Delete supplier:
