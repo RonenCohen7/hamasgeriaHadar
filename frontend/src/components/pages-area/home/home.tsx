@@ -7,10 +7,19 @@ import {
 
 import "./home.css";
 import { useTitle } from "../../utils/UseTitle";
+import { useNavigate } from "react-router-dom";
+
 
 export function Home() {
 
     useTitle("Home");
+   
+
+    const navigate = useNavigate();
+
+    function showProducts(){
+        navigate("/products");
+    }
     
     return (
         <section className="home-page">
@@ -96,7 +105,7 @@ export function Home() {
                             <h2>Stock overview</h2>
                         </div>
 
-                        <button type="button">
+                        <button type="button" onClick={showProducts}>
                             View products
                         </button>
                     </div>

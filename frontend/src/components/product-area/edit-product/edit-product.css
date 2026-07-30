@@ -1,3 +1,262 @@
 .EditProduct {
-	
+    width: 100%;
+    min-height: 100%;
+
+    padding: 40px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    background: #f5f7fa;
+}
+
+.EditProduct h1 {
+    width: 100%;
+    max-width: 900px;
+
+    margin: 0 0 25px;
+
+    color: #066c8e;
+
+    font-size: 32px;
+    font-weight: 700;
+    text-align: left;
+}
+
+.edit-form {
+    width: 100%;
+    max-width: 900px;
+
+    padding: 30px;
+
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 24px;
+
+    background: #ffffff;
+
+    border-radius: 20px;
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.edit-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    color: #475569;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.edit-form input {
+    width: 100%;
+    height: 46px;
+
+    padding: 0 14px;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+
+    background: #ffffff;
+    color: #1e293b;
+
+    font-family: inherit;
+    font-size: 15px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.edit-form input:hover {
+    border-color: #94a3b8;
+}
+
+.edit-form input:focus {
+    border-color: #066c8e;
+
+    box-shadow: 0 0 0 3px rgba(6, 108, 142, 0.14);
+}
+
+.edit-form input[type="file"] {
+    padding: 8px 10px;
+
+    display: flex;
+    align-items: center;
+
+    cursor: pointer;
+}
+
+.edit-form input[type="file"]::file-selector-button {
+    height: 30px;
+
+    margin-right: 12px;
+    padding: 0 14px;
+
+    border: 1px solid #b8d5df;
+    border-radius: 8px;
+
+    background: #ffffff;
+    color: #066c8e;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.edit-form input[type="file"]::file-selector-button:hover {
+    background: #066c8e;
+    color: #ffffff;
+    border-color: #066c8e;
+}
+
+.form-button {
+    grid-column: 1 / -1;
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+
+    margin-top: 10px;
+    padding-top: 22px;
+
+    border-top: 1px solid #e8edf2;
+}
+
+.form-button button {
+    min-width: 120px;
+    height: 42px;
+
+    padding: 0 18px;
+
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid #b8d5df;
+    border-radius: 10px;
+
+    background: #ffffff;
+    color: #066c8e;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.25s ease,
+        color 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.form-button button:hover {
+    background: #066c8e;
+    color: #ffffff;
+    border-color: #066c8e;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 7px 16px rgba(6, 108, 142, 0.22);
+}
+
+.form-button button:active {
+    transform: translateY(0);
+}
+
+.form-button button:focus-visible {
+    outline: 3px solid rgba(6, 108, 142, 0.22);
+    outline-offset: 3px;
+}
+
+.form-button button[type="submit"] {
+    background: #066c8e;
+    color: #ffffff;
+    border-color: #066c8e;
+}
+
+.form-button button[type="submit"]:hover {
+    background: #055874;
+    border-color: #055874;
+}
+
+@media (max-width: 800px) {
+    .EditProduct {
+        padding: 28px;
+    }
+
+    .edit-form {
+        padding: 24px;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 650px) {
+    .EditProduct {
+        padding: 18px;
+    }
+
+    .EditProduct h1 {
+        font-size: 27px;
+        text-align: center;
+    }
+
+    .edit-form {
+        grid-template-columns: 1fr;
+
+        padding: 20px;
+    }
+
+    .form-button {
+        grid-column: 1;
+
+        flex-direction: column-reverse;
+    }
+
+    .form-button button {
+        width: 100%;
+    }
+}
+
+
+.image-preview {
+    grid-column: 1 / -1;
+
+    width: 100%;
+    max-width: 260px;
+    height: 220px;
+
+    margin: 0 auto 10px;
+
+    overflow: hidden;
+
+    /* background: #eef3f7;
+    border: 1px solid #dbe5ec;
+    border-radius: 14px; */
+}
+
+.image-preview img {
+    width: 80%;
+    height: 100%;
+
+    display: block;
+    object-fit: cover;
 }

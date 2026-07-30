@@ -9,7 +9,7 @@ import { UploadedFile } from "express-fileupload";
 class ProductController {
 
     public readonly router = express.Router();
-        
+
 
     public constructor() {
         this.router.get("/api/products", this.getAllProducts);
@@ -25,7 +25,7 @@ class ProductController {
 
 
     //Get All Products
-    public async getAllProducts(request: Request, response: Response, next: NextFunction):Promise<void> {
+    public async getAllProducts(request: Request, response: Response, next: NextFunction): Promise<void> {
         try {
             const products = await productService.getAllProducts();
             response.json(products);
@@ -36,12 +36,12 @@ class ProductController {
     }
 
     //Get One Product
-    public async getOneProduct(request: Request, response: Response, next: NextFunction):Promise<void> {
+    public async getOneProduct(request: Request, response: Response, next: NextFunction): Promise<void> {
         try {
 
             const id = Number(request.params.id);
             if (!Number.isInteger(id) || id <= 0) {
-                response.json({ message: "Id must be a positive category. "})
+                response.json({ message: "Id must be a positive category. " })
                 return
             }
             const product = await productService.getOneProduct(id);
@@ -54,74 +54,77 @@ class ProductController {
 
 
     //Add new product
-    public async addProduct(request:Request, response:Response, next:NextFunction):Promise<void>{
-        try{
+    public async addProduct(request: Request, response: Response, next: NextFunction): Promise<void> {
+        try {
 
-            const product:ProductModel = request.body;
+            const product: ProductModel = request.body;
 
             product.image = request.files?.image as UploadedFile;
 
             const addProduct = await productService.addProduct(product);
 
-            response.status(200).json(addProduct);
+            response.status(201).json(addProduct);
 
 
-        }catch(err:any){
+        } catch (err: any) {
             next(err);
         }
     }
 
 
     //Update products
-    private async updateProduct(request:Request, response:Response, next:NextFunction):Promise<void>{
-        try{
+    private async updateProduct(request: Request, response: Response, next: NextFunction): Promise<void> {
+        try {
 
             const id = Number(request.params.id);
 
-            if(!Number.isInteger(id) || id <= 0){
-                response.status(400).json({ message: "Id must be a positive number"});
+            if (!Number.isInteger(id) || id <= 0) {
+                response.status(400).json({ message: "Id must be a positive number" });
                 return;
             }
             const product: ProductModel = request.body
             product.idProduct = id;
+            product.idCategory = Number(request.body.idCategory);
+            product.isActive = request.body.isActive;
+            product.image = request.files?.image as UploadedFile;
 
             product.image = request.files?.image as UploadedFile;
 
             const updateProduct = await productService.updateProduct(product);
             response.json(updateProduct);
 
-        }catch(err:any){
+        } catch (err: any) {
             next(err);
         }
     }
 
 
     //Delete product
-    private async deleteProduct(request:Request, response:Response, next:NextFunction):Promise<void>{
-        try{
+    private async deleteProduct(request: Request, response: Response, next: NextFunction): Promise<void> {
+        try {
             const id = Number(request.params.id);
-            if(!Number.isInteger(id) || id <= 0){
-                response.json({ message: "Id must be a positive number"});
+            if (!Number.isInteger(id) || id <= 0) {
+                response.json({ message: "Id must be a positive number" });
                 return;
             }
 
             await productService.deleteProduct(id);
-            response.sendStatus(204); 
+            response.sendStatus(204);
 
-        }catch(err:any){
+        } catch (err: any) {
             next(err)
         }
     }
 
 
 
-    private async getLowStockProducts(request:Request, response:Response, next:NextFunction):Promise<void>{
-        try{
+    private async getLowStockProducts(request: Request, response: Response, next: NextFunction): Promise<void> {
+        try {
             const products = await productService.getLowStockProducts();
 
             response.json(products);
 
-        }catch(err:any){
+        } catch (err: any) {
             next(err);
         }
     }

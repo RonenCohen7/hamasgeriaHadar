@@ -22,11 +22,14 @@ class ProductCategoryService {
     //get one product category
     public async getOneCategory(id: number): Promise<ProductCategoryModel> {
         const sql = `
-            SELECT 
-                *
-            FROM product_categories
-            WHERE id_category = ?
-        `;
+            SELECT
+            id_category AS idCategory,
+            category_name AS categoryName,
+            description,
+            created_at AS createdAt
+        FROM product_categories
+        WHERE id_category = ?
+    `;
         const values = [id];
 
         const categories = await dal.execute(sql, values) as ProductCategoryModel[];
