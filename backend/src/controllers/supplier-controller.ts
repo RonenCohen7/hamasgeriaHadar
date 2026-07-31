@@ -1,6 +1,6 @@
 import express, {Request, Response, NextFunction} from "express";
 import { supplierService } from "../services/supplier-service";
-import { supplierModel } from "../models/supplier-model";
+import { SupplierModel } from "../models/supplier-model";
 
 class SuppliersController{
 
@@ -12,7 +12,7 @@ class SuppliersController{
         this.router.get("/api/suppliers/:id", this.getOneSupplier);
 
         this.router.post("/api/suppliers", this.addNewSupplier);
-        this.router.put("/api/suppliers/:id", this.updateSupplier);
+        this.router.patch("/api/suppliers/:id", this.updateSupplier);
 
         this.router.delete("/api/suppliers/:id", this.deleteSupplier);
 
@@ -54,7 +54,7 @@ class SuppliersController{
     //Add new Supplier
     private async addNewSupplier(request:Request, response:Response,next:NextFunction):Promise<void>{
         try{
-            const supplier:supplierModel = request.body;
+            const supplier:SupplierModel = request.body;
 
             const addSupplier = await supplierService.addNewSupplier(supplier);
             response.json(addSupplier);
@@ -73,7 +73,7 @@ class SuppliersController{
                 response.json({ message: "Id Must be a positive number. "});
                 return;
             }
-            const supplier:supplierModel = request.body;
+            const supplier:SupplierModel = request.body;
             supplier.idSupplier = id;
 
             const supplierUpdate = await supplierService.updateSupplier(supplier)

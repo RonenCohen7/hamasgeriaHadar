@@ -1,7 +1,8 @@
 import { OkPacketParams } from "mysql2";
 import { ResourceNotFoundError } from "../models/client-errors";
-import { SupplierOrderModel } from "../models/supplier-order-model";
+import { AddSupplierOrderDto, SupplierOrderModel } from "../models/supplier-order-model";
 import { dal } from "../utils/dal";
+import { ProductModel } from "../models/product-model";
 
 class SupplierOrderService {
     //Get All supplier orders;
@@ -13,7 +14,7 @@ class SupplierOrderService {
                 so.id_supplier AS idSupplier,
                 so.created_by AS createdBy,
                 so.order_date AS orderDate,
-                so.expected_delivery_date AS exceptedDeliveryDate,
+                so.expected_delivery_date AS expectedDeliveryDate,
                 so.received_date AS receivedDate,
                 so.order_status AS orderStatus,
                 so.total_cost AS totalCost,
@@ -21,7 +22,7 @@ class SupplierOrderService {
                 so.created_at As createdAt,
                 so.updated_at As updatedAt,
                 s.supplier_name As supplierName,
-                u.full_name As createdByName
+                CONCAT(u.first_name, ' ', u.last_name) AS createdByName
             FROM supplier_orders As so
             JOIN suppliers s
             ON so.id_supplier = s.id_supplier
@@ -56,7 +57,7 @@ class SupplierOrderService {
                 so.created_at AS createdAt,
                 so.updated_at AS updatedAt,
                 s.supplier_name AS supplierName,
-                u.full_name AS createdByName
+                CONCAT(u.first_name, ' ', u.last_name) AS createdByName
             FROM supplier_orders AS so
             JOIN suppliers AS s
                 ON so.id_supplier = s.id_supplier
@@ -81,9 +82,16 @@ class SupplierOrderService {
 
 
     // Add new supplier order:
-    public async addSupplierOrder(
-        order: SupplierOrderModel
-    ): Promise<SupplierOrderModel> {
+    public async addSupplierOrder(order: AddSupplierOrderDto): Promise<SupplierOrderModel> {
+
+        const orderNumber = `PO-${Date.now()}`;
+        const createBy = 2;
+        const orderStatus = "draft";
+        const totalCost = order.items.reduce(
+            (sum, item) =>
+                sum + item.quantityOrdered * item.unitCost,
+            0
+        );
 
         const sql = `
             INSERT INTO supplier_orders(
@@ -98,22 +106,42 @@ class SupplierOrderService {
             VALUES (?, ?, ?, ?, ?, ?, ?)
         `;
 
-        const values = [
-            order.orderNumber,
+        const values: (string | number | boolean |Date | null)[] = [
+            orderNumber,
             order.idSupplier,
-            order.createdBy,
-            order.expectedDeliveryDate,
-            order.orderStatus,
-            order.totalCost,
-            order.notes
+            createBy,
+            order.expectedDeliveryDate ?? null,
+            orderStatus,
+            totalCost,
+            order.notes ?? null
         ];
 
         const info =
             await dal.execute(sql, values) as OkPacketParams;
 
-        order.idOrder = info.insertId!;
+        const idOrder = info.insertId!;
 
-        return order;
+        for(const item of order.items){
+            const itemSql = `
+                INSERT INTO supplier_order_items(
+                    id_order,
+                    id_product,
+                    quantity_ordered,
+                    quantity_received,
+                    unit_cost
+                )
+                VALUES(?,?,?,?,?);
+            `;
+            const itemValues = [
+                idOrder,
+                item.idProduct,
+                item.quantityOrdered,
+                0,
+                item.unitCost
+            ];
+            await dal.execute(itemSql, itemValues);
+        }
+        return await this.getOneSupplierOrder(idOrder);
     }
 
 
@@ -157,6 +185,46 @@ class SupplierOrderService {
     }
 
 
+
+    //Get Products by Supplier Id
+    public async getProductsBySupplier(supplierId: number): Promise<ProductModel[]> {
+        const sql = `
+          SELECT
+            p.id_product AS idProduct,
+            p.product_name AS productName,
+            p.catalog_number AS catalogNumber,
+            p.product_cost AS productCost,
+            p.product_price AS productPrice,
+            p.product_stock AS productStock,
+            p.minimum_stock AS minimumStock,
+            p.unit_type AS unitType,
+            p.is_active AS isActive,
+
+            ps.supplier_catalog_number AS supplierCatalogNumber,
+            ps.supplier_cost AS supplierCost,
+            ps.is_preferred_supplier AS isPreferredSupplier
+
+        FROM product_suppliers AS ps
+
+        JOIN products AS p
+            ON ps.id_product = p.id_product
+
+        WHERE ps.id_supplier = ?
+          AND p.is_active = 1
+
+        ORDER BY p.product_name
+        `;
+        const products = await dal.execute(sql, [supplierId]) as ProductModel[];
+
+        return products;
+
+    }
+
+
+
+
+
+
     // Delete supplier order:
     public async deleteSupplierOrder(id: number): Promise<void> {
 
@@ -174,6 +242,9 @@ class SupplierOrderService {
             throw new ResourceNotFoundError(id);
         }
     }
+
+
+
 }
 
 

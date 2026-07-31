@@ -1,0 +1,388 @@
+.AddSupplierOrder {
+    width: 100%;
+    min-height: 100%;
+
+    padding: 24px;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    background: #f5f7fa;
+
+    box-sizing: border-box;
+}
+
+.AddSupplierOrder form {
+    width: 100%;
+    max-width: 980px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+
+    padding: 28px;
+
+    background: #ffffff;
+
+    border: 1px solid #dbeafe;
+    border-radius: 20px;
+
+    box-shadow:
+        0 12px 32px rgba(15, 23, 42, 0.08);
+
+    box-sizing: border-box;
+}
+
+/* ===========================
+   Headings
+=========================== */
+
+.AddSupplierOrder h2 {
+    margin: 0 0 8px;
+
+    color: #174f59;
+
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.AddSupplierOrder h3 {
+    margin: 0;
+
+    color: #174f59;
+
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.AddSupplierOrder hr {
+    width: 100%;
+
+    margin: 12px 0 4px;
+
+    border: none;
+    border-top: 1px solid #dbe7f3;
+}
+
+/* ===========================
+   Labels and fields
+=========================== */
+
+.AddSupplierOrder label {
+    color: #334155;
+
+    font-size: 14px;
+    font-weight: 650;
+}
+
+.AddSupplierOrder select,
+.AddSupplierOrder input,
+.AddSupplierOrder textarea {
+    width: 100%;
+
+    padding: 11px 13px;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+
+    background: #fbfdff;
+    color: #172b3a;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    outline: none;
+
+    box-sizing: border-box;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.AddSupplierOrder select,
+.AddSupplierOrder input {
+    min-height: 44px;
+}
+
+.AddSupplierOrder textarea {
+    min-height: 105px;
+    resize: vertical;
+}
+
+.AddSupplierOrder select:focus,
+.AddSupplierOrder input:focus,
+.AddSupplierOrder textarea:focus {
+    background: #ffffff;
+    border-color: #4f8fd9;
+
+    box-shadow:
+        0 0 0 3px rgba(79, 143, 217, 0.14);
+}
+
+.AddSupplierOrder .error {
+    margin-top: -7px;
+
+    color: #dc2626;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* ===========================
+   Add product button
+=========================== */
+
+.AddSupplierOrder form > button[type="button"] {
+    width: fit-content;
+    min-height: 42px;
+
+    padding: 0 17px;
+
+    align-self: flex-start;
+
+    border: 1px solid rgba(124, 58, 237, 0.35);
+    border-radius: 10px;
+
+    background: #ffffff;
+    color: #0d6efd;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.AddSupplierOrder form > button[type="button"]:hover {
+    transform: translateY(-2px);
+
+    background: #f8f7ff;
+
+    box-shadow:
+        0 10px 20px rgba(124, 58, 237, 0.15);
+}
+
+/* ===========================
+   Order rows
+=========================== */
+
+.order-row {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns:
+        minmax(180px, 1.5fr)
+        minmax(100px, 0.6fr)
+        minmax(130px, 0.8fr)
+        44px;
+
+    gap: 12px;
+    align-items: center;
+
+    padding: 14px;
+
+    border: 1px solid #dbe7f3;
+    border-radius: 14px;
+
+    background: #f8fbff;
+
+    box-sizing: border-box;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+.order-row:hover {
+    transform: translateY(-1px);
+
+    border-color: #b8d5f6;
+
+    box-shadow:
+        0 8px 18px rgba(42, 105, 180, 0.08);
+}
+
+.order-row input {
+    margin: 0;
+}
+
+.order-row button {
+    width: 42px;
+    height: 42px;
+
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid rgba(220, 38, 38, 0.32);
+    border-radius: 10px;
+
+    background: #ffffff;
+    color: #dc2626;
+
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.order-row button:hover {
+    transform: translateY(-2px);
+
+    background: #dc2626;
+    color: #ffffff;
+
+    box-shadow:
+        0 8px 16px rgba(220, 38, 38, 0.2);
+}
+
+/* ===========================
+   Save / Cancel
+=========================== */
+
+.form-actions {
+    width: 100%;
+
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+
+    margin-top: 10px;
+    padding-top: 18px;
+
+    border-top: 1px solid #e2e8f0;
+}
+
+.form-actions button {
+    min-width: 125px;
+    min-height: 43px;
+
+    padding: 0 18px;
+
+    border-radius: 10px;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.form-actions button[type="submit"] {
+    border: 1px solid #2563eb;
+
+    background: #2563eb;
+    color: #ffffff;
+}
+
+.form-actions button[type="submit"]:hover {
+    transform: translateY(-2px);
+
+    background: #1d4ed8;
+
+    box-shadow:
+        0 10px 20px rgba(37, 99, 235, 0.22);
+}
+
+.form-actions button[type="button"] {
+    border: 1px solid #cbd5e1;
+
+    background: #ffffff;
+    color: #475569;
+}
+
+.form-actions button[type="button"]:hover {
+    transform: translateY(-2px);
+
+    background: #f1f5f9;
+
+    box-shadow:
+        0 8px 16px rgba(15, 23, 42, 0.1);
+}
+
+/* ===========================
+   Tablet
+=========================== */
+
+@media (max-width: 850px) {
+
+    .AddSupplierOrder {
+        padding: 16px;
+    }
+
+    .AddSupplierOrder form {
+        padding: 22px;
+    }
+
+    .order-row {
+        grid-template-columns:
+            minmax(150px, 1fr)
+            minmax(90px, 0.5fr)
+            minmax(110px, 0.7fr)
+            44px;
+    }
+}
+
+/* ===========================
+   Mobile
+=========================== */
+
+@media (max-width: 650px) {
+
+    .AddSupplierOrder {
+        padding: 12px;
+    }
+
+    .AddSupplierOrder form {
+        padding: 17px;
+        border-radius: 16px;
+    }
+
+    .AddSupplierOrder h2 {
+        font-size: 25px;
+    }
+
+    .order-row {
+        grid-template-columns: 1fr;
+    }
+
+    .order-row button {
+        width: 100%;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .form-actions button {
+        width: 100%;
+    }
+
+    .AddSupplierOrder form > button[type="button"] {
+        width: 100%;
+    }
+}

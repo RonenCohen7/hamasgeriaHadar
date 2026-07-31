@@ -1,0 +1,174 @@
+.SupplierOrderList {
+    width: 100%;
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+.SupplierOrderList .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 22px;
+    padding: 20px 24px;
+
+    background: white;
+    border: 1px solid #dbeafe;
+    border-radius: 16px;
+
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+}
+
+.SupplierOrderList .header h1 {
+    margin: 0;
+
+    color: #174f59;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.SupplierOrderList .header button {
+    padding: 11px 18px;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #2563eb;
+    color: white;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s,
+        transform 0.2s;
+}
+
+.SupplierOrderList .header button:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+.SupplierOrderList table {
+    width: 100%;
+    border-collapse: collapse;
+
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+}
+
+.SupplierOrderList thead {
+    background: #f1f5f9;
+}
+
+.SupplierOrderList th {
+    padding: 15px 16px;
+
+    color: #334155;
+
+    font-size: 14px;
+    font-weight: 700;
+    text-align: left;
+
+    border-bottom: 1px solid #cbd5e1;
+}
+
+.SupplierOrderList td {
+    padding: 15px 16px;
+
+    color: #334155;
+    font-size: 14px;
+
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.SupplierOrderList tbody tr {
+    transition:
+        background-color 0.2s,
+        transform 0.2s;
+}
+
+.SupplierOrderList tbody tr:hover {
+    background: #f8fafc;
+}
+
+.SupplierOrderList tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.SupplierOrderList td:first-child {
+    color: #174f59;
+    font-weight: 700;
+}
+
+.SupplierOrderList td:nth-child(4) {
+    text-transform: capitalize;
+}
+
+.SupplierOrderList td:last-child {
+    text-align: right;
+}
+
+.SupplierOrderList td button {
+    padding: 8px 14px;
+
+    border: 1px solid #93c5fd;
+    border-radius: 9px;
+
+    background: white;
+    color: #2563eb;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s,
+        color 0.2s,
+        transform 0.2s;
+}
+
+.SupplierOrderList td button:hover {
+    background: #2563eb;
+    color: white;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 900px) {
+
+    .SupplierOrderList {
+        padding: 14px;
+        overflow-x: auto;
+    }
+
+    .SupplierOrderList .header {
+        min-width: 760px;
+    }
+
+    .SupplierOrderList table {
+        min-width: 760px;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .SupplierOrderList .header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+    }
+
+    .SupplierOrderList .header h1 {
+        font-size: 24px;
+    }
+
+    .SupplierOrderList .header button {
+        width: 100%;
+    }
+}

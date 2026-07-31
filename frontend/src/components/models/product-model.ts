@@ -21,4 +21,8 @@ export class ProductModel {
 
     createdAt!: string;
     updatedAt!: string;
+
+    supplierCatalogNumber?: string;
+    supplierCost?: number | string;
+    isPreferredSupplier?: boolean;
 }

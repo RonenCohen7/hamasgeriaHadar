@@ -1,4 +1,6 @@
 import { SupplierOrderStatus } from "./enum";
+import { AddSupplierOrderItemDto } from "./supplier-order-item-model";
+
 
 export class SupplierOrderModel {
     idOrder!: number;
@@ -8,8 +10,8 @@ export class SupplierOrderModel {
     createdBy!: number;
 
     orderDate!: Date;
-    expectedDeliveryDate!: Date;
-    receivedDate!: Date;
+    expectedDeliveryDate!: Date | null;
+    receivedDate!: Date | null;
 
     orderStatus!: SupplierOrderStatus;
 
@@ -26,11 +28,10 @@ export class SupplierOrderModel {
 
 
 export class AddSupplierOrderDto {
-    orderNumber!: string;
     idSupplier!: number;
     expectedDeliveryDate?: Date | null;
-    notes?: string;
-    items!: AddSupplierOrderDto[];
+    notes?: string | null;
+    items!: AddSupplierOrderItemDto[];
 }
 
 export class UpdateSupplierOrderDto {

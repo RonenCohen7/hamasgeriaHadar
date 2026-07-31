@@ -1,3 +1,73 @@
 .EditSupplier {
-	
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 30px;
+}
+
+.EditSupplier form {
+    width: 100%;
+    max-width: 700px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+
+    padding: 28px;
+
+    background: white;
+
+    border: 1px solid #dbeafe;
+    border-radius: 18px;
+
+    box-shadow: 0 12px 30px rgba(0,0,0,.08);
+}
+
+.EditSupplier h1 {
+    margin: 0;
+    color: #164e63;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-weight: 600;
+}
+
+.form-group input {
+    padding: 10px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font-size: 15px;
+}
+
+.checkbox-group {
+    flex-direction: row;
+    align-items: center;
+}
+
+.buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.buttons button {
+    padding: 10px 22px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.buttons button:first-child {
+    background: #2563eb;
+    color: white;
+}
+
+.buttons button:last-child {
+    background: #efefef;
 }

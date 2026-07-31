@@ -1,5 +1,5 @@
 export class SupplierModel {
-    idSupplier!: string;
+    idSupplier!: number;
     supplierName!: string;
     supplierEmail!: string;
     supplierMobile!:string;

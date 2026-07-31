@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 import { supplierOrderService } from "../services/supplier-order-service";
-import { SupplierOrderModel } from "../models/supplier-order-model";
+import { AddSupplierOrderDto, SupplierOrderModel } from "../models/supplier-order-model";
 
 
 class SupplierOrderController {
@@ -59,7 +59,7 @@ class SupplierOrderController {
     private async addNewOrder(request: Request, response: Response, next: NextFunction): Promise<void> {
         try {
 
-            const order: SupplierOrderModel = request.body;
+            const order: AddSupplierOrderDto = request.body;
 
             const addOrder = await supplierOrderService.addSupplierOrder(order);
             response.status(201).json(addOrder);

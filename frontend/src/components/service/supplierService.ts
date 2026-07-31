@@ -27,14 +27,14 @@ class SupplierService {
 
     //Update Supplier
     public async updateSupplier(supplier:SupplierModel):Promise<SupplierModel>{
-        const response = await axios.patch<SupplierModel>(appConfig.supplierUrl + supplier.idSupplier, supplier);
+        const response = await axios.patch<SupplierModel>(appConfig.supplierUrl + "/" + supplier.idSupplier, supplier);
         return response.data;
 
     }
 
     //Delete Supplier
     public async deleteSupplier(idSupplier: number):Promise<void>{
-        await axios.delete(appConfig.supplierUrl + idSupplier);
+        await axios.delete(appConfig.supplierUrl + "/" + idSupplier);
         
     }
 }

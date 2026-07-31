@@ -39,7 +39,7 @@ export function SupplierList() {
                     <p>Manage all suppliers of the pub</p>
                 </div>
                 <button type="button" className="add-supplier-button" onClick={()=>{
-                    navigate("/supplier/new")
+                    navigate("/supplier/add")
                 }}>
                     <FaPlus />
                     <span>Add Supplier</span>

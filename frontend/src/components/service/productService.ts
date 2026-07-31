@@ -69,6 +69,12 @@ class ProductService {
         await axios.delete(`${appConfig.productUrl}/${id}`);
     }
 
+   //Get products by Supplier
+   public async getProductsBySupplier(supplierId:number):Promise<ProductModel[]>{
+    const response = await axios.get<ProductModel[]>(`${appConfig.productSuppliersUrl}/supplier/${supplierId}`);
+    return response.data;
+   }
+
 }
 
 export const productService = new ProductService();
