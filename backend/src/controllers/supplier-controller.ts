@@ -1,6 +1,8 @@
 import express, {Request, Response, NextFunction} from "express";
 import { supplierService } from "../services/supplier-service";
 import { SupplierModel } from "../models/supplier-model";
+import { log } from "console";
+
 
 class SuppliersController{
 
@@ -10,7 +12,7 @@ class SuppliersController{
 
         this.router.get("/api/suppliers", this.getAllSuppliers);
         this.router.get("/api/suppliers/:id", this.getOneSupplier);
-
+       
         this.router.post("/api/suppliers", this.addNewSupplier);
         this.router.patch("/api/suppliers/:id", this.updateSupplier);
 
@@ -49,6 +51,9 @@ class SuppliersController{
             next(err);
         } 
     }
+
+
+
 
 
     //Add new Supplier

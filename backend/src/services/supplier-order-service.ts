@@ -28,6 +28,12 @@ class SupplierOrderService {
             ON so.id_supplier = s.id_supplier
             JOIN users AS u
             ON so.created_by = u.id_user
+            WHERE EXISTS (
+                SELECT 1 
+                FROM supplier_order_items as soi
+                WHERE soi.id_order = so.id_order
+                )
+
             ORDER BY so.order_date DESC
         `;
         const order = await dal.execute(sql) as SupplierOrderModel[];
@@ -146,9 +152,7 @@ class SupplierOrderService {
 
 
     // Update supplier order:
-    public async updateSupplierOrder(
-        order: SupplierOrderModel
-    ): Promise<SupplierOrderModel> {
+    public async updateSupplierOrder(order: SupplierOrderModel): Promise<SupplierOrderModel> {
 
         const sql = `
             UPDATE supplier_orders
@@ -174,8 +178,7 @@ class SupplierOrderService {
             order.idOrder
         ];
 
-        const info =
-            await dal.execute(sql, values) as OkPacketParams;
+        const info = await dal.execute(sql, values) as OkPacketParams;
 
         if (info.affectedRows === 0) {
             throw new ResourceNotFoundError(order.idOrder);
@@ -242,8 +245,6 @@ class SupplierOrderService {
             throw new ResourceNotFoundError(id);
         }
     }
-
-
 
 }
 

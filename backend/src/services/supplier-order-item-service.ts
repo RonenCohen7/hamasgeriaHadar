@@ -32,9 +32,9 @@ class SupplierOrderItemService {
 
 
     //Get One supplier order item
-public async getOneSupplierOrderItem(id: number): Promise<SupplierOrderItemModel> {
+    public async getOneSupplierOrderItem(id: number): Promise<SupplierOrderItemModel> {
 
-    const sql = `
+        const sql = `
         SELECT
             soi.id_order_item AS idOrderItem,
             soi.id_order AS idOrder,
@@ -52,16 +52,16 @@ public async getOneSupplierOrderItem(id: number): Promise<SupplierOrderItemModel
         WHERE soi.id_order_item = ?
     `;
 
-    const orderItems = await dal.execute(sql, [id]) as SupplierOrderItemModel[];
+        const orderItems = await dal.execute(sql, [id]) as SupplierOrderItemModel[];
 
-    const orderItem = orderItems[0];
+        const orderItem = orderItems[0];
 
-    if (!orderItem) {
-        throw new ResourceNotFoundError(id);
+        if (!orderItem) {
+            throw new ResourceNotFoundError(id);
+        }
+
+        return orderItem;
     }
-
-    return orderItem;
-}
 
     //Get All items by supplier order
     public async getItemsByOrder(orderId: number): Promise<SupplierOrderItemModel[]> {
@@ -93,9 +93,7 @@ public async getOneSupplierOrderItem(id: number): Promise<SupplierOrderItemModel
     }
 
     // Add new supplier order item:
-    public async addSupplierOrderItem(
-        orderItem: SupplierOrderItemModel
-    ): Promise<SupplierOrderItemModel> {
+    public async addSupplierOrderItem(orderItem: SupplierOrderItemModel): Promise<SupplierOrderItemModel> {
 
         const sql = `
             INSERT INTO supplier_order_items(
@@ -116,8 +114,7 @@ public async getOneSupplierOrderItem(id: number): Promise<SupplierOrderItemModel
             orderItem.unitCost
         ];
 
-        const info =
-            await dal.execute(sql, values) as OkPacketParams;
+        const info = await dal.execute(sql, values) as OkPacketParams;
 
         orderItem.idOrderItem = info.insertId!;
 
@@ -126,15 +123,11 @@ public async getOneSupplierOrderItem(id: number): Promise<SupplierOrderItemModel
 
 
     // Update supplier order item:
-    public async updateSupplierOrderItem(
-        orderItem: SupplierOrderItemModel
-    ): Promise<SupplierOrderItemModel> {
+    public async updateSupplierOrderItem(orderItem: SupplierOrderItemModel): Promise<SupplierOrderItemModel> {
 
         const sql = `
             UPDATE supplier_order_items
             SET
-                id_order = ?,
-                id_product = ?,
                 quantity_ordered = ?,
                 quantity_received = ?,
                 unit_cost = ?
@@ -142,16 +135,13 @@ public async getOneSupplierOrderItem(id: number): Promise<SupplierOrderItemModel
         `;
 
         const values = [
-            orderItem.idOrder,
-            orderItem.idProduct,
             orderItem.quantityOrdered,
             orderItem.quantityReceived,
             orderItem.unitCost,
             orderItem.idOrderItem
         ];
 
-        const info =
-            await dal.execute(sql, values) as OkPacketParams;
+        const info = await dal.execute(sql, values) as OkPacketParams;
 
         if (info.affectedRows === 0) {
             throw new ResourceNotFoundError(
@@ -159,12 +149,16 @@ public async getOneSupplierOrderItem(id: number): Promise<SupplierOrderItemModel
             );
         }
 
-        return orderItem;
+        return await this.getOneSupplierOrderItem(orderItem.idOrderItem);
     }
 
 
     // Delete supplier order item:
     public async deleteSupplierOrderItem(id: number): Promise<void> {
+
+        const item = await this.getOneSupplierOrderItem(id);
+        console.log("Order ID", item.idOrder);
+
 
         const sql = `
             DELETE FROM supplier_order_items
@@ -173,12 +167,38 @@ public async getOneSupplierOrderItem(id: number): Promise<SupplierOrderItemModel
 
         const values = [id];
 
-        const info =
-            await dal.execute(sql, values) as OkPacketParams;
+        const info = await dal.execute(sql, values) as OkPacketParams;
+        if (info.affectedRows === 0) {
+            throw new ResourceNotFoundError(id);
+        }
+        await this.recalculateOrderTotal(item.idOrder);
+
+        const items = await this.getItemsByOrder(item.idOrder);
+        if (items.length === 0) {
+            await dal.execute(`DELETE FROM supplier_orders WHERE id_order = ?`, [item.idOrder]);
+        }
 
         if (info.affectedRows === 0) {
             throw new ResourceNotFoundError(id);
         }
+
+
+    }
+
+
+    //Calculate total order
+    private async recalculateOrderTotal(idOrder: number): Promise<void> {
+        const sql = `
+        UPDATE supplier_orders
+        SET total_cost = (
+            SELECT IFNULL(SUM(line_total),0)
+            FROM supplier_order_items
+            WHERE id_order = ?
+        )
+        WHERE id_order =?
+        `;
+
+        await dal.execute(sql, [idOrder, idOrder]);
     }
 }
 
