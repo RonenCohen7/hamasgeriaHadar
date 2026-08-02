@@ -54,6 +54,9 @@ class ProductService {
         formData.append("productStock", product.productStock);
         formData.append("minimumStock", product.minimumStock);
         formData.append("unitType", product.unitType);
+        formData.append("idSupplier", String(product.idSupplier));
+        formData.append("supplierCost", String(product.supplierCost ?? product.productCost));
+        formData.append("supplierCatalogNumber",product.catalogNumber ?? product.catalogNumber);
 
         if(product.image instanceof File){
             formData.append("image", product.image);

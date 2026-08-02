@@ -31,7 +31,7 @@ export class AddSaleOrderDto {
 export class UpdateSaleOrderDto {
     idEvent?: number | null;
     customerName?: string |  null;
-    salesStatus?: SaleStatus;
+    saleStatus?: SaleStatus;
     paymentMethod!: PaymentMethod | null;
     discountAmount?:number;
     notes?: string | null;

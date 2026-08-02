@@ -36,6 +36,18 @@ export function ProductDetails() {
         navigate(`/products/edit/${product?.idProduct}`);
 
     }
+    function showSupplier(){
+        if(!product?.idSupplier){
+            notificationService.error("No supplier assigned to this product");
+            return
+        }
+        navigate(`/suppliers/${product.idSupplier}`);
+    }
+
+    function showInventory(){
+        if(!product) return;
+        navigate(`/inventory-live?productId=${product.idProduct}`);
+    }
 
     async function deleteCurrentProduct(){
         if(!product) return;
@@ -89,8 +101,8 @@ export function ProductDetails() {
 
                         <div className="product-action">
                             <button className="btn-action" onClick={editProduct}>Edit ✍🏻</button>
-                            <button className="btn-action">Inventory 📦</button>
-                            <button className="btn-action">Supplier 🚚</button>
+                            <button className="btn-action" onClick={showInventory}>Inventory 📦</button>
+                            <button className="btn-action" onClick={showSupplier}>Supplier 🚚</button>
                             <button className="btn-action" btn-delete onClick={deleteCurrentProduct}>Delete 🗑️</button>
 
 

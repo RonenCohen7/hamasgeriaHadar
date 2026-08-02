@@ -16,6 +16,12 @@ export class RouteNotFoundError extends BaseClientError {
     }
 }
 
+export class ResourceAlreadyExistsError extends BaseClientError {
+    public constructor(message: string) {
+        super(StatusCode.Conflict, message);
+    }
+}
+
 export class ResourceNotFoundError extends BaseClientError {
     public constructor(id: number) {
         super(StatusCode.NotFound, `id ${id} not found.`);

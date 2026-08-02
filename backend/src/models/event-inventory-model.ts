@@ -2,29 +2,30 @@ export class EventInventoryModel {
     idEventInventory!: number;
     idEvent!: number;
     idProduct!: number;
-    openingQuantity!: number;
+
+    quantityAllocated!: number;
     quantitySold!: number;
     quantityReturned!: number;
     damagedQuantity!: number;
-    quantityAllocated!: number;
+
     createdAt!: Date;
     updatedAt!: Date;
 }
 
 export class AddEventInventoryDto {
     idProduct!: number;
-    openingQuantity!: number;
+    quantityAllocated!: number;
 }
 
 export class UpdateEventInventoryDto {
-    // openingQuantity?: number;
-    soldQuantity?: number;
-    // damagedQuantity?: number;
+    quantitySold?: number;
     quantityReturned?: number;
+    damagedQuantity?: number;
 }
 
 export class EventInventoryDetailsModel
     extends EventInventoryModel {
+
     eventName!: string;
     productName!: string;
     catalogNumber!: string;

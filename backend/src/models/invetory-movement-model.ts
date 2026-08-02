@@ -17,7 +17,7 @@ export class InventoryMovementModel {
 
 
 export class AddInventoryMovementDto {
-    idProducts!: number;
+    idProduct!: number;
     idEvent!: number;
     movementType!: InventoryMovementType;
     quantity!: number;

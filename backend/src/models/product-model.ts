@@ -9,23 +9,38 @@ export class ProductModel {
     productCost!: number;
     productPrice!: number;
     productStock!: number;
-    minimumStock!:number;
+    minimumStock!: number;
     unitType!: UnitType;
     isActive!: boolean;
     createdAt!: Date;
     updatedAt!: Date;
     categoryName?: string | null;
-    
-    
+    idSupplier?: number;
+    supplierName?: string;
+    supplierCatalogNumber?: string;
+    supplierCost?: number;
+    isPreferredSupplier?: boolean;
+
+
     image?: UploadedFile;
     imageName?: string;
     imageUrl?: string | null;
 }
 
-export class AddProductDto {
+export class AddProductModel {
+    image?: UploadedFile;
+    imageName?: string | null;
+
+    idProduct!: number;
     productName!: string;
-    catalogNumber!:string;
-    idCategory?:number | null;
+
+    idSupplier!: number;
+    supplierCatalogNumber?: string;
+    supplierCost!: number;
+
+    catalogNumber!: string;
+    idCategory?: number | null;
+
     productCost!: number;
     productPrice!: number;
     productStock?: number;
@@ -36,14 +51,14 @@ export class AddProductDto {
 
 
 export class UpdateProductDto {
-    productName?:string;
-    catalogNumber?:string;
-    idCategory?:number;
-    productCost?:number;
-    productPrice?:number;
-    productStock?:number;
-    minimumStock?:number;
-    unitType?:UnitType;
+    productName?: string;
+    catalogNumber?: string;
+    idCategory?: number;
+    productCost?: number;
+    productPrice?: number;
+    productStock?: number;
+    minimumStock?: number;
+    unitType?: UnitType;
     isActive?: boolean;
 }
 
@@ -52,7 +67,7 @@ export class UpdateProductDto {
 export class LowStockProductModel {
     idProduct!: number;
     productName!: string;
-    catalogNumber!:string;
+    catalogNumber!: string;
     productStock!: number;
     minimumStock!: number;
     unitType!: UnitType;

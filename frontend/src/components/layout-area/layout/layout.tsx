@@ -4,10 +4,36 @@ import { Header } from "../header/header";
 import { Menu } from "../menu/menu";
 import { Routing } from "../routing/routing";
 import "./layout.css";
+import { useEffect } from "react";
+import { socketService } from "../../service/socket-service";
+import { useDispatch } from "react-redux";
+import { updateInventoryProduct } from "../../redux/inventory-slice";
 
 export function Layout() {
 
-    
+    const dispatch = useDispatch();
+    useEffect(()=>{
+
+        const handleInventoryUpdated = (data: {
+            idProduct:number;
+            stockAfter: number;
+        }): void => {
+            console.log("inventory-updated received:", data);
+
+            dispatch(updateInventoryProduct({
+                idProduct:Number(data.idProduct),
+                stockAfter:Number(data.stockAfter)
+            }))
+        };
+        socketService.onInventoryUpdated(handleInventoryUpdated);
+
+        return()=>{
+            socketService.offInventoryUpdated(handleInventoryUpdated);
+        }
+
+    },[dispatch]);
+
+
 
     return (
         <div className="layout">

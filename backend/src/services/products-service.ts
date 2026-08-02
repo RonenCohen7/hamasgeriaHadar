@@ -1,7 +1,7 @@
 import { OkPacketParams } from "mysql2";
-import { ProductModel } from "../models/product-model"
+import { AddProductModel, ProductModel } from "../models/product-model"
 import { dal } from "../utils/dal"
-import { ResourceNotFoundError } from "../models/client-errors";
+import { ResourceNotFoundError, ResourceAlreadyExistsError } from "../models/client-errors";
 import { fileSaver } from "uploaded-file-saver";
 import { appConfig } from "../utils/app-config";
 
@@ -46,38 +46,60 @@ class ProductService {
 
     //Get One product
     public async getOneProduct(id: number): Promise<ProductModel> {
-        const sql = `
-            SELECT 
-                p.id_product AS idProduct,
-                p.product_name AS productName,
-                p.image_name AS imageName,
-                p.catalog_number AS catalogNumber,
-                p.id_category AS idCategory,
-                p.product_cost AS productCost,
-                p.product_price AS productPrice,
-                p.product_stock AS productStock,
-                p.minimum_stock AS minimumStock,
-                p.unit_type AS unitType,
-                p.is_active AS isActive,
-                p.created_at AS createdAt,
-                p.updated_at AS updatedAt,
-                c.category_name AS categoryName,
-                CASE
-                    WHEN p.image_name IS NOT NULL
-                    THEN CONCAT(?, p.image_name)
-                    ELSE NULL
-                END As imageUrl
-            FROM products AS p
-            LEFT JOIN product_categories AS c
-                ON p.id_category = c.id_category
-            WHERE p.id_product = ?
-        `
+       
+       const sql = `
+        SELECT 
+            p.id_product AS idProduct,
+            p.product_name AS productName,
+            p.image_name AS imageName,
+            p.catalog_number AS catalogNumber,
+            p.id_category AS idCategory,
+            p.product_cost AS productCost,
+            p.product_price AS productPrice,
+            p.product_stock AS productStock,
+            p.minimum_stock AS minimumStock,
+            p.unit_type AS unitType,
+            p.is_active AS isActive,
+            p.created_at AS createdAt,
+            p.updated_at AS updatedAt,
 
-        const values = [appConfig.baseImageUrl,id];
-        const products = await dal.execute(sql,values) as ProductModel[];
-        
+            c.category_name AS categoryName,
+
+            ps.id_supplier AS idSupplier,
+            ps.supplier_catalog_number AS supplierCatalogNumber,
+            ps.supplier_cost AS supplierCost,
+            ps.is_preferred_supplier AS isPreferredSupplier,
+
+            s.supplier_name AS supplierName,
+
+            CASE
+                WHEN p.image_name IS NOT NULL
+                THEN CONCAT(?, p.image_name)
+                ELSE NULL
+            END AS imageUrl
+
+        FROM products AS p
+
+        LEFT JOIN product_categories AS c
+            ON p.id_category = c.id_category
+
+        LEFT JOIN product_suppliers AS ps
+            ON ps.id_product = p.id_product
+            AND ps.is_preferred_supplier = 1
+
+        LEFT JOIN suppliers AS s
+            ON s.id_supplier = ps.id_supplier
+
+        WHERE p.id_product = ?
+
+        LIMIT 1
+    `;
+
+        const values = [appConfig.baseImageUrl, id];
+        const products = await dal.execute(sql, values) as ProductModel[];
+
         const product = products[0];
-        if(!product){
+        if (!product) {
             throw new ResourceNotFoundError(id);
         }
 
@@ -88,8 +110,19 @@ class ProductService {
 
 
     //Add new Product
-    public async addProduct(product:ProductModel):Promise<ProductModel>{
-        if(product.image) {
+    public async addProduct(product: AddProductModel): Promise<ProductModel> {
+
+        const checkIfBarcodeExists = `
+            SELECT id_product As idProduct
+            FROM products
+            WHERE catalog_number = ?
+        `;
+        const existingProduct = await dal.execute(checkIfBarcodeExists, [product.catalogNumber]) as ProductModel[];
+        if (existingProduct.length > 0) {
+            throw new ResourceAlreadyExistsError("Catalog Number already exists");
+        }
+
+        if (product.image) {
             product.imageName = product.image ? await fileSaver.add(product.image, appConfig.productImages) : null!;
         }
 
@@ -111,34 +144,57 @@ class ProductService {
         const values = [
             product.productName,
             product.catalogNumber,
-            product.idCategory,
+            product.idCategory ?? null,
             product.productCost,
             product.productPrice,
-            product.productStock,
-            product.minimumStock,
-            product.unitType,
+            product.productStock ?? 0,
+            product.minimumStock ?? 0,
+            product.unitType ?? null,
             product.imageName ?? null
         ]
 
-        const info = await dal.execute(sql,values) as OkPacketParams;
-        product.idProduct = info.insertId!;
-        return product;
+        const info = await dal.execute(sql, values) as OkPacketParams;
+        const idProduct = info.insertId!;
+
+
+
+
+        const supplierSql = `
+            INSERT INTO product_suppliers (
+                id_product,
+                id_supplier,
+                supplier_catalog_number,
+                supplier_cost,
+                is_preferred_supplier
+            )
+            VALUES (?,?,?,?,?)
+        `;
+        const supplierValues = [
+            idProduct,
+            product.idSupplier,
+            product.supplierCatalogNumber ?? product.catalogNumber,
+            product.supplierCost ?? product.productCost, 1
+        ]
+
+        await dal.execute(supplierSql, supplierValues);
+
+        return await this.getOneProduct(idProduct);
 
     }
 
 
 
     //update product;
-    public async updateProduct(product:ProductModel): Promise<ProductModel>{
+    public async updateProduct(product: ProductModel): Promise<ProductModel> {
 
         const existingProduct = await this.getOneProduct(product.idProduct);
-        if (product.image){
-            if(existingProduct.imageName){
+        if (product.image) {
+            if (existingProduct.imageName) {
                 await fileSaver.delete(existingProduct.imageName, appConfig.productImages);
             }
-        
 
-        product.imageName = await fileSaver.add(product.image,appConfig.productImages);
+
+            product.imageName = await fileSaver.add(product.image, appConfig.productImages);
 
         }
         else {
@@ -176,9 +232,9 @@ class ProductService {
             product.idProduct
         ]
 
-        const info = await dal.execute(sql,values) as OkPacketParams;
+        const info = await dal.execute(sql, values) as OkPacketParams;
 
-        if (info.affectedRows === 0){
+        if (info.affectedRows === 0) {
             throw new ResourceNotFoundError(product.idProduct)
         }
         return product;
@@ -186,10 +242,10 @@ class ProductService {
 
 
     //delete Products
-    public async deleteProduct(id:number):Promise<void>{
+    public async deleteProduct(id: number): Promise<void> {
 
         const product = await this.getOneProduct(id);
-        if(product.imageName){
+        if (product.imageName) {
             await fileSaver.delete(product.imageName, appConfig.productImages);
         }
 
@@ -199,9 +255,9 @@ class ProductService {
         `
         const values = [id];
 
-        const info = await dal.execute(sql,values) as OkPacketParams;
+        const info = await dal.execute(sql, values) as OkPacketParams;
 
-        if(info.affectedRows === 0){
+        if (info.affectedRows === 0) {
             throw new ResourceNotFoundError(id)
         }
     }
@@ -209,7 +265,7 @@ class ProductService {
 
 
     //Get low Stock product
-    public async getLowStockProducts(): Promise<ProductModel[]>{
+    public async getLowStockProducts(): Promise<ProductModel[]> {
         const sql = `
             SELECT
                 p.id_product AS idProduct,
@@ -235,6 +291,38 @@ class ProductService {
         const products = await dal.execute(sql) as ProductModel[];
         return products;
     }
+
+
+    //Get Live Inventory
+    public async getLiveInventory(): Promise<any[]> {
+        const sql = `
+        SELECT
+            p.id_product AS idProduct,
+            p.product_name AS productName,
+            p.product_stock AS productStock,
+            p.minimum_stock AS minimumStock,
+            p.image_name AS imageName,
+
+            s.id_supplier AS supplierId,
+            s.supplier_name AS supplierName
+
+        FROM products p
+
+        LEFT JOIN product_suppliers ps
+            ON ps.id_product = p.id_product
+            AND ps.is_preferred_supplier = 1
+
+        LEFT JOIN suppliers s
+            ON s.id_supplier = ps.id_supplier
+
+        ORDER BY p.product_name
+
+        `;
+
+        return await dal.execute(sql) as OkPacketParams[];
+    }
+
+
 }
 
 export const productService = new ProductService();

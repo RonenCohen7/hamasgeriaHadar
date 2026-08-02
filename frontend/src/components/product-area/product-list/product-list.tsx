@@ -9,11 +9,17 @@ import { ProductModel } from "../../models/product-model";
 import { ProductCard } from "../product-card/product-card";
 import { useTitle } from "../../utils/UseTitle";
 import { useNavigate } from "react-router-dom";
+import { current } from "@reduxjs/toolkit";
+import { socketService } from "../../service/socket-service";
+
 
 
 export function ProductList() {
 
     const [products, setProducts] = useState<ProductModel[]>([]);
+    const [updateProductId, setUpdateProductId] = useState<number | null>(null);
+
+
     useTitle("products");
 
     const navigate = useNavigate();
@@ -28,11 +34,32 @@ export function ProductList() {
             .catch(error => {
                 console.log(error);
             })
+
+        const handleInventoryUpdated = (data: {
+            idProduct: number;
+            stockAfter: number;
+        }):void => {
+            setProducts(currentProducts => 
+                currentProducts.map(product => 
+                    product.idProduct === data.idProduct ? {...product, productStock:String(data.stockAfter)}: product
+                )
+            );
+            setUpdateProductId(data.idProduct);
+            window.setTimeout(()=>{
+                setUpdateProductId(currentId => currentId === data.idProduct ? null : currentId)
+            },1500);
+        }
+        socketService.onInventoryUpdated(handleInventoryUpdated);
+
+        return()=>{
+            socketService.offInventoryUpdated(handleInventoryUpdated)
+        }
+
     }, []);
     console.log(products);
 
 
-    const filterProducts = products.filter(product =>product.productName.toLowerCase().includes(search.toLowerCase()))
+    const filterProducts = products.filter(product => product.productName.toLowerCase().includes(search.toLowerCase()))
 
     return (
         <section className="products-page">
@@ -52,7 +79,7 @@ export function ProductList() {
             <div className="products-toolbar">
                 <div className="products-search">
                     <FaSearch />
-                    <input type="search" placeholder="Search products..." value={search} onChange={(e)=> setSearch(e.target.value)}/>
+                    <input type="search" placeholder="Search products..." value={search} onChange={(e) => setSearch(e.target.value)} />
                 </div>
                 <div className="products-count">
                     <FaBoxOpen />

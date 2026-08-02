@@ -1,5 +1,5 @@
 export class SaleOrderItemModel {
-    idSalesItem!: number;
+    idSaleItem!: number;
     idSale!: number;
     idProduct!: number;
     quantity!: number;

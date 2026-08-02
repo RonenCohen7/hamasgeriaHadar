@@ -21,6 +21,7 @@ class EventInventoryService {
                 ei.created_at AS createdAt,
                 ei.updated_at AS updatedAt,
                 e.event_name AS eventName,
+                ei.damaged_quantity AS damagedQuantity,
                 p.product_name AS productName
             FROM event_inventory AS ei
             JOIN events AS e
@@ -52,6 +53,7 @@ class EventInventoryService {
                 ei.quantity_returned AS quantityReturned,
                 ei.created_at AS createdAt,
                 ei.updated_at AS updatedAt,
+                ei.damaged_quantity AS damagedQuantity,
                 e.event_name AS eventName,
                 p.product_name AS productName
             FROM event_inventory AS ei
@@ -92,6 +94,7 @@ class EventInventoryService {
                 ei.quantity_returned AS quantityReturned,
                 ei.created_at AS createdAt,
                 ei.updated_at AS updatedAt,
+                ei.damaged_quantity AS damagedQuantity,
                 e.event_name AS eventName,
                 p.product_name AS productName
             FROM event_inventory AS ei
@@ -123,9 +126,10 @@ class EventInventoryService {
                 id_product,
                 quantity_allocated,
                 quantity_sold,
-                quantity_returned
+                quantity_returned,
+                damaged_quantity
             )
-            VALUES (?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?,?)
         `;
 
         const values = [
@@ -133,7 +137,8 @@ class EventInventoryService {
             inventoryItem.idProduct,
             inventoryItem.quantityAllocated,
             inventoryItem.quantitySold,
-            inventoryItem.quantityReturned
+            inventoryItem.quantityReturned,
+            inventoryItem.damagedQuantity ?? 0
         ];
 
         const info =
@@ -157,7 +162,8 @@ class EventInventoryService {
                 id_product = ?,
                 quantity_allocated = ?,
                 quantity_sold = ?,
-                quantity_returned = ?
+                quantity_returned = ?,
+                damaged_quantity = ?,
             WHERE id_event_inventory = ?
         `;
 
@@ -168,6 +174,7 @@ class EventInventoryService {
             inventoryItem.quantitySold,
             inventoryItem.quantityReturned,
             inventoryItem.idEventInventory
+            
         ];
 
         const info =

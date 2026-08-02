@@ -1,8 +1,9 @@
 import express, { Request, Response, NextFunction } from "express";
 import { productService } from "../services/products-service";
-import { ProductModel } from "../models/product-model";
+import { AddProductModel, ProductModel } from "../models/product-model";
 
 import { UploadedFile } from "express-fileupload";
+import { promises } from "dns";
 
 
 
@@ -20,6 +21,8 @@ class ProductController {
         this.router.put("/api/products/:id", this.updateProduct);
 
         this.router.delete("/api/products/:id", this.deleteProduct);
+
+        this.router.get("/api/inventory/live", this.getLiveInventory);
     }
 
 
@@ -57,7 +60,7 @@ class ProductController {
     public async addProduct(request: Request, response: Response, next: NextFunction): Promise<void> {
         try {
 
-            const product: ProductModel = request.body;
+            const product: AddProductModel = request.body;
 
             product.image = request.files?.image as UploadedFile;
 
@@ -127,6 +130,20 @@ class ProductController {
         } catch (err: any) {
             next(err);
         }
+    }
+
+
+    //Get Inventory Live
+    private async getLiveInventory(request:Request, response:Response, next:NextFunction):Promise<void>{
+        try{
+
+            const inventory = await productService.getLiveInventory();
+            response.json(inventory);
+
+        }catch(err:any){
+            next(err);
+        }
+
     }
 }
 

@@ -6,10 +6,13 @@ import { productCategoryService } from "../../service/productCategoryService";
 import { useForm } from "react-hook-form";
 import { ProductModel } from "../../models/product-model";
 
-import { UnitType } from "../../models/enum";
+
 import { useNavigate } from "react-router-dom";
 import { productService } from "../../service/productService";
 import { notificationService } from "../../service/notificationService";
+import { SupplierModel } from "../../models/supplier-model";
+import { supplierService } from "../../service/supplierService";
+import { UnitType } from "../../models/enum";
 
 export function AddProduct() {
 
@@ -18,11 +21,23 @@ export function AddProduct() {
     const [categories, setCategories] =
         useState<ProductCategoryModel[]>([]);
 
-    const { register , handleSubmit } = useForm<ProductModel>();
+    const { register, handleSubmit, formState: { errors } } = useForm<ProductModel>();
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const [suppliers, setSuppliers] = useState<SupplierModel[]>([]);
 
-   
     const navigate = useNavigate();
+
+
+    useEffect(() => {
+        supplierService.getAllSuppliers()
+            .then(suppliersFromApi => setSuppliers(suppliersFromApi))
+            .catch(err => {
+                console.log(err);
+                notificationService.error("Failed to load suppliers");
+
+            })
+    }, []);
+
 
     useEffect(() => {
         productCategoryService
@@ -43,12 +58,12 @@ export function AddProduct() {
     }
 
 
-    async function send(formData:ProductModel){
-        try{
+    async function send(formData: ProductModel) {
+        try {
 
             const imageFiles = formData.image as unknown as FileList;
 
-            if(imageFiles?.length >0){
+            if (imageFiles?.length > 0) {
                 formData.image = imageFiles[0];
             }
             else {
@@ -59,77 +74,91 @@ export function AddProduct() {
             notificationService.success("Product added successfully.");
             navigate(`/products/${addedProduct.idProduct}`);
 
-        }catch(err:any){
-            notificationService.error(err.message);
-            
+        } catch (err: any) {
+            console.log("Add product error:", err);
+            console.log("Backend response:", err.response?.data);
+
+            const serverData = err.response?.data;
+            const message = typeof serverData === "string" ? serverData : serverData?.message ?? err.message ?? "Failed to add product";
+
+            notificationService.error(message);
         }
+
     }
 
-    return (
-        <div className="AddProduct">
 
-            <h1>Add Product</h1>
+return (
+    <div className="AddProduct">
 
-            <form className="add-form" onSubmit={handleSubmit(send)}>
-                <label>Category</label>
-                <select
-                    defaultValue=""
-                    {...register("idCategory", {
-                        required: true,
-                        valueAsNumber: true
-                    })}
-                >
-                    <option value="" disabled>
-                        Select Category
+        <h1>Add Product</h1>
+
+        <form className="add-form" onSubmit={handleSubmit(send)}>
+            <label>Category</label>
+            <select
+                defaultValue=""
+                {...register("idCategory", {
+                    required: true,
+                    valueAsNumber: true
+                })}
+            >
+                <option value="" disabled>
+                    Select Category
+                </option>
+
+                {categories.map(category => (
+                    <option
+                        key={category.idCategory}
+                        value={category.idCategory}
+                    >
+                        {category.categoryName}
                     </option>
+                ))}
+            </select>
 
-                    {categories.map(category => (
-                        <option
-                            key={category.idCategory}
-                            value={category.idCategory}
-                        >
-                            {category.categoryName}
-                        </option>
-                    ))}
-                </select>
-                <label>Product Name</label>
-                <input type="text" {...register("productName", { required: true })} />
+            <label>Supplier</label>
+            <select defaultValue="" {...register("idSupplier", { required: "Supplier is Required", valueAsNumber: true })}>
+                <option value="" disabled>Select Supplier</option>
+                {suppliers.map(supplier => (<option key={supplier.idSupplier} value={supplier.idSupplier}>{supplier.supplierName}</option>))}
+                {errors.idSupplier && <span className="error">{errors.idSupplier.message}</span>}
+            </select>
+            <label>Product Name</label>
+            <input type="text" {...register("productName", { required: true })} />
 
-                <label>Catalog Number</label>
-                <input type="text" {...register("catalogNumber", { required: true })} />
+            <label>Catalog Number</label>
+            <input type="text" {...register("catalogNumber", { required: true })} />
 
-                <label>Cost</label>
-                <input type="number" step="0.01" {...register("productCost", { required: true })} />
+            <label>Cost</label>
+            <input type="number" step="0.01" {...register("productCost", { required: true })} />
 
-                <label>Price</label>
-                <input type="number" step="0.01" {...register("productPrice", { required: true })} />
+            <label>Price</label>
+            <input type="number" step="0.01" {...register("productPrice", { required: true })} />
 
-                <label>Stock</label>
-                <input type="number" step="0.01" {...register("productStock", { required: true })} />
+            <label>Stock</label>
+            <input type="number" step="0.01" {...register("productStock", { required: true })} />
 
-                <label>Minimum Stock</label>
-                <input type="number" step="0.01" {...register("minimumStock", { required: true })} />
+            <label>Minimum Stock</label>
+            <input type="number" step="0.01" {...register("minimumStock", { required: true })} />
 
-                <label>Unit</label>
-                <select defaultValue="" {...register("unitType", { required: true })}>
-                    <option value="" disabled>Select Unit</option>
-                    {Object.values(UnitType).map(unit => (<option key={unit} value={unit}>{unit}</option>))}
-                </select>
+            <label>Unit</label>
+            <select defaultValue="" {...register("unitType", { required: true })}>
+                <option value="" disabled>Select Unit</option>
+                {Object.values(UnitType).map(unit => (<option key={unit} value={unit}>{unit}</option>))}
+            </select>
 
-                <label>Image</label>
-                {previewUrl && (<div className="image-preview">
-                    <img src={previewUrl} alt="product preview" />
-                </div>)}
+            <label>Image</label>
+            {previewUrl && (<div className="image-preview">
+                <img src={previewUrl} alt="product preview" />
+            </div>)}
 
-                <input type="file" accept="image/*" {...register("image",{onChange: handleImageChange})}/>
+            <input type="file" accept="image/*" {...register("image", { onChange: handleImageChange })} />
 
-                <div className="form-button">
-                    <button type="submit">Save</button>
-                    <button type="button" onClick={()=> navigate("/products")}>Cancel</button>
-                </div>
+            <div className="form-button">
+                <button type="submit">Save</button>
+                <button type="button" onClick={() => navigate("/products")}>Cancel</button>
+            </div>
 
-            </form>
+        </form>
 
-        </div>
-    );
+    </div>
+);
 }

@@ -12,6 +12,13 @@ import { supplierOrderController } from "./controllers/supplier-orders-controlle
 import { errorMiddleware } from "./middleware/errors-middleware";
 
 import fileUpload from "express-fileupload";
+import { saleOrderController } from "./controllers/sale-order-controller";
+
+
+import { createServer } from "http";
+import { Server } from "socket.io";
+import { Socket } from "dgram";
+import { initSocket } from "./utils/socket";
 
 
 
@@ -20,27 +27,37 @@ class App {
     public start():void {
         try{
 
-            const server = express();
+            const app = express();
+            
 
-            server.use("/api/products/images", express.static("src/assets/images/products"));
+            app.use("/api/products/images", express.static("src/assets/images/products"));
 
-            server.use(fileUpload());
-            server.use(cors());
-            server.use(express.json());
-            server.use(eventInventoryController.router)
-            server.use(eventController.router);
-            server.use(userController.router);
-            server.use(categoriesController.router);
-            server.use(productController.router);
-            server.use(supplierController.router);
-            server.use(productSupplierController.router);
-            server.use(supplierOrderController.router);
+            app.use(fileUpload());
+            app.use(cors());
+            app.use(express.json());
+            app.use(eventInventoryController.router)
+            app.use(eventController.router);
+            app.use(userController.router);
+            app.use(categoriesController.router);
+            app.use(productController.router);
+            app.use(supplierController.router);
+            app.use(productSupplierController.router);
+            app.use(supplierOrderController.router);
+            app.use(saleOrderController.router);
 
 
-            server.use(errorMiddleware.routeNotFound);
-            server.use(errorMiddleware.catchAll);
+            app.use(errorMiddleware.routeNotFound);
+            app.use(errorMiddleware.catchAll);
 
-            server.listen(appConfig.port, ()=> console.log("Listening on http://localhost:  " + appConfig.port));
+            const httpServer = createServer(app);
+            
+            initSocket(httpServer);
+      
+            
+            httpServer.listen(appConfig.port, ()=> {
+                console.log("Listening on http://localhost:" + appConfig.port);
+                
+            })
     
 
         }catch(err:any){

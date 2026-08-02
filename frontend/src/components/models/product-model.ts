@@ -2,6 +2,10 @@ export class ProductModel {
     idProduct!: number;
     productName!: string;
 
+    idSupplier!: number;
+    supplierCost?: number;
+    supplierCatalogNumber?: string;
+
     imageName!: string | null;
     imageUrl!: string | null;
     image?: File;
@@ -22,7 +26,6 @@ export class ProductModel {
     createdAt!: string;
     updatedAt!: string;
 
-    supplierCatalogNumber?: string;
-    supplierCost?: number | string;
+    
     isPreferredSupplier?: boolean;
 }

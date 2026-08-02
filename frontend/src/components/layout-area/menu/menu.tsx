@@ -1,7 +1,8 @@
 import { NavLink } from "react-router-dom";
 import "./menu.css";
-import { FaHome, FaBoxOpen, FaInfoCircle, FaEnvelope, FaTruck, FaFileInvoice } from "react-icons/fa";
+import { FaHome, FaBoxOpen, FaInfoCircle, FaEnvelope, FaTruck, FaFileInvoice,FaWarehouse } from "react-icons/fa";
 import { useEffect, useState } from "react";
+import { FaSackDollar } from "react-icons/fa6";
 
 
 
@@ -44,6 +45,10 @@ export function Menu() {
                 <NavLink to="/suppliers" className="menu-link" data-tooltip="suppliers"><FaTruck /></NavLink>
 
                 <NavLink to="/supplier-orders" className="menu-link" data-tooltip="Supplier Orders"><FaFileInvoice></FaFileInvoice></NavLink>
+
+                <NavLink to="/sales/new" className="menu-link" data-tooltip="Create New Sale"><FaSackDollar></FaSackDollar></NavLink>
+                
+                <NavLink to="/inventory-live" className="menu-link" data-tooltip="Live Inventory"><FaWarehouse /></NavLink>
 
                
                 <NavLink to="/about" className="menu-link" data-tooltip="About"><FaInfoCircle /></NavLink>

@@ -60,7 +60,7 @@ class EventController {
 
             const addEvent = await eventService.addEvent(event);
 
-            response.status(200).json(addEvent);
+            response.status(201).json(addEvent);
 
         }catch(err:any){
             next(err)
@@ -99,7 +99,7 @@ class EventController {
                 return;
             }
             await eventService.deleteEvent(id);
-            response.status(204);
+            response.sendStatus(204);
 
         }catch(err: any){
             next(err)

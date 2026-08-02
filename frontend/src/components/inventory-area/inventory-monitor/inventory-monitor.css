@@ -1,0 +1,575 @@
+/* =========================================================
+   LIVE INVENTORY DASHBOARD
+   Designed for 13" laptop screens
+========================================================= */
+
+.InventoryMonitor {
+    width: min(1120px, calc(100% - 32px));
+    margin: 22px auto 50px;
+    box-sizing: border-box;
+
+    color: #15384f;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.inventory-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 285px;
+    align-items: center;
+    gap: 24px;
+
+    margin-bottom: 22px;
+    padding: 24px 28px;
+    box-sizing: border-box;
+
+    background:
+        radial-gradient(circle at top right,
+            rgba(99, 102, 241, 0.08),
+            transparent 36%),
+        linear-gradient(135deg,
+            #ffffff 0%,
+            #f7fbff 100%);
+
+    border: 1px solid #d7e4ef;
+    border-radius: 22px;
+
+    box-shadow:
+        0 14px 36px rgba(25, 57, 84, 0.09);
+}
+
+.inventory-eyebrow {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #0788a8;
+
+    font-size: 0.7rem;
+    font-weight: 900;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+.inventory-header h1 {
+    margin: 0 0 9px;
+
+    color: #123a53;
+
+    font-size: 2rem;
+    line-height: 1;
+    font-weight: 900;
+    letter-spacing: -0.035em;
+}
+
+.inventory-header p {
+    margin: 0;
+
+    color: #697e8f;
+
+    font-size: 0.92rem;
+    line-height: 1.45;
+}
+
+
+/* =========================================================
+   LIVE STATUS / LAST UPDATE
+========================================================= */
+
+.inventory-live-status {
+    min-height: 92px;
+
+    display: grid;
+    grid-template-columns: auto 1px minmax(0, 1fr);
+    align-items: center;
+    gap: 16px;
+
+    padding: 16px 18px;
+    box-sizing: border-box;
+
+    background: rgba(255, 255, 255, 0.94);
+
+    border: 1px solid #d9e5ef;
+    border-radius: 17px;
+
+    box-shadow:
+        0 10px 25px rgba(20, 55, 85, 0.08);
+}
+
+.inventory-live-status::after {
+    content: "";
+
+    grid-column: 2;
+    grid-row: 1;
+
+    width: 1px;
+    height: 48px;
+
+    background: #d8e4ed;
+}
+
+.InventoryMonitor .status-dot {
+    grid-column: 1;
+    grid-row: 1;
+
+    width: 13px;
+    height: 13px;
+
+    border-radius: 50%;
+
+    flex: 0 0 auto;
+}
+
+.InventoryMonitor .status-dot.connected {
+    background: #16a45f;
+
+    box-shadow:
+        0 0 0 5px rgba(22, 164, 95, 0.13),
+        0 0 16px rgba(22, 164, 95, 0.45);
+}
+
+.InventoryMonitor .status-dot.disconnected {
+    background: #e43f4f;
+
+    box-shadow:
+        0 0 0 5px rgba(228, 63, 79, 0.12),
+        0 0 16px rgba(228, 63, 79, 0.35);
+}
+
+.inventory-live-status>div {
+    grid-column: 3;
+    grid-row: 1;
+
+    min-width: 0;
+    text-align: right;
+}
+
+.inventory-live-status strong {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #123a53;
+
+    font-size: 0.82rem;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.inventory-live-status>div>span {
+    display: block;
+
+    color: #64798a;
+
+    font-size: 0.72rem;
+    line-height: 1.45;
+    white-space: normal;
+}
+
+
+/* =========================================================
+   KPI CARDS
+========================================================= */
+
+.inventory-stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+
+    margin-bottom: 22px;
+}
+
+.inventory-stat-card {
+    min-height: 128px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding: 20px 22px;
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border: 1px solid #d9e5ef;
+    border-radius: 18px;
+
+    box-shadow:
+        0 10px 26px rgba(20, 55, 85, 0.07);
+
+    position: relative;
+    overflow: hidden;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.inventory-stat-card::before {
+    content: "";
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 4px;
+
+    background: #4f74e8;
+}
+
+.inventory-stat-card:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 15px 34px rgba(20, 55, 85, 0.12);
+}
+
+.inventory-stat-card>span {
+    display: block;
+
+    margin-bottom: 9px;
+
+    color: #617788;
+
+    font-size: 0.75rem;
+    font-weight: 800;
+}
+
+.inventory-stat-card strong {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #123a53;
+
+    font-size: 2rem;
+    line-height: 1;
+    font-weight: 950;
+    letter-spacing: -0.04em;
+}
+
+.inventory-stat-card small {
+    color: #8b9aa6;
+
+    font-size: 0.68rem;
+    line-height: 1.35;
+}
+
+.inventory-stat-card:nth-child(1) {
+    background:
+        linear-gradient(145deg,
+            rgba(59, 130, 246, 0.08),
+            #ffffff 55%);
+}
+
+.inventory-stat-card:nth-child(1)::before {
+    background: #3b82f6;
+}
+
+.inventory-stat-card:nth-child(2) {
+    background:
+        linear-gradient(145deg,
+            rgba(34, 197, 94, 0.08),
+            #ffffff 55%);
+}
+
+.inventory-stat-card:nth-child(2)::before {
+    background: #22a95a;
+}
+
+.inventory-stat-card.warning {
+    background:
+        linear-gradient(145deg,
+            rgba(245, 158, 11, 0.1),
+            #ffffff 55%);
+
+    border-color: rgba(245, 158, 11, 0.3);
+}
+
+.inventory-stat-card.warning::before {
+    background: #f59e0b;
+}
+
+.inventory-stat-card.live {
+    background:
+        linear-gradient(145deg,
+            rgba(20, 184, 166, 0.08),
+            #ffffff 55%);
+
+    border-color: rgba(20, 184, 166, 0.28);
+}
+
+.inventory-stat-card.live::before {
+    background: #14a58f;
+}
+
+
+/* =========================================================
+   TABLE WRAPPER
+========================================================= */
+
+.InventoryMonitor table {
+    width: 100%;
+
+    border-collapse: separate;
+    border-spacing: 0;
+
+    background: #ffffff;
+
+    border: 1px solid #d8e4ee;
+    border-radius: 19px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 13px 32px rgba(20, 55, 85, 0.08);
+}
+
+.InventoryMonitor thead {
+    background:
+        linear-gradient(90deg,
+            #123e59,
+            #176889);
+}
+
+.InventoryMonitor th {
+    padding: 15px 18px;
+
+    color: rgba(255, 255, 255, 0.95);
+
+    font-size: 0.76rem;
+    font-weight: 900;
+    letter-spacing: 0.03em;
+    text-align: left;
+
+    border: none;
+}
+
+.InventoryMonitor td {
+    padding: 14px 18px;
+
+    color: #29485d;
+
+    font-size: 0.83rem;
+    font-weight: 600;
+
+    border-bottom: 1px solid #e8eff4;
+
+    transition:
+        background-color 0.18s ease,
+        color 0.18s ease;
+}
+
+.InventoryMonitor tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.InventoryMonitor tbody tr:hover td {
+    background: #f3f8fc;
+}
+
+.InventoryMonitor td:first-child {
+    color: #143b53;
+    font-weight: 850;
+}
+
+.InventoryMonitor td:nth-child(2),
+.InventoryMonitor td:nth-child(3) {
+    font-variant-numeric: tabular-nums;
+}
+
+.InventoryMonitor td:nth-child(2) {
+    color: #14705f;
+    font-weight: 850;
+}
+
+
+/* =========================================================
+   OPTIONAL STOCK STATES
+========================================================= */
+
+.InventoryMonitor tr.low-stock-row td {
+    background: rgba(245, 158, 11, 0.08);
+}
+
+.InventoryMonitor tr.low-stock-row td:first-child {
+    border-left: 4px solid #f59e0b;
+}
+
+.InventoryMonitor tr.out-of-stock-row td {
+    background: rgba(239, 68, 68, 0.08);
+}
+
+.InventoryMonitor tr.out-of-stock-row td:first-child {
+    border-left: 4px solid #ef4444;
+}
+
+.InventoryMonitor tr.inventory-selected td {
+    background: #dbeafe;
+    color: #123b54;
+    box-shadow: inset 0 2px 0 #3b82f6,
+                inset 0 -2px 0 #3b82f6;
+}
+
+.InventoryMonitor tr.inventory-selected td:first-child {
+    border-left: 5px solid #3b82f6;
+}
+/* =========================================================
+   REAL-TIME GREEN FLASH
+========================================================= */
+
+.InventoryMonitor tr.inventory-updated td {
+    animation: inventoryFlash 1.5s ease;
+}
+
+@keyframes inventoryFlash {
+    0% {
+        background-color: #5cff8d;
+        color: #064e2b;
+    }
+
+    45% {
+        background-color: #bbf7d0;
+    }
+
+    100% {
+        background-color: #ffffff;
+    }
+}
+
+ .inventory-updated {
+        background: hwb(207 3% 25%) !important;
+        animation: inventoryFlash 1.5s ease;
+    }
+
+    @keyframes inventoryFlash {
+        0% {
+            background: hwb(134 2% 11%);
+        }
+
+        100% {
+            background: transparent;
+        }
+    }
+/* =========================================================
+   LAPTOP 13"
+========================================================= */
+
+@media (max-width: 1250px) {
+    .InventoryMonitor {
+        width: min(980px, calc(100% - 24px));
+        margin-top: 16px;
+    }
+
+    .inventory-header {
+        grid-template-columns: minmax(0, 1fr) 250px;
+
+        padding: 20px 22px;
+    }
+
+    .inventory-header h1 {
+        font-size: 1.75rem;
+    }
+
+    .inventory-stats {
+        gap: 12px;
+    }
+
+    .inventory-stat-card {
+        min-height: 112px;
+        padding: 17px 18px;
+    }
+
+    .inventory-stat-card strong {
+        font-size: 1.65rem;
+    }
+
+    .InventoryMonitor th {
+        padding: 12px 14px;
+    }
+
+    .InventoryMonitor td {
+        padding: 11px 14px;
+    }
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+    .inventory-header {
+        grid-template-columns: 1fr;
+    }
+
+    .inventory-live-status {
+        width: 100%;
+        max-width: 360px;
+
+        justify-self: start;
+    }
+
+    .inventory-live-status>div {
+        text-align: left;
+    }
+
+    .inventory-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .InventoryMonitor {
+        overflow-x: auto;
+    }
+
+    .InventoryMonitor table {
+        min-width: 700px;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+    .InventoryMonitor {
+        width: calc(100% - 16px);
+        margin: 10px auto 30px;
+    }
+
+    .inventory-header {
+        padding: 17px;
+        border-radius: 16px;
+    }
+
+    .inventory-header h1 {
+        font-size: 1.55rem;
+    }
+
+    .inventory-live-status {
+        grid-template-columns: auto 1px minmax(0, 1fr);
+
+        min-width: 0;
+        max-width: none;
+
+        padding: 13px;
+    }
+
+    .inventory-stats {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .inventory-stat-card {
+        min-height: 100px;
+    }
+
+   
+}

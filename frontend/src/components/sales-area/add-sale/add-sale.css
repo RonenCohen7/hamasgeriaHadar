@@ -1,0 +1,697 @@
+/* =========================================
+   ADD SALE — COMPACT TOUCH POS
+   Fits a 13-inch laptop without huge fields
+========================================= */
+
+.AddSale {
+    width: min(860px, calc(100% - 28px));
+    margin: 14px auto 24px;
+    padding: 18px 20px 22px;
+    box-sizing: border-box;
+
+    display: grid;
+    grid-template-columns:
+        minmax(210px, 1.8fr)
+        minmax(105px, 0.65fr)
+        minmax(120px, 0.75fr)
+        minmax(120px, 0.75fr)
+        125px;
+    gap: 12px;
+
+    color: #17384d;
+
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(99, 102, 241, 0.08),
+            transparent 32%
+        ),
+        linear-gradient(145deg, #ffffff, #f7fbff);
+
+    border: 1px solid #d6e3ef;
+    border-radius: 20px;
+
+    box-shadow:
+        0 16px 42px rgba(25, 60, 90, 0.11);
+
+    position: relative;
+    overflow: hidden;
+}
+
+.AddSale::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 9%;
+    right: 9%;
+    height: 4px;
+
+    background: linear-gradient(
+        90deg,
+        #315cf4,
+        #7541d8,
+        #13ae98
+    );
+
+    border-radius: 0 0 8px 8px;
+}
+
+/* =========================================
+   TITLE
+========================================= */
+
+.AddSale > h2 {
+    grid-column: 1 / -1;
+
+    margin: 4px 0 12px;
+
+    color: #123b54;
+    text-align: center;
+
+    font-size: 1.8rem;
+    line-height: 1;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+}
+
+.AddSale > h2::before {
+    content: "POINT OF SALE";
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #6366f1;
+
+    font-size: 0.55rem;
+    font-weight: 900;
+    letter-spacing: 0.22em;
+}
+
+/* =========================================
+   PRODUCT SELECT
+========================================= */
+
+.AddSale .sale-header {
+    grid-column: 1;
+
+    width: 100%;
+    height: 48px;
+    min-height: 48px;
+
+    margin: 0;
+    padding: 0 38px 0 13px;
+    box-sizing: border-box;
+
+    color: #17384d;
+    background: #ffffff;
+
+    border: 1px solid #cbdceb;
+    border-radius: 11px;
+
+    outline: none;
+    cursor: pointer;
+
+    font-size: 0.9rem;
+    font-weight: 750;
+
+    box-shadow: 0 4px 12px rgba(25, 60, 90, 0.05);
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.AddSale .sale-header:focus {
+    border-color: #526df0;
+
+    box-shadow:
+        0 0 0 3px rgba(82, 109, 240, 0.12);
+}
+
+/* =========================================
+   QUANTITY / PRICE / TOTAL
+========================================= */
+
+.AddSale .form-field {
+    margin: 0;
+    padding: 7px 9px;
+    box-sizing: border-box;
+
+    background: rgba(255, 255, 255, 0.9);
+
+    border: 1px solid #d8e5ef;
+    border-radius: 11px;
+
+    box-shadow: 0 4px 12px rgba(25, 60, 90, 0.04);
+}
+
+.AddSale .form-field label {
+    display: block;
+
+    margin: 0 0 4px;
+
+    color: #657b8d;
+
+    font-size: 0.56rem;
+    font-weight: 900;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+
+.AddSale .form-field input {
+    width: 100%;
+    height: 31px;
+    min-height: 31px;
+
+    padding: 0 9px;
+    box-sizing: border-box;
+
+    color: #143c54;
+    background: #f8fbfd;
+
+    border: 1px solid #ceddea;
+    border-radius: 7px;
+
+    outline: none;
+
+    font-size: 0.84rem;
+    font-weight: 800;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.AddSale .form-field input:focus {
+    background: #ffffff;
+    border-color: #526df0;
+
+    box-shadow:
+        0 0 0 3px rgba(82, 109, 240, 0.1);
+}
+
+.AddSale .form-field input[readonly] {
+    color: #087565;
+
+    background: rgba(16, 185, 129, 0.07);
+    border-color: rgba(16, 185, 129, 0.32);
+}
+
+/* Smaller browser number controls */
+.AddSale input[type="number"]::-webkit-inner-spin-button,
+.AddSale input[type="number"]::-webkit-outer-spin-button {
+    margin: 0;
+}
+
+/* =========================================
+   ADD ITEM BUTTON
+========================================= */
+
+.AddSale .add-item-button {
+    grid-column: 5;
+    align-self: stretch;
+
+    width: 100%;
+    height: 48px;
+    min-height: 48px;
+
+    margin: 0;
+    padding: 0 12px;
+
+    color: #ffffff;
+
+    background: linear-gradient(
+        135deg,
+        #315cf4,
+        #7340d5
+    );
+
+    border: none;
+    border-radius: 11px;
+
+    cursor: pointer;
+
+    font-size: 0.78rem;
+    font-weight: 900;
+
+    box-shadow:
+        0 8px 18px rgba(83, 70, 220, 0.23);
+
+    transition:
+        transform 0.16s ease,
+        box-shadow 0.16s ease,
+        filter 0.16s ease;
+}
+
+.AddSale .add-item-button::before {
+    content: "+";
+
+    display: inline-grid;
+    place-items: center;
+
+    width: 19px;
+    height: 19px;
+
+    margin-right: 6px;
+
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+
+    font-size: 0.85rem;
+}
+
+.AddSale .add-item-button:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+
+    box-shadow:
+        0 11px 22px rgba(83, 70, 220, 0.3);
+}
+
+.AddSale .add-item-button:active {
+    transform: scale(0.98);
+}
+
+/* =========================================
+   TABLE
+========================================= */
+
+.AddSale .sale-table {
+    grid-column: 1 / -1;
+
+    width: 100%;
+    margin-top: 4px;
+
+    border-spacing: 0;
+    border-collapse: separate;
+
+    background: #ffffff;
+
+    border: 1px solid #d8e5ef;
+    border-radius: 13px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 8px 20px rgba(25, 60, 90, 0.07);
+}
+
+.AddSale .sale-table thead {
+    background: linear-gradient(
+        135deg,
+        #173e59,
+        #20536d
+    );
+}
+
+.AddSale .sale-table th {
+    height: 35px;
+    padding: 0 11px;
+
+    color: rgba(255, 255, 255, 0.94);
+
+    border: none;
+
+    text-align: center;
+    text-transform: uppercase;
+
+    font-size: 0.56rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+}
+
+.AddSale .sale-table td {
+    height: 44px;
+    padding: 5px 11px;
+
+    color: #29495e;
+
+    border-bottom: 1px solid #e8eff5;
+
+    text-align: center;
+
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.AddSale .sale-table tbody tr:not(:last-child):hover td {
+    background: #f4f8ff;
+}
+
+.AddSale .sale-table td:first-child {
+    color: #143a51;
+
+    text-align: left;
+    font-weight: 900;
+}
+
+.AddSale .sale-table td:nth-child(4) {
+    color: #087565;
+    font-weight: 900;
+}
+
+/* =========================================
+   DELETE BUTTON
+========================================= */
+
+.AddSale .remove-item-button {
+    display: inline-grid;
+    place-items: center;
+
+    width: 34px;
+    height: 34px;
+    min-height: 34px;
+
+    margin: 0;
+    padding: 0;
+
+    color: #ffffff;
+
+    background: linear-gradient(
+        135deg,
+        #ff5968,
+        #e62e48
+    );
+
+    border: none;
+    border-radius: 9px;
+
+    cursor: pointer;
+
+    font-size: 0.82rem;
+
+    box-shadow:
+        0 6px 13px rgba(230, 46, 72, 0.22);
+
+    transition:
+        transform 0.16s ease,
+        box-shadow 0.16s ease;
+}
+
+.AddSale .remove-item-button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 17px rgba(230, 46, 72, 0.3);
+}
+
+.AddSale .remove-item-button:active {
+    transform: scale(0.93);
+}
+
+/* =========================================
+   SAVE SALE BUTTON
+========================================= */
+
+.AddSale .save-sale-button {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    width: 260px;
+    height: 48px;
+
+    margin: 18px 0 0 auto;
+    padding: 0 22px;
+
+    border: none;
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    background: linear-gradient(
+        135deg,
+        #10b981,
+        #0f766e
+    );
+
+    color: white;
+
+    font-size: .95rem;
+    font-weight: 800;
+
+    transition: .25s;
+
+    box-shadow:
+        0 10px 24px rgba(16,185,129,.30);
+}
+
+.AddSale .save-sale-button:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 16px 30px rgba(16,185,129,.40);
+
+    filter: brightness(1.05);
+}
+
+.AddSale .save-sale-button:active {
+    transform: scale(.97);
+}
+
+.AddSale .save-sale-button:disabled {
+
+    cursor: not-allowed;
+
+    background: #cbd5e1;
+
+    color: #64748b;
+
+    box-shadow: none;
+
+    transform: none;
+}
+
+/* =========================================
+   SUMMARY
+========================================= */
+
+.AddSale .sale-summary {
+    width: 270px;
+
+    margin: 8px 0 2px auto;
+    padding: 12px 14px;
+    box-sizing: border-box;
+
+    color: #ffffff;
+
+    background: linear-gradient(
+        145deg,
+        #133d57,
+        #16536a
+    );
+
+    border-radius: 13px;
+
+    box-shadow:
+        0 10px 23px rgba(20, 60, 80, 0.2);
+}
+
+.AddSale .sale-summary h3 {
+    margin: 0 0 8px;
+    padding-bottom: 8px;
+
+    color: rgba(255, 255, 255, 0.88);
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.AddSale .sale-summary label {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: rgba(255, 255, 255, 0.65);
+
+    font-size: 0.52rem;
+    font-weight: 900;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+
+.AddSale .sale-summary input {
+    width: 100%;
+    height: 31px;
+    min-height: 31px;
+
+    margin-bottom: 8px;
+    padding: 0 9px;
+    box-sizing: border-box;
+
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.11);
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 7px;
+
+    outline: none;
+
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.AddSale .sale-summary input:focus {
+    border-color: rgba(255, 255, 255, 0.55);
+
+    box-shadow:
+        0 0 0 3px rgba(255, 255, 255, 0.08);
+}
+
+.AddSale .sale-summary h2 {
+    margin: 0;
+    padding-top: 8px;
+
+    color: #ffffff;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+
+    font-size: 1.12rem;
+    font-weight: 950;
+}
+
+/* Summary row inside your table */
+.AddSale .sale-table tbody > tr:last-child > td {
+    padding: 6px 8px 8px;
+    border-bottom: none;
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 900px) {
+    .AddSale {
+        width: calc(100% - 18px);
+
+        grid-template-columns:
+            minmax(180px, 1.5fr)
+            repeat(3, minmax(90px, 0.7fr))
+            112px;
+
+        padding: 14px;
+        gap: 9px;
+    }
+
+    .AddSale > h2 {
+        font-size: 1.55rem;
+    }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 650px) {
+    .AddSale {
+        display: flex;
+        flex-direction: column;
+
+        width: calc(100% - 14px);
+        margin: 7px auto 18px;
+        padding: 12px;
+
+        gap: 8px;
+        border-radius: 14px;
+    }
+
+    .AddSale > h2 {
+        margin-bottom: 7px;
+        font-size: 1.45rem;
+    }
+
+    .AddSale .sale-header,
+    .AddSale .add-item-button {
+        height: 44px;
+        min-height: 44px;
+    }
+
+    .AddSale .form-field {
+        padding: 7px 8px;
+    }
+
+    .AddSale .sale-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .AddSale .sale-summary {
+        width: 100%;
+    }
+
+
+    .save-sale-button {
+    width: 100%;
+    margin-top: 22px;
+    padding: 16px 24px;
+
+    border: none;
+    border-radius: 16px;
+
+    background: linear-gradient(135deg, #1d4ed8, #2563eb, #0ea5e9);
+    color: white;
+
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    transition: all .25s ease;
+
+    box-shadow:
+        0 12px 30px rgba(37,99,235,.30),
+        inset 0 1px 1px rgba(255,255,255,.25);
+}
+
+.AddSale .save-sale-button {
+    grid-column: 1 / -1;
+
+    width: 220px;
+    height: 46px;
+
+    margin: 14px 0 0 auto;
+    padding: 0 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: linear-gradient(
+        135deg,
+        #10b981,
+        #0f766e
+    );
+
+    color: white;
+
+    font-size: 0.88rem;
+    font-weight: 900;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 10px 22px rgba(15, 118, 110, 0.28);
+
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        filter 0.18s ease;
+}
+
+}

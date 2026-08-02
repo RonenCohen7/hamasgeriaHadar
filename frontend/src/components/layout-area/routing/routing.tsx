@@ -13,6 +13,8 @@ import { EditSupplier } from "../../suppliers-area/edit-supplier/edit-supplier";
 import { SupplierOrderList } from "../../suppliers-area/supplier-order-list/supplier-order-list";
 import { AddSupplierOrder } from "../../suppliers-area/add-supplier-order/add-supplier-order";
 import { SupplierOrderDetails } from "../../suppliers-area/supplier-order-details/supplier-order-details";
+import { AddSale } from "../../sales-area/add-sale/add-sale";
+import { InventoryMonitor } from "../../inventory-area/inventory-monitor/inventory-monitor";
 
 
 
@@ -39,6 +41,11 @@ export function Routing() {
             <Route path="/supplier-orders" element={<SupplierOrderList/>}/>
             <Route path="/supplier-orders/add" element={<AddSupplierOrder/>}/>
             <Route path="/supplier-orders/:id" element={<SupplierOrderDetails/>}/>
+
+            <Route path="/inventory-live" element={<InventoryMonitor/>}/>
+
+
+            <Route path="/sales/new" element={<AddSale/>}/>
             
         </Routes>
     );
