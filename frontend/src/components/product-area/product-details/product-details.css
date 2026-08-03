@@ -1,6 +1,7 @@
 .ProductDetails {
     width: 100%;
     min-height: 100%;
+    overflow-y: auto;
 }
 
 /* Main page */
@@ -127,15 +128,16 @@
     width: 100%;
 
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 8px;
+    grid-template-columns: repeat(2, 1fr);
 
-    margin-top: 28px;
+    gap: 12px;
+    margin-top: 25px;
 }
 
 .btn-action {
     min-width: 0;
     height: 42px;
+    
 
     padding: 0 10px;
 

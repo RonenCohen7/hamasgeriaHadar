@@ -102,23 +102,29 @@ export function ProductDetails() {
                             <span>Cost</span>
                             <strong>₪{product?.productCost}</strong>
                         </div>
+                        <div className="product-actions">
+                            {isAdmin && (
+                                <>
+                                    <button
+                                        className="btn-action" onClick={editProduct}>Edit ✍🏻
+                                    </button>
 
-                        <br></br>
-                        {isAdmin && (
-                            <>
-                                <button className="btn-action" onClick={editProduct}>Edit ✍🏻</button>
-                                <button className="btn-action" onClick={editProduct}>Edit ✍🏻</button>
-                                <button className="btn-action" onClick={deleteCurrentProduct}>Delete 🗑️</button>
-                            </>
-                        )}
-                        <div className="product-action">
+                                    <button
+                                        className="btn-action"onClick={deleteCurrentProduct}>Delete 🗑️
+                                    </button>
+                                </>
+                            )}
 
-                            <button className="btn-action" onClick={showInventory}>Inventory 📦</button>
-                            <button className="btn-action" onClick={showSupplier}>Supplier 🚚</button>
+                            <button
+                                className="btn-action" onClick={showInventory}>Inventory 📦
+                            </button>
 
-
-
+                            <button
+                                className="btn-action" onClick={showSupplier} >Supplier 🚚
+                            </button>
                         </div>
+
+                        
                         <br></br>
                         <button className="btn-back-to-products" onClick={showProducts}>Back to products ⬅</button>
 
