@@ -5,6 +5,11 @@ import { useEffect, useState } from "react";
 import { ProductModel } from "../../models/product-model";
 import { productService } from "../../service/productService";
 import { notificationService } from "../../service/notificationService";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../redux/inventory-store";
+
+
+
 
 export function ProductDetails() {
 
@@ -13,7 +18,8 @@ export function ProductDetails() {
     const { id } = useParams()
     const [product, setProduct] = useState<ProductModel | null>(null);
     const navigate = useNavigate()
-
+    const user = useSelector((state: RootState) => state.auth.user)
+    const isAdmin = user?.role === "admin";
 
     useEffect(() => {
         if (!id) return;
@@ -36,30 +42,30 @@ export function ProductDetails() {
         navigate(`/products/edit/${product?.idProduct}`);
 
     }
-    function showSupplier(){
-        if(!product?.idSupplier){
+    function showSupplier() {
+        if (!product?.idSupplier) {
             notificationService.error("No supplier assigned to this product");
             return
         }
         navigate(`/suppliers/${product.idSupplier}`);
     }
 
-    function showInventory(){
-        if(!product) return;
+    function showInventory() {
+        if (!product) return;
         navigate(`/inventory-live?productId=${product.idProduct}`);
     }
 
-    async function deleteCurrentProduct(){
-        if(!product) return;
+    async function deleteCurrentProduct() {
+        if (!product) return;
         const ok = window.confirm(`Delete "${product.productName}`);
-        if(!ok) return;
-        try{
+        if (!ok) return;
+        try {
             await productService.deleteProduct(product.idProduct);
             notificationService.success("Product deleted successfully")
             navigate("/products");
-        }catch(err:any){
+        } catch (err: any) {
             notificationService.error(err.message);
-            
+
         }
     }
 
@@ -88,7 +94,7 @@ export function ProductDetails() {
                             <span>Minimum Stock</span>
                             <strong>{product?.minimumStock}</strong>
                         </div>
-                         <div className="info-row">
+                        <div className="info-row">
                             <span>Catalog Number</span>
                             <strong>{product?.catalogNumber}</strong>
                         </div>
@@ -96,14 +102,20 @@ export function ProductDetails() {
                             <span>Cost</span>
                             <strong>₪{product?.productCost}</strong>
                         </div>
-                       
-                        <br></br>
 
+                        <br></br>
+                        {isAdmin && (
+                            <>
+                                <button className="btn-action" onClick={editProduct}>Edit ✍🏻</button>
+                                <button className="btn-action" onClick={editProduct}>Edit ✍🏻</button>
+                                <button className="btn-action" onClick={deleteCurrentProduct}>Delete 🗑️</button>
+                            </>
+                        )}
                         <div className="product-action">
-                            <button className="btn-action" onClick={editProduct}>Edit ✍🏻</button>
+
                             <button className="btn-action" onClick={showInventory}>Inventory 📦</button>
                             <button className="btn-action" onClick={showSupplier}>Supplier 🚚</button>
-                            <button className="btn-action" btn-delete onClick={deleteCurrentProduct}>Delete 🗑️</button>
+
 
 
                         </div>

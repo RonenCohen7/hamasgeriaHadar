@@ -13,30 +13,35 @@ class ProductService {
     //Get All Products
     public async getAllProducts(): Promise<ProductModel[]> {
         const sql = `
-            SELECT 
-                p.id_product As idProduct,
-                p.product_name As productName,
-                p.image_name As imageName,
-                p.catalog_number As catalogNumber,
-                p.product_cost As productCost,
-                p.product_price As productPrice,
-                p.product_stock As productStock,
-                p.minimum_stock As minimumStock,
-                p.unit_type As unitType,
-                p.is_active As isActive,
-                p.created_at As createdAt,
-                p.updated_at As updateAt,
-                c.category_name As categoryName,
-                CASE
-                    WHEN p.image_name IS NOT NULL
-                    THEN CONCAT(?, p.image_name)
-                    ELSE NULL
-                END As imageUrl
+        SELECT 
+            p.id_product AS idProduct,
+            p.product_name AS productName,
+            p.image_name AS imageName,
+            p.catalog_number AS catalogNumber,
+            p.product_cost AS productCost,
+            p.product_price AS productPrice,
+            p.product_stock AS productStock,
+            p.minimum_stock AS minimumStock,
+            p.unit_type AS unitType,
+            p.is_active AS isActive,
+            p.created_at AS createdAt,
+            p.updated_at AS updatedAt,
+            c.category_name AS categoryName,
 
-            FROM products As p
-            LEFT JOIN product_categories AS c
+            CASE
+                WHEN p.image_name IS NOT NULL
+                THEN CONCAT(?, p.image_name)
+                ELSE NULL
+            END AS imageUrl
+
+        FROM products AS p
+
+        LEFT JOIN product_categories AS c
             ON p.id_category = c.id_category
-            ORDER BY p.product_name
+
+        WHERE p.is_active = 1
+
+        ORDER BY p.product_name
         `;
 
         const values = [appConfig.baseImageUrl];
@@ -266,7 +271,8 @@ class ProductService {
         }
 
         const sql = `
-            DELETE FROM products
+            UPDATE products
+            SET is_active = 0
             WHERE id_product = ?
         `
         const values = [id];

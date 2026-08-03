@@ -2,6 +2,8 @@ import express, {Request, Response, NextFunction} from "express";
 import { supplierService } from "../services/supplier-service";
 import { SupplierModel } from "../models/supplier-model";
 import { log } from "console";
+import { verifyToken } from "../middleware/verify-token";
+import { allowRoles } from "../middleware/role-middleware";
 
 
 class SuppliersController{
@@ -13,10 +15,10 @@ class SuppliersController{
         this.router.get("/api/suppliers", this.getAllSuppliers);
         this.router.get("/api/suppliers/:id", this.getOneSupplier);
        
-        this.router.post("/api/suppliers", this.addNewSupplier);
-        this.router.patch("/api/suppliers/:id", this.updateSupplier);
+        this.router.post("/api/suppliers",verifyToken, allowRoles("admin"), this.addNewSupplier);
+        this.router.patch("/api/suppliers/:id",verifyToken, allowRoles("admin"), this.updateSupplier);
 
-        this.router.delete("/api/suppliers/:id", this.deleteSupplier);
+        this.router.delete("/api/suppliers/:id",verifyToken, allowRoles("admin"), this.deleteSupplier);
 
         this.router.get("/api/supplier-count", this.getSupplierCount);
 

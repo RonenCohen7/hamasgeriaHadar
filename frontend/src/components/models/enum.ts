@@ -18,3 +18,10 @@ export enum PaymentMethod {
     PayBox = "pay_box",
     Other = "other"
 }
+
+
+export enum UserRole {
+    Admin = "admin",
+    Manager = "manager",
+    Employee = "employee"
+}

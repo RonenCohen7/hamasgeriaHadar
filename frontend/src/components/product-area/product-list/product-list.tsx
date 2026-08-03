@@ -9,16 +9,18 @@ import { ProductModel } from "../../models/product-model";
 import { ProductCard } from "../product-card/product-card";
 import { useTitle } from "../../utils/UseTitle";
 import { useNavigate } from "react-router-dom";
-import { current } from "@reduxjs/toolkit";
-import { socketService } from "../../service/socket-service";
 
+import { socketService } from "../../service/socket-service";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../redux/inventory-store";
 
 
 export function ProductList() {
 
     const [products, setProducts] = useState<ProductModel[]>([]);
     const [updateProductId, setUpdateProductId] = useState<number | null>(null);
-
+    const user = useSelector((state: RootState) => state.auth.user);
+    const isAdmin = user?.role === "admin";
 
     useTitle("products");
 
@@ -38,20 +40,20 @@ export function ProductList() {
         const handleInventoryUpdated = (data: {
             idProduct: number;
             stockAfter: number;
-        }):void => {
-            setProducts(currentProducts => 
-                currentProducts.map(product => 
-                    product.idProduct === data.idProduct ? {...product, productStock:String(data.stockAfter)}: product
+        }): void => {
+            setProducts(currentProducts =>
+                currentProducts.map(product =>
+                    product.idProduct === data.idProduct ? { ...product, productStock: String(data.stockAfter) } : product
                 )
             );
             setUpdateProductId(data.idProduct);
-            window.setTimeout(()=>{
+            window.setTimeout(() => {
                 setUpdateProductId(currentId => currentId === data.idProduct ? null : currentId)
-            },1500);
+            }, 1500);
         }
         socketService.onInventoryUpdated(handleInventoryUpdated);
 
-        return()=>{
+        return () => {
             socketService.offInventoryUpdated(handleInventoryUpdated)
         }
 
@@ -71,10 +73,14 @@ export function ProductList() {
                     <h1>Products</h1>
                     <p>Manage the products, price and stock levels of Hadar pub. </p>
                 </div>
-                <button type="button" className="add-product-button" onClick={() => navigate("/product/new")}>
-                    <FaPlus />
-                    <span>Add product</span>
-                </button>
+
+                {isAdmin && (
+                    <button type="button" className="add-product-button" onClick={() => navigate("/product/new")}>
+                        <FaPlus />
+                        <span>Add product</span>
+                    </button>
+                )}
+
             </header>
             <div className="products-toolbar">
                 <div className="products-search">

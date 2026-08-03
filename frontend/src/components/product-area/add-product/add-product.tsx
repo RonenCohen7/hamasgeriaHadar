@@ -14,6 +14,7 @@ import { SupplierModel } from "../../models/supplier-model";
 import { supplierService } from "../../service/supplierService";
 import { UnitType } from "../../models/enum";
 
+
 export function AddProduct() {
 
     useTitle("Add new Product")
@@ -24,6 +25,8 @@ export function AddProduct() {
     const { register, handleSubmit, formState: { errors } } = useForm<ProductModel>();
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [suppliers, setSuppliers] = useState<SupplierModel[]>([]);
+
+   
 
     const navigate = useNavigate();
 

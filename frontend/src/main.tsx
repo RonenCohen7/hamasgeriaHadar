@@ -6,12 +6,17 @@ import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 
 import { Layout } from "./components/layout-area/layout/layout";
-import { store } from "./components/redux/inventory-store";
+
 import { updateInventoryProduct } from "./components/redux/inventory-slice";
 import { socketService } from "./components/service/socket-service";
 import { notificationService } from "./components/service/notificationService";
+import axios from "axios";
+import { store } from "./components/redux/inventory-store";
 
 socketService.connect();
+
+
+
 socketService.onInventoryUpdated(data => {
     const stateBeforeUpdate = store.getState();
 
@@ -50,7 +55,13 @@ socketService.onInventoryUpdated(data => {
 });
 
 
-
+axios.interceptors.request.use(request => {
+    const token = store.getState().auth.token;
+    if(token) {
+        request.headers.Authorization = `Bearer ${token}`;
+    }
+    return request;
+})
 
 
 

@@ -6,6 +6,8 @@ import { SupplierModel } from "../../models/supplier-model";
 import { supplierService } from "../../service/supplierService";
 import { notificationService } from "../../service/notificationService";
 import { FaArrowLeft, FaEdit, FaEnvelope, FaMapMarkedAlt, FaPhone, FaTrash } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../redux/inventory-store";
 
 export function SupplierDetails() {
 
@@ -13,6 +15,8 @@ export function SupplierDetails() {
 
     const { id } = useParams()
     const [supplier, setSupplier] = useState<SupplierModel | null>(null);
+    const user = useSelector((state: RootState) => state.auth.user)
+    const isAdmin = user?.role === "admin";
 
     const navigate = useNavigate();
 
@@ -72,101 +76,104 @@ export function SupplierDetails() {
             </header>
 
 
-<article className="supplier-details-card">
+            <article className="supplier-details-card">
 
-    <div className="supplier-details-row">
+                <div className="supplier-details-row">
 
-        <div className="supplier-details-icon">
-            <FaEnvelope />
-        </div>
+                    <div className="supplier-details-icon">
+                        <FaEnvelope />
+                    </div>
 
-        <div>
-            <span>Email</span>
+                    <div>
+                        <span>Email</span>
 
-            <strong>
-                {supplier?.supplierEmail}
-            </strong>
-        </div>
+                        <strong>
+                            {supplier?.supplierEmail}
+                        </strong>
+                    </div>
 
-    </div>
+                </div>
 
-    <div className="supplier-details-row">
+                <div className="supplier-details-row">
 
-        <div className="supplier-details-icon">
-            <FaPhone />
-        </div>
+                    <div className="supplier-details-icon">
+                        <FaPhone />
+                    </div>
 
-        <div>
-            <span>Mobile</span>
+                    <div>
+                        <span>Mobile</span>
 
-            <strong>
-                {supplier?.supplierMobile}
-            </strong>
-        </div>
+                        <strong>
+                            {supplier?.supplierMobile}
+                        </strong>
+                    </div>
 
-    </div>
+                </div>
 
-    <div className="supplier-details-row">
+                <div className="supplier-details-row">
 
-        <div className="supplier-details-icon">
-            <FaMapMarkedAlt />
-        </div>
+                    <div className="supplier-details-icon">
+                        <FaMapMarkedAlt />
+                    </div>
 
-        <div>
-            <span>Address</span>
+                    <div>
+                        <span>Address</span>
 
-            <strong>
-                {supplier?.supplierAddress}
-            </strong>
-        </div>
+                        <strong>
+                            {supplier?.supplierAddress}
+                        </strong>
+                    </div>
 
-    </div>
+                </div>
 
-    <div className="supplier-details-row">
+                <div className="supplier-details-row">
 
-        <div>
-            <span>Status</span>
+                    <div>
+                        <span>Status</span>
 
-            <strong
-                className={
-                    supplier?.isActive
-                        ? "supplier-active"
-                        : "supplier-inactive"
-                }
-            >
-                {supplier?.isActive ? "Active" : "Inactive"}
-            </strong>
-        </div>
+                        <strong
+                            className={
+                                supplier?.isActive
+                                    ? "supplier-active"
+                                    : "supplier-inactive"
+                            }
+                        >
+                            {supplier?.isActive ? "Active" : "Inactive"}
+                        </strong>
+                    </div>
 
-    </div>
+                </div>
+                {isAdmin && (
 
-    <div className="supplier-details-actions">
+                    <div className="supplier-details-actions">
 
-        <button
-            type="button"
-            className="edit-supplier-button"
-            onClick={() =>
-                navigate(
-                    `/suppliers/edit/${supplier?.idSupplier}`
-                )
-            }
-        >
-            <FaEdit />
-            <span>Edit</span>
-        </button>
+                        <button
+                            type="button"
+                            className="edit-supplier-button"
+                            onClick={() =>
+                                navigate(
+                                    `/suppliers/edit/${supplier?.idSupplier}`
+                                )
+                            }
+                        >
+                            <FaEdit />
+                            <span>Edit</span>
+                        </button>
 
-        <button
-            type="button"
-            className="delete-supplier-button"
-            onClick={deleteSupplier}
-        >
-            <FaTrash />
-            <span>Delete</span>
-        </button>
+                        <button
+                            type="button"
+                            className="delete-supplier-button"
+                            onClick={deleteSupplier}
+                        >
+                            <FaTrash />
+                            <span>Delete</span>
+                        </button>
 
-    </div>
+                    </div>
+                )}
 
-</article>
+
+            </article>
 
         </section>
     );

@@ -9,6 +9,10 @@ class AppConfig {
     public readonly productSuppliersUrl = this.baseUrl + "product-suppliers";
     public readonly salesUrl = this.baseUrl + "sales";
     public readonly inventoryUrl = this.baseUrl + "inventory/live"
+
+    public readonly usersUrl = this.baseUrl + "users/";
+    public readonly loginUrl = this.baseUrl + "users/login";
+    public readonly registerUrl = this.baseUrl + "users/register";
 }
 
 export const appConfig = new AppConfig();

@@ -1,6 +1,8 @@
 import express, { Request, Response, NextFunction } from "express"
 import { productCategoryService } from "../services/product-category-service";
 import { ProductCategoryModel } from "../models/product-category-model";
+import { verifyToken } from "../middleware/verify-token";
+import { allowRoles } from "../middleware/role-middleware";
 
 class CategoriesController {
 
@@ -12,10 +14,10 @@ class CategoriesController {
         this.router.get("/api/categories", this.getAllCategory);
         this.router.get("/api/categories/:id", this.getOneCategory);
 
-        this.router.post("/api/categories", this.addCategory);
-        this.router.put("/api/categories/:id", this.updateCategory);
+        this.router.post("/api/categories",verifyToken, allowRoles("admin"), this.addCategory);
+        this.router.put("/api/categories/:id",verifyToken, allowRoles("admin"),this.updateCategory);
 
-        this.router.delete("/api/categories/:id", this.deleteCategory);
+        this.router.delete("/api/categories/:id",verifyToken, allowRoles("admin"), this.deleteCategory);
 
     }
 

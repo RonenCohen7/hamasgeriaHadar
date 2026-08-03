@@ -4,6 +4,8 @@ import { AddProductModel, ProductModel } from "../models/product-model";
 
 import { UploadedFile } from "express-fileupload";
 import { promises } from "dns";
+import { verifyToken } from "../middleware/verify-token";
+import { allowRoles } from "../middleware/role-middleware";
 
 
 
@@ -13,14 +15,15 @@ class ProductController {
 
 
     public constructor() {
-        this.router.get("/api/products", this.getAllProducts);
+        this.router.get("/api/products", verifyToken, this.getAllProducts);
+
         this.router.get("/api/products/low-stock", this.getLowStockProducts);
         this.router.get("/api/products/:id", this.getOneProduct);
 
-        this.router.post("/api/products", this.addProduct);
-        this.router.put("/api/products/:id", this.updateProduct);
+        this.router.post("/api/products",verifyToken, allowRoles("admin"), this.addProduct);
+        this.router.put("/api/products/:id",verifyToken, allowRoles("admin"), this.updateProduct);
 
-        this.router.delete("/api/products/:id", this.deleteProduct);
+        this.router.delete("/api/products/:id",verifyToken,allowRoles("admin"), this.deleteProduct);
 
         this.router.get("/api/inventory/live", this.getLiveInventory);
     }

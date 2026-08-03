@@ -17,38 +17,57 @@ import { AddSale } from "../../sales-area/add-sale/add-sale";
 import { InventoryMonitor } from "../../inventory-area/inventory-monitor/inventory-monitor";
 import { InventoryCount } from "../../sales-area/inventory-count/inventory-count";
 import { ContactUs } from "../../pages-area/contact-us/contact-us";
+import { Login } from "../../user-area/login/login";
+import { Register } from "../../user-area/register/register";
 
-
+import { AuthGuard } from "../../user-area/auth-guard/auth-guard";
 
 export function Routing() {
     return (
         <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="*" element={<h2>Page Not Found</h2>} />
+            <Route path="/" element={<AuthGuard><Home /></AuthGuard>} />
+            
+
+            <Route path="login" element={<Login/>}/>
+            <Route path="register" element={<Register />}/>
 
             <Route path="/about" element={<About />} />
             <Route path="/contact-us" element={<ContactUs/>} />
 
 
-            <Route path="/products" element={<ProductList />} />
-            <Route path="/products/:id" element={<ProductDetails />} />
-            <Route path="/products/edit/:id" element={<EditProduct />} />
-            <Route path="/product/new" element={<AddProduct />} />
+            <Route path="/products" element={<AuthGuard><ProductList/></AuthGuard>} />
+
+            <Route path="/products/:id" element={<AuthGuard><ProductDetails/></AuthGuard>} />
+
+            <Route path="/products/edit/:id" element={<AuthGuard><EditProduct/></AuthGuard>} />
+
+            <Route path="/product/new" element={<AuthGuard><AddProduct/></AuthGuard>} />
 
 
-            <Route path="/suppliers" element={<SupplierList />}/>
-            <Route path="/supplier/add" element={<AddSupplier/>}/>
-            <Route path="/suppliers/:id" element={<SupplierDetails/>}/>
-            <Route path="/suppliers/edit/:id" element={<EditSupplier/>}/>
-            <Route path="/supplier-orders" element={<SupplierOrderList/>}/>
-            <Route path="/supplier-orders/add" element={<AddSupplierOrder/>}/>
-            <Route path="/supplier-orders/:id" element={<SupplierOrderDetails/>}/>
+            <Route path="/suppliers" element={<AuthGuard><SupplierList/></AuthGuard>}/>
 
-            <Route path="/inventory-live" element={<InventoryMonitor/>}/>
+            <Route path="/supplier/add" element={<AuthGuard><AddSupplier/></AuthGuard>}/>
+
+            <Route path="/suppliers/:id" element={<AuthGuard><SupplierDetails/></AuthGuard>}/>
+
+            <Route path="/suppliers/edit/:id" element={<AuthGuard><EditSupplier/></AuthGuard>}/>
+
+            <Route path="/supplier-orders" element={<AuthGuard><SupplierOrderList/></AuthGuard>}/>
+            
+            
+            <Route path="/supplier-orders/add" element={<AuthGuard><AddSupplierOrder/></AuthGuard>}/>
+
+            <Route path="/supplier-orders/:id" element={<AuthGuard><SupplierOrderDetails/></AuthGuard>}/>
+
+            <Route path="/inventory-live" element={<AuthGuard><InventoryMonitor/></AuthGuard>}/>
 
 
-            <Route path="/sales/new" element={<AddSale/>}/>
-            <Route path="/inventory-count" element={<InventoryCount />}/>
+            <Route path="/sales/new" element={<AuthGuard><AddSale/></AuthGuard>}/>
+            <Route path="/inventory-count" element={<AuthGuard><InventoryCount /></AuthGuard>}/>
+
+
+
+            <Route path="*" element={<h2>Page Not Found</h2>} />
         </Routes>
     );
 }

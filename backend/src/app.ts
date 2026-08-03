@@ -1,4 +1,4 @@
-import  express from "express";
+import express from "express";
 import { eventInventoryController } from "./controllers/event-inventory-controller";
 import cors from "cors";
 import { appConfig } from "./utils/app-config";
@@ -27,11 +27,17 @@ import { apiLimiter } from "./middleware/rate-limit-middleware";
 
 class App {
 
-    public start():void {
-        try{
+    public start(): void {
+        try {
 
             const app = express();
-            app.use(helmet());
+            app.use(
+                helmet({
+                    crossOriginResourcePolicy: {
+                        policy: "cross-origin"
+                    }
+                })
+            );
             app.use(apiLimiter)
 
             process.env.JWT_SECRET
@@ -56,19 +62,19 @@ class App {
             app.use(errorMiddleware.catchAll);
 
             const httpServer = createServer(app);
-            
-            initSocket(httpServer);
-      
-            
-            httpServer.listen(appConfig.port, ()=> {
-                console.log("Listening on http://localhost:" + appConfig.port);
-                
-            })
-    
 
-        }catch(err:any){
+            initSocket(httpServer);
+
+
+            httpServer.listen(appConfig.port, () => {
+                console.log("Listening on http://localhost:" + appConfig.port);
+
+            })
+
+
+        } catch (err: any) {
             console.log(err);
-            
+
         }
     }
 

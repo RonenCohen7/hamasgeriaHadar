@@ -1,6 +1,8 @@
 import express, { Request, Response, NextFunction } from "express";
 import { eventService } from "../services/event-service";
 import { EventModel } from "../models/event-model";
+import { verifyToken } from "../middleware/verify-token";
+import { allowRoles } from "../middleware/role-middleware";
 
 
 class EventController {
@@ -12,13 +14,12 @@ class EventController {
         this.router.get("/api/events", this.getAllEvents);
         this.router.get("/api/events/:id", this.getOneEvent);
         
-        this.router.post("/api/events", this.addEvent);
-        this.router.put("/api/events/:id", this.updateEvent);
+        this.router.post("/api/events",verifyToken, allowRoles("admin"), this.addEvent);
+        this.router.put("/api/events/:id", verifyToken, allowRoles("admin"), this.updateEvent);
 
-        this.router.delete("/api/events/:id", this.deleteEvent);
+        this.router.delete("/api/events/:id",verifyToken, allowRoles("admin"), this.deleteEvent);
 
         this.router.get("/api/event-count",this.getEventCount);
-
 
     }
 
