@@ -2,6 +2,7 @@ import { OkPacketParams } from "mysql2";
 import { ResourceNotFoundError } from "../models/client-errors";
 import { EventModel } from "../models/event-model";
 import { dal } from "../utils/dal";
+import { sanitizeText } from "../utils/sanitize";
 
 class EventService {
     //Get All Events
@@ -22,7 +23,7 @@ class EventService {
                 e.created_by AS createdBy,
                 e.created_at AS createdAt,
                 e.updated_at AS updatedAt,
-                u.full_name AS createdByName
+                CONCAT(u.first_name, ' ', u.last_name) AS createdByName
             FROM events AS e
             JOIN users AS u
                 ON e.created_by = u.id_user
@@ -51,7 +52,7 @@ class EventService {
                 e.created_by AS createdBy,
                 e.created_at AS createdAt,
                 e.updated_at AS updatedAt,
-                u.full_name AS createdByName
+                CONCAT(u.first_name, ' ', u.last_name) AS createdByName
             FROM events AS e
             JOIN users AS u
                 ON e.created_by = u.id_user
@@ -59,18 +60,22 @@ class EventService {
         `;
         const values = [id];
 
-        const events = await dal.execute(sql,values) as EventModel[];
+        const events = await dal.execute(sql, values) as EventModel[];
         const event = events[0];
-        if(!event){
+        if (!event) {
             throw new ResourceNotFoundError(id);
         }
         return event;
     }
 
     //Add new Event
-    public async addEvent(event:EventModel):Promise<EventModel>{
-        
-        const sql = `
+    public async addEvent(event: EventModel): Promise<EventModel> {
+        event.eventName = sanitizeText(event.eventName);
+        event.eventDescription = sanitizeText(event.eventDescription);
+        event.eventLocation = sanitizeText(event.eventLocation);
+
+
+        const sql = `   
             INSERT INTO events (
                 event_name,
                 event_description,
@@ -99,13 +104,17 @@ class EventService {
             event.eventStatus,
             event.createdBy
         ];
-        const info = await dal.execute(sql,values) as OkPacketParams;
+        const info = await dal.execute(sql, values) as OkPacketParams;
         event.idEvent = info.insertId!
-        
-        return event   
+
+        return event
     }
-      // Update event:
+    // Update event:
     public async updateEvent(event: EventModel): Promise<EventModel> {
+
+        event.eventName = sanitizeText(event.eventName);
+        event.eventDescription = sanitizeText(event.eventDescription);
+        event.eventLocation = sanitizeText(event.eventLocation);
 
         const sql = `
             UPDATE events
@@ -167,12 +176,12 @@ class EventService {
     }
 
     //Get event Count
-    public async getEventCount():Promise<number>{
-        const sql =`
+    public async getEventCount(): Promise<number> {
+        const sql = `
             SELECT COUNT (*) AS count
             FROM events
         `;
-        const result = await dal.execute(sql) as {count:number}[];
+        const result = await dal.execute(sql) as { count: number }[];
         return Number(result[0].count);
     }
 

@@ -4,6 +4,9 @@ import { dal } from "../utils/dal"
 import { ResourceNotFoundError, ResourceAlreadyExistsError } from "../models/client-errors";
 import { fileSaver } from "uploaded-file-saver";
 import { appConfig } from "../utils/app-config";
+import { sanitizeText } from "../utils/sanitize";
+
+
 
 class ProductService {
 
@@ -46,8 +49,8 @@ class ProductService {
 
     //Get One product
     public async getOneProduct(id: number): Promise<ProductModel> {
-       
-       const sql = `
+
+        const sql = `
         SELECT 
             p.id_product AS idProduct,
             p.product_name AS productName,
@@ -111,6 +114,13 @@ class ProductService {
 
     //Add new Product
     public async addProduct(product: AddProductModel): Promise<ProductModel> {
+
+        product.productName = sanitizeText(product.productName);
+        product.catalogNumber = sanitizeText(product.catalogNumber);
+
+        if (product.supplierCatalogNumber) {
+            product.supplierCatalogNumber = sanitizeText(product.supplierCatalogNumber)
+        }
 
         const checkIfBarcodeExists = `
             SELECT id_product As idProduct
@@ -187,6 +197,12 @@ class ProductService {
     //update product;
     public async updateProduct(product: ProductModel): Promise<ProductModel> {
 
+        product.productName = sanitizeText(product.productName);
+        product.catalogNumber = sanitizeText(product.catalogNumber);
+
+        if (product.supplierCatalogNumber) {
+            product.supplierCatalogNumber = sanitizeText(product.supplierCatalogNumber)
+        }
         const existingProduct = await this.getOneProduct(product.idProduct);
         if (product.image) {
             if (existingProduct.imageName) {

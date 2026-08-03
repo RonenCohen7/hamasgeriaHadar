@@ -3,6 +3,7 @@ import { ResourceNotFoundError } from "../models/client-errors";
 
 import { dal } from "../utils/dal";
 import { SupplierModel } from "../models/supplier-model";
+import { sanitizeText } from "../utils/sanitize";
 
 
 class SupplierService {
@@ -67,9 +68,11 @@ class SupplierService {
 
 
     // Add new supplier:
-    public async addNewSupplier(
-        supplier: SupplierModel
-    ): Promise<SupplierModel> {
+    public async addNewSupplier(supplier: SupplierModel): Promise<SupplierModel> {
+        supplier.supplierName = sanitizeText(supplier.supplierName);
+        supplier.supplierEmail = sanitizeText(supplier.supplierEmail);
+        supplier.supplierMobile = sanitizeText(supplier.supplierMobile);
+        supplier.supplierAddress = sanitizeText(supplier.supplierAddress);
 
         const sql = `
             INSERT INTO suppliers(
@@ -99,63 +102,68 @@ class SupplierService {
 
     // Update supplier:
     public async updateSupplier(supplier: SupplierModel): Promise<SupplierModel> {
-         const fields: string[] = [];
+        supplier.supplierName = sanitizeText(supplier.supplierName);
+        supplier.supplierEmail = sanitizeText(supplier.supplierEmail);
+        supplier.supplierMobile = sanitizeText(supplier.supplierMobile);
+        supplier.supplierAddress = sanitizeText(supplier.supplierAddress);
 
-    const values:
-        (string | number | boolean | Date | null)[] = [];
+        const fields: string[] = [];
 
-    if (supplier.supplierName !== undefined) {
-        fields.push("supplier_name = ?");
-        values.push(supplier.supplierName);
-    }
+        const values:
+            (string | number | boolean | Date | null)[] = [];
 
-    if (supplier.supplierEmail !== undefined) {
-        fields.push("supplier_email = ?");
-        values.push(supplier.supplierEmail);
-    }
+        if (supplier.supplierName !== undefined) {
+            fields.push("supplier_name = ?");
+            values.push(supplier.supplierName);
+        }
 
-    if (supplier.supplierMobile !== undefined) {
-        fields.push("supplier_mobile = ?");
-        values.push(supplier.supplierMobile);
-    }
+        if (supplier.supplierEmail !== undefined) {
+            fields.push("supplier_email = ?");
+            values.push(supplier.supplierEmail);
+        }
 
-    if (supplier.supplierAddress !== undefined) {
-        fields.push("supplier_address = ?");
-        values.push(supplier.supplierAddress);
-    }
+        if (supplier.supplierMobile !== undefined) {
+            fields.push("supplier_mobile = ?");
+            values.push(supplier.supplierMobile);
+        }
 
-    if (supplier.isActive !== undefined) {
-        fields.push("is_active = ?");
-        values.push(supplier.isActive);
-    }
+        if (supplier.supplierAddress !== undefined) {
+            fields.push("supplier_address = ?");
+            values.push(supplier.supplierAddress);
+        }
 
-    if (fields.length === 0) {
-        return await this.getOneSupplier(
-            supplier.idSupplier
-        );
-    }
+        if (supplier.isActive !== undefined) {
+            fields.push("is_active = ?");
+            values.push(supplier.isActive);
+        }
 
-    const sql = `
+        if (fields.length === 0) {
+            return await this.getOneSupplier(
+                supplier.idSupplier
+            );
+        }
+
+        const sql = `
         UPDATE suppliers
         SET ${fields.join(", ")}
         WHERE id_supplier = ?
     `;
 
-    values.push(supplier.idSupplier);
+        values.push(supplier.idSupplier);
 
-    const info =
-        await dal.execute(sql, values) as OkPacketParams;
+        const info =
+            await dal.execute(sql, values) as OkPacketParams;
 
-    if (info.affectedRows === 0) {
-        throw new ResourceNotFoundError(
+        if (info.affectedRows === 0) {
+            throw new ResourceNotFoundError(
+                supplier.idSupplier
+            );
+        }
+
+        return await this.getOneSupplier(
             supplier.idSupplier
         );
     }
-
-    return await this.getOneSupplier(
-        supplier.idSupplier
-    );
-}
 
 
     // Delete supplier:
@@ -177,7 +185,7 @@ class SupplierService {
     }
 
     //Get Supplier Count
-    public async getSupplierCount():Promise<number>{
+    public async getSupplierCount(): Promise<number> {
         const sql = `
             SELECT COUNT(*) AS count
             FROM suppliers

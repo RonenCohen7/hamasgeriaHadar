@@ -1,35 +1,40 @@
 import { OkPacketParams } from "mysql2";
-import {
-    RegisterUserDto,
-    SafeUserModel,
-    UpdatedUserDto,
-    UserModel
-} from "../models/user-model";
+import { AuthResponseModel, LoginUserDto, RegisterUserDto, SafeUserModel, UpdatedUserDto, UserModel } from "../models/user-model";
 
 import { dal } from "../utils/dal";
-import { UpdateEventDto } from "../models/event-model";
-import { ResourceNotFoundError } from "../models/client-errors";
 
+import { ResourceNotFoundError } from "../models/client-errors";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { sanitizeText } from "../utils/sanitize";
 
 class UserService {
+
     //Register
     public async registerUser(user: RegisterUserDto): Promise<SafeUserModel> {
+        user.firstName = sanitizeText(user.firstName);
+        user.lastName = sanitizeText(user.lastName);
+        user.email = sanitizeText(user.email).toLowerCase();
+
+        const hashedPassword = await bcrypt.hash(user.password, 12);
 
         const sql = `
             INSERT INTO users(
-                full_name,
+                first_name,
+                last_name,
                 email,
-                password_hash,
+                password,
                 role,
                 is_active
             )
-            VALUES (?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?,?)
         `;
 
         const values = [
-            user.fullName,
+            user.firstName,
+            user.lastName,
             user.email,
-            user.password,
+            hashedPassword,
             user.role,
             true
         ];
@@ -39,7 +44,8 @@ class UserService {
 
         const addedUser: SafeUserModel = {
             idUser: info.insertId!,
-            fullName: user.fullName,
+            firstName: user.firstName,
+            lastName: user.lastName,
             email: user.email,
             role: user.role,
             isActive: true,
@@ -50,8 +56,58 @@ class UserService {
     }
 
 
+    //Login
+    public async login(credentials: LoginUserDto): Promise<AuthResponseModel> {
+        credentials.email = sanitizeText(credentials.email).toLowerCase();
+        const sql = `
+            SELECT 
+                id_user As idUser,
+                first_name As firstName,
+                last_name As lastName,
+                email,
+                password,
+                role,
+                is_active As isActive,
+                created_at As createdAt,
+                updated_at As updateAt
+            FROM users
+            WHERE email = ?
+        `
+        const users = await dal.execute(sql, [credentials.email]) as UserModel[];
+        const user = users[0];
+        if (!user) {
+            throw new Error("Invalid email or password");
+        }
+        const isMatch = await bcrypt.compare(credentials.password, user.password);
+        if (!isMatch) {
+            throw new Error("Invalid Email Or Password")
+        }
+        const safeUser: SafeUserModel = {
+            idUser: user.idUser,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            role: user.role,
+            isActive: user.isActive,
+            createdAt: user.createdAt
+        };
+        const token = jwt.sign(
+            {
+                idUser: user.idUser,
+                role: user.role
+            },
+            process.env.JWT_SECRET!, { expiresIn: "8h" }
+        )
+        return {
+            token,
+            user: safeUser
+        }
+    }
+
+
+
     //Get All Users
-    public async getAllUsers():Promise<UserModel[]>{
+    public async getAllUsers(): Promise<UserModel[]> {
         const sql = `
             SELECT 
                *
@@ -66,7 +122,7 @@ class UserService {
 
 
     //Get User By Id
-    public async getOneUser(id:number):Promise<UserModel>{
+    public async getOneUser(id: number): Promise<UserModel> {
         const sql = `
             SELECT *
             FROM users
@@ -74,7 +130,7 @@ class UserService {
         `;
         const values = [id];
 
-        const users = await dal.execute(sql,values) as UserModel[];
+        const users = await dal.execute(sql, values) as UserModel[];
 
         const user = users[0];
 
@@ -82,28 +138,43 @@ class UserService {
     }
 
 
-    public async updateUser(id:number, user:UpdatedUserDto):Promise<SafeUserModel>{
-        const  currentUser = await this.getOneUser(id);
+    public async updateUser(id: number, user: UpdatedUserDto): Promise<SafeUserModel> {
+        const currentUser = await this.getOneUser(id);
+        if (user.firstName !== undefined) {
+            user.firstName = sanitizeText(user.firstName);
+        }
+
+        if (user.lastName !== undefined) {
+            user.lastName = sanitizeText(user.lastName);
+        }
+
+        if (user.email !== undefined) {
+            user.email = sanitizeText(
+                user.email
+            ).toLowerCase();
+        }
 
         const sql = `
             UPDATE users
             SET
-                full_name = ?,
+                first_name = ?,
+                last_name =?,
                 email = ?,
                 role = ?,
                 is_active = ?
             WHERE id_user = ?
         `;
         const values = [
-            user.fullName ?? currentUser.fullName,
+            user.firstName ?? currentUser.firstName,
+            user.lastName ?? currentUser.lastName,
             user.email ?? currentUser.email,
             user.role ?? currentUser.role,
             user.isActive ?? currentUser.isActive,
             id
 
         ];
-        const info = await dal.execute(sql,values) as OkPacketParams;
-        if(info.affectedRows === 0){
+        const info = await dal.execute(sql, values) as OkPacketParams;
+        if (info.affectedRows === 0) {
             throw new ResourceNotFoundError(id);
         }
 
@@ -115,7 +186,7 @@ class UserService {
 
 
     //DELETE user
-    public async deleteUser(id:number):Promise<void>{
+    public async deleteUser(id: number): Promise<void> {
         const sql = `
             DELETE FROM users
             WHERE id_user = ?
@@ -123,7 +194,7 @@ class UserService {
         const values = [id];
 
         const info = await dal.execute(sql, values) as OkPacketParams;
-        if(info.affectedRows === 0){
+        if (info.affectedRows === 0) {
             throw new ResourceNotFoundError(id);
         }
     }

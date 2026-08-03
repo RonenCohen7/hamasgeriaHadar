@@ -3,6 +3,7 @@ import { ResourceNotFoundError } from "../models/client-errors";
 import { AddSaleOrderDto, SaleOrderModel } from "../models/sale-order-model";
 import { dal } from "../utils/dal";
 import { getIo } from "../utils/socket";
+import { sanitizeText } from "../utils/sanitize";
 
 
 
@@ -90,6 +91,13 @@ class SaleOrderService {
 
     //Add sale
     public async addSale(sale: AddSaleOrderDto): Promise<SaleOrderModel> {
+        if (sale.customerName) {
+            sale.customerName = sanitizeText(sale.customerName);
+        }
+
+        if (sale.notes) {
+            sale.notes = sanitizeText(sale.notes);
+        }
         const createdBy = 2;
         const saleNumber = `SALE-${Date.now()}`
         const saleStatus = "paid";
@@ -143,19 +151,19 @@ class SaleOrderService {
                 WHERE id_product = ?
             `
 
-            const products = await dal.execute(stockSql,[item.idProduct]) as {productStock:number}[];
+            const products = await dal.execute(stockSql, [item.idProduct]) as { productStock: number }[];
 
             const product = products[0]
-            if(!product){
+            if (!product) {
                 throw new ResourceNotFoundError(item.idProduct);
             }
 
             const stockBefore = Number(product.productStock);
-            if(stockBefore < item.quantity) {
-                throw new Error (`Not enough stock for product ${item.idProduct}`);
+            if (stockBefore < item.quantity) {
+                throw new Error(`Not enough stock for product ${item.idProduct}`);
             }
 
-            const stockAfter = stockBefore  - item.quantity;
+            const stockAfter = stockBefore - item.quantity;
 
 
             const itemSql = `
@@ -183,8 +191,8 @@ class SaleOrderService {
             `;
 
             const stockInfo = await dal.execute(updateStockSql, [stockAfter, item.idProduct]) as OkPacketParams;
-            if (stockInfo.affectedRows === 0){
-                throw new Error (`Not enough stock for product ${item.idProduct}`);
+            if (stockInfo.affectedRows === 0) {
+                throw new Error(`Not enough stock for product ${item.idProduct}`);
             }
 
 
@@ -214,7 +222,7 @@ class SaleOrderService {
                 stockAfter,
                 "sale",
                 idSale,
-                sale.notes?? null
+                sale.notes ?? null
             ])
 
             getIo().emit("inventory-update", {

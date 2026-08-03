@@ -2,6 +2,7 @@ import { OkPacketParams } from "mysql2";
 import { ResourceNotFoundError } from "../models/client-errors";
 import { ProductCategoryModel } from "../models/product-category-model";
 import { dal } from "../utils/dal";
+import { sanitizeText } from "../utils/sanitize";
 
 class ProductCategoryService {
     //get all product category 
@@ -44,6 +45,10 @@ class ProductCategoryService {
 
     //Add new Category
     public async addCategory(category: ProductCategoryModel): Promise<ProductCategoryModel> {
+        category.categoryName = sanitizeText(category.categoryName);
+        category.description = sanitizeText(category.description) ? sanitizeText(category.description) : "";
+
+
         const sql = `
             INSERT INTO product_categories(
             category_name,
@@ -65,6 +70,9 @@ class ProductCategoryService {
 
     //Update  Category
     public async updateProductCategory(category: ProductCategoryModel): Promise<ProductCategoryModel> {
+        category.categoryName = sanitizeText(category.categoryName);
+        category.description = sanitizeText(category.description) ? sanitizeText(category.description) : "";
+
         const sql = `
             UPDATE product_categories
             SET

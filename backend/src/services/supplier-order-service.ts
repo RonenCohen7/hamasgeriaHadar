@@ -3,6 +3,7 @@ import { ResourceNotFoundError } from "../models/client-errors";
 import { AddSupplierOrderDto, SupplierOrderModel } from "../models/supplier-order-model";
 import { dal } from "../utils/dal";
 import { ProductModel } from "../models/product-model";
+import { sanitizeText } from "../utils/sanitize";
 
 class SupplierOrderService {
     //Get All supplier orders;
@@ -89,7 +90,7 @@ class SupplierOrderService {
 
     // Add new supplier order:
     public async addSupplierOrder(order: AddSupplierOrderDto): Promise<SupplierOrderModel> {
-
+      
         const orderNumber = `PO-${Date.now()}`;
         const createBy = 2;
         const orderStatus = "draft";
@@ -112,7 +113,7 @@ class SupplierOrderService {
             VALUES (?, ?, ?, ?, ?, ?, ?)
         `;
 
-        const values: (string | number | boolean |Date | null)[] = [
+        const values: (string | number | boolean | Date | null)[] = [
             orderNumber,
             order.idSupplier,
             createBy,
@@ -127,7 +128,7 @@ class SupplierOrderService {
 
         const idOrder = info.insertId!;
 
-        for(const item of order.items){
+        for (const item of order.items) {
             const itemSql = `
                 INSERT INTO supplier_order_items(
                     id_order,

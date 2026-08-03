@@ -2,46 +2,47 @@ import { UserRole } from "./enum";
 
 export class UserModel {
     idUser!: number;
-    fullName!:string;
-    email!:string;
-    passwordHash!:string;
-    role!:UserRole;
-    isActive!:boolean;
-    createdAt!:Date;
-    updatedAt!:Date;
+    firstName!: string;
+    lastName!: string;
+    email!: string;
+    password!: string;
+    role!: UserRole;
+    isActive!: boolean;
+    createdAt!: Date;
+    updatedAt!: Date;
 }
 
-
 export class RegisterUserDto {
-    fullName!: string;
-    email!:string;
+    firstName!: string;
+    lastName!: string;
+    email!: string;
     password!: string;
-    role!:UserRole;
+    role!: UserRole;
 }
 
 export class LoginUserDto {
-    email!:string;
+    email!: string;
     password!: string;
 }
 
 export class UpdatedUserDto {
-    fullName?:string;
+    firstName?: string;
+    lastName?: string;
     email?: string;
-    password?:string;
+    password?: string;
     role?: UserRole;
     isActive?: boolean;
 }
 
-
 export class SafeUserModel {
     idUser!: number;
-    fullName!:string;
-    email!:string;
-    role!:UserRole;
+    firstName!: string;
+    lastName!: string;
+    email!: string;
+    role!: UserRole;
     isActive!: boolean;
-    createdAt!:Date;
+    createdAt!: Date;
 }
-
 
 export class AuthResponseModel {
     token!: string;

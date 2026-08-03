@@ -49,6 +49,8 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
 
+      JWT_SECRET: ${JWT_SECRET}
+
       BASE_IMAGE_URL: http://localhost:4000/api/products/images/
 
     ports:

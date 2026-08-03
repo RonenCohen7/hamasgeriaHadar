@@ -4,8 +4,9 @@ import express, {
     Response
 } from "express";
 
-import { RegisterUserDto, UpdatedUserDto } from "../models/user-model";
+import { LoginUserDto, RegisterUserDto, UpdatedUserDto } from "../models/user-model";
 import { userService } from "../services/users-service";
+import { authLimiter } from "../middleware/rate-limit-middleware";
 
 
 
@@ -17,7 +18,10 @@ class UserController {
 
     public constructor() {
 
-        this.router.post("/api/users/register", this.registerUser);
+        this.router.post("/api/users/register",authLimiter, this.registerUser);
+        this.router.post("/api/users/login",authLimiter, this.login);
+
+
         this.router.get("/api/users", this.getAllUsers);
         this.router.get("/api/users/:id", this.getOneUser);
 
@@ -42,6 +46,22 @@ class UserController {
             next(error);
         }
     }
+
+
+    //Login
+    private async login(request:Request, response:Response, next:NextFunction):Promise<void>{
+        try{
+
+            const credentials:LoginUserDto = request.body;
+            const auth = await userService.login(credentials);
+            response.json(auth);
+            
+        }catch(err){
+            next(err)
+        }
+    }
+
+
 
     //Get All Users
     private async getAllUsers(request: Request, response: Response, next: NextFunction): Promise<void> {

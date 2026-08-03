@@ -14,11 +14,14 @@ import { errorMiddleware } from "./middleware/errors-middleware";
 import fileUpload from "express-fileupload";
 import { saleOrderController } from "./controllers/sale-order-controller";
 
-
+import "dotenv/config";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { Socket } from "dgram";
 import { initSocket } from "./utils/socket";
+import helmet from "helmet";
+import { apiLimiter } from "./middleware/rate-limit-middleware";
+
 
 
 
@@ -28,7 +31,10 @@ class App {
         try{
 
             const app = express();
-            
+            app.use(helmet());
+            app.use(apiLimiter)
+
+            process.env.JWT_SECRET
 
             app.use("/api/products/images", express.static("src/assets/images/products"));
 
