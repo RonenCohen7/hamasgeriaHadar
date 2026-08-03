@@ -175,6 +175,18 @@ class SupplierService {
             throw new ResourceNotFoundError(id);
         }
     }
+
+    //Get Supplier Count
+    public async getSupplierCount():Promise<number>{
+        const sql = `
+            SELECT COUNT(*) AS count
+            FROM suppliers
+            WHERE is_active =1
+        `;
+        const result = await dal.execute(sql) as any[];
+        return result[0].count;
+
+    }
 }
 
 

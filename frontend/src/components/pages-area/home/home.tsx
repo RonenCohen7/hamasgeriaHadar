@@ -8,31 +8,111 @@ import {
 import "./home.css";
 import { useTitle } from "../../utils/UseTitle";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "../../redux/inventory-store";
+import { useEffect, useMemo, useState } from "react";
+import { inventoryService } from "../../service/inventoryService";
+import { setInventory } from "../../redux/inventory-slice";
+import { supplierService } from "../../service/supplierService";
+import { eventService } from "../../service/eventService";
 
 
 export function Home() {
 
     useTitle("Home");
-   
-
     const navigate = useNavigate();
 
-    function showProducts(){
+    const dispatch = useDispatch()
+
+    const inventory = useSelector((state: RootState) => state.inventory.items);
+
+    const totalProducts = inventory.length;
+
+    const totalStock = inventory.reduce((sum, product) => sum + Number(product.productStock), 0);
+
+    const [supplierCount, setSupplierCount] = useState(0);
+    const [eventCount, setEventCount] = useState<number>(0);
+
+    const lowStockProducts = useMemo(() => {
+        return inventory
+            .filter(product => Number(product.productStock) <= Number(product.minimumStock))
+            .sort((a, b) => Number(a.productStock) - Number(b.productStock))
+    }, [inventory]);
+
+    const stockOverviewProducts = useMemo(() => {
+        return [...inventory]
+            .sort((a, b) => {
+                const distanceA =
+                    Number(a.productStock) -
+                    Number(a.minimumStock);
+
+                const distanceB =
+                    Number(b.productStock) -
+                    Number(b.minimumStock);
+
+                return distanceA - distanceB;
+            })
+            .slice(0, 5);
+    }, [inventory]);
+
+
+    useEffect(() => {
+        supplierService
+            .getSupplierCount()
+            .then(count => setSupplierCount(count))
+            .catch(error => console.log("Failed to loading supplier count", error));
+
+    }, []);
+
+
+
+    useEffect(() => {
+        if (inventory.length > 0) return;
+        inventoryService
+            .getLiveInventory()
+            .then(data => dispatch(setInventory(data)))
+            .catch(error => console.log("Failed to  loading home inventory", error));
+
+    }, [dispatch, inventory.length]);
+
+    useEffect(() => {
+        eventService
+            .getEventCount()
+            .then(count => setEventCount(count))
+            .catch(error => console.log("Failed to load events", error));
+    }, []);
+
+
+    function showProducts() {
         navigate("/products");
     }
-    
+
+    function showSuppliers() {
+        navigate("/suppliers")
+    }
+
+    function showEvents() {
+        navigate("/events")
+    }
+
     return (
         <section className="home-page">
 
             <div className="home-heading">
                 <div>
                     <h1>
-                         HAMASGERIYA 
+                        HAMASGERIYA
                     </h1>
 
                     <p>
                         Track products, suppliers, events and sales
                         from one management dashboard.
+                    </p>
+
+                    <p>
+                        {lowStockProducts.length > 0
+                            ? `⚠ ${lowStockProducts.length} products require attention`
+                            : "✅ All products are above minimum stock"}
                     </p>
                 </div>
 
@@ -53,7 +133,7 @@ export function Home() {
 
                     <div>
                         <span>Total Products</span>
-                        <strong>10</strong>
+                        <strong onClick={showProducts}>{totalProducts}</strong>
                         <small>Available in inventory</small>
                     </div>
                 </article>
@@ -64,8 +144,8 @@ export function Home() {
                     </div>
 
                     <div>
-                        <span>Suppliers</span>
-                        <strong>10</strong>
+                        <span onClick={showSuppliers}>Suppliers</span>
+                        <strong>{supplierCount}</strong>
                         <small>Active business partners</small>
                     </div>
                 </article>
@@ -76,8 +156,8 @@ export function Home() {
                     </div>
 
                     <div>
-                        <span>Events</span>
-                        <strong>10</strong>
+                        <span onClick={showEvents}>Events</span>
+                        <strong>{eventCount}</strong>
                         <small>Registered pub events</small>
                     </div>
                 </article>
@@ -88,8 +168,8 @@ export function Home() {
                     </div>
 
                     <div>
-                        <span>Sales Activity</span>
-                        <strong>Live</strong>
+                        <span>Total Stock</span>
+                        <strong>{totalStock}</strong>
                         <small>Connected to the management API</small>
                     </div>
                 </article>
@@ -110,40 +190,43 @@ export function Home() {
                         </button>
                     </div>
 
+
                     <div className="stock-list">
 
-                        <div className="stock-row">
-                            <div>
-                                <strong>Cabernet Saovinon</strong>
-                                <span>Wine</span>
-                            </div>
+                        {stockOverviewProducts.map(product => {
+                            const stock = Number(product.productStock);
+                            const minimum = Number(product.minimumStock);
+                            const isLow = stock <= minimum;
 
-                            <div className="stock-value">
-                                35 units
-                            </div>
-                        </div>
+                            return (
+                                <div
+                                    key={product.idProduct}
+                                    className={
+                                        isLow
+                                            ? "stock-row low"
+                                            : "stock-row"
+                                    }
+                                >
+                                    <div>
+                                        <strong>{product.productName}</strong>
 
-                        <div className="stock-row">
-                            <div>
-                                <strong>Chardonnay</strong>
-                                <span>Wine</span>
-                            </div>
+                                        <span>
+                                            Minimum: {minimum.toFixed(0)}
+                                        </span>
+                                    </div>
 
-                            <div className="stock-value">
-                                29 units
-                            </div>
-                        </div>
-
-                        <div className="stock-row">
-                            <div>
-                                <strong>Cola 330ml</strong>
-                                <span>Soft Drinks</span>
-                            </div>
-
-                            <div className="stock-value">
-                                145 units
-                            </div>
-                        </div>
+                                    <div
+                                        className={
+                                            isLow
+                                                ? "stock-value danger"
+                                                : "stock-value"
+                                        }
+                                    >
+                                        {stock.toFixed(0)} units
+                                    </div>
+                                </div>
+                            );
+                        })}
 
                     </div>
                 </article>

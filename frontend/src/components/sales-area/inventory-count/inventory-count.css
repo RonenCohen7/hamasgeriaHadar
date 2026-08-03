@@ -1,0 +1,329 @@
+.InventoryCount {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    padding: 22px;
+
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 18px;
+
+    color: #17384d;
+
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(37, 99, 235, 0.08),
+            transparent 28%
+        ),
+        linear-gradient(
+            145deg,
+            #f8fbff,
+            #f2f7fb
+        );
+
+    overflow: hidden;
+}
+
+.inventory-count-header {
+    padding: 20px 24px;
+
+    border: 1px solid #d6e3ef;
+    border-radius: 20px;
+
+    background: rgba(255, 255, 255, 0.94);
+
+    box-shadow:
+        0 14px 36px rgba(23, 56, 77, 0.08);
+}
+
+.inventory-count-header span {
+    display: block;
+    margin-bottom: 5px;
+
+    color: #6366f1;
+
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1.7px;
+    text-transform: uppercase;
+}
+
+.inventory-count-header h1 {
+    margin: 0 0 7px;
+
+    color: #123b54;
+
+    font-size: clamp(26px, 2.5vw, 38px);
+    font-weight: 900;
+}
+
+.inventory-count-header p {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.inventory-count-table-wrapper {
+    min-height: 0;
+
+    overflow: auto;
+
+    border: 1px solid #d6e3ef;
+    border-radius: 18px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 18px 42px rgba(23, 56, 77, 0.09);
+}
+
+.inventory-count-table {
+    width: 100%;
+
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.inventory-count-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+
+    background:
+        linear-gradient(
+            135deg,
+            #173e59,
+            #20536d
+        );
+}
+
+.inventory-count-table th {
+    height: 46px;
+    padding: 0 16px;
+
+    color: rgba(255, 255, 255, 0.95);
+
+    text-align: center;
+    text-transform: uppercase;
+
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+}
+
+.inventory-count-table td {
+    height: 54px;
+    padding: 7px 16px;
+
+    color: #29495e;
+
+    border-bottom: 1px solid #e7eef4;
+
+    text-align: center;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.inventory-count-table td:first-child {
+    color: #143a51;
+
+    text-align: left;
+    font-weight: 900;
+}
+
+.inventory-count-table tbody tr:hover td {
+    background: #f5f9ff;
+}
+
+.inventory-count-table input {
+    width: 110px;
+    height: 34px;
+    padding: 0 10px;
+
+    color: #153d55;
+    background: #f8fbfd;
+
+    border: 1px solid #cbdceb;
+    border-radius: 8px;
+
+    outline: none;
+
+    font-size: 12px;
+    font-weight: 800;
+    text-align: center;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.inventory-count-table input:focus {
+    background: #ffffff;
+    border-color: #526df0;
+
+    box-shadow:
+        0 0 0 3px rgba(82, 109, 240, 0.12);
+}
+
+.inventory-count-table td:nth-child(4) {
+    color: #64748b;
+    font-weight: 900;
+}
+
+.inventory-count-table-wrapper::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.inventory-count-table-wrapper::-webkit-scrollbar-track {
+    background: #edf4f8;
+}
+
+.inventory-count-table-wrapper::-webkit-scrollbar-thumb {
+    background: #8eb7cc;
+    border-radius: 10px;
+}
+
+.inventory-count-table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #5f91aa;
+}
+.InventoryCount {
+    grid-template-rows:
+        auto
+        minmax(0, 1fr)
+        auto;
+}
+.inventory-count-footer {
+    min-height: 76px;
+    padding: 13px 16px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 18px;
+
+    border: 1px solid #d6e3ef;
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.98),
+            rgba(244, 249, 253, 0.96)
+        );
+
+    box-shadow:
+        0 14px 34px rgba(23, 56, 77, 0.09);
+}
+
+.inventory-count-changes {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.inventory-count-changes span {
+    color: #64748b;
+
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.inventory-count-changes strong {
+    color: #123b54;
+
+    font-size: 26px;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.inventory-count-save-button {
+    min-width: 220px;
+    height: 48px;
+    padding: 0 24px;
+
+    border: none;
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #10b981,
+            #0f766e
+        );
+
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 900;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 10px 24px rgba(16, 185, 129, 0.3);
+
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        filter 0.18s ease;
+}
+
+.inventory-count-save-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    filter: brightness(1.04);
+
+    box-shadow:
+        0 15px 30px rgba(16, 185, 129, 0.4);
+}
+
+.inventory-count-save-button:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.inventory-count-save-button:disabled {
+    cursor: not-allowed;
+
+    background: #cbd5e1;
+    color: #64748b;
+
+    box-shadow: none;
+    transform: none;
+}
+
+@media (max-width: 600px) {
+    .inventory-count-footer {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .inventory-count-save-button {
+        width: 100%;
+        min-width: 0;
+    }
+}
+@media (max-width: 800px) {
+    .InventoryCount {
+        height: auto;
+        min-height: 100%;
+        padding: 12px;
+
+        overflow-y: auto;
+    }
+
+    .inventory-count-table-wrapper {
+        overflow-x: auto;
+    }
+
+    .inventory-count-table {
+        min-width: 720px;
+    }
+}

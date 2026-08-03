@@ -15,6 +15,8 @@ import { AddSupplierOrder } from "../../suppliers-area/add-supplier-order/add-su
 import { SupplierOrderDetails } from "../../suppliers-area/supplier-order-details/supplier-order-details";
 import { AddSale } from "../../sales-area/add-sale/add-sale";
 import { InventoryMonitor } from "../../inventory-area/inventory-monitor/inventory-monitor";
+import { InventoryCount } from "../../sales-area/inventory-count/inventory-count";
+import { ContactUs } from "../../pages-area/contact-us/contact-us";
 
 
 
@@ -25,7 +27,7 @@ export function Routing() {
             <Route path="*" element={<h2>Page Not Found</h2>} />
 
             <Route path="/about" element={<About />} />
-            <Route path="/contact-us" element={<h2>Contact Us</h2>} />
+            <Route path="/contact-us" element={<ContactUs/>} />
 
 
             <Route path="/products" element={<ProductList />} />
@@ -46,7 +48,7 @@ export function Routing() {
 
 
             <Route path="/sales/new" element={<AddSale/>}/>
-            
+            <Route path="/inventory-count" element={<InventoryCount />}/>
         </Routes>
     );
 }

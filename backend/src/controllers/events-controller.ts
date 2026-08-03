@@ -17,6 +17,8 @@ class EventController {
 
         this.router.delete("/api/events/:id", this.deleteEvent);
 
+        this.router.get("/api/event-count",this.getEventCount);
+
 
     }
 
@@ -102,6 +104,19 @@ class EventController {
             response.sendStatus(204);
 
         }catch(err: any){
+            next(err)
+        }
+    }
+
+
+    //Get Event Count
+    private async getEventCount(request:Request, response:Response, next:NextFunction):Promise<void>{
+        try{
+
+            const count =  await eventService.getEventCount();
+            response.json(count);
+
+        }catch(err:any){
             next(err)
         }
     }

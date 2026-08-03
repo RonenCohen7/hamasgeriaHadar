@@ -37,6 +37,12 @@ class SupplierService {
         await axios.delete(appConfig.supplierUrl + "/" + idSupplier);
         
     }
+
+    //Get Supplier Count
+    public async getSupplierCount():Promise<number>{
+        const response = await axios.get<number>(`${appConfig.baseUrl}supplier-count`);
+        return response.data;
+    }
 }
 
 export const supplierService = new SupplierService();

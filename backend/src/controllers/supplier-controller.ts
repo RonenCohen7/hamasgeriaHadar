@@ -18,6 +18,10 @@ class SuppliersController{
 
         this.router.delete("/api/suppliers/:id", this.deleteSupplier);
 
+        this.router.get("/api/supplier-count", this.getSupplierCount);
+
+        
+
 
 
 
@@ -104,6 +108,18 @@ class SuppliersController{
 
         }catch(err:any){
             next(err);
+        }
+    }
+
+
+    //Get supplier Count
+    private async getSupplierCount(request:Request,response:Response, next:NextFunction):Promise<void>{
+        try{
+            const count = await supplierService.getSupplierCount();
+            response.json(count);
+
+        }catch(err:any){
+            next(err)
         }
     }
 }

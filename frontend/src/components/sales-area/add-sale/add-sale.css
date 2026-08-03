@@ -1,6 +1,3286 @@
+
+
+Pasted text.txt
+Document
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: hadar-pub-mysql
+    restart: unless-stopped
+
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+    ports:
+      - "3308:3306"
+
+    volumes:
+      
+      - hadar_mysql_data:/var/lib/mysql
+      - ../database/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "mysqladmin ping -h localhost -u root -p${MYSQL_ROOT_PASSWORD}"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    image: hadar-pub-backend
+    container_name: hadar-pub-backend
+    restart: unless-stopped
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+    environment:
+      ENVIRONMENT: production
+      PORT: 4000
+
+     
+      MYSQL_HOST: mysql
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+
+      BASE_IMAGE_URL: http://localhost:4000/api/products/images/
+
+    ports:
+      - "4000:4000"
+
+    volumes:
+      
+      - hadar_product_images:/app/src/assets/images/products
+
+volumes:
+  hadar_mysql_data:
+  hadar_product_images:
+
+
+Screenshot 2026-08-01 at 12.53.02.png
+Screenshot 2026-08-01 at 12.53.15.png
+למה לא לקשר לסביבת עבודה שלי ?
+
+Screenshot 2026-08-01 at 12.56.03.png
+מעולה התחברנו
+
+Screenshot 2026-08-01 at 12.57.25.png
+Screenshot 2026-08-01 at 12.57.32.png
+אנחנו בצד פרונט - אתמול סיימנו מעבר מרשימת הזמנות ספקים 
+להצגת פרטי הזמנה
+this is the git - lRonenCohen7/hamasgeriaHadar
+תלמד משם מה ביצענו וצריכים להמשיך עם 
+הצגת מוצרים של הספק למטה בכרטיס ... הצעת משהו כזה 
+
+Screenshot 2026-08-01 at 13.21.12.png
+
+Screenshot 2026-08-01 at 13.23.20.png
+this is the css dont change it 
+.SupplierOrderDetails {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+
+    direction: ltr;
+
+    padding: 16px 18px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+
+    color: #17324a;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+/* =====================================
+   Header
+===================================== */
+
+.supplier-order-details-header {
+    width: 100%;
+
+    padding: 16px 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+
+    border: 1px solid #c9def5;
+    border-radius: 16px;
+
+    background: #ffffff;
+
+    box-shadow: 0 8px 22px rgba(42, 105, 180, 0.07);
+
+    box-sizing: border-box;
+}
+
+.supplier-order-details-header > div {
+    min-width: 0;
+}
+
+.supplier-order-eyebrow {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #6f43ef;
+
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.3px;
+    text-transform: uppercase;
+}
+
+.supplier-order-details-header h1 {
+    margin: 0;
+
+    color: #174f59;
+
+    font-size: clamp(24px, 3vw, 34px);
+    line-height: 1.1;
+}
+
+.supplier-order-details-header p {
+    margin: 5px 0 0;
+
+    color: #6b8092;
+
+    font-size: 13px;
+}
+
+/* =====================================
+   Back button
+===================================== */
+
+.supplier-order-back-button {
+    min-width: 88px;
+    min-height: 40px;
+
+    padding: 0 14px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    border: 1px solid #c9d7e8;
+    border-radius: 11px;
+
+    background: #ffffff;
+    color: #17324a;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.supplier-order-back-button:hover {
+    transform: translateY(-1px);
+
+    background: #f7fbff;
+    border-color: #9fc4ed;
+
+    box-shadow: 0 8px 16px rgba(42, 105, 180, 0.1);
+}
+
+/* =====================================
+   Details card
+===================================== */
+
+.supplier-order-details-card {
+    width: 100%;
+
+    padding: 16px;
+
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+
+    border: 1px solid #c9def5;
+    border-radius: 16px;
+
+    background: #ffffff;
+
+    box-shadow: 0 8px 22px rgba(42, 105, 180, 0.06);
+
+    box-sizing: border-box;
+}
+
+/* =====================================
+   Detail row
+===================================== */
+
+.supplier-order-detail-row {
+    min-width: 0;
+    min-height: 76px;
+
+    padding: 12px 14px;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    border: 1px solid #dce8f5;
+    border-radius: 13px;
+
+    background: #fbfdff;
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.supplier-order-detail-row:hover {
+    transform: translateY(-1px);
+
+    border-color: #bad5f2;
+
+    box-shadow: 0 7px 15px rgba(42, 105, 180, 0.07);
+}
+
+.supplier-order-detail-icon {
+    width: 38px;
+    height: 38px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background: #edf5ff;
+    color: #2563eb;
+
+    font-size: 15px;
+}
+
+.supplier-order-detail-row > div:last-child {
+    min-width: 0;
+}
+
+.supplier-order-detail-row span {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #7a8c9d;
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.supplier-order-detail-row strong {
+    display: block;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    color: #17324a;
+
+    font-size: 14px;
+    font-weight: 750;
+}
+
+/* =====================================
+   Status
+===================================== */
+
+.supplier-order-status {
+    width: fit-content;
+
+    padding: 5px 10px;
+
+    border-radius: 999px;
+
+    background: #e9f2ff;
+    color: #2563eb;
+
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    text-transform: capitalize;
+}
+
+/* optional status classes */
+
+.supplier-order-status.draft {
+    background: #eef2f7;
+    color: #526174;
+}
+
+.supplier-order-status.ordered {
+    background: #e8f1ff;
+    color: #2563eb;
+}
+
+.supplier-order-status.partially_received {
+    background: #fff4d8;
+    color: #a16207;
+}
+
+.supplier-order-status.received {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.supplier-order-status.cancelled {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+/* =====================================
+   Notes
+===================================== */
+
+.supplier-order-notes {
+    grid-column: 1 / -1;
+
+    padding: 13px 15px;
+
+    border: 1px solid #dce8f5;
+    border-radius: 13px;
+
+    background: #f8fbff;
+}
+
+.supplier-order-notes span {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #71879a;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.supplier-order-notes p {
+    margin: 0;
+
+    color: #243b50;
+
+    font-size: 13px;
+    line-height: 1.55;
+
+    white-space: pre-wrap;
+}
+
+/* =====================================
+   Products section
+===================================== */
+
+.supplier-order-products {
+    width: 100%;
+
+    padding: 16px;
+
+    border: 1px solid #c9def5;
+    border-radius: 16px;
+
+    background: #ffffff;
+
+    box-shadow: 0 8px 22px rgba(42, 105, 180, 0.06);
+
+    box-sizing: border-box;
+}
+
+.supplier-order-products-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    margin-bottom: 12px;
+}
+
+.supplier-order-products-header h2,
+.supplier-order-products h2 {
+    margin: 0;
+
+    color: #174f59;
+
+    font-size: 19px;
+}
+
+.supplier-order-products-header span {
+    color: #7a8c9d;
+
+    font-size: 11px;
+}
+
+/* =====================================
+   Product rows table
+===================================== */
+
+.supplier-order-products-table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+
+    border: 1px solid #dce8f5;
+    border-radius: 13px;
+}
+
+.supplier-order-products table {
+    width: 100%;
+    min-width: 760px;
+
+    border-collapse: collapse;
+
+    background: #ffffff;
+}
+
+.supplier-order-products thead {
+    background: #f1f6fc;
+}
+
+.supplier-order-products th {
+    padding: 11px 13px;
+
+    text-align: left;
+
+    color: #587084;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    border-bottom: 1px solid #cfe0f1;
+}
+
+.supplier-order-products td {
+    padding: 12px 13px;
+
+    color: #243b50;
+
+    font-size: 12px;
+
+    border-bottom: 1px solid #e7eef6;
+}
+
+.supplier-order-products tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.supplier-order-products tbody tr {
+    transition: background 0.2s ease;
+}
+
+.supplier-order-products tbody tr:hover {
+    background: #f8fbff;
+}
+
+.supplier-order-products .product-name {
+    color: #17324a;
+
+    font-weight: 750;
+}
+
+.supplier-order-products .catalog-number {
+    color: #71879a;
+
+    font-size: 11px;
+}
+
+.supplier-order-products .numeric-cell {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.supplier-order-products .line-total {
+    color: #0d6efd;
+
+    font-weight: 800;
+}
+
+/* =====================================
+   Products summary / total
+===================================== */
+
+.supplier-order-products-footer {
+    margin-top: 12px;
+
+    display: flex;
+    justify-content: flex-end;
+}
+
+.supplier-order-grand-total {
+    min-width: 220px;
+
+    padding: 12px 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+
+    border: 1px solid #c9def5;
+    border-radius: 12px;
+
+    background: #f7fbff;
+}
+
+.supplier-order-grand-total span {
+    color: #71879a;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.supplier-order-grand-total strong {
+    color: #174f59;
+
+    font-size: 18px;
+}
+
+/* =====================================
+   Empty products
+===================================== */
+
+.supplier-order-products-empty {
+    padding: 26px 16px;
+
+    text-align: center;
+
+    color: #7a8c9d;
+
+    font-size: 13px;
+
+    border: 1px dashed #c9d9e9;
+    border-radius: 12px;
+
+    background: #fbfdff;
+}
+
+/* =====================================
+   Loading
+===================================== */
+
+.supplier-order-loading {
+    width: 100%;
+    min-height: 260px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #6f8192;
+
+    font-size: 14px;
+}
+
+/* =====================================
+   Laptop
+===================================== */
+
+@media (max-width: 1050px) {
+    .supplier-order-details-card {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* =====================================
+   Mobile
+===================================== */
+
+@media (max-width: 700px) {
+    .SupplierOrderDetails {
+        height: auto;
+        min-height: 100%;
+
+        padding: 12px;
+    }
+
+    .supplier-order-details-header {
+        padding: 14px;
+
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .supplier-order-back-button {
+        width: 100%;
+    }
+
+    .supplier-order-details-card {
+        grid-template-columns: 1fr;
+
+        padding: 12px;
+    }
+
+    .supplier-order-detail-row {
+        min-height: 68px;
+
+        padding: 11px 12px;
+    }
+
+    .supplier-order-products {
+        padding: 12px;
+    }
+
+    .supplier-order-products-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .supplier-order-products-footer {
+        justify-content: stretch;
+    }
+
+    .supplier-order-grand-total {
+        width: 100%;
+    }
+}
+
+Screenshot 2026-08-01 at 13.34.15.png
+
+Screenshot 2026-08-01 at 13.36.11.png
+Screenshot 2026-08-01 at 13.36.18.png
+
+Screenshot 2026-08-01 at 13.37.32.png
+
+Screenshot 2026-08-01 at 13.41.00.png
+
+Screenshot 2026-08-01 at 13.53.56.png
+
+Screenshot 2026-08-01 at 14.00.40.png
+
+Screenshot 2026-08-01 at 14.02.32.png
+עדיין לא מציג כלום?
+
+Screenshot 2026-08-01 at 14.03.54.png
+
+Screenshot 2026-08-01 at 14.07.05.png
+
+Screenshot 2026-08-01 at 14.07.38.png
+קודם נסיר את המסגרת מסביב למילה prducts in order
+היא לא מוסיפה לטופס 
+
+Generated image: You need to generate a title for the image described by the user prompt. Do not provide any additional information, only the title.
+
+
+Edit
+
+
+Screenshot 2026-08-01 at 14.23.25.png
+Screenshot 2026-08-01 at 14.23.34.png
+הוסר הכפתור 
+
+Screenshot 2026-08-01 at 14.27.17.png
+
+Screenshot 2026-08-01 at 14.36.45.png
+
+Screenshot 2026-08-01 at 14.50.12.png
+
+Screenshot 2026-08-01 at 14.51.48.png
+
+Screenshot 2026-08-01 at 15.23.31.png
+Screenshot 2026-08-01 at 15.23.44.png
+
+Screenshot 2026-08-01 at 15.25.55.png
+Screenshot 2026-08-01 at 15.26.15.png
+
+Screenshot 2026-08-01 at 15.38.23.png
+Screenshot 2026-08-01 at 15.39.08.png
+
+Screenshot 2026-08-01 at 15.40.06.png
+
+Screenshot 2026-08-01 at 15.46.16.png
+
+Screenshot 2026-08-01 at 15.55.46.png
+התכוונתי לכפתורים האלה
+
+Screenshot 2026-08-01 at 17.09.36.png
+Screenshot 2026-08-01 at 17.09.46.png
+
+Screenshot 2026-08-01 at 17.11.41.png
+Screenshot 2026-08-01 at 17.12.00.png
+
+Screenshot 2026-08-01 at 17.20.22.png
+import express, { Request, Response, NextFunction } from "express";
+import { supplierOrderService } from "../services/supplier-order-service";
+import { AddSupplierOrderDto, SupplierOrderModel } from "../models/supplier-order-model";
+import { supplierOrderItemService } from "../services/supplier-order-item-service";
+import { log } from "console";
+
+
+class SupplierOrderController {
+
+
+    public readonly router = express.Router();
+
+
+    public constructor() {
+
+        this.router.get("/api/supplier-orders", this.getAllSupplierOrders);
+        this.router.get("/api/supplier-orders/:id", this.getOneOrder);
+        this.router.get("/api/supplier-orders/:id/items", this.getOneOrderItems);
+
+        this.router.post("/api/supplier-orders", this.addNewOrder);
+        
+        this.router.put("/api/supplier-orders/:id", this.updateSupplierOrder);
+        this.router.put("/api/supplier-orders/items/:id",this.updateOrderItem)
+
+        this.router.delete("/api/supplier-orders/:id", this.deleteSupplierOrder);
+        this.router.delete("/api/supplier-orders/items/:id", this.deleteOrderItem);
+
+    }
+
+
+    //Get All SupplierOrder
+    private async getAllSupplierOrders(request: Request, response: Response, next: NextFunction): Promise<void> {
+        try {
+
+            const orders = await supplierOrderService.getAllSupplierOrders();
+            response.json(orders);
+
+        } catch (err: any) {
+            next(err);
+        }
+    }
+
+    //Get One order
+    private async getOneOrder(request: Request, response: Response, next: NextFunction): Promise<void> {
+        try {
+
+            const id = Number(request.params.id);
+            if (!Number.isInteger(id) || id <= 0) {
+                response.status(400).json({ message: "Id must be a positive number. " });
+                return;
+            }
+
+            const order = await supplierOrderService.getOneSupplierOrder(id);
+            response.json(order);
+
+
+        } catch (err: any) {
+            next(err);
+        }
+    }
+
+
+        //Get Order item
+        private async getOneOrderItems(request:Request, response:Response, next:NextFunction):Promise<void>{
+            try{
+    
+                const id = Number(request.params.id);
+                const items = await supplierOrderItemService.getItemsByOrder(id);
+                response.json(items);
+    
+            }catch(err:any){
+                next(err);
+                
+            }
+        }
+
+
+    // Add new Order
+    private async addNewOrder(request: Request, response: Response, next: NextFunction): Promise<void> {
+        try {
+
+            const order: AddSupplierOrderDto = request.body;
+
+            const addOrder = await supplierOrderService.addSupplierOrder(order);
+            response.status(201).json(addOrder);
+
+        } catch (err: any) {
+            next(err);
+        }
+    }
+
+
+    //update order
+    private async updateSupplierOrder(request: Request, response: Response, next: NextFunction): Promise<void> {
+        try {
+
+            const id = Number(request.params.id);
+            if (!Number.isInteger(id) || id <= 0) {
+                response.status(400).json({ message: "Id must be a positive number. " });
+                return;
+            }
+
+            const order: SupplierOrderModel = request.body;
+            order.idOrder = id;
+
+            const updateOrder = await supplierOrderService.updateSupplierOrder(order);
+            response.json(updateOrder);
+
+
+        } catch (err: any) {
+            next(err);
+        }
+    }
+
+    //update Order item
+    private async updateOrderItem(request:Request, response:Response,next:NextFunction):Promise<void>{
+        try{
+
+            const id = Number(request.params.id);
+            if(!Number.isInteger(id) || id <=0){
+                response.status(400).json({message: "Id must be a positive number. "});
+                return;
+            }
+            const item = request.body;
+            item.idOrder = id;
+
+            const updateItem = await supplierOrderItemService.updateSupplierOrderItem(item);
+            response.json(updateItem);
+
+        }catch(err:any){
+            next(err)
+            
+        }
+    }
+
+
+
+    //delete order 
+    private async deleteSupplierOrder(request: Request, response: Response, next: NextFunction): Promise<void> {
+        try {
+
+            const id = Number(request.params.id);
+            if (!Number.isInteger(id) || id <= 0) {
+                response.status(400).json({ message: "Id must be a positive number. " });
+                return
+            }
+            await supplierOrderService.deleteSupplierOrder(id);
+            response.sendStatus(204);
+
+        } catch (err: any) {
+            next(err);
+        }
+    }
+
+    //delete item from order
+    private async deleteOrderItem(request:Request, response:Response, next:NextFunction):Promise<void>{
+        try{
+
+            const id = Number(request.params.id);
+            if(!Number.isInteger(id) || id <= 0){
+                response.status(400).json({message: "Id must Be a positive number"});
+            }
+            await supplierOrderItemService.deleteSupplierOrderItem(id);
+            response.status(204);
+
+        }catch(err:any){
+            next(err);
+        }
+    }
+
+
+}
+
+export const supplierOrderController = new SupplierOrderController();
+
+
+import { OkPacketParams } from "mysql2";
+import { ResourceNotFoundError } from "../models/client-errors";
+import { SupplierOrderItemModel } from "../models/supplier-order-item-model";
+import { dal } from "../utils/dal";
+
+class SupplierOrderItemService {
+    //Get All supplier order items
+    public async getAllSupplierOrderItems(): Promise<SupplierOrderItemModel[]> {
+        const sql = 
+            SELECT 
+                 soi.id_order_item AS idOrderItem,
+                soi.id_order AS idOrder,
+                soi.id_product AS idProduct,
+                soi.quantity_ordered AS quantityOrdered,
+                soi.quantity_received AS quantityReceived,
+                soi.unit_cost AS unitCost,
+                soi.line_total AS lineTotal,
+                soi.created_at AS createdAt,
+                p.product_name AS productName,
+                p.catalog_number AS catalogNumber
+            FROM supplier_order_items AS soi
+            JOIN products AS p
+                ON soi.id_product = p.id_product
+            ORDER BY soi.id_order_item
+        ;
+
+        const orderItems =
+            await dal.execute(sql) as SupplierOrderItemModel[];
+
+        return orderItems;
+    }
+
+
+    //Get One supplier order item
+public async getOneSupplierOrderItem(id: number): Promise<SupplierOrderItemModel> {
+
+    const sql = 
+        SELECT
+            soi.id_order_item AS idOrderItem,
+            soi.id_order AS idOrder,
+            soi.id_product AS idProduct,
+            soi.quantity_ordered AS quantityOrdered,
+            soi.quantity_received AS quantityReceived,
+            soi.unit_cost AS unitCost,
+            soi.line_total AS lineTotal,
+            soi.created_at AS createdAt,
+            p.product_name AS productName,
+            p.catalog_number AS catalogNumber
+        FROM supplier_order_items AS soi
+        JOIN products AS p
+            ON soi.id_product = p.id_product
+        WHERE soi.id_order_item = ?
+    ;
+
+    const orderItems = await dal.execute(sql, [id]) as SupplierOrderItemModel[];
+
+    const orderItem = orderItems[0];
+
+    if (!orderItem) {
+        throw new ResourceNotFoundError(id);
+    }
+
+    return orderItem;
+}
+
+    //Get All items by supplier order
+    public async getItemsByOrder(orderId: number): Promise<SupplierOrderItemModel[]> {
+        const sql = 
+            SELECT 
+                soi.id_order_item AS idOrderItem,
+                soi.id_order AS idOrder,
+                soi.id_product AS idProduct,
+                soi.quantity_ordered AS quantityOrdered,
+                soi.quantity_received AS quantityReceived,
+                soi.unit_cost AS unitCost,
+                soi.line_total AS lineTotal,
+                soi.created_at AS createdAt,
+                p.product_name AS productName,
+                p.catalog_number AS catalogNumber
+            FROM supplier_order_items AS soi
+            JOIN products AS p
+                ON soi.id_product = p.id_product
+            WHERE soi.id_order = ?
+            ORDER BY p.product_name
+        ;
+
+        const values = [orderId];
+
+        const orderItems =
+            await dal.execute(sql, values) as SupplierOrderItemModel[];
+
+        return orderItems;
+    }
+
+    // Add new supplier order item:
+    public async addSupplierOrderItem(
+        orderItem: SupplierOrderItemModel
+    ): Promise<SupplierOrderItemModel> {
+
+        const sql = 
+            INSERT INTO supplier_order_items(
+                id_order,
+                id_product,
+                quantity_ordered,
+                quantity_received,
+                unit_cost
+            )
+            VALUES (?, ?, ?, ?, ?)
+        ;
+
+        const values = [
+            orderItem.idOrder,
+            orderItem.idProduct,
+            orderItem.quantityOrdered,
+            orderItem.quantityReceived,
+            orderItem.unitCost
+        ];
+
+        const info =
+            await dal.execute(sql, values) as OkPacketParams;
+
+        orderItem.idOrderItem = info.insertId!;
+
+        return orderItem;
+    }
+
+
+    // Update supplier order item:
+    public async updateSupplierOrderItem(orderItem: SupplierOrderItemModel): Promise<SupplierOrderItemModel> {
+
+        const sql = 
+            UPDATE supplier_order_items
+            SET
+                quantity_ordered = ?,
+                quantity_received = ?,
+                unit_cost = ?
+            WHERE id_order_item = ?
+        ;
+
+        const values = [
+            orderItem.quantityOrdered,
+            orderItem.quantityReceived,
+            orderItem.unitCost,
+            orderItem.idOrderItem
+        ];
+
+        const info =  await dal.execute(sql, values) as OkPacketParams;
+
+        if (info.affectedRows === 0) {
+            throw new ResourceNotFoundError(
+                orderItem.idOrderItem
+            );
+        }
+
+        return await this.getOneSupplierOrderItem(orderItem.idOrderItem);
+    }
+
+
+    // Delete supplier order item:
+    public async deleteSupplierOrderItem(id: number): Promise<void> {
+
+        const sql = 
+            DELETE FROM supplier_order_items
+            WHERE id_order_item = ?
+        ;
+
+        const values = [id];
+
+        const info =
+            await dal.execute(sql, values) as OkPacketParams;
+
+        if (info.affectedRows === 0) {
+            throw new ResourceNotFoundError(id);
+        }
+    }
+}
+
+
+export const supplierOrderItemService = new SupplierOrderItemService();    
+
+Screenshot 2026-08-01 at 17.23.44.png
+Screenshot 2026-08-01 at 17.24.15.png
+מחק  מעולה - אבל חייב להקפיץ התראה למשתמש 
+confirm
+
+בנוסף מחקתי מוצרים - סך התשלום לא השתנה 
+הזמנה ללא מוצרים צריכה להימחק מרישמת ההזמנות 
+
+Screenshot 2026-08-01 at 17.32.57.png
+ככה?
+
+Screenshot 2026-08-01 at 17.35.16.png
+Screenshot 2026-08-01 at 17.35.37.png
+
+Screenshot 2026-08-01 at 17.37.50.png
+Screenshot 2026-08-01 at 17.38.51.png
+Screenshot 2026-08-01 at 17.39.00.png
+
+
+Pasted text(1).txt
+Document
+
+Screenshot 2026-08-01 at 17.51.54.png
+ככה?
+
+Screenshot 2026-08-01 at 17.55.11.png
+Screenshot 2026-08-01 at 17.55.28.png
+Screenshot 2026-08-01 at 17.55.35.png
+מקבל שגיאת מחיקה - לא מתרפרש 
+רק אחרי שיוצאים ונכנסים - מתאפס רשימת הזמנות לא נמחקת - יש המון הזמנות ללא מוצרים??
+
+Screenshot 2026-08-01 at 18.02.19.png
+Screenshot 2026-08-01 at 18.02.30.png
+ronencohen@Ronens-MacBook-Pro backend % docker compose logs backend --tail=50
+hadar-pub-backend  | 
+hadar-pub-backend  | > hadar_pab@1.0.0 start
+hadar-pub-backend  | > node dist/app.js
+hadar-pub-backend  | 
+hadar-pub-backend  | Listening on http://localhost:  4000
+hadar-pub-backend  | Order ID 11
+hadar-pub-backend  | ResourceNotFoundError { status: 404, message: 'id 11 not found.' }
+hadar-pub-backend  | Order ID 1
+hadar-pub-backend  | Order ID 1
+hadar-pub-backend  | ResourceNotFoundError { status: 404, message: 'id 1 not found.' }
+ronencohen@Ronens-MacBook-Pro backend % 
+
+Screenshot 2026-08-01 at 18.12.24.png
+הזמנות ללא מוצרים שסהכ לא התאפס
+
+Screenshot 2026-08-01 at 18.15.11.png
+ככה?
+
+Screenshot 2026-08-01 at 18.17.27.png
+Screenshot 2026-08-01 at 18.17.33.png
+
+Screenshot 2026-08-01 at 18.18.33.png
+
+Screenshot 2026-08-01 at 18.22.27.png
+מבולבל כבר - מה בדיוק השינוי שאתה מציע עכשיו?
+
+Screenshot 2026-08-01 at 18.27.43.png
+ | Error: Duplicate entry '21-2' for key 'supplier_order_items.uq_supplier_order_product'
+hadar-pub-backend  |     at Packet.asError (/app/node_modules/mysql2/lib/packets/packet.js:833:17)
+hadar-pub-backend  |     at Query.execute (/app/node_modules/mysql2/lib/commands/command.js:29:26)
+hadar-pub-backend  |     at PoolConnection.handlePacket (/app/node_modules/mysql2/lib/base/connection.js:554:34)
+hadar-pub-backend  |     at PacketParser.onPacket (/app/node_modules/mysql2/lib/base/connection.js:104:12)
+hadar-pub-backend  |     at PacketParser.executeStart (/app/node_modules/mysql2/lib/packet_parser.js:75:16)
+hadar-pub-backend  |     at Socket.<anonymous> (/app/node_modules/mysql2/lib/base/connection.js:111:25)
+hadar-pub-backend  |     at Socket.emit (node:events:519:28)
+hadar-pub-backend  |     at addChunk (node:internal/streams/readable:561:12)
+hadar-pub-backend  |     at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+hadar-pub-backend  |     at Readable.push (node:internal/streams/readable:392:5) {
+hadar-pub-backend  |   code: 'ER_DUP_ENTRY',
+hadar-pub-backend  |   errno: 1062,
+hadar-pub-backend  |   sqlState: '23000',
+hadar-pub-backend  |   sqlMessage: "Duplicate entry '21-2' for key 'supplier_order_items.uq_supplier_order_product'",
+hadar-pub-backend  |   sql: '\n' +
+hadar-pub-backend  |     '                INSERT INTO supplier_order_items(\n' +
+hadar-pub-backend  |     '                    id_order,\n' +
+hadar-pub-backend  |     '                    id_product,\n' +
+hadar-pub-backend  |     '                    quantity_ordered,\n' +
+hadar-pub-backend  |     '                    quantity_received,\n' +
+hadar-pub-backend  |     '                    unit_cost\n' +
+hadar-pub-backend  |     '                )\n' +
+hadar-pub-backend  |     '                VALUES(21,2,1,0,6.5);\n' +
+hadar-pub-backend  |     '            '
+hadar-pub-backend  | }
+
+Screenshot 2026-08-01 at 18.33.02.png
+??
+
+Screenshot 2026-08-01 at 18.33.57.png
+
+Screenshot 2026-08-01 at 20.02.18.png
+זה ישפיע על המודל enum??
+
+Screenshot 2026-08-01 at 20.03.20.png
+אוקי  איפה בדיוק אתה רוצה את השינוי?
+
+
+pub_products_sales_fake_data(1).xlsx
+Spreadsheet
+אני מעלה לך קובץ אקסל של הלקוח תבין איך היום הוא מנהל את המוצרים 
+יש שם שמות של מוצרים ומחירים וכן ספקים ופרטי קשר 
+צריך אחכ למצוא דרך לטעון את כלל הנתונים האלה למערכת באוטומט  - הקמת ספק עם פרטים מלאים 
+מוצרים המשוייכים לספק וכדומה ...
+
+Screenshot 2026-08-01 at 20.16.34.png
+במערכת שלנו בהכנסת מוצר אין שם ספק 
+עמ לשייך את המוצר לספק 
+
+Screenshot 2026-08-01 at 20.26.52.png
+
+Screenshot 2026-08-01 at 20.34.12.png
+
+Screenshot 2026-08-01 at 20.41.40.png
+
+Screenshot 2026-08-01 at 20.47.05.png
+????
+
+Screenshot 2026-08-01 at 20.51.05.png
+
+Screenshot 2026-08-01 at 20.53.19.png
+
+Screenshot 2026-08-01 at 20.54.47.png
+Screenshot 2026-08-01 at 20.54.58.png
+Screenshot 2026-08-01 at 20.56.09.png
+איך אני מוצא את המותר בטבלת ספקים?
+
+Screenshot 2026-08-01 at 20.56.54.png
+
+Screenshot 2026-08-01 at 20.58.11.png
+
+Screenshot 2026-08-01 at 21.01.49.png
+
+Screenshot 2026-08-01 at 21.03.28.png
+
+Screenshot 2026-08-01 at 21.10.16.png
+Screenshot 2026-08-01 at 21.11.11.png
+Screenshot 2026-08-01 at 21.11.35.png
+
+Screenshot 2026-08-01 at 21.14.31.png
+Screenshot 2026-08-01 at 21.15.41.png
+עובד אבל צריך להקפיץ התראה למשתמש אם מכניסים ברקוד שכבר קיים 
+
+Screenshot 2026-08-01 at 21.32.26.png
+Screenshot 2026-08-01 at 21.32.34.png
+Screenshot 2026-08-01 at 21.34.23.png
+Screenshot 2026-08-01 at 21.34.32.png
+Screenshot 2026-08-01 at 21.34.40.png
+Screenshot 2026-08-01 at 21.35.15.png
+ישר מקבל שגיאה למרות שלא רואים שנכנסה שורה 
+לא עובד טוב 
+
+Screenshot 2026-08-02 at 8.40.23.png
+import { useEffect, useState } from "react";
+import "./add-product.css";
+import { ProductCategoryModel } from "../../models/category-model";
+import { useTitle } from "../../utils/UseTitle";
+import { productCategoryService } from "../../service/productCategoryService";
+import { useForm } from "react-hook-form";
+import { ProductModel } from "../../models/product-model";
+
+import { UnitType } from "../../models/enum";
+import { useNavigate } from "react-router-dom";
+import { productService } from "../../service/productService";
+import { notificationService } from "../../service/notificationService";
+import { SupplierModel } from "../../models/supplier-model";
+import { supplierService } from "../../service/supplierService";
+
+export function AddProduct() {
+
+    useTitle("Add new Product")
+
+    const [categories, setCategories] =
+        useState<ProductCategoryModel[]>([]);
+
+    const { register, handleSubmit, formState: { errors } } = useForm<ProductModel>();
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const [suppliers, setSuppliers] = useState<SupplierModel[]>([]);
+
+    const navigate = useNavigate();
+
+
+    useEffect(() => {
+        supplierService.getAllSuppliers()
+            .then(suppliersFromApi => setSuppliers(suppliersFromApi))
+            .catch(err => {
+                console.log(err);
+                notificationService.error("Failed to load suppliers");
+
+            })
+    }, []);
+
+
+    useEffect(() => {
+        productCategoryService
+            .getAllCategories()
+            .then(categories => setCategories(categories))
+            .catch(err => console.log(err));
+    }, []);
+
+
+    function handleImageChange(
+        event: React.ChangeEvent<HTMLInputElement>
+    ) {
+        const file = event.target.files?.[0];
+
+        if (!file) return;
+
+        setPreviewUrl(URL.createObjectURL(file));
+    }
+
+
+    async function send(formData: ProductModel) {
+        try {
+
+            const imageFiles = formData.image as unknown as FileList;
+
+            if (imageFiles?.length > 0) {
+                formData.image = imageFiles[0];
+            }
+            else {
+                delete formData.image;
+            }
+
+            const addedProduct = await productService.addProduct(formData);
+            notificationService.success("Product added successfully.");
+            navigate(/products/${addedProduct.idProduct});
+
+        } catch (err: any) {
+            console.log("Add product error:", err);
+            console.log("Backend response:", err.response?.data);
+
+            const serverData = err.response?.data;
+            const message = typeof serverData === "string" ? serverData : serverData?.message ?? err.message ?? "Failed to add product";
+
+            notificationService.error(message);
+        }
+
+
+    }
+}
+
+return (
+    <div className="AddProduct">
+
+        <h1>Add Product</h1>
+
+        <form className="add-form" onSubmit={handleSubmit(send)}>
+            <label>Category</label>
+            <select
+                defaultValue=""
+                {...register("idCategory", {
+                    required: true,
+                    valueAsNumber: true
+                })}
+            >
+                <option value="" disabled>
+                    Select Category
+                </option>
+
+                {categories.map(category => (
+                    <option
+                        key={category.idCategory}
+                        value={category.idCategory}
+                    >
+                        {category.categoryName}
+                    </option>
+                ))}
+            </select>
+
+            <label>Supplier</label>
+            <select defaultValue="" {...register("idSupplier", { required: "Supplier is Required", valueAsNumber: true })}>
+                <option value="" disabled>Select Supplier</option>
+                {suppliers.map(supplier => (<option key={supplier.idSupplier} value={supplier.idSupplier}>{supplier.supplierName}</option>))}
+                {errors.idSupplier && <span className="error">{errors.idSupplier.message}</span>}
+            </select>
+            <label>Product Name</label>
+            <input type="text" {...register("productName", { required: true })} />
+
+            <label>Catalog Number</label>
+            <input type="text" {...register("catalogNumber", { required: true })} />
+
+            <label>Cost</label>
+            <input type="number" step="0.01" {...register("productCost", { required: true })} />
+
+            <label>Price</label>
+            <input type="number" step="0.01" {...register("productPrice", { required: true })} />
+
+            <label>Stock</label>
+            <input type="number" step="0.01" {...register("productStock", { required: true })} />
+
+            <label>Minimum Stock</label>
+            <input type="number" step="0.01" {...register("minimumStock", { required: true })} />
+
+            <label>Unit</label>
+            <select defaultValue="" {...register("unitType", { required: true })}>
+                <option value="" disabled>Select Unit</option>
+                {Object.values(UnitType).map(unit => (<option key={unit} value={unit}>{unit}</option>))}
+            </select>
+
+            <label>Image</label>
+            {previewUrl && (<div className="image-preview">
+                <img src={previewUrl} alt="product preview" />
+            </div>)}
+
+            <input type="file" accept="image/*" {...register("image", { onChange: handleImageChange })} />
+
+            <div className="form-button">
+                <button type="submit">Save</button>
+                <button type="button" onClick={() => navigate("/products")}>Cancel</button>
+            </div>
+
+        </form>
+
+    </div>
+);
+}
+
+Screenshot 2026-08-02 at 8.43.21.png
+ckend  | 
+hadar-pub-backend  | > hadar_pab@1.0.0 start
+hadar-pub-backend  | > node dist/app.js
+hadar-pub-backend  | 
+hadar-pub-backend  | Listening on http://localhost:  4000
+hadar-pub-backend  | Error: Catalog Number already exists
+hadar-pub-backend  |     at ProductService.addProduct (/app/dist/services/products-service.js:86:19)
+hadar-pub-backend  |     at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+hadar-pub-backend  |     at async addProduct (/app/dist/controllers/product-controller.js:49:32)
+hadar-pub-backend  | Error: Catalog Number already exists
+hadar-pub-backend  |     at ProductService.addProduct (/app/dist/services/products-service.js:86:19)
+hadar-pub-backend  |     at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+hadar-pub-backend  |     at async addProduct (/app/dist/controllers/product-controller.js:49:32)
+ronencohen@Ronens-MacBook-Pro backend % למה לא מודיע בפרונט שיש כזה מספר קטלוג!!!!!!!!!???????
+
+Screenshot 2026-08-02 at 8.49.25.png
+ Container hadar-pub-backend Recreated                                                                                                                       0.8s
+ronencohen@Ronens-MacBook-Pro backend % docker compose logs backend --tail=50
+hadar-pub-backend  | 
+hadar-pub-backend  | > hadar_pab@1.0.0 start
+hadar-pub-backend  | > node dist/app.js
+hadar-pub-backend  | 
+hadar-pub-backend  | Listening on http://localhost:  4000
+hadar-pub-backend  | Error: Catalog Number already exists
+hadar-pub-backend  |     at ProductService.addProduct (/app/dist/services/products-service.js:86:19)
+hadar-pub-backend  |     at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+hadar-pub-backend  |     at async addProduct (/app/dist/controllers/product-controller.js:49:32)
+ronencohen@Ronens-MacBook-Pro backend % 
+
+Screenshot 2026-08-02 at 9.06.29.png
+
+Screenshot 2026-08-02 at 10.32.37.png
+
+Screenshot 2026-08-02 at 10.33.27.png
+
+Screenshot 2026-08-02 at 10.44.51.png
+products stock
+postman...
+
+Screenshot 2026-08-02 at 10.46.42.png
+Screenshot 2026-08-02 at 10.47.59.png
+Screenshot 2026-08-02 at 10.48.12.png
+Screenshot 2026-08-02 at 10.48.36.png
+
+Screenshot 2026-08-02 at 10.49.46.png
+
+Screenshot 2026-08-02 at 10.51.32.png
+
+Screenshot 2026-08-02 at 10.52.11.png
+
+Screenshot 2026-08-02 at 10.53.33.png
+
+Screenshot 2026-08-02 at 10.55.58.png
+Screenshot 2026-08-02 at 10.56.46.png
+Screenshot 2026-08-02 at 10.57.08.png
+
+Screenshot 2026-08-02 at 10.59.12.png
+נמחקו 
+בוא נבצע שוב ניסיון בפוסטמן לראות שלא יורד כפול 
+
+Screenshot 2026-08-02 at 10.59.58.png
+Screenshot 2026-08-02 at 11.00.46.png
+Screenshot 2026-08-02 at 11.00.53.png
+מעולה 
+
+Screenshot 2026-08-02 at 11.06.30.png
+
+Screenshot 2026-08-02 at 11.19.06.png
+Screenshot 2026-08-02 at 11.19.40.png
+
+Screenshot 2026-08-02 at 11.22.52.png
+
+Screenshot 2026-08-02 at 11.34.10.png
+Screenshot 2026-08-02 at 11.34.16.png
+??
+
+Screenshot 2026-08-02 at 11.36.29.png
+Screenshot 2026-08-02 at 11.36.42.png
+
+Screenshot 2026-08-02 at 12.37.02.png
+צריך  אולי להכניס גישה גם מתפריט הצד לנושא
+
+Screenshot 2026-08-02 at 12.56.11.png
+Screenshot 2026-08-02 at 12.56.41.png
+??
+
+Screenshot 2026-08-02 at 13.33.36.png
+css
+
+Screenshot 2026-08-02 at 13.35.07.png
+תן לי משהו יותר בסגנון של זה 
+
+Screenshot 2026-08-02 at 13.36.54.png
+???
+
+Screenshot 2026-08-02 at 13.40.04.png
+יותר רווח לכתפור הכנס מותר 
+
+Screenshot 2026-08-02 at 13.55.07.png
+עדיין ענק ולא רוצה גלילה - זה מתוך המסך הנייד שלי 
+
+Screenshot 2026-08-02 at 13.58.19.png
+ללא שינוי 
+תקטין !!!!!!!!!
+סדר את כל הקובץ מחדש
+
+Screenshot 2026-08-02 at 14.14.31.png
+Screenshot 2026-08-02 at 14.19.56.png
+
+Screenshot 2026-08-02 at 14.26.31.png
+Screenshot 2026-08-02 at 14.26.37.png
+
+
+Pasted code.css
+File
+תקן את הקובץ 
+
+Screenshot 2026-08-02 at 14.31.46.png
+אתה גמור???
+
+
+Pasted code(1).css
+File
+import { useNavigate } from "react-router-dom";
+import { useTitle } from "../../utils/UseTitle";
+import "./add-sale.css";
+import { useEffect, useState } from "react";
+import { ProductModel } from "../../models/product-model";
+import { productService } from "../../service/productService";
+import { AddSaleOrderItemModel, AddSaleOrderModel } from "../../models/sale-order-model";
+import { notificationService } from "../../service/notificationService";
+import { saleOrderService } from "../../service/sale-order-service";
+
+export function AddSale() {
+
+
+    useTitle("Sale")
+    const navigate = useNavigate();
+
+    const [products, setProducts] = useState<ProductModel[]>([]);
+    const [selectedProductID, setSelectedProductId] = useState<number>(0);
+
+    const [quantity, setQuantity] = useState<number>(1);
+    const [unitPrice, setUnitPrice] = useState<number>(0);
+
+    const [items, setItems] = useState<AddSaleOrderItemModel[]>([]);
+
+    const [isSaving, setIsSaving] = useState(false);
+
+    const lineTotal = quantity * unitPrice;
+
+    const subTotal = items.reduce((sum, item) => sum + item.quantity * item.unitPrice, 0);
+    const [discount, setDiscount] = useState(0);
+
+    const discountAmount = subTotal * (discount / 100);
+    const total = subTotal - discountAmount
+
+    useEffect(() => {
+        productService.getAllProducts()
+            .then(products => setProducts(products))
+            .catch(err => console.log(err))
+    }, []);
+
+
+
+    function addItems(): void {
+        if (selectedProductID === 0) return;
+
+        const newItem: AddSaleOrderItemModel = {
+            idProduct: selectedProductID,
+            quantity,
+            unitPrice
+        }
+        setItems([...items, newItem]);
+        setSelectedProductId(0)
+        setQuantity(1)
+        setUnitPrice(0)
+    }
+
+    function removeItem(index: number): void {
+        setItems(currentItems => currentItems.filter((_, i) => i !== index));
+    }
+
+
+    async function saveSale(): Promise<void> {
+        try {
+            if (items.length === 0) {
+                notificationService.error("Pleas Add a least one product to the sale")
+                return
+            }
+            if (discount < 0 || discount > 100) {
+                notificationService.error("Discount must be between 0 to 100")
+                return
+            }
+            setIsSaving(true);
+            const sale: AddSaleOrderModel = {
+                idEvent: null,
+                discountAmount,
+                notes: "Sale created from POS",
+                items
+            }
+            const addSale = await saleOrderService.addSale(sale);
+            notificationService.success(Sale ${addSale.saleNumber} Saved successfully);
+            setItems([]);
+            setSelectedProductId(0);
+            setQuantity(1);
+            setUnitPrice(0);
+            setDiscount(0);
+
+        } catch (err: any) {
+            console.error("Save sale error: ", err);
+            console.error("Backend response:", err.response?.data);
+            const serverData = err.response?.data;
+
+            const message = typeof serverData === "string" ? serverData : serverData?.message ?? err.message ?? "Failed to save sale"
+            notificationService.error(message)
+
+        }
+    }
+
+    return (
+        <div className="AddSale">
+
+            <h2>New Sale</h2>
+
+            <select
+                className="sale-header"
+                value={selectedProductID}
+                onChange={e => {
+                    const id = Number(e.target.value);
+                    setSelectedProductId(id);
+
+                    const product = products.find(p => p.idProduct === id);
+                    if (product) {
+                        setUnitPrice(Number(product.productPrice));
+                    }
+                }}
+            >
+                <option value={0}>Select Product</option>
+
+                {products.map(product => (
+                    <option
+                        key={product.idProduct}
+                        value={product.idProduct}
+                    >
+                        {product.productName}
+                    </option>
+                ))}
+            </select>
+
+            <div className="form-field">
+                <label>Quantity</label>
+
+                <input
+                    type="number"
+                    min="1"
+                    value={quantity}
+                    onChange={e => setQuantity(Number(e.target.value))}
+                />
+            </div>
+
+            <div className="form-field">
+                <label>Unit Price</label>
+
+                <input
+                    type="number"
+                    step="0.01"
+                    value={unitPrice}
+                    onChange={e => setUnitPrice(Number(e.target.value))}
+                />
+            </div>
+
+            <div className="form-field">
+                <label>Total</label>
+
+                <input
+                    type="number"
+                    value={lineTotal}
+                    readOnly
+                />
+            </div>
+
+            <button
+                type="button"
+                className="add-item-button"
+                onClick={addItems}
+            >
+                Add Item
+            </button>
+
+            <table className="sale-table">
+
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {items.map((items, index) => {
+
+                        const product = products.find(
+                            p => p.idProduct === items.idProduct
+                        );
+
+                        return (
+                            <tr key={index}>
+
+                                <td>{product?.productName}</td>
+
+                                <td>{items.quantity}</td>
+
+                                <td>{items.unitPrice}</td>
+
+                                <td>{items.quantity * items.unitPrice}</td>
+
+                                <td>
+
+                                    <button
+                                        type="button"
+                                        className="remove-item-button"
+                                        onClick={() => removeItem(index)}
+                                    >
+                                        🗑️
+                                    </button>
+
+                                </td>
+
+                            </tr>
+                        );
+
+                    })}
+
+                    <tr>
+                        <td colSpan={5}>
+
+                            <div className="sale-summary">
+
+                                <h3>
+                                    Subtotal: ₪{subTotal.toFixed(2)}
+                                </h3>
+
+                                <label>Discount (%)</label>
+
+                                <input
+                                    type="number"
+                                    value={discount}
+                                    onChange={e => setDiscount(Number(e.target.value))}
+                                />
+
+                                <h2>
+                                    Total: ₪{total.toFixed(2)}
+                                </h2>
+
+
+
+                            </div>
+                            <button type="button" className="save-sale-button" onClick={saveSale} disabled={isSaving || items.length === 0}
+                            >
+                                {isSaving ? "Saving Sale..." : "Complete Sale"}
+                            </button>
+
+
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    );
+}
+css only 
+
+save-sale-button
+
+Screenshot 2026-08-02 at 15.04.01.png
+
+Screenshot 2026-08-02 at 15.18.10.png
+
+Screenshot 2026-08-02 at 15.37.56.png
+למה עובדים כפול - אתה עייף??
+לפני רגע יצרנו 
+אתה מתיש אותי עם הטנגו הזה 
+
+Screenshot 2026-08-02 at 15.40.17.png
+Screenshot 2026-08-02 at 15.40.34.png
+
+Screenshot 2026-08-02 at 15.49.12.png
+
+Screenshot 2026-08-02 at 16.11.32.png
+
+Screenshot 2026-08-02 at 16.21.20.png
+מותש כבר - איפה הטעות ???
+
+Screenshot 2026-08-02 at 16.45.33.png
+
+Screenshot 2026-08-02 at 16.54.23.png
+?? desboard icon /live ?/
+
+Screenshot 2026-08-02 at 17.02.25.png
+אולי כדאי לשים תאריך  עמ להסביר שהמידע נכון ליום ושעה ?
+
+Screenshot 2026-08-02 at 17.25.59.png
+לא טוב
+
+Screenshot 2026-08-02 at 17.28.02.png
+לא טוב 
+השעה צריכה להיות בצד ימין בצורה ברורה
+סהכ מוצרים בתוך ריבוע קטן לידו סהכ סחורות  לידו כמות נמוכה 
+כולם באותה שורה 
+סדר את זה נמשיך
+
+Generated image: Live Inventory Dashboard
+
+
+Edit
+
+
+Screenshot 2026-08-02 at 17.33.34.png
+עוד פעם שורף זמן 
+אם לא יודע אני יבקש מקלוד 
+
+
+Pasted code(2).css
+File
+import { useEffect, useState } from "react";
+import "./inventory-monitor.css";
+import { useTitle } from "../../utils/UseTitle";
+import { inventoryService } from "../../service/inventoryService";
+import { InventoryModel } from "../../models/inventory-model";
+
+export function InventoryMonitor() {
+
+    useTitle("Live Inventory");
+
+    const [inventory, setInventory] = useState<InventoryModel[]>([]);
+    const [lastUpdate, setLastUpdate] = useState(new Date());
+    const [isConnected, setIsConnected] = useState(true);
+
+    const totalProducts = inventory.length;
+    const totalStock = inventory.reduce((sum, item) => sum + Number(item.productStock), 0);
+
+    const lowStock = inventory.filter(item => Number(item.productStock) <= Number(item.minimumStock)).length;
+
+
+
+    useEffect(()=>{
+        inventoryService.getLiveInventory()
+            .then(inventoryFromApi => {
+                setInventory(inventoryFromApi)
+                setLastUpdate(new Date())
+            })
+            .catch(console.error)
+            setIsConnected(false);
+    },[]);
+
+    return (
+        <div className="InventoryMonitor">
+            <header className="inventory-header">
+                <div>
+                    <span className="inventory-eyebrow">
+                        Real-Time Inventory
+                    </span>
+                    <h1>Live Inventory</h1>
+                    <p>Current product quantity and supplier information</p>
+                </div>
+
+                <div className="inventory-live-status">
+
+                <span className={isConnected ? "status-dot connected" : "status-dot disconnected"}>
+                        <div>
+                            <strong>{isConnected? "Live" : "Offline"}</strong>
+                            <span>Update: {" "}
+                                {lastUpdate.toLocaleString("en-GB")}{" "}
+                                {lastUpdate.toLocaleString("en-GB")}
+                            </span>
+                        </div>
+
+                    </span>
+
+                </div>
+            </header>
+
+            <section className="inventory-stat">
+                <article className="inventory-stat-card">
+                    <span>Total Products</span>
+                    <strong>{totalProducts}</strong>
+                    <small>Active inventory items</small>
+                </article>
+
+                <article className="inventory-stat-card">
+                    <span>Total Stock</span>
+                    <strong>{totalStock}</strong>
+                    <small>Units currently items</small>
+                </article>
+
+                <article className={lowStock > 0 ? "inventory-stat-card waring" : "inventory-stat-card"}>
+                    <span>Low Stock</span>
+                    <strong>{lowStock}</strong>
+                    <small>Products requiring attention</small>
+                </article>
+
+                <article className="inventory-stat-card live">
+                    <span>Connection</span>
+                    <strong>{isConnected ? "Live" : "OFFLINE"}</strong>
+                    <small>Real time inventory update</small>
+
+                </article>
+
+            </section>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Stock</th>
+                        <th>Minimum</th>
+                        <th>Supplier</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {inventory.map(item => (
+                        <tr key={item.idProduct}>
+                            <td>{item.productName}</td>
+                            <td>{item.productStock}</td>
+                            <td>{item.minimumStock}</td>
+                            <td>{item.supplierName}</td>
+                        </tr>
+                        
+                    ))}
+                </tbody>
+            </table>
+
+        </div>
+    );
+}
+
+
+
+Screenshot 2026-08-02 at 17.38.22.png
+שים לב מבצע מכירה של מוצר במבה עד שאני לא מרפרש את הדף הכמות לא מתעדכנת וזה ממש לא בסדר
+
+Screenshot 2026-08-02 at 18.16.30.png
+
+Screenshot 2026-08-02 at 18.20.02.png
+
+Screenshot 2026-08-02 at 18.21.34.png
+
+Screenshot 2026-08-02 at 19.13.19.png
+
+Screenshot 2026-08-02 at 19.17.20.png
+Screenshot 2026-08-02 at 19.17.29.png
+הכמות לא מתעדכנת - רק אחרי שמרעננים את הדף??
+??
+
+Screenshot 2026-08-02 at 19.28.30.png
+
+Screenshot 2026-08-02 at 19.33.06.png
+inventory???
+
+Screenshot 2026-08-02 at 19.38.48.png
+
+Screenshot 2026-08-02 at 19.42.30.png
+
+Screenshot 2026-08-02 at 19.45.23.png
+Screenshot 2026-08-02 at 19.45.32.png
+Screenshot 2026-08-02 at 19.45.40.png
+לא מתרפרש עצמאי - רק אם אני מרפרש את הדף ??
+
+
+Pasted code(3).css
+File
+כמות ירדה שורה לא נצבעה
+
+??
+
+Screenshot 2026-08-02 at 22.51.42.png
+
+Pasted code(4).css
+File
+השורה לא נצבעת ???
+
+Screenshot 2026-08-02 at 22.57.54.png
+Screenshot 2026-08-02 at 22.59.14.png
+שים לב לאחר שני משדר מכירה לוקח לדף זמן להתרענן - אני חייב לרפרש אותו כדי שיקבל את ההזמנה הבאה ??
+
+כמו כן יצרתי הזמנה 3 מוצרים - רק השורה האחרונה נצבעה בירוק ??
+
+Screenshot 2026-08-02 at 23.18.29.png
+
+Screenshot 2026-08-02 at 23.23.23.png
+gold lager 24 
+לא קפץ שום התראה ???
+
+Screenshot 2026-08-02 at 23.28.22.png
+כרטיס פרטי מוצר יש כפתורים 
+עריכה . מחיקה - עובדים תקין 
+ספק - לא עובד
+inventory לא עובד
+בוא נטפל קודם באלה 
+
+Screenshot 2026-08-02 at 23.34.48.png
+אני שייכתי לו ספק  בוודאות יש 
+לא מבין למה לא עובד
+
+Screenshot 2026-08-02 at 23.42.41.png
+עכשיו נעלמ המידע ??
+
+Screenshot 2026-08-02 at 23.55.12.png
+Screenshot 2026-08-02 at 23.55.22.png
+אןקי הסתדר 
+מנסה לגיע לדף הספק בלחיצת כפתור 
+
+Screenshot 2026-08-02 at 23.56.49.png
+כפתור 
+inventory ?? 
+
+Screenshot 2026-08-03 at 10.13.57.png
+קיבלתי תוצאה 12 בsql 
+
+Screenshot 2026-08-03 at 10.19.49.png
+בוא נחבר גם אתכמות ספקים שיהיה דינמי ולא מספר קבוע 
+מוצרים נמוכים - כנל 
+
+Screenshot 2026-08-03 at 10.32.09.png
+לא מציג לי את האפשרות לבחור ספירת ספקים??
+
+Screenshot 2026-08-03 at 11.07.29.png
+Screenshot 2026-08-03 at 11.07.42.png
+לא בניתי במערכת יכולת CRUD events..
+
+backEnd:
+import { OkPacketParams } from "mysql2";
+import { ResourceNotFoundError } from "../models/client-errors";
+import { EventModel } from "../models/event-model";
+import { dal } from "../utils/dal";
+
+class EventService {
+    //Get All Events
+    public async getAllEvents(): Promise<EventModel[]> {
+        const sql = 
+            SELECT
+                e.id_event AS idEvent,
+                e.event_name As eventName,
+                e.event_description As eventDescription,
+                e.event_start AS eventStart,
+                e.event_end As eventEnd,
+                e.event_location AS eventLocation,
+                e.maximum_guests AS maximumGuests,
+                e.expected_guests AS expectedGuests,
+                e.actual_guests AS actualGuests,
+                e.ticket_price AS ticketPrice,
+                e.event_status AS eventStatus,
+                e.created_by AS createdBy,
+                e.created_at AS createdAt,
+                e.updated_at AS updatedAt,
+                u.full_name AS createdByName
+            FROM events AS e
+            JOIN users AS u
+                ON e.created_by = u.id_user
+            ORDER BY e.event_start DESC
+        ;
+        const events = await dal.execute(sql) as EventModel[];
+        return events;
+
+    }
+
+    //Get One Event
+    public async getOneEvent(id: number): Promise<EventModel> {
+        const sql = 
+            SELECT 
+                e.id_event AS idEvent,
+                e.event_name AS eventName,
+                e.event_description AS eventDescription,
+                e.event_start AS eventStart,
+                e.event_end AS eventEnd,
+                e.event_location AS eventLocation,
+                e.maximum_guests AS maximumGuests,
+                e.expected_guests AS expectedGuests,
+                e.actual_guests AS actualGuests,
+                e.ticket_price AS ticketPrice,
+                e.event_status AS eventStatus,
+                e.created_by AS createdBy,
+                e.created_at AS createdAt,
+                e.updated_at AS updatedAt,
+                u.full_name AS createdByName
+            FROM events AS e
+            JOIN users AS u
+                ON e.created_by = u.id_user
+            WHERE e.id_event = ?
+        ;
+        const values = [id];
+
+        const events = await dal.execute(sql,values) as EventModel[];
+        const event = events[0];
+        if(!event){
+            throw new ResourceNotFoundError(id);
+        }
+        return event;
+    }
+
+    //Add new Event
+    public async addEvent(event:EventModel):Promise<EventModel>{
+        
+        const sql = 
+            INSERT INTO events (
+                event_name,
+                event_description,
+                event_start,
+                event_end,
+                event_location,
+                maximum_guests,
+                expected_guests,
+                actual_guests,
+                ticket_price,
+                event_status,
+                created_by
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        
+        const values = [
+            event.eventName,
+            event.eventDescription,
+            event.eventStart,
+            event.eventEnd,
+            event.eventLocation,
+            event.maximumGuests,
+            event.expectedGuests,
+            event.actualGuests,
+            event.ticketPrice,
+            event.eventStatus,
+            event.createdBy
+        ];
+        const info = await dal.execute(sql,values) as OkPacketParams;
+        event.idEvent = info.insertId!
+        
+        return event   
+    }
+      // Update event:
+    public async updateEvent(event: EventModel): Promise<EventModel> {
+
+        const sql = 
+            UPDATE events
+            SET
+                event_name = ?,
+                event_description = ?,
+                event_start = ?,
+                event_end = ?,
+                event_location = ?,
+                maximum_guests = ?,
+                expected_guests = ?,
+                actual_guests = ?,
+                ticket_price = ?,
+                event_status = ?
+            WHERE id_event = ?
+        ;
+
+        const values = [
+            event.eventName,
+            event.eventDescription,
+            event.eventStart,
+            event.eventEnd,
+            event.eventLocation,
+            event.maximumGuests,
+            event.expectedGuests,
+            event.actualGuests,
+            event.ticketPrice,
+            event.eventStatus,
+            event.idEvent
+        ];
+
+        const info =
+            await dal.execute(sql, values) as OkPacketParams;
+
+        if (info.affectedRows === 0) {
+            throw new ResourceNotFoundError(event.idEvent);
+        }
+
+        return event;
+    }
+
+
+    // Delete event:
+    public async deleteEvent(id: number): Promise<void> {
+
+        const sql = 
+            DELETE FROM events
+            WHERE id_event = ?
+        ;
+
+        const values = [id];
+
+        const info =
+            await dal.execute(sql, values) as OkPacketParams;
+
+        if (info.affectedRows === 0) {
+            throw new ResourceNotFoundError(id);
+        }
+    }
+
+}
+
+
+export const eventService = new EventService();
+
+Screenshot 2026-08-03 at 11.12.52.png
+
+Screenshot 2026-08-03 at 11.25.10.png
+Screenshot 2026-08-03 at 11.25.16.png
+Screenshot 2026-08-03 at 11.25.24.png
+עכשיו לא מציג כלום??
+
+Screenshot 2026-08-03 at 11.29.00.png
+יותר טוב רק המשפט לשים תשומת לב מציג 0 ??
+
+החלף את כל home.css בקובץ הבא. הוא מתאים למבנה ה־Home.tsx הנוכחי שלך ולא דורש שינוי בקומפוננטה.
+
+/* =========================================================
+   HADAR PUB — MANAGEMENT DASHBOARD
+========================================================= */
+
+.home-page {
+    --home-navy: #0c2f48;
+    --home-blue: #2563eb;
+    --home-cyan: #0891b2;
+    --home-green: #16a36a;
+    --home-purple: #7c3aed;
+    --home-orange: #f97316;
+
+    --home-text: #17324a;
+    --home-muted: #718096;
+    --home-line: #d8e6f2;
+    --home-panel: rgba(255, 255, 255, 0.9);
+    --home-shadow: 0 18px 50px rgba(15, 47, 72, 0.09);
+
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    padding: clamp(18px, 2vw, 30px);
+
+    display: grid;
+    grid-template-rows: auto auto minmax(0, 1fr);
+    gap: clamp(16px, 2vh, 24px);
+
+    color: var(--home-text);
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 8% 5%,
+            rgba(37, 99, 235, 0.1),
+            transparent 25%
+        ),
+        radial-gradient(
+            circle at 96% 2%,
+            rgba(22, 163, 106, 0.09),
+            transparent 25%
+        ),
+        linear-gradient(
+            145deg,
+            #f8fbff 0%,
+            #f2f7fb 50%,
+            #f7fafc 100%
+        );
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.home-heading {
+    position: relative;
+
+    min-height: 105px;
+    padding: clamp(20px, 2.2vw, 30px);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+
+    overflow: hidden;
+
+    border: 1px solid rgba(186, 209, 228, 0.9);
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            120deg,
+            rgba(255, 255, 255, 0.96),
+            rgba(241, 248, 255, 0.92)
+        );
+
+    box-shadow:
+        0 20px 55px rgba(15, 47, 72, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.home-heading::before {
+    content: "";
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 210px;
+    height: 4px;
+
+    border-radius: 0 0 10px 0;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--home-blue),
+            var(--home-purple),
+            var(--home-green)
+        );
+}
+
+.home-heading::after {
+    content: "";
+
+    position: absolute;
+    top: -90px;
+    right: -60px;
+
+    width: 240px;
+    height: 240px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(37, 99, 235, 0.12),
+            transparent 68%
+        );
+
+    pointer-events: none;
+}
+
+.home-heading > div:first-child {
+    position: relative;
+    z-index: 1;
+}
+
+.home-heading h1 {
+    margin: 0 0 8px;
+
+    color: var(--home-navy);
+
+    font-size: clamp(28px, 3vw, 43px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -1.1px;
+}
+
+.home-heading p {
+    margin: 4px 0 0;
+
+    max-width: 670px;
+
+    color: #587086;
+
+    font-size: clamp(12px, 1vw, 14px);
+    line-height: 1.55;
+}
+
+.home-heading p:last-child {
+    margin-top: 9px;
+
+    color: var(--home-green);
+    font-weight: 700;
+}
+
+.home-eyebrow {
+    margin-bottom: 7px;
+
+    display: inline-block;
+
+    color: var(--home-blue);
+
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+}
+
+.home-date {
+    position: relative;
+    z-index: 1;
+
+    min-width: 165px;
+    padding: 15px 18px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    border: 1px solid rgba(186, 209, 228, 0.85);
+    border-radius: 16px;
+
+    background: rgba(255, 255, 255, 0.82);
+
+    color: var(--home-muted);
+
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+
+    box-shadow:
+        0 10px 30px rgba(15, 47, 72, 0.07),
+        inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+.home-date strong {
+    color: var(--home-navy);
+
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+/* =========================================================
+   STAT CARDS
+========================================================= */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(12px, 1.4vw, 20px);
+}
+
+.stat-card {
+    position: relative;
+
+    min-width: 0;
+    min-height: clamp(112px, 14vh, 140px);
+    padding: clamp(16px, 1.6vw, 22px);
+
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    overflow: hidden;
+
+    border: 1px solid rgba(186, 209, 228, 0.95);
+    border-radius: 21px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.97),
+            rgba(242, 248, 253, 0.91)
+        );
+
+    box-shadow:
+        0 16px 38px rgba(15, 47, 72, 0.075),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+
+    cursor: pointer;
+
+    transition:
+        transform 0.22s ease,
+        box-shadow 0.22s ease,
+        border-color 0.22s ease;
+}
+
+.stat-card::before {
+    content: "";
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 3px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--home-blue),
+            var(--home-cyan)
+        );
+
+    opacity: 0.9;
+}
+
+.stat-card::after {
+    content: "";
+
+    position: absolute;
+    right: -30px;
+    bottom: -45px;
+
+    width: 115px;
+    height: 115px;
+
+    border-radius: 50%;
+
+    background: rgba(37, 99, 235, 0.055);
+
+    transition: transform 0.25s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+
+    border-color: rgba(37, 99, 235, 0.38);
+
+    box-shadow:
+        0 22px 45px rgba(15, 47, 72, 0.13),
+        inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+.stat-card:hover::after {
+    transform: scale(1.25);
+}
+
+.stat-card:nth-child(2)::before {
+    background:
+        linear-gradient(
+            90deg,
+            var(--home-purple),
+            var(--home-blue)
+        );
+}
+
+.stat-card:nth-child(3)::before {
+    background:
+        linear-gradient(
+            90deg,
+            var(--home-orange),
+            #f59e0b
+        );
+}
+
+.stat-card:nth-child(4)::before {
+    background:
+        linear-gradient(
+            90deg,
+            var(--home-green),
+            var(--home-cyan)
+        );
+}
+
+.stat-icon {
+    position: relative;
+    z-index: 1;
+
+    width: clamp(48px, 4vw, 58px);
+    height: clamp(48px, 4vw, 58px);
+
+    flex-shrink: 0;
+
+    display: grid;
+    place-items: center;
+
+    border: 1px solid rgba(255, 255, 255, 0.68);
+    border-radius: 17px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(37, 99, 235, 0.92),
+            rgba(124, 58, 237, 0.82)
+        );
+
+    color: #ffffff;
+
+    font-size: clamp(18px, 1.7vw, 23px);
+
+    box-shadow:
+        0 13px 28px rgba(37, 99, 235, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+.stat-card:nth-child(2) .stat-icon {
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #4f46e5
+        );
+}
+
+.stat-card:nth-child(3) .stat-icon {
+    background:
+        linear-gradient(
+            135deg,
+            #f97316,
+            #ef4444
+        );
+}
+
+.stat-card:nth-child(4) .stat-icon {
+    background:
+        linear-gradient(
+            135deg,
+            #0f9f70,
+            #0891b2
+        );
+}
+
+.stat-card > div:last-child {
+    position: relative;
+    z-index: 1;
+
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.stat-card span {
+    color: #6c8193;
+
+    font-size: clamp(10px, 0.86vw, 12px);
+    font-weight: 700;
+    letter-spacing: 0.25px;
+}
+
+.stat-card strong {
+    color: var(--home-navy);
+
+    font-size: clamp(25px, 2.2vw, 33px);
+    font-weight: 800;
+    line-height: 1;
+}
+
+.stat-card small {
+    color: #8495a4;
+
+    font-size: clamp(9px, 0.72vw, 10.5px);
+    line-height: 1.4;
+}
+
+/* =========================================================
+   MAIN PANELS
+========================================================= */
+
+.home-content-grid {
+    min-height: 0;
+
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.65fr)
+        minmax(285px, 0.9fr);
+
+    gap: clamp(14px, 1.5vw, 21px);
+}
+
+.dashboard-panel {
+    position: relative;
+
+    min-height: 0;
+    padding: clamp(18px, 1.7vw, 25px);
+
+    overflow: hidden;
+
+    border: 1px solid rgba(186, 209, 228, 0.95);
+    border-radius: 23px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.97),
+            rgba(247, 251, 254, 0.91)
+        );
+
+    box-shadow: var(--home-shadow);
+}
+
+.dashboard-panel::before {
+    content: "";
+
+    position: absolute;
+    top: 0;
+    left: 24px;
+    right: 24px;
+
+    height: 3px;
+
+    border-radius: 0 0 8px 8px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--home-blue),
+            var(--home-cyan),
+            var(--home-green)
+        );
+}
+
+.panel-heading {
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+
+    margin-bottom: clamp(13px, 1.5vh, 20px);
+}
+
+.panel-heading span {
+    color: var(--home-blue);
+
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1.65px;
+    text-transform: uppercase;
+}
+
+.panel-heading h2 {
+    margin: 5px 0 0;
+
+    color: var(--home-navy);
+
+    font-size: clamp(18px, 1.6vw, 23px);
+    font-weight: 800;
+    letter-spacing: -0.35px;
+}
+
+.panel-heading button {
+    padding: 9px 14px;
+
+    border: 1px solid rgba(37, 99, 235, 0.24);
+    border-radius: 11px;
+
+    background: rgba(37, 99, 235, 0.065);
+
+    color: var(--home-blue);
+
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.panel-heading button:hover {
+    transform: translateY(-2px);
+
+    border-color: transparent;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--home-blue),
+            var(--home-purple)
+        );
+
+    color: #ffffff;
+
+    box-shadow: 0 10px 22px rgba(37, 99, 235, 0.22);
+}
+
+/* =========================================================
+   STOCK OVERVIEW
+========================================================= */
+
+.stock-list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.stock-row {
+    width: 100%;
+    min-height: 58px;
+    padding: 11px 13px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+
+    border: 1px solid transparent;
+    border-radius: 13px;
+
+    background: rgba(245, 249, 252, 0.7);
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.stock-row:hover {
+    transform: translateX(4px);
+
+    border-color: rgba(37, 99, 235, 0.18);
+
+    background: rgba(238, 246, 255, 0.95);
+
+    box-shadow: 0 8px 22px rgba(15, 47, 72, 0.06);
+}
+
+.stock-row > div:first-child {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.stock-row strong {
+    overflow: hidden;
+
+    color: #17415e;
+
+    font-size: clamp(11px, 1vw, 13.5px);
+    font-weight: 750;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.stock-row span {
+    color: #8395a5;
+
+    font-size: 9.5px;
+    font-weight: 600;
+}
+
+.stock-value {
+    min-width: 76px;
+    padding: 8px 11px;
+
+    border: 1px solid rgba(22, 163, 106, 0.13);
+    border-radius: 10px;
+
+    background: rgba(22, 163, 106, 0.1);
+
+    color: #087451;
+
+    font-size: 10px;
+    font-weight: 800;
+    text-align: center;
+
+    white-space: nowrap;
+}
+
+.stock-row.low {
+    border-color: rgba(249, 115, 22, 0.18);
+    background: rgba(255, 247, 237, 0.88);
+}
+
+.stock-value.danger,
+.stock-row.low .stock-value {
+    border-color: rgba(239, 68, 68, 0.15);
+    background: rgba(239, 68, 68, 0.1);
+
+    color: #c62828;
+}
+
+.stock-empty {
+    padding: 38px 15px;
+
+    color: #8495a4;
+
+    font-size: 12px;
+    text-align: center;
+}
+
+/* =========================================================
+   SYSTEM ACTIVITY
+========================================================= */
+
+.activity-panel {
+    display: flex;
+    flex-direction: column;
+}
+
+.activity-panel::before {
+    background:
+        linear-gradient(
+            90deg,
+            var(--home-green),
+            var(--home-cyan)
+        );
+}
+
+.activity-item {
+    position: relative;
+
+    min-height: 61px;
+    padding: 12px 10px;
+
+    display: flex;
+    align-items: center;
+    gap: 13px;
+
+    border-bottom: 1px solid rgba(210, 225, 236, 0.78);
+    border-radius: 10px;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.activity-item:hover {
+    transform: translateX(3px);
+    background: rgba(22, 163, 106, 0.045);
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-dot {
+    position: relative;
+
+    width: 9px;
+    height: 9px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #16a36a;
+
+    box-shadow:
+        0 0 0 5px rgba(22, 163, 106, 0.11),
+        0 0 14px rgba(22, 163, 106, 0.45);
+}
+
+.activity-dot::after {
+    content: "";
+
+    position: absolute;
+    inset: -5px;
+
+    border: 1px solid rgba(22, 163, 106, 0.3);
+    border-radius: 50%;
+
+    animation: homeStatusPulse 2s infinite;
+}
+
+@keyframes homeStatusPulse {
+    0% {
+        opacity: 0.8;
+        transform: scale(0.7);
+    }
+
+    70%,
+    100% {
+        opacity: 0;
+        transform: scale(1.5);
+    }
+}
+
+.activity-item div {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.activity-item strong {
+    color: #17415e;
+
+    font-size: clamp(11px, 1vw, 13.5px);
+    font-weight: 750;
+}
+
+.activity-item small {
+    color: #8395a5;
+
+    font-size: 9.5px;
+    line-height: 1.4;
+}
+
+/* =========================================================
+   SMALL LAPTOP
+========================================================= */
+
+@media (max-width: 1200px) {
+    .home-page {
+        padding: 17px;
+    }
+
+    .home-heading {
+        min-height: 92px;
+        padding: 18px 21px;
+    }
+
+    .home-heading p {
+        max-width: 540px;
+    }
+
+    .stat-card {
+        gap: 11px;
+        padding: 15px;
+    }
+
+    .home-content-grid {
+        grid-template-columns:
+            minmax(0, 1.45fr)
+            minmax(255px, 0.85fr);
+    }
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 900px) {
+    .home-page {
+        height: auto;
+        min-height: 100%;
+        overflow-y: auto;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .home-content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-panel {
+        min-height: 330px;
+    }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+    .home-page {
+        padding: 13px;
+        gap: 14px;
+    }
+
+    .home-heading {
+        min-height: unset;
+        padding: 18px;
+
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .home-heading h1 {
+        font-size: 27px;
+    }
+
+    .home-heading p {
+        font-size: 11px;
+    }
+
+    .home-date {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stat-card {
+        min-height: 100px;
+    }
+
+    .home-content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-panel {
+        min-height: unset;
+        padding: 17px;
+        overflow: visible;
+    }
+
+    .panel-heading {
+        align-items: flex-start;
+    }
+
+    .stock-row {
+        padding: 10px;
+    }
+}
+כמה נקודות שהעיצוב החדש משפר:
+
+כותרת ניהולית מודרנית עם רקע עדין ומסגרת.
+
+כרטיסי KPI שונים בצבע לפי סוג הנתון.
+
+אנימציות Hover עדינות ולא מוגזמות.
+
+Stock Overview נראה כמו רשימת בקרה מקצועית.
+
+מוצרים במלאי נמוך מקבלים עיצוב אדום.
+
+סטטוס המערכת כולל נקודות חיות עם Pulse.
+
+Responsive למחשב, טאבלט וטלפון.
+
+אין שימוש ב־lab() ו־hwb(), כדי למנוע הבדלי תצוגה בין דפדפנים.
+
+
+Screenshot 2026-08-03 at 11.36.14.png
+במסך המכירה אם אני במחשב נייד ויש רשימה ארוכה אני צריך גלילה 
+
+נכון. במסך המכירה צריך שהטבלה עצמה תהיה נגללת, בזמן שהכותרת והסיכום נשארים במקום.
+
+הוסף ל־add-sale.css:
+
+.AddSale {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.AddSale .sale-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* אזור גלילה לטבלה */
+.AddSale .sale-table tbody {
+    display: block;
+    max-height: clamp(260px, 48vh, 520px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* שמירה על רוחב עמודות */
+.AddSale .sale-table thead,
+.AddSale .sale-table tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}
+
+.AddSale .sale-table thead {
+    width: calc(100% - 8px);
+}
+
+/* כותרת נשארת למעלה בזמן גלילה */
+.AddSale .sale-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+/* scrollbar */
+.AddSale .sale-table tbody::-webkit-scrollbar {
+    width: 8px;
+}
+
+.AddSale .sale-table tbody::-webkit-scrollbar-track {
+    background: #edf4f8;
+    border-radius: 10px;
+}
+
+.AddSale .sale-table tbody::-webkit-scrollbar-thumb {
+    background: #8eb7cc;
+    border-radius: 10px;
+}
+
+.AddSale .sale-table tbody::-webkit-scrollbar-thumb:hover {
+    background: #5f91aa;
+}
+אבל אצלך שורת הסיכום והכפתור נמצאים כרגע בתוך tbody, ולכן גם הם יגללו. עדיף להפריד אותם מהטבלה.
+
+השאר בתוך tbody רק את המוצרים:
+
+<tbody>
+    {items.map((item, index) => (
+        // rows
+    ))}
+</tbody>
+ואחרי </table> שים:
+
+<div className="sale-footer">
+
+    <div className="sale-summary">
+        <h3>Subtotal: ₪{subTotal.toFixed(2)}</h3>
+
+        <label>Discount (%)</label>
+
+        <input
+            type="number"
+            value={discount}
+            onChange={e =>
+                setDiscount(Number(e.target.value))
+            }
+        />
+
+        <h2>Total: ₪{total.toFixed(2)}</h2>
+    </div>
+
+    <button
+        type="button"
+        className="save-sale-button"
+        onClick={saveSale}
+        disabled={isSaving || items.length === 0}
+    >
+        {isSaving ? "Saving Sale..." : "Complete Sale"}
+    </button>
+
+</div>
+CSS ל־footer:
+
+.AddSale .sale-footer {
+    margin-top: 14px;
+    display: grid;
+    grid-template-columns: minmax(240px, 1fr);
+    justify-content: end;
+    gap: 12px;
+}
+
+.AddSale .sale-summary {
+    margin-left: auto;
+    width: min(100%, 320px);
+}
+
+.AddSale .save-sale-button {
+    margin-left: auto;
+    width: min(100%, 320px);
+}
+כך במחשב נייד:
+
+רשימת המוצרים תקבל גלילה פנימית.
+
+כותרת הטבלה תישאר קבועה.
+
+הסכום והכפתור תמיד יישארו גלויים.
+
+כל הדף לא יתארך בגלל עשרות מוצרים.
+
+
+
+Pasted code(5).css
+File
+תתאים את הדברים לקובץ אחד 
+
+סידרתי את הכול לקובץ CSS אחד, כולל גלילה פנימית לרשימת מכירה ארוכה במחשב נייד, Header קבוע, וסיכום מכירה שנשאר בתחתית. 
+
+
+add-sale.css
+
+החלף את הקובץ הקיים כולו בקובץ הזה. 
+
+
+add-sale.css
+Code
+
+
+Library
+/
+hadarPub
+/
+add-sale.css
+
+
 /* =========================================
    ADD SALE — COMPACT TOUCH POS
-   Fits a 13-inch laptop without huge fields
+   Optimized for 13-inch laptops and touch use
 ========================================= */
 
 .AddSale {
@@ -19,20 +3299,13 @@
     gap: 12px;
 
     color: #17384d;
-
     background:
-        radial-gradient(
-            circle at top right,
-            rgba(99, 102, 241, 0.08),
-            transparent 32%
-        ),
+        radial-gradient(circle at top right, rgba(99, 102, 241, 0.08), transparent 32%),
         linear-gradient(145deg, #ffffff, #f7fbff);
 
     border: 1px solid #d6e3ef;
     border-radius: 20px;
-
-    box-shadow:
-        0 16px 42px rgba(25, 60, 90, 0.11);
+    box-shadow: 0 16px 42px rgba(25, 60, 90, 0.11);
 
     position: relative;
     overflow: hidden;
@@ -45,14 +3318,7 @@
     left: 9%;
     right: 9%;
     height: 4px;
-
-    background: linear-gradient(
-        90deg,
-        #315cf4,
-        #7541d8,
-        #13ae98
-    );
-
+    background: linear-gradient(90deg, #315cf4, #7541d8, #13ae98);
     border-radius: 0 0 8px 8px;
 }
 
@@ -62,12 +3328,9 @@
 
 .AddSale > h2 {
     grid-column: 1 / -1;
-
     margin: 4px 0 12px;
-
     color: #123b54;
     text-align: center;
-
     font-size: 1.8rem;
     line-height: 1;
     font-weight: 900;
@@ -77,11 +3340,8 @@
 .AddSale > h2::before {
     content: "POINT OF SALE";
     display: block;
-
     margin-bottom: 5px;
-
     color: #6366f1;
-
     font-size: 0.55rem;
     font-weight: 900;
     letter-spacing: 0.22em;
@@ -93,39 +3353,30 @@
 
 .AddSale .sale-header {
     grid-column: 1;
-
     width: 100%;
     height: 48px;
     min-height: 48px;
-
     margin: 0;
     padding: 0 38px 0 13px;
     box-sizing: border-box;
 
     color: #17384d;
     background: #ffffff;
-
     border: 1px solid #cbdceb;
     border-radius: 11px;
 
     outline: none;
     cursor: pointer;
-
     font-size: 0.9rem;
     font-weight: 750;
 
     box-shadow: 0 4px 12px rgba(25, 60, 90, 0.05);
-
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .AddSale .sale-header:focus {
     border-color: #526df0;
-
-    box-shadow:
-        0 0 0 3px rgba(82, 109, 240, 0.12);
+    box-shadow: 0 0 0 3px rgba(82, 109, 240, 0.12);
 }
 
 /* =========================================
@@ -136,22 +3387,16 @@
     margin: 0;
     padding: 7px 9px;
     box-sizing: border-box;
-
     background: rgba(255, 255, 255, 0.9);
-
     border: 1px solid #d8e5ef;
     border-radius: 11px;
-
     box-shadow: 0 4px 12px rgba(25, 60, 90, 0.04);
 }
 
 .AddSale .form-field label {
     display: block;
-
     margin: 0 0 4px;
-
     color: #657b8d;
-
     font-size: 0.56rem;
     font-weight: 900;
     letter-spacing: 0.09em;
@@ -162,42 +3407,33 @@
     width: 100%;
     height: 31px;
     min-height: 31px;
-
     padding: 0 9px;
     box-sizing: border-box;
 
     color: #143c54;
     background: #f8fbfd;
-
     border: 1px solid #ceddea;
     border-radius: 7px;
-
     outline: none;
 
     font-size: 0.84rem;
     font-weight: 800;
 
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .AddSale .form-field input:focus {
     background: #ffffff;
     border-color: #526df0;
-
-    box-shadow:
-        0 0 0 3px rgba(82, 109, 240, 0.1);
+    box-shadow: 0 0 0 3px rgba(82, 109, 240, 0.1);
 }
 
 .AddSale .form-field input[readonly] {
     color: #087565;
-
     background: rgba(16, 185, 129, 0.07);
     border-color: rgba(16, 185, 129, 0.32);
 }
 
-/* Smaller browser number controls */
 .AddSale input[type="number"]::-webkit-inner-spin-button,
 .AddSale input[type="number"]::-webkit-outer-spin-button {
     margin: 0;
@@ -214,58 +3450,40 @@
     width: 100%;
     height: 48px;
     min-height: 48px;
-
     margin: 0;
     padding: 0 12px;
 
     color: #ffffff;
-
-    background: linear-gradient(
-        135deg,
-        #315cf4,
-        #7340d5
-    );
-
+    background: linear-gradient(135deg, #315cf4, #7340d5);
     border: none;
     border-radius: 11px;
 
     cursor: pointer;
-
     font-size: 0.78rem;
     font-weight: 900;
 
-    box-shadow:
-        0 8px 18px rgba(83, 70, 220, 0.23);
-
-    transition:
-        transform 0.16s ease,
-        box-shadow 0.16s ease,
-        filter 0.16s ease;
+    box-shadow: 0 8px 18px rgba(83, 70, 220, 0.23);
+    transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
 }
 
 .AddSale .add-item-button::before {
     content: "+";
-
     display: inline-grid;
     place-items: center;
 
     width: 19px;
     height: 19px;
-
     margin-right: 6px;
 
     background: rgba(255, 255, 255, 0.2);
     border-radius: 50%;
-
     font-size: 0.85rem;
 }
 
 .AddSale .add-item-button:hover {
     transform: translateY(-2px);
     filter: brightness(1.05);
-
-    box-shadow:
-        0 11px 22px rgba(83, 70, 220, 0.3);
+    box-shadow: 0 11px 22px rgba(83, 70, 220, 0.3);
 }
 
 .AddSale .add-item-button:active {
@@ -278,43 +3496,31 @@
 
 .AddSale .sale-table {
     grid-column: 1 / -1;
-
     width: 100%;
     margin-top: 4px;
 
     border-spacing: 0;
     border-collapse: separate;
-
     background: #ffffff;
-
     border: 1px solid #d8e5ef;
     border-radius: 13px;
-
     overflow: hidden;
 
-    box-shadow:
-        0 8px 20px rgba(25, 60, 90, 0.07);
+    box-shadow: 0 8px 20px rgba(25, 60, 90, 0.07);
 }
 
 .AddSale .sale-table thead {
-    background: linear-gradient(
-        135deg,
-        #173e59,
-        #20536d
-    );
+    background: linear-gradient(135deg, #173e59, #20536d);
 }
 
 .AddSale .sale-table th {
     height: 35px;
     padding: 0 11px;
-
     color: rgba(255, 255, 255, 0.94);
-
     border: none;
 
     text-align: center;
     text-transform: uppercase;
-
     font-size: 0.56rem;
     font-weight: 900;
     letter-spacing: 0.08em;
@@ -323,13 +3529,10 @@
 .AddSale .sale-table td {
     height: 44px;
     padding: 5px 11px;
-
     color: #29495e;
-
     border-bottom: 1px solid #e8eff5;
 
     text-align: center;
-
     font-size: 0.78rem;
     font-weight: 700;
 }
@@ -340,7 +3543,6 @@
 
 .AddSale .sale-table td:first-child {
     color: #143a51;
-
     text-align: left;
     font-weight: 900;
 }
@@ -361,108 +3563,28 @@
     width: 34px;
     height: 34px;
     min-height: 34px;
-
     margin: 0;
     padding: 0;
 
     color: #ffffff;
-
-    background: linear-gradient(
-        135deg,
-        #ff5968,
-        #e62e48
-    );
-
+    background: linear-gradient(135deg, #ff5968, #e62e48);
     border: none;
     border-radius: 9px;
 
     cursor: pointer;
-
     font-size: 0.82rem;
 
-    box-shadow:
-        0 6px 13px rgba(230, 46, 72, 0.22);
-
-    transition:
-        transform 0.16s ease,
-        box-shadow 0.16s ease;
+    box-shadow: 0 6px 13px rgba(230, 46, 72, 0.22);
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
 }
 
 .AddSale .remove-item-button:hover {
     transform: translateY(-2px);
-
-    box-shadow:
-        0 8px 17px rgba(230, 46, 72, 0.3);
+    box-shadow: 0 8px 17px rgba(230, 46, 72, 0.3);
 }
 
 .AddSale .remove-item-button:active {
     transform: scale(0.93);
-}
-
-/* =========================================
-   SAVE SALE BUTTON
-========================================= */
-
-.AddSale .save-sale-button {
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-
-    width: 260px;
-    height: 48px;
-
-    margin: 18px 0 0 auto;
-    padding: 0 22px;
-
-    border: none;
-    border-radius: 12px;
-
-    cursor: pointer;
-
-    background: linear-gradient(
-        135deg,
-        #10b981,
-        #0f766e
-    );
-
-    color: white;
-
-    font-size: .95rem;
-    font-weight: 800;
-
-    transition: .25s;
-
-    box-shadow:
-        0 10px 24px rgba(16,185,129,.30);
-}
-
-.AddSale .save-sale-button:hover {
-
-    transform: translateY(-2px);
-
-    box-shadow:
-        0 16px 30px rgba(16,185,129,.40);
-
-    filter: brightness(1.05);
-}
-
-.AddSale .save-sale-button:active {
-    transform: scale(.97);
-}
-
-.AddSale .save-sale-button:disabled {
-
-    cursor: not-allowed;
-
-    background: #cbd5e1;
-
-    color: #64748b;
-
-    box-shadow: none;
-
-    transform: none;
 }
 
 /* =========================================
@@ -471,44 +3593,29 @@
 
 .AddSale .sale-summary {
     width: 270px;
-
     margin: 8px 0 2px auto;
     padding: 12px 14px;
     box-sizing: border-box;
 
     color: #ffffff;
-
-    background: linear-gradient(
-        145deg,
-        #133d57,
-        #16536a
-    );
-
+    background: linear-gradient(145deg, #133d57, #16536a);
     border-radius: 13px;
-
-    box-shadow:
-        0 10px 23px rgba(20, 60, 80, 0.2);
+    box-shadow: 0 10px 23px rgba(20, 60, 80, 0.2);
 }
 
 .AddSale .sale-summary h3 {
     margin: 0 0 8px;
     padding-bottom: 8px;
-
     color: rgba(255, 255, 255, 0.88);
-
     border-bottom: 1px solid rgba(255, 255, 255, 0.14);
-
     font-size: 0.78rem;
     font-weight: 800;
 }
 
 .AddSale .sale-summary label {
     display: block;
-
     margin-bottom: 4px;
-
     color: rgba(255, 255, 255, 0.65);
-
     font-size: 0.52rem;
     font-weight: 900;
     letter-spacing: 0.09em;
@@ -519,17 +3626,14 @@
     width: 100%;
     height: 31px;
     min-height: 31px;
-
     margin-bottom: 8px;
     padding: 0 9px;
     box-sizing: border-box;
 
     color: #ffffff;
     background: rgba(255, 255, 255, 0.11);
-
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 7px;
-
     outline: none;
 
     font-size: 0.78rem;
@@ -538,27 +3642,71 @@
 
 .AddSale .sale-summary input:focus {
     border-color: rgba(255, 255, 255, 0.55);
-
-    box-shadow:
-        0 0 0 3px rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
 }
 
 .AddSale .sale-summary h2 {
     margin: 0;
     padding-top: 8px;
-
     color: #ffffff;
-
     border-top: 1px solid rgba(255, 255, 255, 0.14);
-
     font-size: 1.12rem;
     font-weight: 950;
 }
 
-/* Summary row inside your table */
 .AddSale .sale-table tbody > tr:last-child > td {
     padding: 6px 8px 8px;
     border-bottom: none;
+}
+
+/* =========================================
+   SAVE SALE BUTTON
+========================================= */
+
+.AddSale .save-sale-button {
+    grid-column: 1 / -1;
+
+    width: 220px;
+    height: 46px;
+    min-height: 46px;
+    margin: 14px 0 0 auto;
+    padding: 0 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    color: #ffffff;
+    background: linear-gradient(135deg, #10b981, #0f766e);
+    border: none;
+    border-radius: 12px;
+
+    font-size: 0.88rem;
+    font-weight: 900;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+
+    box-shadow: 0 10px 22px rgba(15, 118, 110, 0.28);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+
+.AddSale .save-sale-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+    box-shadow: 0 14px 28px rgba(15, 118, 110, 0.36);
+}
+
+.AddSale .save-sale-button:active:not(:disabled) {
+    transform: scale(0.97);
+}
+
+.AddSale .save-sale-button:disabled {
+    color: #475569;
+    background: linear-gradient(135deg, #cbd5e1, #94a3b8);
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: 0.75;
 }
 
 /* =========================================
@@ -568,18 +3716,20 @@
 @media (max-width: 900px) {
     .AddSale {
         width: calc(100% - 18px);
-
         grid-template-columns:
             minmax(180px, 1.5fr)
             repeat(3, minmax(90px, 0.7fr))
             112px;
-
         padding: 14px;
         gap: 9px;
     }
 
     .AddSale > h2 {
         font-size: 1.55rem;
+    }
+
+    .AddSale .save-sale-button {
+        width: 200px;
     }
 }
 
@@ -591,11 +3741,9 @@
     .AddSale {
         display: flex;
         flex-direction: column;
-
         width: calc(100% - 14px);
         margin: 7px auto 18px;
         padding: 12px;
-
         gap: 8px;
         border-radius: 14px;
     }
@@ -625,42 +3773,411 @@
         width: 100%;
     }
 
+    .AddSale .save-sale-button {
+        width: 100%;
+        height: 46px;
+        min-height: 46px;
+        margin: 10px 0 0;
+    }
+}
+Library
+/
+hadarPub
+/
+add-sale.css
 
-    .save-sale-button {
+
+/* =========================================
+   ADD SALE — COMPACT TOUCH POS
+   Optimized for 13-inch laptops and touch use
+========================================= */
+
+.AddSale {
+    width: min(860px, calc(100% - 28px));
+    margin: 14px auto 24px;
+    padding: 18px 20px 22px;
+    box-sizing: border-box;
+
+    display: grid;
+    grid-template-columns:
+        minmax(210px, 1.8fr)
+        minmax(105px, 0.65fr)
+        minmax(120px, 0.75fr)
+        minmax(120px, 0.75fr)
+        125px;
+    gap: 12px;
+
+    color: #17384d;
+    background:
+        radial-gradient(circle at top right, rgba(99, 102, 241, 0.08), transparent 32%),
+        linear-gradient(145deg, #ffffff, #f7fbff);
+
+    border: 1px solid #d6e3ef;
+    border-radius: 20px;
+    box-shadow: 0 16px 42px rgba(25, 60, 90, 0.11);
+
+    position: relative;
+    overflow: hidden;
+}
+
+.AddSale::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 9%;
+    right: 9%;
+    height: 4px;
+    background: linear-gradient(90deg, #315cf4, #7541d8, #13ae98);
+    border-radius: 0 0 8px 8px;
+}
+
+/* =========================================
+   TITLE
+========================================= */
+
+.AddSale > h2 {
+    grid-column: 1 / -1;
+    margin: 4px 0 12px;
+    color: #123b54;
+    text-align: center;
+    font-size: 1.8rem;
+    line-height: 1;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+}
+
+.AddSale > h2::before {
+    content: "POINT OF SALE";
+    display: block;
+    margin-bottom: 5px;
+    color: #6366f1;
+    font-size: 0.55rem;
+    font-weight: 900;
+    letter-spacing: 0.22em;
+}
+
+/* =========================================
+   PRODUCT SELECT
+========================================= */
+
+.AddSale .sale-header {
+    grid-column: 1;
     width: 100%;
-    margin-top: 22px;
-    padding: 16px 24px;
+    height: 48px;
+    min-height: 48px;
+    margin: 0;
+    padding: 0 38px 0 13px;
+    box-sizing: border-box;
 
+    color: #17384d;
+    background: #ffffff;
+    border: 1px solid #cbdceb;
+    border-radius: 11px;
+
+    outline: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 750;
+
+    box-shadow: 0 4px 12px rgba(25, 60, 90, 0.05);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.AddSale .sale-header:focus {
+    border-color: #526df0;
+    box-shadow: 0 0 0 3px rgba(82, 109, 240, 0.12);
+}
+
+/* =========================================
+   QUANTITY / PRICE / TOTAL
+========================================= */
+
+.AddSale .form-field {
+    margin: 0;
+    padding: 7px 9px;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #d8e5ef;
+    border-radius: 11px;
+    box-shadow: 0 4px 12px rgba(25, 60, 90, 0.04);
+}
+
+.AddSale .form-field label {
+    display: block;
+    margin: 0 0 4px;
+    color: #657b8d;
+    font-size: 0.56rem;
+    font-weight: 900;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+
+.AddSale .form-field input {
+    width: 100%;
+    height: 31px;
+    min-height: 31px;
+    padding: 0 9px;
+    box-sizing: border-box;
+
+    color: #143c54;
+    background: #f8fbfd;
+    border: 1px solid #ceddea;
+    border-radius: 7px;
+    outline: none;
+
+    font-size: 0.84rem;
+    font-weight: 800;
+
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.AddSale .form-field input:focus {
+    background: #ffffff;
+    border-color: #526df0;
+    box-shadow: 0 0 0 3px rgba(82, 109, 240, 0.1);
+}
+
+.AddSale .form-field input[readonly] {
+    color: #087565;
+    background: rgba(16, 185, 129, 0.07);
+    border-color: rgba(16, 185, 129, 0.32);
+}
+
+.AddSale input[type="number"]::-webkit-inner-spin-button,
+.AddSale input[type="number"]::-webkit-outer-spin-button {
+    margin: 0;
+}
+
+/* =========================================
+   ADD ITEM BUTTON
+========================================= */
+
+.AddSale .add-item-button {
+    grid-column: 5;
+    align-self: stretch;
+
+    width: 100%;
+    height: 48px;
+    min-height: 48px;
+    margin: 0;
+    padding: 0 12px;
+
+    color: #ffffff;
+    background: linear-gradient(135deg, #315cf4, #7340d5);
     border: none;
-    border-radius: 16px;
-
-    background: linear-gradient(135deg, #1d4ed8, #2563eb, #0ea5e9);
-    color: white;
-
-    font-size: 1.1rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
+    border-radius: 11px;
 
     cursor: pointer;
+    font-size: 0.78rem;
+    font-weight: 900;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-
-    transition: all .25s ease;
-
-    box-shadow:
-        0 12px 30px rgba(37,99,235,.30),
-        inset 0 1px 1px rgba(255,255,255,.25);
+    box-shadow: 0 8px 18px rgba(83, 70, 220, 0.23);
+    transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
 }
+
+.AddSale .add-item-button::before {
+    content: "+";
+    display: inline-grid;
+    place-items: center;
+
+    width: 19px;
+    height: 19px;
+    margin-right: 6px;
+
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    font-size: 0.85rem;
+}
+
+.AddSale .add-item-button:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+    box-shadow: 0 11px 22px rgba(83, 70, 220, 0.3);
+}
+
+.AddSale .add-item-button:active {
+    transform: scale(0.98);
+}
+
+/* =========================================
+   TABLE
+========================================= */
+
+.AddSale .sale-table {
+    grid-column: 1 / -1;
+    width: 100%;
+    margin-top: 4px;
+
+    border-spacing: 0;
+    border-collapse: separate;
+    background: #ffffff;
+    border: 1px solid #d8e5ef;
+    border-radius: 13px;
+    overflow: hidden;
+
+    box-shadow: 0 8px 20px rgba(25, 60, 90, 0.07);
+}
+
+.AddSale .sale-table thead {
+    background: linear-gradient(135deg, #173e59, #20536d);
+}
+
+.AddSale .sale-table th {
+    height: 35px;
+    padding: 0 11px;
+    color: rgba(255, 255, 255, 0.94);
+    border: none;
+
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 0.56rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+}
+
+.AddSale .sale-table td {
+    height: 44px;
+    padding: 5px 11px;
+    color: #29495e;
+    border-bottom: 1px solid #e8eff5;
+
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.AddSale .sale-table tbody tr:not(:last-child):hover td {
+    background: #f4f8ff;
+}
+
+.AddSale .sale-table td:first-child {
+    color: #143a51;
+    text-align: left;
+    font-weight: 900;
+}
+
+.AddSale .sale-table td:nth-child(4) {
+    color: #087565;
+    font-weight: 900;
+}
+
+/* =========================================
+   DELETE BUTTON
+========================================= */
+
+.AddSale .remove-item-button {
+    display: inline-grid;
+    place-items: center;
+
+    width: 34px;
+    height: 34px;
+    min-height: 34px;
+    margin: 0;
+    padding: 0;
+
+    color: #ffffff;
+    background: linear-gradient(135deg, #ff5968, #e62e48);
+    border: none;
+    border-radius: 9px;
+
+    cursor: pointer;
+    font-size: 0.82rem;
+
+    box-shadow: 0 6px 13px rgba(230, 46, 72, 0.22);
+    transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.AddSale .remove-item-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 17px rgba(230, 46, 72, 0.3);
+}
+
+.AddSale .remove-item-button:active {
+    transform: scale(0.93);
+}
+
+/* =========================================
+   SUMMARY
+========================================= */
+
+.AddSale .sale-summary {
+    width: 270px;
+    margin: 8px 0 2px auto;
+    padding: 12px 14px;
+    box-sizing: border-box;
+
+    color: #ffffff;
+    background: linear-gradient(145deg, #133d57, #16536a);
+    border-radius: 13px;
+    box-shadow: 0 10px 23px rgba(20, 60, 80, 0.2);
+}
+
+.AddSale .sale-summary h3 {
+    margin: 0 0 8px;
+    padding-bottom: 8px;
+    color: rgba(255, 255, 255, 0.88);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.AddSale .sale-summary label {
+    display: block;
+    margin-bottom: 4px;
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 0.52rem;
+    font-weight: 900;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+}
+
+.AddSale .sale-summary input {
+    width: 100%;
+    height: 31px;
+    min-height: 31px;
+    margin-bottom: 8px;
+    padding: 0 9px;
+    box-sizing: border-box;
+
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.11);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 7px;
+    outline: none;
+
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.AddSale .sale-summary input:focus {
+    border-color: rgba(255, 255, 255, 0.55);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.08);
+}
+
+.AddSale .sale-summary h2 {
+    margin: 0;
+    padding-top: 8px;
+    color: #ffffff;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+    font-size: 1.12rem;
+    font-weight: 950;
+}
+
+.AddSale .sale-table tbody > tr:last-child > td {
+    padding: 6px 8px 8px;
+    border-bottom: none;
+}
+
+/* =========================================
+   SAVE SALE BUTTON
+========================================= */
 
 .AddSale .save-sale-button {
     grid-column: 1 / -1;
 
     width: 220px;
     height: 46px;
-
+    min-height: 46px;
     margin: 14px 0 0 auto;
     padding: 0 18px;
 
@@ -669,29 +4186,106 @@
     justify-content: center;
     gap: 8px;
 
+    color: #ffffff;
+    background: linear-gradient(135deg, #10b981, #0f766e);
     border: none;
     border-radius: 12px;
 
-    background: linear-gradient(
-        135deg,
-        #10b981,
-        #0f766e
-    );
-
-    color: white;
-
     font-size: 0.88rem;
     font-weight: 900;
-
+    letter-spacing: 0.01em;
     cursor: pointer;
 
-    box-shadow:
-        0 10px 22px rgba(15, 118, 110, 0.28);
-
-    transition:
-        transform 0.18s ease,
-        box-shadow 0.18s ease,
-        filter 0.18s ease;
+    box-shadow: 0 10px 22px rgba(15, 118, 110, 0.28);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
 }
 
+.AddSale .save-sale-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+    box-shadow: 0 14px 28px rgba(15, 118, 110, 0.36);
+}
+
+.AddSale .save-sale-button:active:not(:disabled) {
+    transform: scale(0.97);
+}
+
+.AddSale .save-sale-button:disabled {
+    color: #475569;
+    background: linear-gradient(135deg, #cbd5e1, #94a3b8);
+    cursor: not-allowed;
+    box-shadow: none;
+    opacity: 0.75;
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 900px) {
+    .AddSale {
+        width: calc(100% - 18px);
+        grid-template-columns:
+            minmax(180px, 1.5fr)
+            repeat(3, minmax(90px, 0.7fr))
+            112px;
+        padding: 14px;
+        gap: 9px;
+    }
+
+    .AddSale > h2 {
+        font-size: 1.55rem;
+    }
+
+    .AddSale .save-sale-button {
+        width: 200px;
+    }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 650px) {
+    .AddSale {
+        display: flex;
+        flex-direction: column;
+        width: calc(100% - 14px);
+        margin: 7px auto 18px;
+        padding: 12px;
+        gap: 8px;
+        border-radius: 14px;
+    }
+
+    .AddSale > h2 {
+        margin-bottom: 7px;
+        font-size: 1.45rem;
+    }
+
+    .AddSale .sale-header,
+    .AddSale .add-item-button {
+        height: 44px;
+        min-height: 44px;
+    }
+
+    .AddSale .form-field {
+        padding: 7px 8px;
+    }
+
+    .AddSale .sale-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .AddSale .sale-summary {
+        width: 100%;
+    }
+
+    .AddSale .save-sale-button {
+        width: 100%;
+        height: 46px;
+        min-height: 46px;
+        margin: 10px 0 0;
+    }
 }

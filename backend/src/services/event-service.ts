@@ -166,6 +166,16 @@ class EventService {
         }
     }
 
+    //Get event Count
+    public async getEventCount():Promise<number>{
+        const sql =`
+            SELECT COUNT (*) AS count
+            FROM events
+        `;
+        const result = await dal.execute(sql) as {count:number}[];
+        return Number(result[0].count);
+    }
+
 }
 
 
