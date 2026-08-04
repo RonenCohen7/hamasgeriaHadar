@@ -1,0 +1,33 @@
+.CustomerList {
+    padding: 18px;
+}
+
+.CustomerList > h2 {
+    margin: 0 0 18px;
+    color: #17324a;
+}
+
+.customer-list-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    align-items: stretch;
+}
+
+@media (max-width: 1250px) {
+    .customer-list-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 950px) {
+    .customer-list-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 650px) {
+    .customer-list-grid {
+        grid-template-columns: 1fr;
+    }
+}

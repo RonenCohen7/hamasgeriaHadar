@@ -7,6 +7,9 @@ import express, {
 import { LoginUserDto, RegisterUserDto, UpdatedUserDto } from "../models/user-model";
 import { userService } from "../services/users-service";
 import { authLimiter } from "../middleware/rate-limit-middleware";
+import { verify } from "jsonwebtoken";
+import { allowRoles } from "../middleware/role-middleware";
+import { verifyToken } from "../middleware/verify-token";
 
 
 
@@ -22,11 +25,11 @@ class UserController {
         this.router.post("/api/users/login",authLimiter, this.login);
 
 
-        this.router.get("/api/users", this.getAllUsers);
-        this.router.get("/api/users/:id", this.getOneUser);
+        this.router.get("/api/users",verifyToken, allowRoles("admin"), this.getAllUsers);
+        this.router.get("/api/users/:id",verifyToken, allowRoles("admin"), this.getOneUser);
 
-        this.router.put("/api/users/:id", this.updateUser);
-        this.router.delete("/api/users/:id", this.deleteUser);
+        this.router.put("/api/users/:id", verifyToken,allowRoles("admin"), this.updateUser);
+        this.router.delete("/api/users/:id",verifyToken, allowRoles("admin"), this.deleteUser);
     }
 
     //Register

@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import "./menu.css";
-import { FaHome, FaBoxOpen, FaInfoCircle, FaEnvelope, FaTruck, FaFileInvoice, FaWarehouse, FaClipboardCheck } from "react-icons/fa";
+import { FaHome, FaBoxOpen, FaInfoCircle, FaEnvelope, FaTruck, FaFileInvoice, FaWarehouse, FaClipboardCheck, FaSalesforce } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { FaSackDollar } from "react-icons/fa6";
 import type { RootState } from "../../redux/inventory-store";
@@ -8,7 +8,6 @@ import { useSelector } from "react-redux";
 
 import { useNavigate } from "react-router-dom";
 import { authService } from "../../service/authService";
-
 
 
 export function Menu() {
@@ -78,9 +77,12 @@ export function Menu() {
 
                 <NavLink to="/" className="menu-link" data-tooltip="Home" aria-label="Home"><FaHome /></NavLink>
 
-                <NavLink to="login" className="menu-link" data-tooltip="Login">🔐</NavLink>
+                {user ? (<NavLink to="/customers" className="menu-link" data-tooltip="Customers" aria-label="Customers"> 👥
+
+                        </NavLink>):( <NavLink to="login" className="menu-link" data-tooltip="Login">🔐</NavLink>)}
 
                 <NavLink to="/products" className="menu-link" data-tooltip="Products"><FaBoxOpen /></NavLink>
+                <NavLink to="/quick-sale" className="menu-link" data-tooltip="Quick Sale"><FaSalesforce></FaSalesforce></NavLink>
 
                 {role !== "employee" && (<NavLink to="/suppliers" className="menu-link" data-tooltip="suppliers"><FaTruck /></NavLink>)}
 

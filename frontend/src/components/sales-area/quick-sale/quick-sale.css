@@ -1,0 +1,1115 @@
+/* =========================================================
+   QUICK SALE - MAIN LAYOUT
+========================================================= */
+
+.QuickSale {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+
+    padding: 18px;
+
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+    gap: 18px;
+
+    box-sizing: border-box;
+    overflow: hidden;
+
+    background: #f4f7fa;
+}
+
+
+/* =========================================================
+   LEFT AND RIGHT PANELS
+========================================================= */
+
+.quick-sale-left,
+.quick-sale-right {
+    min-width: 0;
+    min-height: 0;
+
+    padding: 18px;
+
+    border: 1px solid #dce7f1;
+    border-radius: 16px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 10px 26px rgba(20, 55, 85, 0.07);
+
+    box-sizing: border-box;
+}
+
+.quick-sale-left {
+    overflow-y: auto;
+}
+
+.quick-sale-right {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    overflow: hidden;
+}
+
+.quick-sale-right h2 {
+    margin: 0;
+    padding-bottom: 12px;
+
+    border-bottom: 1px solid #dce7f1;
+
+    color: #174f59;
+    font-size: 21px;
+}
+
+
+/* =========================================================
+   SEARCH TOOLBAR
+========================================================= */
+
+.quick-sale-toolbar {
+    margin-bottom: 14px;
+}
+
+.quick-sale-toolbar input {
+    width: 100%;
+    height: 42px;
+
+    padding: 0 14px;
+
+    border: 1px solid #cfdce8;
+    border-radius: 10px;
+
+    background: #f9fbfd;
+    color: #17324a;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    outline: none;
+    box-sizing: border-box;
+
+    transition:
+        border-color 0.18s ease,
+        background-color 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.quick-sale-toolbar input:focus {
+    border-color: #2563eb;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+
+/* =========================================================
+   CATEGORY FILTERS
+========================================================= */
+
+.quick-sale-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    margin: 14px 0 18px;
+}
+
+.quick-sale-category-button,
+.quick-sale-categories button {
+    min-height: 38px;
+    padding: 0 16px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    border: 1px solid transparent;
+    border-radius: 999px;
+
+    background: #edf4fb;
+    color: #174f59;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.18s ease,
+        background-color 0.18s ease,
+        color 0.18s ease,
+        border-color 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.quick-sale-category-button svg,
+.quick-sale-categories button svg {
+    flex-shrink: 0;
+    font-size: 15px;
+}
+
+.quick-sale-category-button:hover,
+.quick-sale-categories button:hover {
+    transform: translateY(-1px);
+
+    border-color: #b8d5ef;
+    background: #dcecff;
+}
+
+.quick-sale-category-button.active,
+.quick-sale-categories button.active {
+    border-color: #066c8e;
+
+    background: #066c8e;
+    color: #ffffff;
+
+    box-shadow:
+        0 6px 14px rgba(6, 108, 142, 0.2);
+}
+
+
+/* Category active colors */
+
+.quick-sale-category-button.beer.active {
+    border-color: #2e7d32;
+    background: #2e7d32;
+}
+
+.quick-sale-category-button.wine.active {
+    border-color: #8b1e3f;
+    background: #8b1e3f;
+}
+
+.quick-sale-category-button.cocktail.active {
+    border-color: #8e44ad;
+    background: #8e44ad;
+}
+
+.quick-sale-category-button.coffee.active {
+    border-color: #6d4c41;
+    background: #6d4c41;
+}
+
+.quick-sale-category-button.water.active {
+    border-color: #2196f3;
+    background: #2196f3;
+}
+
+.quick-sale-category-button.soft.active {
+    border-color: #00acc1;
+    background: #00acc1;
+}
+
+.quick-sale-category-button.spirit.active {
+    border-color: #ef6c00;
+    background: #ef6c00;
+}
+
+.quick-sale-category-button.snack.active {
+    border-color: #fb8c00;
+    background: #fb8c00;
+}
+
+.quick-sale-category-button.kitchen.active {
+    border-color: #607d8b;
+    background: #607d8b;
+}
+
+.quick-sale-category-button.supplies.active {
+    border-color: #546e7a;
+    background: #546e7a;
+}
+
+
+/* =========================================================
+   PRODUCTS GRID
+========================================================= */
+
+.quick-sale-products-grid {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fill, minmax(135px, 1fr));
+    gap: 14px;
+}
+
+
+/* =========================================================
+   PRODUCT CARD
+========================================================= */
+
+.quick-sale-product-card {
+    position: relative;
+
+    min-width: 0;
+    min-height: 185px;
+
+    padding: 14px 10px 10px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+
+    overflow: hidden;
+
+    border: 1px solid #d8e4ee;
+    border-radius: 14px;
+
+    background: #ffffff;
+    color: #17324a;
+
+    font-family: inherit;
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.18s ease,
+        border-color 0.18s ease,
+        box-shadow 0.18s ease,
+        opacity 0.18s ease;
+}
+
+.quick-sale-product-card:hover:not(:disabled) {
+    transform: translateY(-3px);
+
+    border-color: #8ebce8;
+
+    box-shadow:
+        0 9px 20px rgba(37, 99, 235, 0.12);
+}
+
+.quick-sale-product-card:active:not(:disabled) {
+    transform: scale(0.97);
+}
+
+.quick-sale-product-card:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   CATEGORY COLOR STRIP
+========================================================= */
+
+.quick-sale-category-strip {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    width: 100%;
+    height: 6px;
+
+    z-index: 10;
+}
+
+.quick-sale-category-strip.beer {
+    background:
+        linear-gradient(90deg, #2e7d32, #66bb6a);
+}
+
+.quick-sale-category-strip.wine {
+    background:
+        linear-gradient(90deg, #7b1e3d, #c2185b);
+}
+
+.quick-sale-category-strip.cocktail {
+    background:
+        linear-gradient(90deg, #7b1fa2, #ba68c8);
+}
+
+.quick-sale-category-strip.coffee {
+    background:
+        linear-gradient(90deg, #5d4037, #8d6e63);
+}
+
+.quick-sale-category-strip.water {
+    background:
+        linear-gradient(90deg, #1976d2, #64b5f6);
+}
+
+.quick-sale-category-strip.soft {
+    background:
+        linear-gradient(90deg, #0097a7, #4dd0e1);
+}
+
+.quick-sale-category-strip.spirit {
+    background:
+        linear-gradient(90deg, #ef6c00, #ffb74d);
+}
+
+.quick-sale-category-strip.snack {
+    background:
+        linear-gradient(90deg, #f57c00, #ffcc80);
+}
+
+.quick-sale-category-strip.kitchen {
+    background:
+        linear-gradient(90deg, #455a64, #90a4ae);
+}
+
+.quick-sale-category-strip.supplies {
+    background:
+        linear-gradient(90deg, #546e7a, #b0bec5);
+}
+
+.quick-sale-category-strip.other {
+    background:
+        linear-gradient(90deg, #64748b, #cbd5e1);
+}
+
+
+/* =========================================================
+   STOCK BADGE
+========================================================= */
+
+.quick-sale-stock {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 2px solid #2fa84f;
+    border-radius: 50%;
+
+    background: #ffffff;
+    color: #2fa84f;
+
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+
+    box-sizing: border-box;
+
+    box-shadow:
+        0 2px 6px rgba(0, 0, 0, 0.12);
+
+    z-index: 20;
+}
+
+
+/* =========================================================
+   PRODUCT IMAGE
+========================================================= */
+
+.quick-sale-product-image {
+    width: 100%;
+    height: 115px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    border-radius: 10px;
+
+    background: #f4f7fa;
+}
+
+.quick-sale-product-image img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: contain;
+
+    transition: transform 0.18s ease;
+}
+
+.quick-sale-product-card:hover:not(:disabled)
+.quick-sale-product-image img {
+    transform: scale(1.03);
+}
+
+.quick-sale-no-image {
+    color: #8a9aa8;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   PRODUCT TEXT
+========================================================= */
+
+.quick-sale-product-name {
+    overflow: hidden;
+
+    color: #17324a;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.quick-sale-product-price {
+    color: #066c8e;
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   EMPTY ORDER
+========================================================= */
+
+.quick-sale-empty-order {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    color: #8a9aa8;
+    text-align: center;
+}
+
+.quick-sale-empty-order > span {
+    font-size: 42px;
+    opacity: 0.45;
+}
+
+.quick-sale-empty-order strong {
+    margin-top: 12px;
+    font-size: 16px;
+}
+
+.quick-sale-empty-order p {
+    margin: 5px 0 0;
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   CURRENT ORDER ITEMS
+========================================================= */
+
+.quick-sale-order-items {
+    flex: 1;
+    min-height: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    overflow-y: auto;
+}
+
+.quick-sale-order-row {
+    padding: 11px;
+
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 10px;
+
+    border: 1px solid #dce7f1;
+    border-radius: 11px;
+
+    background: #f9fbfd;
+}
+
+.quick-sale-order-info {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.quick-sale-order-info strong {
+    overflow: hidden;
+
+    font-size: 12px;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.quick-sale-order-info span {
+    color: #71879a;
+    font-size: 11px;
+}
+
+
+/* =========================================================
+   ORDER QUANTITY CONTROLS
+========================================================= */
+
+.quick-sale-quantity {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.quick-sale-quantity button {
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #bfd3e3;
+    border-radius: 8px;
+
+    background: #ffffff;
+    color: #066c8e;
+
+    font-size: 18px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.18s ease,
+        color 0.18s ease,
+        transform 0.18s ease;
+}
+
+.quick-sale-quantity button:hover {
+    transform: translateY(-1px);
+
+    background: #066c8e;
+    color: #ffffff;
+}
+
+.quick-sale-quantity strong {
+    min-width: 20px;
+    text-align: center;
+}
+
+.quick-sale-line-total {
+    min-width: 65px;
+
+    color: #066c8e;
+
+    font-size: 12px;
+    text-align: right;
+}
+
+
+/* =========================================================
+   ORDER SUMMARY
+========================================================= */
+
+.quick-sale-summary {
+    padding-top: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-top: 1px solid #dce7f1;
+}
+
+.quick-sale-summary span {
+    color: #587084;
+    font-weight: 700;
+}
+
+.quick-sale-summary strong {
+    color: #066c8e;
+
+    font-size: 22px;
+}
+
+
+/* =========================================================
+   ORDER ACTION BUTTONS
+========================================================= */
+
+.quick-sale-order-actions {
+    display: grid;
+    grid-template-columns:
+        minmax(120px, 0.8fr)
+        minmax(160px, 1.4fr);
+    gap: 10px;
+
+    flex-shrink: 0;
+}
+
+.quick-sale-cancel-button,
+.quick-sale-complete-button {
+    width: 100%;
+    min-height: 48px;
+
+    border-radius: 11px;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.18s ease,
+        background-color 0.18s ease,
+        color 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.quick-sale-cancel-button {
+    border: 1px solid #ef4444;
+
+    background: #ffffff;
+    color: #dc2626;
+}
+
+.quick-sale-cancel-button:hover {
+    transform: translateY(-1px);
+
+    background: #ef4444;
+    color: #ffffff;
+}
+
+.quick-sale-complete-button {
+    border: none;
+
+    background: #16a34a;
+    color: #ffffff;
+}
+
+.quick-sale-complete-button:hover {
+    transform: translateY(-1px);
+
+    background: #15803d;
+
+    box-shadow:
+        0 8px 18px rgba(22, 163, 74, 0.22);
+}
+
+.quick-sale-cancel-button:disabled,
+.quick-sale-complete-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   PAYMENT MODAL OVERLAY
+========================================================= */
+
+.quick-sale-payment-overlay {
+    position: fixed;
+    inset: 0;
+
+    z-index: 1000;
+
+    padding: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(15, 23, 42, 0.55);
+
+    backdrop-filter: blur(4px);
+}
+
+
+/* =========================================================
+   PAYMENT MODAL
+========================================================= */
+
+.quick-sale-payment-modal {
+    width: 100%;
+    max-width: 520px;
+    max-height: calc(100dvh - 40px);
+
+    padding: 24px;
+
+    overflow-y: auto;
+
+    border: 1px solid #d7e4ee;
+    border-radius: 20px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 24px 70px rgba(15, 23, 42, 0.28);
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   PAYMENT HEADER
+========================================================= */
+
+.quick-sale-payment-header {
+    padding-bottom: 16px;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.quick-sale-payment-header span {
+    color: #7c3aed;
+
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+}
+
+.quick-sale-payment-header h2 {
+    margin: 5px 0 0;
+
+    color: #174f59;
+    font-size: 25px;
+}
+
+.quick-sale-payment-close {
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid #d6e1ea;
+    border-radius: 50%;
+
+    background: #ffffff;
+    color: #64748b;
+
+    font-size: 24px;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.18s ease,
+        color 0.18s ease,
+        transform 0.18s ease;
+}
+
+.quick-sale-payment-close:hover {
+    transform: rotate(5deg);
+
+    background: #f1f5f9;
+    color: #dc2626;
+}
+
+
+/* =========================================================
+   PAYMENT TOTAL
+========================================================= */
+
+.quick-sale-payment-total {
+    margin: 20px 0;
+    padding: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-radius: 14px;
+
+    background: #f1f8fc;
+}
+
+.quick-sale-payment-total span {
+    color: #587084;
+
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.quick-sale-payment-total strong {
+    color: #066c8e;
+    font-size: 30px;
+}
+
+
+/* =========================================================
+   PAYMENT METHOD LABELS
+========================================================= */
+
+.quick-sale-payment-section > label,
+.quick-sale-payment-cash > label {
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: #374151;
+
+    font-size: 13px;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   PAYMENT METHOD BUTTONS
+========================================================= */
+
+.quick-sale-payment-methods {
+    display: grid;
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.quick-sale-payment-methods button {
+    min-height: 62px;
+    padding: 10px 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    border: 1px solid #d5e1eb;
+    border-radius: 14px;
+
+    background: #f8fafc;
+    color: #174f59;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.18s ease,
+        border-color 0.18s ease,
+        background-color 0.18s ease,
+        color 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.quick-sale-payment-methods button svg {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.quick-sale-payment-methods button:hover {
+    transform: translateY(-2px);
+
+    border-color: #8ab9d3;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 7px 18px rgba(15, 23, 42, 0.1);
+}
+
+.quick-sale-payment-methods button.active {
+    border-color: #066c8e;
+
+    background: #066c8e;
+    color: #ffffff;
+
+    box-shadow:
+        0 8px 18px rgba(6, 108, 142, 0.22);
+}
+
+
+/* =========================================================
+   CASH PAYMENT
+========================================================= */
+
+.quick-sale-payment-cash {
+    margin-top: 20px;
+}
+
+.quick-sale-payment-cash input {
+    width: 100%;
+    height: 50px;
+
+    padding: 0 14px;
+
+    border: 1px solid #cfdce8;
+    border-radius: 11px;
+
+    background: #f9fbfd;
+    color: #17324a;
+
+    font-family: inherit;
+    font-size: 18px;
+    font-weight: 700;
+
+    outline: none;
+    box-sizing: border-box;
+}
+
+.quick-sale-payment-cash input:focus {
+    border-color: #066c8e;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 3px rgba(6, 108, 142, 0.12);
+}
+
+
+/* =========================================================
+   CHANGE DISPLAY
+========================================================= */
+
+.quick-sale-change-row {
+    margin-top: 12px;
+    padding: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-radius: 11px;
+
+    background: #ecfdf3;
+}
+
+.quick-sale-change-row span {
+    color: #166534;
+    font-weight: 700;
+}
+
+.quick-sale-change-row strong {
+    color: #15803d;
+    font-size: 20px;
+}
+
+
+/* =========================================================
+   PAYMENT ACTION BUTTONS
+========================================================= */
+
+.quick-sale-payment-actions {
+    margin-top: 24px;
+
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 12px;
+}
+
+.quick-sale-payment-actions button {
+    min-height: 50px;
+
+    border-radius: 12px;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.18s ease,
+        background-color 0.18s ease,
+        color 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.quick-sale-payment-cancel {
+    border: 1px solid #ef4444;
+
+    background: #ffffff;
+    color: #dc2626;
+}
+
+.quick-sale-payment-cancel:hover {
+    transform: translateY(-1px);
+
+    background: #ef4444;
+    color: #ffffff;
+}
+
+.quick-sale-payment-confirm {
+    border: none;
+
+    background: #16a34a;
+    color: #ffffff;
+}
+
+.quick-sale-payment-confirm:hover:not(:disabled) {
+    transform: translateY(-1px);
+
+    background: #15803d;
+
+    box-shadow:
+        0 8px 18px rgba(22, 163, 74, 0.22);
+}
+
+.quick-sale-payment-actions button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   TABLET RESPONSIVE
+========================================================= */
+
+@media (max-width: 950px) {
+    .QuickSale {
+        grid-template-columns: 1fr;
+        overflow-y: auto;
+    }
+
+    .quick-sale-left,
+    .quick-sale-right {
+        overflow: visible;
+    }
+}
+
+
+/* =========================================================
+   MOBILE RESPONSIVE
+========================================================= */
+
+@media (max-width: 600px) {
+    .QuickSale {
+        padding: 10px;
+    }
+
+    .quick-sale-products-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .quick-sale-product-card {
+        min-height: 165px;
+    }
+
+    .quick-sale-product-image {
+        height: 100px;
+    }
+
+    .quick-sale-order-actions,
+    .quick-sale-payment-methods,
+    .quick-sale-payment-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .quick-sale-payment-modal {
+        padding: 18px;
+    }
+}

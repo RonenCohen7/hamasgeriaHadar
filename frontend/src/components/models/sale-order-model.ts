@@ -9,7 +9,7 @@ export class AddSaleOrderItemModel {
 
 export class AddSaleOrderModel {
     idEvent?: number | null;
-    customerNme?: string;
+    customerName?: string | null;
     paymentMethod?: PaymentMethod;
     discountAmount?: number;
     notes?: string;

@@ -5,6 +5,7 @@ export class ProductModel {
     idSupplier!: number;
     supplierCost?: number;
     supplierCatalogNumber?: string;
+    supplierName?: string;
 
     imageName!: string | null;
     imageUrl!: string | null;

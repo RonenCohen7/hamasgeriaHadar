@@ -21,50 +21,72 @@ import { Login } from "../../user-area/login/login";
 import { Register } from "../../user-area/register/register";
 
 import { AuthGuard } from "../../user-area/auth-guard/auth-guard";
+import { QuickSale } from "../../sales-area/quick-sale/quick-sale";
+import { CustomerCrud } from "../../customers-area/customer-crud/customer-crud";
+import { CustomerList } from "../../customers-area/customer-list/customer-list";
+import { AddCustomer } from "../../customers-area/add-customer/add-customer";
+import { EditCustomer } from "../../customers-area/edit-customer/edit-customer";
+import { SearchCustomer } from "../../customers-area/search-customer/search-customer";
 
 export function Routing() {
     return (
         <Routes>
             <Route path="/" element={<AuthGuard><Home /></AuthGuard>} />
-            
 
-            <Route path="login" element={<Login/>}/>
-            <Route path="register" element={<Register />}/>
+
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
 
             <Route path="/about" element={<About />} />
-            <Route path="/contact-us" element={<ContactUs/>} />
+            <Route path="/contact-us" element={<ContactUs />} />
 
 
-            <Route path="/products" element={<AuthGuard><ProductList/></AuthGuard>} />
+            <Route path="/products" element={<AuthGuard><ProductList /></AuthGuard>} />
 
-            <Route path="/products/:id" element={<AuthGuard><ProductDetails/></AuthGuard>} />
+            <Route path="/products/:id" element={<AuthGuard><ProductDetails /></AuthGuard>} />
 
-            <Route path="/products/edit/:id" element={<AuthGuard><EditProduct/></AuthGuard>} />
+            <Route path="/products/edit/:id" element={<AuthGuard><EditProduct /></AuthGuard>} />
 
-            <Route path="/product/new" element={<AuthGuard><AddProduct/></AuthGuard>} />
-
-
-            <Route path="/suppliers" element={<AuthGuard><SupplierList/></AuthGuard>}/>
-
-            <Route path="/supplier/add" element={<AuthGuard><AddSupplier/></AuthGuard>}/>
-
-            <Route path="/suppliers/:id" element={<AuthGuard><SupplierDetails/></AuthGuard>}/>
-
-            <Route path="/suppliers/edit/:id" element={<AuthGuard><EditSupplier/></AuthGuard>}/>
-
-            <Route path="/supplier-orders" element={<AuthGuard><SupplierOrderList/></AuthGuard>}/>
-            
-            
-            <Route path="/supplier-orders/add" element={<AuthGuard><AddSupplierOrder/></AuthGuard>}/>
-
-            <Route path="/supplier-orders/:id" element={<AuthGuard><SupplierOrderDetails/></AuthGuard>}/>
-
-            <Route path="/inventory-live" element={<AuthGuard><InventoryMonitor/></AuthGuard>}/>
+            <Route path="/product/new" element={<AuthGuard><AddProduct /></AuthGuard>} />
 
 
-            <Route path="/sales/new" element={<AuthGuard><AddSale/></AuthGuard>}/>
-            <Route path="/inventory-count" element={<AuthGuard><InventoryCount /></AuthGuard>}/>
+            <Route path="/suppliers" element={<AuthGuard><SupplierList /></AuthGuard>} />
 
+            <Route path="/supplier/add" element={<AuthGuard><AddSupplier /></AuthGuard>} />
+
+            <Route path="/suppliers/:id" element={<AuthGuard><SupplierDetails /></AuthGuard>} />
+
+            <Route path="/suppliers/edit/:id" element={<AuthGuard><EditSupplier /></AuthGuard>} />
+
+            <Route path="/supplier-orders" element={<AuthGuard><SupplierOrderList /></AuthGuard>} />
+
+
+            <Route path="/supplier-orders/add" element={<AuthGuard><AddSupplierOrder /></AuthGuard>} />
+
+            <Route path="/supplier-orders/:id" element={<AuthGuard><SupplierOrderDetails /></AuthGuard>} />
+
+            <Route path="/inventory-live" element={<AuthGuard><InventoryMonitor /></AuthGuard>} />
+
+
+            <Route path="/sales/new" element={<AuthGuard><AddSale /></AuthGuard>} />
+
+            <Route path="/quick-sale" element={<AuthGuard><QuickSale /></AuthGuard>} />
+
+            <Route path="/inventory-count" element={<AuthGuard><InventoryCount /></AuthGuard>} />
+
+            <Route path="/customers" element={<AuthGuard><CustomerCrud /></AuthGuard> }>
+
+                <Route index element={<CustomerList />} />
+
+                <Route path="list" element={<CustomerList />}/>
+
+                <Route path="add" element={<AddCustomer />}/>
+
+                <Route path="edit/:id" element={<EditCustomer />}/>
+
+                <Route path="search"element={<SearchCustomer />}/>
+
+            </Route>
 
 
             <Route path="*" element={<h2>Page Not Found</h2>} />

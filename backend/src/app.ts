@@ -21,6 +21,7 @@ import { Socket } from "dgram";
 import { initSocket } from "./utils/socket";
 import helmet from "helmet";
 import { apiLimiter } from "./middleware/rate-limit-middleware";
+import { customerController } from "./controllers/customers-controller";
 
 
 
@@ -56,6 +57,7 @@ class App {
             app.use(productSupplierController.router);
             app.use(supplierOrderController.router);
             app.use(saleOrderController.router);
+            app.use(customerController.router);
 
 
             app.use(errorMiddleware.routeNotFound);

@@ -16,13 +16,13 @@ export type InventoryUpdatedData = {
 
 class SocketService {
 
-    private socket: Socket;
+    private readonly socket: Socket;
     private listenersRegistered = false
 
     public constructor() {
         this.socket = io("http://localhost:4000"), {
             autoConnect: false,
-            transports: ["websocket", "poling"]
+            transports: ["websocket", "polling"]
         };
     }
 
@@ -32,8 +32,8 @@ class SocketService {
             this.socket.on("connect", () => {
                 console.log("Socket connected: ", this.socket.id);
             })
-            this.socket.on("disconnect", () => {
-                console.log("Socket disconnected");
+            this.socket.on("disconnect", reason => {
+                console.log("Socket disconnected", reason);
 
             })
 
@@ -48,7 +48,9 @@ class SocketService {
         }
     }
     public disconnect():void {
-        this.socket.disconnect();
+        if(this.socket.disconnect){
+            this.socket.disconnect()
+        };
     }
 
     public onInventoryUpdated(callback:(data:InventoryUpdatedData) => void):void {

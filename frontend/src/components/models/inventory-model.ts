@@ -3,7 +3,7 @@ export class InventoryModel {
     productName!: string;
     productStock!:number;
     minimumStock!:number;
-    supplierName!:string;
-    supplierId!:number;
-    imageName?:string;
+    supplierName!:string | null;
+    supplierId!:number | null;
+    imageName?:string | null;
 }

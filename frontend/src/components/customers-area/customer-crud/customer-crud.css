@@ -1,0 +1,22 @@
+.CustomerCrud {
+
+    padding:20px;
+}
+
+.CustomerCrud nav{
+
+    margin:15px 0;
+}
+
+.CustomerCrud a{
+
+    text-decoration:none;
+    margin-right:15px;
+    font-weight:bold;
+}
+
+.CustomerCrud a.active{
+
+    color:#1976d2;
+}
+

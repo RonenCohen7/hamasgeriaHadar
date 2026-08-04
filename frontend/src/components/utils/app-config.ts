@@ -13,6 +13,8 @@ class AppConfig {
     public readonly usersUrl = this.baseUrl + "users/";
     public readonly loginUrl = this.baseUrl + "users/login";
     public readonly registerUrl = this.baseUrl + "users/register";
+
+    public readonly customersUrl = this.baseUrl + "customers"
 }
 
 export const appConfig = new AppConfig();

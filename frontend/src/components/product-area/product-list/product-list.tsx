@@ -18,8 +18,11 @@ import type { RootState } from "../../redux/inventory-store";
 export function ProductList() {
 
     const [products, setProducts] = useState<ProductModel[]>([]);
+    
     const [updateProductId, setUpdateProductId] = useState<number | null>(null);
+
     const user = useSelector((state: RootState) => state.auth.user);
+    
     const isAdmin = user?.role === "admin";
 
     useTitle("products");
