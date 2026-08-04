@@ -42,7 +42,7 @@ export enum PaymentMethod {
     Cash = "cash",
     CreditCard = "credit_card",
     Bit = "bit",
-    PayBox = "pay_box",
+    PayBox = "paybox",
     Other = "other"
 }
 

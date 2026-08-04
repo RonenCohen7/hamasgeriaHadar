@@ -18,6 +18,7 @@ class ProductService {
             p.product_name AS productName,
             p.image_name AS imageName,
             p.catalog_number AS catalogNumber,
+            p.id_category AS idCategory,
             p.product_cost AS productCost,
             p.product_price AS productPrice,
             p.product_stock AS productStock,
@@ -336,7 +337,7 @@ class ProductService {
 
         LEFT JOIN suppliers s
             ON s.id_supplier = ps.id_supplier
-
+        WHERE p.is_active = 1
         ORDER BY p.product_name
 
         `;
