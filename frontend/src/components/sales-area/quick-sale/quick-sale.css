@@ -417,9 +417,9 @@
 
     overflow: hidden;
 
-    border-radius: 10px;
+    /* border-radius: 10px;
 
-    background: #f4f7fa;
+    background: #f4f7fa; */
 }
 
 .quick-sale-product-image img {

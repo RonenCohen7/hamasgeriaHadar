@@ -90,7 +90,10 @@ class SupplierOrderService {
 
     // Add new supplier order:
     public async addSupplierOrder(order: AddSupplierOrderDto): Promise<SupplierOrderModel> {
-      
+        const expectedDeliveryDate = order.expectedDeliveryDate
+            ? String(order.expectedDeliveryDate).slice(0, 10)
+            : null;
+
         const orderNumber = `PO-${Date.now()}`;
         const createBy = 2;
         const orderStatus = "draft";
@@ -117,7 +120,7 @@ class SupplierOrderService {
             orderNumber,
             order.idSupplier,
             createBy,
-            order.expectedDeliveryDate ?? null,
+            expectedDeliveryDate ?? null,
             orderStatus,
             totalCost,
             order.notes ?? null
@@ -153,39 +156,51 @@ class SupplierOrderService {
 
 
     // Update supplier order:
+    // Update supplier order:
     public async updateSupplierOrder(order: SupplierOrderModel): Promise<SupplierOrderModel> {
 
+        const expectedDeliveryDate = order.expectedDeliveryDate
+            ? String(order.expectedDeliveryDate).slice(0, 10)
+            : null;
+
+        const receivedDate = order.receivedDate
+            ? String(order.receivedDate).slice(0, 10)
+            : null;
+
         const sql = `
-            UPDATE supplier_orders
-            SET
-                order_number = ?,
-                id_supplier = ?,
-                expected_delivery_date = ?,
-                received_date = ?,
-                order_status = ?,
-                total_cost = ?,
-                notes = ?
-            WHERE id_order = ?
-        `;
+        UPDATE supplier_orders
+        SET
+            order_number = ?,
+            id_supplier = ?,
+            expected_delivery_date = ?,
+            received_date = ?,
+            order_status = ?,
+            total_cost = ?,
+            notes = ?
+        WHERE id_order = ?
+    `;
 
         const values = [
             order.orderNumber,
             order.idSupplier,
-            order.expectedDeliveryDate,
-            order.receivedDate,
+            expectedDeliveryDate,
+            receivedDate,
             order.orderStatus,
             order.totalCost,
             order.notes,
             order.idOrder
         ];
 
-        const info = await dal.execute(sql, values) as OkPacketParams;
+        const info = await dal.execute(
+            sql,
+            values
+        ) as OkPacketParams;
 
         if (info.affectedRows === 0) {
             throw new ResourceNotFoundError(order.idOrder);
         }
 
-        return order;
+        return await this.getOneSupplierOrder(order.idOrder);
     }
 
 

@@ -9,7 +9,7 @@
 
     padding: 16px;
 
-    border: 1px solid #d7e5f4;
+    border: 1px solid #e2eff1;
     border-radius: 18px;
 
     background: linear-gradient(
@@ -53,15 +53,15 @@
     justify-content: center;
 
     overflow: hidden;
-
-    border: 1px solid #e0eaf5;
+/* 
+    border: 1px solid #e0eaf5; */
     border-radius: 14px;
 
-    background: linear-gradient(
+    /* background: linear-gradient(
         135deg,
         #f4f8fc,
         #edf4fb
-    );
+    ); */
 
     color: #7890a5;
     font-size: 13px;

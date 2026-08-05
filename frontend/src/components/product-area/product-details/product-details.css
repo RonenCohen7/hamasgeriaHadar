@@ -44,12 +44,14 @@
     box-shadow: 0 16px 38px rgba(0, 0, 0, 0.11);
 }
 
-/* Product image */
+
+/* Product image edit */
 
 .details-image {
     width: 320px;
     min-width: 320px;
     height: 320px;
+    padding: 22px;
 
     display: flex;
     justify-content: center;
@@ -57,8 +59,15 @@
 
     overflow: hidden;
 
-    background: #eef3f7;
-    border-radius: 18px;
+    /* border: 1px solid #dce8f1;
+    border-radius: 18px; */
+
+    /* background:
+        linear-gradient(
+            145deg,
+            #f8fbfd 0%,
+            #eef4f8 100%
+        ); */
 
     color: #64748b;
     font-size: 15px;
@@ -70,7 +79,18 @@
     height: 100%;
 
     display: block;
-    object-fit: cover;
+
+    object-fit: contain;
+    object-position: center;
+
+    border-radius: 12px;
+     background: transparent;
+    transition: transform 0.25s ease;
+}
+
+
+.details-image:hover img {
+    transform: scale(1.04);
 }
 
 /* Product information */

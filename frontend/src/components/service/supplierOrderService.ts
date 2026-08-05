@@ -4,7 +4,7 @@ import axios from "axios";
 import { appConfig } from "../utils/app-config";
 import type { AddSupplierOrderModel, SupplierOrderModel } from "../models/supplierOrderModel";
 import type { SupplierOrderItemModel } from "../models/supplierOrderItemModel";
-import { notificationService } from "./notificationService";
+
 
 
 class SupplierOrderService {
@@ -43,7 +43,7 @@ class SupplierOrderService {
 
     //Update order
     public async updateSupplierOrder(order:SupplierOrderModel):Promise<SupplierOrderModel>{
-        const response = await axios.patch<SupplierOrderModel>(`${appConfig.supplierOrderUrl}/${order.idOrder}`,order);
+        const response = await axios.put<SupplierOrderModel>(`${appConfig.supplierOrderUrl}/${order.idOrder}`,order);
         return response.data;
     }
 

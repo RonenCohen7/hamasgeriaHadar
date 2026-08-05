@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { supplierOrderService } from "../../service/supplierOrderService";
 import { notificationService } from "../../service/notificationService";
 import type { SupplierOrderModel } from "../../models/supplierOrderModel";
-import { BsUiRadios } from "react-icons/bs";
+
 
 export function SupplierOrderList() {
 
