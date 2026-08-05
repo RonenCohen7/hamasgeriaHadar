@@ -22,7 +22,7 @@ import { Register } from "../../user-area/register/register";
 
 import { AuthGuard } from "../../user-area/auth-guard/auth-guard";
 import { QuickSale } from "../../sales-area/quick-sale/quick-sale";
-import { CustomerCrud } from "../../customers-area/customer-crud/customer-crud";
+import { CustomerCrud } from "../../customers-area/customer-crad/customer-crud";
 import { CustomerList } from "../../customers-area/customer-list/customer-list";
 import { AddCustomer } from "../../customers-area/add-customer/add-customer";
 import { EditCustomer } from "../../customers-area/edit-customer/edit-customer";

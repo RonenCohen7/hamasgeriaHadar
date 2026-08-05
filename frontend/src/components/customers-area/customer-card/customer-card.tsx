@@ -17,16 +17,20 @@ import {
 
 type CustomerCardProps = {
     customer: CustomerModel;
-    onDelete:(id:number) => void;
+    onDelete: (id: number) => void;
 };
 
 export function CustomerCard({ customer, onDelete }: CustomerCardProps) {
-    
+
     const navigate = useNavigate();
 
     const birthDate = customer.dateOfBirth
         ? new Date(customer.dateOfBirth).toLocaleDateString("en-GB")
         : "No birth date";
+
+
+
+    const formattedPhone = customer.phone ? customer.phone.replace(/\D/g, "").replace(/^(\d{3})(\d{7})$/, "$1-$2") : "No- phone";
 
     return (
         <article className="CustomerCard">
@@ -39,7 +43,7 @@ export function CustomerCard({ customer, onDelete }: CustomerCardProps) {
                         {customer.lastName || "Customer"}
                     </h3>
 
-                    {customer.hasVipCard && (
+                    {Boolean(customer.hasVipCard) && (
                         <span className="vip-label">
                             <FaStar />
                             VIP Customer
@@ -66,7 +70,7 @@ export function CustomerCard({ customer, onDelete }: CustomerCardProps) {
                         <FaPhone />
                     </span>
 
-                    <span>{customer.phone || "No phone"}</span>
+                    <span>{formattedPhone}</span>
                 </div>
 
                 <div className="customer-detail-row">
@@ -92,9 +96,9 @@ export function CustomerCard({ customer, onDelete }: CustomerCardProps) {
             <footer className="customer-actions">
 
                 <button type="button"
-                
+
                     className="customer-edit-button"
-                    onClick={()=>{navigate(`/customers/edit/${customer.idCustomer}`)}}
+                    onClick={() => { navigate(`/customers/edit/${customer.idCustomer}`) }}
                 >
                     <FaEdit />
                     <span>Edit</span>
@@ -103,7 +107,7 @@ export function CustomerCard({ customer, onDelete }: CustomerCardProps) {
                 <button
                     type="button"
                     className="customer-delete-button"
-                    onClick={()=> onDelete(customer.idCustomer)}
+                    onClick={() => onDelete(customer.idCustomer)}
                     title="Delete customer"
                     aria-label="Delete customer"
                 >

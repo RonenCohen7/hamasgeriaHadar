@@ -186,18 +186,41 @@ CREATE TABLE supplier_order_items (
 
 CREATE TABLE vip_cards (
     id_vip_card INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+
     card_number VARCHAR(50) NOT NULL UNIQUE,
-    id_customer INT UNSIGNED NOT NULL,
+
+    id_customer INT UNSIGNED NOT NULL UNIQUE,
+
+    tier ENUM('bronze','silver','gold')
+        NOT NULL DEFAULT 'bronze',
+
+    external_card BOOLEAN
+        NOT NULL DEFAULT FALSE,
+
     balance DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+
     issued_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
     expires_at DATETIME NULL,
-    card_status ENUM('active','blocked','expired','cancelled') NOT NULL DEFAULT 'active',
+
+    card_status ENUM('active','blocked','expired','cancelled')
+        NOT NULL DEFAULT 'active',
+
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    CONSTRAINT fk_vip_cards_customer FOREIGN KEY (id_customer)
-        REFERENCES customers(id_customer) ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT chk_vip_card_balance CHECK (balance >= 0),
-    CONSTRAINT chk_vip_card_expiration CHECK (expires_at IS NULL OR expires_at >= issued_at)
+
+    CONSTRAINT fk_vip_cards_customer
+        FOREIGN KEY (id_customer)
+        REFERENCES customers(id_customer)
+        ON DELETE RESTRICT
+        ON UPDATE CASCADE,
+
+    CONSTRAINT chk_vip_card_balance
+        CHECK (balance >= 0),
+
+    CONSTRAINT chk_vip_card_expiration
+        CHECK (expires_at IS NULL OR expires_at >= issued_at)
 );
 
 -- VIP payment validation is enforced in the backend service.
@@ -310,6 +333,7 @@ CREATE INDEX idx_supplier_orders_status_date ON supplier_orders(order_status, or
 CREATE INDEX idx_supplier_order_items_product ON supplier_order_items(id_product);
 CREATE INDEX idx_vip_cards_customer ON vip_cards(id_customer);
 CREATE INDEX idx_vip_cards_status_expiry ON vip_cards(card_status, expires_at);
+CREATE INDEX idx_vip_cards_tier_status ON vip_cards(tier, card_status);
 CREATE INDEX idx_sales_date_status ON sales_orders(sale_date, sale_status);
 CREATE INDEX idx_sales_customer ON sales_orders(id_customer);
 CREATE INDEX idx_sales_vip_card ON sales_orders(id_vip_card);
@@ -508,27 +532,37 @@ INSERT INTO supplier_order_items (id_order_item,id_order,id_product,quantity_ord
     (19, 19, 19, 29.000, 14.000, 18.00),
     (20, 20, 20, 30.000, 0.000, 14.00);
 
-INSERT INTO vip_cards (id_vip_card,card_number,id_customer,balance,issued_at,expires_at,card_status) VALUES
-    (1, 'VIP-2026-000001', 1, 500.00, '2026-01-01 10:00:00', '2027-01-01 23:59:59', 'active'),
-    (2, 'VIP-2026-000002', 2, 250.00, '2026-01-02 10:00:00', '2027-01-02 23:59:59', 'active'),
-    (3, 'VIP-2026-000003', 3, 320.00, '2026-01-03 10:00:00', '2027-01-03 23:59:59', 'active'),
-    (4, 'VIP-2026-000004', 4, 150.00, '2026-01-04 10:00:00', '2027-01-04 23:59:59', 'active'),
-    (5, 'VIP-2026-000005', 5, 700.00, '2026-01-05 10:00:00', '2027-01-05 23:59:59', 'active'),
-    (6, 'VIP-2026-000006', 6, 85.00, '2026-01-06 10:00:00', '2027-01-06 23:59:59', 'active'),
-    (7, 'VIP-2026-000007', 7, 430.00, '2026-01-07 10:00:00', '2027-01-07 23:59:59', 'active'),
-    (8, 'VIP-2026-000008', 8, 275.00, '2026-01-08 10:00:00', '2027-01-08 23:59:59', 'active'),
-    (9, 'VIP-2026-000009', 9, 90.00, '2026-01-09 10:00:00', '2027-01-09 23:59:59', 'active'),
-    (10, 'VIP-2026-000010', 10, 610.00, '2026-01-10 10:00:00', '2027-01-10 23:59:59', 'active'),
-    (11, 'VIP-2026-000011', 11, 350.00, '2026-01-11 10:00:00', '2027-01-11 23:59:59', 'active'),
-    (12, 'VIP-2026-000012', 12, 225.00, '2026-01-12 10:00:00', '2027-01-12 23:59:59', 'active'),
-    (13, 'VIP-2026-000013', 13, 480.00, '2026-01-13 10:00:00', '2027-01-13 23:59:59', 'active'),
-    (14, 'VIP-2026-000014', 14, 130.00, '2026-01-14 10:00:00', '2027-01-14 23:59:59', 'active'),
-    (15, 'VIP-2026-000015', 15, 540.00, '2026-01-15 10:00:00', '2027-01-15 23:59:59', 'active'),
-    (16, 'VIP-2026-000016', 16, 65.00, '2026-01-16 10:00:00', '2027-01-16 23:59:59', 'active'),
-    (17, 'VIP-2026-000017', 17, 390.00, '2026-01-17 10:00:00', '2027-01-17 23:59:59', 'active'),
-    (18, 'VIP-2026-000018', 18, 180.00, '2026-01-18 10:00:00', '2027-01-18 23:59:59', 'blocked'),
-    (19, 'VIP-2026-000019', 19, 260.00, '2026-01-19 10:00:00', '2027-01-19 23:59:59', 'expired'),
-    (20, 'VIP-2026-000020', 20, 0.00, '2026-01-20 10:00:00', NULL, 'cancelled');
+INSERT INTO vip_cards (
+    id_vip_card,
+    card_number,
+    id_customer,
+    tier,
+    external_card,
+    balance,
+    issued_at,
+    expires_at,
+    card_status
+) VALUES
+    (1, 'VIP-2026-000001', 1, 'bronze', FALSE, 500.00, '2026-01-01 10:00:00', '2027-01-01 23:59:59', 'active'),
+    (2, 'VIP-2026-000002', 2, 'bronze', FALSE, 250.00, '2026-01-02 10:00:00', '2027-01-02 23:59:59', 'active'),
+    (3, 'VIP-2026-000003', 3, 'bronze', FALSE, 320.00, '2026-01-03 10:00:00', '2027-01-03 23:59:59', 'active'),
+    (4, 'VIP-2026-000004', 4, 'bronze', FALSE, 150.00, '2026-01-04 10:00:00', '2027-01-04 23:59:59', 'active'),
+    (5, 'VIP-2026-000005', 5, 'bronze', FALSE, 700.00, '2026-01-05 10:00:00', '2027-01-05 23:59:59', 'active'),
+    (6, 'VIP-2026-000006', 6, 'bronze', FALSE, 85.00, '2026-01-06 10:00:00', '2027-01-06 23:59:59', 'active'),
+    (7, 'VIP-2026-000007', 7, 'bronze', FALSE, 430.00, '2026-01-07 10:00:00', '2027-01-07 23:59:59', 'active'),
+    (8, 'VIP-2026-000008', 8, 'bronze', FALSE, 275.00, '2026-01-08 10:00:00', '2027-01-08 23:59:59', 'active'),
+    (9, 'VIP-2026-000009', 9, 'bronze', FALSE, 90.00, '2026-01-09 10:00:00', '2027-01-09 23:59:59', 'active'),
+    (10, 'VIP-2026-000010', 10, 'bronze', FALSE, 610.00, '2026-01-10 10:00:00', '2027-01-10 23:59:59', 'active'),
+    (11, 'VIP-2026-000011', 11, 'bronze', FALSE, 350.00, '2026-01-11 10:00:00', '2027-01-11 23:59:59', 'active'),
+    (12, 'VIP-2026-000012', 12, 'bronze', FALSE, 225.00, '2026-01-12 10:00:00', '2027-01-12 23:59:59', 'active'),
+    (13, 'VIP-2026-000013', 13, 'bronze', FALSE, 480.00, '2026-01-13 10:00:00', '2027-01-13 23:59:59', 'active'),
+    (14, 'VIP-2026-000014', 14, 'bronze', FALSE, 130.00, '2026-01-14 10:00:00', '2027-01-14 23:59:59', 'active'),
+    (15, 'VIP-2026-000015', 15, 'bronze', FALSE, 540.00, '2026-01-15 10:00:00', '2027-01-15 23:59:59', 'active'),
+    (16, 'VIP-2026-000016', 16, 'bronze', FALSE, 65.00, '2026-01-16 10:00:00', '2027-01-16 23:59:59', 'active'),
+    (17, 'VIP-2026-000017', 17, 'bronze', FALSE, 390.00, '2026-01-17 10:00:00', '2027-01-17 23:59:59', 'active'),
+    (18, 'VIP-2026-000018', 18, 'bronze', FALSE, 180.00, '2026-01-18 10:00:00', '2027-01-18 23:59:59', 'blocked'),
+    (19, 'VIP-2026-000019', 19, 'bronze', FALSE, 260.00, '2026-01-19 10:00:00', '2027-01-19 23:59:59', 'expired'),
+    (20, 'VIP-2026-000020', 20, 'bronze', FALSE, 0.00, '2026-01-20 10:00:00', NULL, 'cancelled');
 
 INSERT INTO sales_orders (id_sale,sale_number,id_event,id_customer,id_vip_card,created_by,customer_name,sale_date,sale_status,payment_method,subtotal,discount_amount,total_amount,notes) VALUES
     (1, 'SALE-2026-001', 1, NULL, NULL, 2, 'Customer 1', '2026-01-01 20:00:00', 'paid', 'credit_card', 54.00, 0.00, 54.00, 'Seed sale 1'),
@@ -662,6 +696,8 @@ SELECT
     vc.card_number,
     vc.id_customer,
     CONCAT(c.first_name, ' ', c.last_name) AS customer_name,
+    vc.tier,
+    vc.external_card,
     vc.balance,
     vc.card_status,
     vc.expires_at,
@@ -673,6 +709,7 @@ JOIN customers c ON c.id_customer = vc.id_customer
 LEFT JOIN vip_card_transactions vct ON vct.id_vip_card = vc.id_vip_card
 GROUP BY
     vc.id_vip_card,vc.card_number,vc.id_customer,
-    c.first_name,c.last_name,vc.balance,vc.card_status,vc.expires_at;
+    c.first_name,c.last_name,vc.tier,vc.external_card,
+    vc.balance,vc.card_status,vc.expires_at;
 
 -- End of initialization.

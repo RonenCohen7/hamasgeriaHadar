@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CustomerModel } from "../models/customer-model";
+import { AddCustomerDto, CustomerModel, updateCustomerDto } from "../models/customer-model";
 import { appConfig } from "../utils/app-config";
 
 
@@ -37,7 +37,7 @@ class CustomerService {
 
 
     //Add customer
-    public async addCustomer(customer: CustomerModel): Promise<CustomerModel> {
+    public async addCustomer(customer: AddCustomerDto): Promise<CustomerModel> {
 
         const response = await axios.post<CustomerModel>(appConfig.customersUrl, customer);
 
@@ -45,7 +45,7 @@ class CustomerService {
     }
 
     //Update customer
-    public async updateCustomer(id: number, customer: CustomerModel): Promise<CustomerModel> {
+    public async updateCustomer(id: number, customer: updateCustomerDto): Promise<CustomerModel> {
 
         const response = await axios.put<CustomerModel>(`${appConfig.customersUrl}/${id}`, customer)
 

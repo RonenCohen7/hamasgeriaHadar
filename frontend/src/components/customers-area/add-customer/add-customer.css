@@ -1,3 +1,188 @@
 .AddCustomer {
-	
+    width: 100%;
+    min-height: 100%;
+    padding: 24px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    box-sizing: border-box;
+    background: #f4f7fa;
+}
+
+.AddCustomer h2 {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 0 18px;
+
+    color: #17324a;
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.AddCustomer form {
+    width: 100%;
+    max-width: 720px;
+    padding: 24px;
+
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #dbe7ef;
+    border-radius: 18px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 12px 32px rgba(23, 50, 74, 0.09);
+}
+
+.customer-field {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.customer-field.full-width {
+    grid-column: 1 / -1;
+}
+
+.customer-field label {
+    margin-bottom: 7px;
+
+    color: #385267;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.customer-field input {
+    width: 100%;
+    height: 46px;
+    padding: 0 13px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #cfdde8;
+    border-radius: 10px;
+
+    outline: none;
+
+    background: #f9fbfd;
+    color: #17324a;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    transition:
+        border-color 0.18s ease,
+        background-color 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.customer-field input:focus {
+    border-color: #087ea4;
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 3px rgba(8, 126, 164, 0.12);
+}
+
+.customer-field > span {
+    min-height: 16px;
+    margin-top: 5px;
+
+    color: #dc2626;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.customer-actions {
+    grid-column: 1 / -1;
+
+    margin-top: 8px;
+
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.customer-actions button {
+    min-width: 120px;
+    min-height: 44px;
+    padding: 0 13px;
+
+    border-radius: 11px;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.18s ease,
+        background-color 0.18s ease,
+        color 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.customer-actions button:first-child {
+    border: 1px solid #cbd5df;
+
+    background: #ffffff;
+    color: #526b7f;
+}
+
+.customer-actions button:first-child:hover {
+    transform: translateY(-1px);
+    background: #f1f5f8;
+}
+
+.customer-actions button:last-child {
+    border: none;
+
+    background: #087ea4;
+    color: #ffffff;
+
+    box-shadow:
+        0 8px 18px rgba(8, 126, 164, 0.2);
+}
+
+.customer-actions button:last-child:hover:not(:disabled) {
+    transform: translateY(-1px);
+    background: #066985;
+}
+
+.customer-actions button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+@media (max-width: 700px) {
+    .AddCustomer {
+        padding: 14px;
+    }
+
+    .AddCustomer form {
+        grid-template-columns: 1fr;
+        padding: 18px;
+    }
+
+    .customer-field.full-width,
+    .customer-actions {
+        grid-column: auto;
+    }
+
+    .customer-actions {
+        flex-direction: column-reverse;
+    }
+
+    .customer-actions button {
+        width: 100%;
+    }
 }

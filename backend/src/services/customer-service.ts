@@ -94,11 +94,13 @@ class CustomerService {
         FROM customers c
         LEFT JOIN vip_cards vc
             ON vc.id_customer = c.id_customer
-        WHERE
-            c.first_name LIKE ?
-            OR c.last_name LIKE ?
-            OR c.phone LIKE ?
-            OR c.email LIKE ?
+        WHERE c.is_active = TRUE
+          AND (
+                LOWER(c.first_name) LIKE ?
+                OR LOWER(c.last_name) LIKE ?
+                OR c.phone LIKE ?
+                OR LOWER(c.email) LIKE ?
+          )
         ORDER BY c.first_name, c.last_name
         `;
         return await dal.execute(sql, [

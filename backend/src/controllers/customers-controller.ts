@@ -73,10 +73,11 @@ class CustomerController {
                 });
                 return;
             }
-
+            console.log("Search text:", text);
             const customers = await customerService.searchCustomers(text);
+            console.log("Search results:", customers);
 
-            response.sendStatus(204).json(customers);
+            response.json(customers);
 
         } catch (err: any) {
             next(err)

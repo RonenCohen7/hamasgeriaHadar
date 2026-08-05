@@ -1,3 +1,35 @@
-.SearchCustomer {
-	
+.search-customer-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    align-items: stretch;
+}
+
+.search-box{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin:25px 0 30px;
+}
+
+.search-box input{
+    flex:1;
+    max-width:420px;
+
+    padding:12px 16px;
+
+    border:1px solid #d7e4ef;
+    border-radius:10px;
+
+    font-size:15px;
+
+    transition:.2s;
+}
+
+.search-box input:focus{
+    outline:none;
+
+    border-color:#1486ad;
+
+    box-shadow:0 0 0 4px rgba(20,134,173,.15);
 }
