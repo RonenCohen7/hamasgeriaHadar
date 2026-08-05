@@ -3,11 +3,17 @@ import { useTitle } from "../../utils/UseTitle";
 import "./inventory-count.css";
 import { ProductModel } from "../../models/product-model";
 import { productService } from "../../service/productService";
-import { current } from "@reduxjs/toolkit";
+
 import { useDispatch } from "react-redux";
 import { notificationService } from "../../service/notificationService";
 import { inventoryService } from "../../service/inventoryService";
 import { setInventory } from "../../redux/inventory-slice";
+import { FaFileExcel, FaFilePdf } from "react-icons/fa";
+import * as XLSX from "xlsx";
+import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
+
+
 
 export function InventoryCount() {
 
@@ -97,12 +103,63 @@ export function InventoryCount() {
     }
 
 
+    function exportToXl() {
+        const reportData = products.map(product => ({
+            "product": product.productName,
+            "Current Stock": Number(product.productStock),
+            "Inspection Date": new Date().toLocaleString("en-GB")
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(reportData);
+        worksheet["!cols"] = [
+            { wch: 35 },
+            { wch: 18 },
+            { wch: 18 }
+        ];
+        const workbook = XLSX.utils.book_new();
+
+        XLSX.utils.book_append_sheet(
+            workbook,
+            worksheet,
+            "Inventory"
+        );
+        XLSX.writeFile(workbook, `Inventory_${new Date().toISOString().slice(0,10)}.xlsx`);
+
+    }
+
+    function exportToPdf() {
+        const doc = new jsPDF();
+        doc.setFontSize(18);
+        doc.text("Inventory Report", 14, 20);
+
+        doc.setFontSize(11)
+        doc.text(`Inspection Data: ${new Date().toLocaleDateString("en-GB")}`,14, 30);
+
+        autoTable(doc, {
+            startY: 40,
+            head:[["Product", "Current Stock"]],
+            body: products.map(product => [product.productName, Number(product.productStock)])
+
+        });
+        doc.save(`Inventory_${new Date().toISOString().slice(0,10)}.pdf`);
+
+    }
+
+
     return (
         <section className="InventoryCount">
             <header className="inventory-count-header">
                 <div>
-                    <span>INventory Control</span>
+                    <span>Inventory Control</span>
                     <h1>Stock Count</h1>
+
+                    <div className="export-file-action">
+                        <button type="button" onClick={exportToXl} className="stock-report-right" data-tooltip="export to xls"><FaFileExcel></FaFileExcel></button>
+                        <button type="button" onClick={exportToPdf} className="stock-report-right" data-tooltip="export to pdf"><FaFilePdf></FaFilePdf></button>
+
+                    </div>
+                    <br></br>
+
                     <p>
                         Enter the physical quantity counted for each product
                     </p>
@@ -148,12 +205,12 @@ export function InventoryCount() {
 
             </div>
             <div>
-                <button 
+                <button
                     type="button"
-                    className="inventory-count-save-button" 
+                    className="inventory-count-save-button"
                     onClick={saveAllChanges}
                     disabled={isSaving}
-                    >
+                >
                     {isSaving ? "Saving Change" : "Save All Changes"}
                 </button>
             </div>

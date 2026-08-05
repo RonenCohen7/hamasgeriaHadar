@@ -24,7 +24,45 @@
 
     overflow: hidden;
 }
+.stock-report:after {
 
+    content: attr(data-tooltip);
+
+    position:absolute;
+
+    left:50%;
+    bottom:calc(100% + 10px);
+
+    transform:translate(-50%,6px);
+
+    padding:7px 10px;
+
+    border-radius:8px;
+
+    background:#0f172a;
+    color:white;
+
+    font-size:12px;
+    font-weight:600;
+
+    white-space:nowrap;
+
+    opacity:0;
+    visibility:hidden;
+
+    pointer-events:none;
+
+    transition:
+        opacity .18s,
+        transform .18s,
+        visibility .18s;
+
+    z-index:999;
+
+
+
+
+}
 .inventory-count-header {
     padding: 20px 24px;
 

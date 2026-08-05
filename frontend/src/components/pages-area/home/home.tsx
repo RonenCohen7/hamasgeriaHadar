@@ -144,8 +144,8 @@ export function Home() {
                     </div>
 
                     <div>
-                        <span onClick={showSuppliers}>Suppliers</span>
-                        <strong>{supplierCount}</strong>
+                        <span>Suppliers</span>
+                        <strong onClick={showSuppliers}>{supplierCount}</strong>
                         <small>Active business partners</small>
                     </div>
                 </article>

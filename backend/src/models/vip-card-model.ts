@@ -32,7 +32,12 @@ export type CreateVipCardDto = {
 };
 
 export type UpdateVipCardDto = {
-    tier?: "bronze" | "silver" | "gold";
+    tier?: VipTier;
     expiresAt?: string | null;
-    cardStatus?: "active" | "blocked" | "expired" | "cancelled";
+    cardStatus?:VipCardStatus;
+    
 };
+
+export type RechargeVipCardDto = {
+    amount:number;
+}

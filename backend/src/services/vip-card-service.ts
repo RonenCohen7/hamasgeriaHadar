@@ -1,5 +1,6 @@
+import { OkPacketParams } from "mysql2";
 import { ConflictError, ResourceNotFoundError } from "../models/client-errors";
-import { CreateVipCardDto, VipCardModel } from "../models/vip-card-model";
+import { CreateVipCardDto, UpdateVipCardDto, VipCardModel } from "../models/vip-card-model";
 import { dal } from "../utils/dal";
 
 
@@ -8,8 +9,8 @@ class VipCardService {
 
 
     //Get All Card
-    public async getAllCards():Promise<VipCardModel[]>{
-            const sql = `
+    public async getAllCards(): Promise<VipCardModel[]> {
+        const sql = `
                 SELECT
                     vc.id_vip_card AS idVipCard,
                     vc.card_number AS cardNumber,
@@ -34,14 +35,15 @@ class VipCardService {
 
                 INNER JOIN customers c
                     ON c.id_customer = vc.id_customer
-
+                
+                WHERE vc.card_status <> 'cancelled'
                 ORDER BY
                     vc.tier,
                     c.first_name,
                     c.last_name
     `;
 
-    return await dal.execute(sql) as VipCardModel[];
+        return await dal.execute(sql) as VipCardModel[];
     }
 
 
@@ -129,7 +131,7 @@ class VipCardService {
 
 
     //Get card details by id customer
-    public async getVipCardByCustomer(idCustomer:number):Promise<VipCardModel>{
+    public async getVipCardByCustomer(idCustomer: number): Promise<VipCardModel> {
         const sql = `
             SELECT
                 vc.id_vip_card AS idVipCard,
@@ -159,14 +161,134 @@ class VipCardService {
 
             LIMIT 1
         `;
-        const cards = await dal.execute(sql,[idCustomer]) as VipCardModel[];
+        const cards = await dal.execute(sql, [idCustomer]) as VipCardModel[];
 
         const card = cards[0];
 
-        if(!card){
+        if (!card) {
             throw new ResourceNotFoundError(idCustomer);
         }
         return card;
+    }
+
+
+    //Get card By IdCard;
+    public async getCardById(idVipCard: number): Promise<VipCardModel> {
+        const sql = `
+            SELECT 
+                vc.id_vip_card AS idVipCard,
+                vc.card_number AS cardNumber,
+                vc.id_customer As idCustomer,
+                vc.tier,
+                vc.external_card AS externalCard,
+                vc.balance,
+                vc.issued_at AS issuedAt,
+                vc.expires_at AS expiresAt,
+                vc.card_status AS cardStatus,
+                vc.created_at AS createdAt,
+                vc.updated_at AS updatedAt,
+
+                c.first_name AS firstName,
+                c.last_name AS lastName,
+                c.phone,
+                c.email,
+                c.date_of_birth AS dateOfBirth,
+                c.is_active AS isActive
+            FROM vip_cards vc
+
+            INNER JOIN customers c
+                ON c.id_customer = vc.id_customer
+            WHERE vc.id_vip_card = ?
+
+            LIMIT 1
+        `;
+        const cards = await dal.execute(sql, [idVipCard]) as VipCardModel[];
+        const card = cards[0];
+        if (!card) {
+            throw new ResourceNotFoundError(idVipCard);
+        }
+        return card;
+    }
+
+    //Update VIP card
+    public async updateVipCard(idVipCard: number, dto: UpdateVipCardDto): Promise<VipCardModel> {
+        await this.getCardById(idVipCard);
+
+        const fields: string[] = [];
+        const values: (string | number | boolean | Date | null)[] = [];
+
+        if (dto.tier !== undefined) {
+            fields.push("tier = ?")
+            values.push(dto.tier);
+        }
+
+        if (dto.expiresAt !== undefined) {
+            fields.push("expires_at = ?")
+            values.push(dto.expiresAt)
+        }
+
+        if (dto.cardStatus !== undefined) {
+            fields.push("card_status = ?")
+            values.push(dto.cardStatus)
+        }
+
+        if (fields.length === 0) {
+            return await this.getCardById(idVipCard);
+        }
+
+        fields.push("updated_at = CURRENT_TIMESTAMP");
+
+        const sql = `
+          UPDATE vip_cards
+          SET ${fields.join(", ")}
+          WHERE id_vip_card = ?
+        `;
+        values.push(idVipCard);
+
+        await dal.execute(sql, values)
+
+        return await this.getCardById(idVipCard);
+    }
+
+    //soft delete
+    public async softDeleteVipCard(idVipCard: number): Promise<VipCardModel> {
+        await this.getCardById(idVipCard);
+
+        const sql = `
+        UPDATE vip_cards
+        SET
+            card_status = 'cancelled',
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id_vip_card = ?
+    `;
+        await dal.execute(sql, [idVipCard]);
+
+        return await this.getCardById(idVipCard)
+    }
+
+
+    //Recharge VIP card
+    public async rechargeBalance(idVipCard: number, amount: number): Promise<VipCardModel> {
+
+
+
+        if (amount <= 0) {
+            throw new Error("Recharge amount must be greater then zero. ")
+        }
+        await this.getCardById(idVipCard);
+
+        const sql = `
+            UPDATE vip_cards
+            SET
+                balance = balance + ?,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE id_vip_card = ?
+        `
+        await dal.execute(sql, [amount, idVipCard]);
+
+        const updatedCard = await this.getCardById(idVipCard);
+
+        return updatedCard;
     }
 
 }

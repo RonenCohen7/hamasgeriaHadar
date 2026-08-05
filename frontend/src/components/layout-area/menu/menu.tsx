@@ -12,7 +12,7 @@ import { authService } from "../../service/authService";
 
 export function Menu() {
 
-    const user = useSelector((state:RootState)=> state.auth.user);
+    const user = useSelector((state: RootState) => state.auth.user);
     const role = user?.role;
 
     const positions = [
@@ -31,7 +31,7 @@ export function Menu() {
         return () => clearInterval(timer)
     }, []);
 
-    
+
     console.log("Current user:", user);
     const navigate = useNavigate();
 
@@ -79,24 +79,27 @@ export function Menu() {
 
                 {user ? (<NavLink to="/customers" className="menu-link" data-tooltip="Customers" aria-label="Customers"> 👥
 
-                        </NavLink>):( <NavLink to="login" className="menu-link" data-tooltip="Login">🔐</NavLink>)}
+                </NavLink>) : (<NavLink to="login" className="menu-link" data-tooltip="Login">🔐</NavLink>)}
+
+                {role !== "employee" && (<NavLink to="/inventory-live" className="menu-link" data-tooltip="Live Inventory"><FaWarehouse /></NavLink>)}
+
+                <NavLink to="/sales/new" className="menu-link" data-tooltip="Create New Sale"><FaSackDollar></FaSackDollar></NavLink>
+
+                <NavLink to="/quick-sale" className="menu-link" data-tooltip="Quick Sale"><FaSalesforce></FaSalesforce></NavLink>
 
                 <NavLink to="/products" className="menu-link" data-tooltip="Products"><FaBoxOpen /></NavLink>
-                <NavLink to="/quick-sale" className="menu-link" data-tooltip="Quick Sale"><FaSalesforce></FaSalesforce></NavLink>
+
+                <NavLink to="/inventory-count" className="menu-link" data-tooltip="Stock Count"><FaClipboardCheck></FaClipboardCheck></NavLink>
+
+
 
                 {role !== "employee" && (<NavLink to="/suppliers" className="menu-link" data-tooltip="suppliers"><FaTruck /></NavLink>)}
 
                 {role !== "employee" && (<NavLink to="/supplier-orders" className="menu-link" data-tooltip="Supplier Orders"><FaFileInvoice></FaFileInvoice></NavLink>)}
 
-                <NavLink to="/sales/new" className="menu-link" data-tooltip="Create New Sale"><FaSackDollar></FaSackDollar></NavLink>
+                
 
-                {role !== "employee" && (<NavLink to="/inventory-live" className="menu-link" data-tooltip="Live Inventory"><FaWarehouse /></NavLink>)}
-
-
-                <NavLink to="/inventory-count" className="menu-link" data-tooltip="Stock Count"><FaClipboardCheck></FaClipboardCheck></NavLink>
-
-
-                <NavLink to="/about" className="menu-link" data-tooltip="About"><FaInfoCircle /></NavLink>
+                {role !== "employee" && (<NavLink to="/about" className="menu-link" data-tooltip="About"><FaInfoCircle /></NavLink>)}
 
                 <NavLink to="/contact-us" className="menu-link" data-tooltip="Contact Us"><FaEnvelope /></NavLink>
             </div>

@@ -39,7 +39,7 @@ export function EditCustomer() {
                     phone: customer.phone ?? "",
                     email: customer.email ?? "",
                     dateOfBirth: customer.dateOfBirth
-                        ? customer.dateOfBirth.slice(0, 10)
+                        ? String(customer.dateOfBirth).slice(0, 10)
                         : "",
                     isActive: Boolean(customer.isActive)
                 });

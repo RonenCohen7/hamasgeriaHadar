@@ -708,7 +708,7 @@ export function QuickSale() {
                             </button>
 
                             <button type="button" className="quick-sale-payment-confirm"
-                            onClick={openPayment}
+                            onClick={completeSale}
                             disabled={isSubmitting || (
                                  paymentMethod === PaymentMethod.Cash &&
                                 Number(receivedAmount)< totalAmount)

@@ -40,7 +40,7 @@ class App {
                     }
                 })
             );
-            app.use(apiLimiter)
+            // app.use(apiLimiter)
 
             process.env.JWT_SECRET
 

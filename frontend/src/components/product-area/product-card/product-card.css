@@ -1,7 +1,7 @@
 .product-card {
-    width: 100%;
-    min-width: 0;
-    height: 320px;
+    width: 80%;
+    width: 230px;
+    height: 300px;
 
     display: flex;
     flex-direction: column;
