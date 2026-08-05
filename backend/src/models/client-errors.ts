@@ -39,3 +39,11 @@ export class UnauthorizedError extends BaseClientError {
         super(StatusCode.Unauthorized, message);
     }
 }
+export class ConflictError extends Error {
+    public status = 409;
+
+    public constructor(message: string) {
+        super(message);
+        this.name = "ConflictError";
+    }
+}

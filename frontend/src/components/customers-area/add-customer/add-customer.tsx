@@ -55,7 +55,7 @@ export function AddCustomer() {
 
                     <label>Phone</label>
                     <input type="tel" placeholder="0526240604" maxLength={10}
-                    {...register("phone", {pattern: { value:/^05\d{8}/, message: "Enter a valid mobile number"}} )} />
+                    {...register("phone", {pattern: { value:/^05\d{10}/, message: "Enter a valid mobile number"}} )} />
 
                     <label>Email</label>
                     <input type="email" {...register("email", { required: true })} />
