@@ -1,0 +1,435 @@
+.CardDetails {
+    width: min(100%, 1280px);
+    margin: 0 auto;
+    padding: 32px 20px;
+}
+
+.vip-page-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 0.95fr) minmax(360px, 1.05fr);
+    align-items: start;
+    gap: 24px;
+}
+
+
+/* VIP Card */
+
+.vip-details-card {
+    position: relative;
+
+    width: 100%;
+    padding: 28px;
+
+    overflow: hidden;
+
+    border: 1px solid #dbe7ef;
+    border-radius: 20px;
+
+    background: linear-gradient(
+        135deg,
+        #ffffff 0%,
+        #f7fcfe 100%
+    );
+
+    box-shadow:
+        0 16px 40px rgba(22, 50, 74, 0.12);
+}
+
+.vip-details-card::before {
+    content: "";
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 6px;
+
+    background: linear-gradient(
+        90deg,
+        #d89b32,
+        #f5c96b,
+        #087ea4
+    );
+}
+
+
+/* Header */
+
+.vip-details-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+
+    border-bottom: 1px solid #e7eef3;
+}
+
+.vip-details-title {
+    min-width: 0;
+}
+
+.vip-details-title h1 {
+    margin: 0 0 8px;
+
+    color: #17324a;
+
+    font-size: clamp(24px, 4vw, 34px);
+    font-weight: 900;
+}
+
+.vip-details-title p {
+    margin: 0;
+
+    color: #718797;
+
+    font-size: 14px;
+}
+
+
+/* Status */
+
+.vip-status {
+    flex-shrink: 0;
+
+    padding: 7px 13px;
+
+    border-radius: 999px;
+
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: capitalize;
+}
+
+.vip-status.active {
+    border: 1px solid #93d9aa;
+
+    background: #edf9f1;
+    color: #198245;
+}
+
+.vip-status.blocked,
+.vip-status.expired,
+.vip-status.cancelled {
+    border: 1px solid #f2a7a7;
+
+    background: #fff1f1;
+    color: #d63333;
+}
+
+
+/* Customer */
+
+.vip-customer-name {
+    margin: 0 0 8px;
+
+    color: #17324a;
+
+    font-size: clamp(22px, 3vw, 30px);
+    font-weight: 900;
+}
+
+.vip-card-number {
+    margin: 0 0 28px;
+
+    color: #526b7e;
+
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+
+/* Balance */
+
+.vip-balance-box {
+    margin-bottom: 24px;
+    padding: 22px;
+
+    border: 1px solid #dbe7ef;
+    border-radius: 16px;
+
+    background: #ffffff;
+}
+
+.vip-balance-label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #718797;
+
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.vip-balance-value {
+    color: #087ea4;
+
+    font-size: clamp(34px, 6vw, 50px);
+    font-weight: 900;
+}
+
+
+/* Details */
+
+.vip-details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+
+    margin-bottom: 26px;
+}
+
+.vip-detail-item {
+    padding: 16px;
+
+    border: 1px solid #e1ebf1;
+    border-radius: 14px;
+
+    background: #ffffff;
+}
+
+.vip-detail-item span {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #718797;
+
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.vip-detail-item strong {
+    color: #17324a;
+
+    font-size: 15px;
+    text-transform: capitalize;
+}
+
+
+/* Actions */
+
+.vip-details-actions {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.vip-details-actions button {
+    min-width: 0;
+    min-height: 46px;
+    padding: 0 14px;
+
+    border-radius: 11px;
+
+    font-size: 14px;
+    font-weight: 900;
+    cursor: pointer;
+
+    transition:
+        transform 0.18s ease,
+        background-color 0.18s ease,
+        color 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.vip-details-actions button:hover {
+    transform: translateY(-2px);
+}
+
+.vip-recharge-button {
+    border: 1px solid #198245;
+
+    background: #198245;
+    color: #ffffff;
+
+    box-shadow:
+        0 7px 18px rgba(25, 130, 69, 0.22);
+}
+
+.vip-recharge-button:hover {
+    background: #126c38;
+}
+
+.vip-back-button {
+    border: 1px solid #d4dde5;
+
+    background: #f3f5f7;
+    color: #34495e;
+}
+
+.vip-back-button:hover {
+    background: #e7edf2;
+}
+
+.vip-edit-button {
+    border: 1px solid #efd58a;
+
+    background: #fff2cd;
+    color: #9a6800;
+
+    box-shadow:
+        0 7px 18px rgba(218, 163, 48, 0.18);
+}
+
+.vip-edit-button:hover {
+    background: #ffe59b;
+}
+
+
+/* Transactions Panel */
+
+.vip-transactions-panel {
+    min-height: 620px;
+    padding: 24px;
+
+    border: 1px solid #dbe7ef;
+    border-radius: 20px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 16px 40px rgba(22, 50, 74, 0.1);
+}
+
+.vip-transactions-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+
+    margin-bottom: 20px;
+    padding-bottom: 18px;
+
+    border-bottom: 1px solid #e7eef3;
+}
+
+.vip-transactions-header h2 {
+    margin: 0 0 5px;
+
+    color: #17324a;
+
+    font-size: 22px;
+}
+
+.vip-transactions-header p {
+    margin: 0;
+
+    color: #718797;
+
+    font-size: 13px;
+}
+
+.vip-transactions-header button {
+    min-height: 40px;
+    padding: 0 15px;
+
+    border: 1px solid #35a9d3;
+    border-radius: 10px;
+
+    background: #35a9d3;
+    color: #ffffff;
+
+    font-weight: 800;
+    cursor: pointer;
+
+    transition:
+        transform 0.18s ease,
+        background-color 0.18s ease;
+}
+
+.vip-transactions-header button:hover {
+    transform: translateY(-1px);
+
+    background: #178cb7;
+}
+
+
+/* No Card */
+
+.no-vip-card {
+    width: min(100%, 620px);
+    margin: 0 auto;
+    padding: 30px;
+
+    border: 1px solid #dbe7ef;
+    border-radius: 20px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 14px 34px rgba(22, 50, 74, 0.1);
+
+    text-align: center;
+}
+
+.no-vip-card h1 {
+    margin: 0 0 10px;
+
+    color: #17324a;
+}
+
+.no-vip-card p {
+    margin: 0 0 24px;
+
+    color: #718797;
+}
+
+
+/* Tablet */
+
+@media (max-width: 900px) {
+    .vip-page-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .vip-transactions-panel {
+        min-height: auto;
+    }
+}
+
+
+/* Mobile */
+
+@media (max-width: 700px) {
+    .CardDetails {
+        padding: 20px 14px;
+    }
+
+    .vip-details-card {
+        padding: 22px 18px;
+    }
+
+    .vip-details-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .vip-details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .vip-details-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .vip-details-actions button {
+        min-height: 48px;
+    }
+
+    .vip-transactions-header {
+        flex-direction: column;
+    }
+
+    .vip-transactions-header button {
+        width: 100%;
+    }
+}

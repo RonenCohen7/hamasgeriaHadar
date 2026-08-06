@@ -2,7 +2,7 @@
     position: relative;
 
     min-width: 0;
-    min-height: 230px;
+    min-height: 280px;
     padding: 18px;
 
     display: flex;
@@ -44,7 +44,6 @@
 
 .CustomerCard:hover {
     transform: translateY(-4px);
-
     border-color: #9ccde0;
 
     box-shadow:
@@ -181,25 +180,75 @@
 
 .customer-actions {
     margin-top: auto;
-
     padding-top: 14px;
 
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
+    flex-direction: column;
+    gap: 8px;
 
     border-top: 1px solid #e7eef3;
 }
 
-.customer-edit-button {
-    min-height: 36px;
-    padding: 0 14px;
+.customer-actions-bottom-row {
+    display: flex;
+    gap: 8px;
+}
+
+
+/* VIP Button */
+
+.customer-vip-button {
+    width: 100%;
+    min-width: 0;
+    height: 38px;
+    padding: 0 12px;
+    box-sizing: border-box;
 
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 7px;
+    gap: 6px;
+
+    border: 1px solid #e3b341;
+    border-radius: 10px;
+
+    background: gold !important;
+    color: #0cacf1 !important;
+
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+
+    transition:
+        transform 0.18s ease,
+        background-color 0.18s ease,
+        color 0.18s ease,
+        box-shadow 0.18s ease;
+}
+
+.customer-vip-button:hover {
+    transform: translateY(-1px);
+
+    background: hsl(306, 92%, 51%) !important;
+    color: white !important;
+
+    box-shadow:
+        0 5px 12px rgba(227, 179, 65, 0.25);
+}
+
+
+/* Edit Button */
+
+.customer-edit-button {
+    flex: 1;
+    height: 38px;
+    padding: 0;
+    box-sizing: border-box;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
 
     border: 1px solid #8dc6dc;
     border-radius: 10px;
@@ -207,14 +256,19 @@
     background: #eef8fc;
     color: #087494;
 
-    font-size: 13px;
-    font-weight: 800;
-    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
 
     transition:
+        transform 0.18s ease,
         background-color 0.18s ease,
-        color 0.18s ease,
-        transform 0.18s ease;
+        color 0.18s ease;
+}
+
+.customer-edit-button span {
+    display: inline;
+    font-size: 13px;
+    font-weight: 800;
 }
 
 .customer-edit-button:hover {
@@ -224,21 +278,26 @@
     color: #ffffff;
 }
 
+
+/* Delete Button */
+
 .customer-delete-button {
-    width: 36px;
-    height: 36px;
+    flex: 1;
+    height: 38px;
     padding: 0;
+    box-sizing: border-box;
 
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
     border: 1px solid #f0b2b2;
-    border-radius: 50%;
+    border-radius: 10px;
 
-    background: #fff5f5;
-    color: #d83a3a;
+    background: white !important;
+    color: hwb(207 0% 96%) !important;
 
+    font-size: 14px;
     cursor: pointer;
 
     transition:
@@ -248,8 +307,24 @@
 }
 
 .customer-delete-button:hover {
-    transform: scale(1.07);
+    transform: scale(1.06);
 
-    background: #d83a3a;
-    color: #ffffff;
+    background: red !important;
+    color: wheat !important;
+}
+
+
+/* Mobile */
+
+@media (max-width: 520px) {
+    .CustomerCard {
+        min-height: 260px;
+        padding: 16px;
+    }
+
+    .customer-vip-button,
+    .customer-edit-button,
+    .customer-delete-button {
+        height: 40px;
+    }
 }

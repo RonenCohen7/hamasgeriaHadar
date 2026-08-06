@@ -36,7 +36,7 @@ export function CustomerCard({ customer, onDelete }: CustomerCardProps) {
         <article className="CustomerCard">
 
             <header className="customer-header">
-
+               
                 <div className="customer-title">
                     <h3>
                         {customer.firstName || "Unnamed"}{" "}
@@ -94,6 +94,17 @@ export function CustomerCard({ customer, onDelete }: CustomerCardProps) {
             </div>
 
             <footer className="customer-actions">
+
+                <button
+                    type="button"
+                    className="customer-vip-button"
+                    onClick={() =>
+                        navigate(`/vip-cards/customer/${customer.idCustomer}`)
+                    }
+                >
+                    <FaStar />
+                    <span>VIP</span>
+                </button>
 
                 <button type="button"
 

@@ -24,7 +24,7 @@ class AppConfig {
 
     public readonly customersUrl = this.baseUrl + "customers"
 
-    public readonly vipCardsUrl = this.baseUrl + "cards"
+    public readonly vipCardsUrl = this.baseUrl + "vip-cards"
 }
 
 export const appConfig = new AppConfig();

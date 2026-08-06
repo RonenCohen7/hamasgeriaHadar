@@ -1,0 +1,90 @@
+.CardTransactions {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.vip-transactions-panel-body {
+    max-height: 650px;
+    overflow-y: auto;
+}
+
+.CardTransactions h2 {
+    margin: 0 0 6px;
+
+    color: #17324a;
+
+    font-size: 22px;
+    font-weight: 900;
+}
+
+.transaction-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px 14px;
+
+    padding: 14px;
+
+    border: 1px solid #e1ebf1;
+    border-radius: 14px;
+
+    background: #ffffff;
+}
+
+.transaction-item strong {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #17324a;
+
+    font-size: 14px;
+    text-transform: capitalize;
+}
+
+.transaction-item p {
+    margin: 0;
+
+    color: #718797;
+
+    font-size: 12px;
+}
+
+.transaction-item small {
+    grid-column: 1 / -1;
+
+    color: #8ca0ae;
+
+    font-size: 11px;
+}
+
+.transaction-amount {
+    align-self: center;
+
+    font-size: 16px;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.transaction-amount.load,
+.transaction-amount.refund {
+    color: #198245;
+}
+
+.transaction-amount.payment {
+    color: #d83a3a;
+}
+
+.transaction-amount.adjustment {
+    color: #a66d00;
+}
+
+@media (max-width: 700px) {
+    .transaction-item {
+        grid-template-columns: 1fr;
+    }
+
+    .transaction-amount {
+        justify-self: start;
+    }
+}

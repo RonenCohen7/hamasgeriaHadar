@@ -1,0 +1,144 @@
+.RechargeCard {
+    width: min(100%, 720px);
+
+    margin: 40px auto;
+    padding: 32px;
+
+    border: 1px solid #dbe7ef;
+    border-radius: 20px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 16px 40px rgba(22, 50, 74, 0.10);
+}
+
+.recharge-actions{
+    display:flex;
+    justify-content:space-between;
+    gap:14px;
+    margin-top:28px;
+}
+
+.recharge-cancel-button{
+    width:180px;
+    height:48px;
+
+    border:1px solid #cfdce6;
+    border-radius:12px;
+
+    background:#fff;
+    color:#49667d;
+
+    font-weight:700;
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.recharge-cancel-button:hover{
+    background:#eef5fa;
+    border-color:#8fc2d8;
+}
+
+.recharge-button{
+    width:220px;
+}
+
+
+.RechargeCard h1 {
+    margin: 0 0 28px;
+
+    color: hsl(123, 81%, 29%);
+
+    font-size: 38px;
+    font-weight: 900;
+}
+
+.recharge-form {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.recharge-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.recharge-group label {
+    color: #61788b;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: .05em;
+}
+
+.recharge-group input,
+.recharge-group textarea {
+    width: 100%;
+    padding: 14px 16px;
+
+    border: 1px solid #dbe7ef;
+    border-radius: 12px;
+
+    background: #fff;
+
+    font-size: 15px;
+
+    transition: .2s;
+}
+
+.recharge-group textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.recharge-group input:focus,
+.recharge-group textarea:focus {
+    outline: none;
+
+    border-color: #0b88b7;
+
+    box-shadow: 0 0 0 3px rgba(8,126,164,.12);
+}
+
+.recharge-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+
+    margin-top: 10px;
+}
+
+.recharge-button {
+    min-width: 180px;
+    height: 46px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: lab(32.02% -27.39 4.84 / 0.811);
+    color: white;
+
+    font-size: 15px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+.recharge-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+
+    background: #167137;
+}
+
+.recharge-button:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}

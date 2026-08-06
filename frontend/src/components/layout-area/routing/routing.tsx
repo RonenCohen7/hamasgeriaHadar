@@ -22,11 +22,13 @@ import { Register } from "../../user-area/register/register";
 
 import { AuthGuard } from "../../user-area/auth-guard/auth-guard";
 import { QuickSale } from "../../sales-area/quick-sale/quick-sale";
-import { CustomerCrud } from "../../customers-area/customer-crad/customer-crud";
+import { CustomerCrud } from "../../customers-area/customer-crud/customer-crud";
 import { CustomerList } from "../../customers-area/customer-list/customer-list";
 import { AddCustomer } from "../../customers-area/add-customer/add-customer";
 import { EditCustomer } from "../../customers-area/edit-customer/edit-customer";
 import { SearchCustomer } from "../../customers-area/search-customer/search-customer";
+import { CardDetails } from "../../vip-card-area/card-details/card-details";
+import { RechargeCard } from "../../vip-card-area/recharge-card/reacharge-card";
 
 export function Routing() {
     return (
@@ -88,6 +90,11 @@ export function Routing() {
 
             </Route>
 
+
+            <Route path="/vip-cards/customer/:idCustomer" element={<CardDetails/>}/>
+
+            <Route path="/vip-cards/:id/recharge" element={<RechargeCard/>}/>
+            
 
             <Route path="*" element={<h2>Page Not Found</h2>} />
         </Routes>
