@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction, json } from "express";
+import express, { Request, Response, NextFunction } from "express";
 import { vipCardTransactionService } from "../services/vip-card-transaction-service";
 
 
@@ -19,13 +19,28 @@ class VipCardTransactionsController {
         try {
 
             const idVipCard = Number(request.params.id);
+
             if (!Number.isInteger(idVipCard) || idVipCard <= 0) {
                 response.status(400).json({
                     message: "Id must be a positive number"
                 })
                 return;
             }
-            const transactions = await vipCardTransactionService.getTransactionsByCard(idVipCard);
+
+            const from = request.query.from?.toString();
+            const to = request.query.to?.toString();
+            const type = request.query?.type?.toString();
+            const page = request.query.page ? Number(request.query.page) : undefined;
+            const pageSize = request.query.pageSize ? Number(request.query.pageSize): undefined;
+
+            const transactions = await vipCardTransactionService.getTransactionsByCard(
+                idVipCard,
+                from,
+                to,
+                type,
+                page,
+                pageSize
+            );
             response.status(200).json(transactions);
 
         } catch (err: any) {
