@@ -23,6 +23,8 @@ export class AddVipCardTransactionDto {
     idSale?: number | null;
     transactionType!: VipCardTransactionType;
     amount!: number;
+    balanceBefore!: number;
+    balanceAfter!: number;
     notes?: string | null;
 }
 

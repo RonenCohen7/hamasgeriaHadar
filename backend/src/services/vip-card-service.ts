@@ -2,6 +2,8 @@ import { OkPacketParams } from "mysql2";
 import { ConflictError, ResourceNotFoundError } from "../models/client-errors";
 import { CreateVipCardDto, UpdateVipCardDto, VipCardModel } from "../models/vip-card-model";
 import { dal } from "../utils/dal";
+import { vipCardTransactionService } from "./vip-card-transaction-service";
+import { VipCardTransactionType } from "../models/vip-card-transaction-model";
 
 
 
@@ -270,12 +272,15 @@ class VipCardService {
     //Recharge VIP card
     public async rechargeBalance(idVipCard: number, amount: number): Promise<VipCardModel> {
 
-
+        const createdBy = 1;
 
         if (amount <= 0) {
             throw new Error("Recharge amount must be greater then zero. ")
         }
-        await this.getCardById(idVipCard);
+        //card before update
+        const cardBefore = await this.getCardById(idVipCard);
+
+        const balanceBefore = cardBefore.balance
 
         const sql = `
             UPDATE vip_cards
@@ -286,7 +291,20 @@ class VipCardService {
         `
         await dal.execute(sql, [amount, idVipCard]);
 
+        //card after update
         const updatedCard = await this.getCardById(idVipCard);
+
+        await vipCardTransactionService.addTransaction(
+            {
+                idVipCard,
+                transactionType: VipCardTransactionType.Load,
+                amount,
+                balanceBefore,
+                balanceAfter: updatedCard.balance,
+                notes: "VIP card recharge"
+            },
+            createdBy
+        )
 
         return updatedCard;
     }
