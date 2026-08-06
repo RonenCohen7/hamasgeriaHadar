@@ -23,6 +23,8 @@ class AppConfig {
     public readonly registerUrl = this.baseUrl + "users/register";
 
     public readonly customersUrl = this.baseUrl + "customers"
+
+    public readonly vipCardsUrl = this.baseUrl + "cards"
 }
 
 export const appConfig = new AppConfig();
