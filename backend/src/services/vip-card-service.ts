@@ -3,7 +3,7 @@ import { ConflictError, ResourceNotFoundError } from "../models/client-errors";
 import { CreateVipCardDto, UpdateVipCardDto, VipCardModel } from "../models/vip-card-model";
 import { dal } from "../utils/dal";
 import { vipCardTransactionService } from "./vip-card-transaction-service";
-import { VipCardTransactionType } from "../models/vip-card-transaction-model";
+import { AddVipCardTransactionDto, VipCardTransactionModel, VipCardTransactionType } from "../models/vip-card-transaction-model";
 
 
 
@@ -308,6 +308,46 @@ class VipCardService {
 
         return updatedCard;
     }
+
+
+    // Charge Balance
+    public async chargeBalance(idVipCard: number, amount: number): Promise<VipCardModel> {
+        const createdBy = 1;
+        if (amount <= 0) {
+            throw new Error("Charge amount must be greater then zero.")
+        }
+        //Card before update
+        const cardBefore = await this.getCardById(idVipCard);
+        if (cardBefore.balance < amount) {
+            throw new Error("Insufficient balance");
+        }
+        const balanceBefore = cardBefore.balance
+
+        const sql = `
+            UPDATE vip_cards
+            SET
+                balance = balance - ?
+            WHERE id_vip_card = ?
+        `;
+
+        await dal.execute(sql, [amount, idVipCard]);
+
+        //Card After update
+        const updatedCard = await this.getCardById(idVipCard);
+        await vipCardTransactionService.addTransaction({
+            idVipCard,
+            transactionType: VipCardTransactionType.Payment,
+            amount,
+            balanceBefore,
+            balanceAfter: updatedCard.balance,
+            notes: "VIP card payment"
+        },
+            createdBy
+        );
+        return updatedCard;
+
+    }
+
 
 }
 

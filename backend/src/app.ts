@@ -23,6 +23,7 @@ import helmet from "helmet";
 import { apiLimiter } from "./middleware/rate-limit-middleware";
 import { customerController } from "./controllers/customers-controller";
 import { vipCardController } from "./controllers/vip-card-controller";
+import { vipCardTransactionsController } from "./controllers/vip-card-transactions-controller";
 
 
 
@@ -60,6 +61,7 @@ class App {
             app.use(saleOrderController.router);
             app.use(customerController.router);
             app.use(vipCardController.router);
+            app.use(vipCardTransactionsController.router);
 
             app.use(errorMiddleware.routeNotFound);
             app.use(errorMiddleware.catchAll);

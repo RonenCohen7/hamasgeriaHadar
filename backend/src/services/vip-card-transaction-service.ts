@@ -8,7 +8,7 @@ class VipCardTransactionService {
     //Add Transaction
     public async addTransaction(dto: AddVipCardTransactionDto, createdBy: number): Promise<VipCardTransactionModel> {
         
-        console.log("Before addTransaction");
+       
         const sql = `
             INSERT INTO vip_card_transactions(
                 id_vip_card,
@@ -35,7 +35,6 @@ class VipCardTransactionService {
             dto.notes ?? null
         ]) as { insertId: number };
 
-         console.log("After transaction INSERT:", result.insertId);
 
         return await this.getTransactionById(result.insertId);
     }
@@ -67,9 +66,9 @@ class VipCardTransactionService {
 
 
     //Get Transaction By id Card VIP
-    public async getTransactionByCard(idVipCard: number): Promise<VipCardTransactionModel[]> {
+    public async getTransactionsByCard(idVipCard: number): Promise<VipCardTransactionModel[]> {
 
-        console.log("getCardById started:", idVipCard);
+        
 
         const sql = `
             SELECT

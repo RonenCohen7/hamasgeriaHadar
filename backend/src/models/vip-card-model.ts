@@ -41,3 +41,8 @@ export type UpdateVipCardDto = {
 export type RechargeVipCardDto = {
     amount:number;
 }
+
+export class ChargeVipCardDto {
+    amount!: number;
+    notes?: string | null;
+}

@@ -10,11 +10,18 @@ class VipCardController {
     public constructor() {
 
         this.router.get("/api/vip-cards", this.getAllVipCards);
+        
         this.router.get("/api/vip-cards/:id", this.getVipCardByCustomer);
+        
         this.router.post("/api/vip-cards", this.createVipCard);
+        
         this.router.put("/api/vip-cards/:id", this.updateVipCard);
+        
         this.router.delete("/api/vip-cards/:id", this.softDeleteVipCard);
+        
         this.router.post("/api/vip-cards/:id/recharge", this.rechargeBalance);
+
+        this.router.post("/api/vip-cards/:id/charge", this.chargeBalance);
 
     }
 
@@ -145,6 +152,25 @@ class VipCardController {
             next(err)
         }
     }
+
+    //ChargeBalance
+    private async chargeBalance(request:Request, response: Response, next:NextFunction):Promise<void>{
+        try{
+
+            const idVipCard = Number(request.params.id);
+            const dto = request.body;
+
+            const card = await vipCardService.chargeBalance(
+                idVipCard,
+                dto.amount
+            )
+            response.status(200).json(card);
+
+        }catch(err:any){
+            next(err)
+        }
+    }
+
 }
 
 export const vipCardController = new VipCardController();
