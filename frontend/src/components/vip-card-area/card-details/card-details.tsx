@@ -175,7 +175,7 @@ export function CardDetails() {
                             <h2>Recent Transactions</h2>
                             <p>Latest VIP card activity</p>
                         </div>
-                        <button type="button" onClick={() => navigate(`/vip-cards/${vipCard}/transactions`)}
+                        <button type="button" onClick={() => navigate(`/vip-cards/${vipCard.idVipCard}/transactions`)}
                         >
                             All Transactions
                         </button>

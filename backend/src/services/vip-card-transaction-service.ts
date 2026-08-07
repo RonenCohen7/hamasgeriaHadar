@@ -66,7 +66,7 @@ class VipCardTransactionService {
 
 
     //Get Transaction By id Card VIP
-    public async getTransactionsByCard(idVipCard: number, from?: string, to?: string, type?: string, page?: number, pageSize?: number): Promise<VipCardTransactionModel[]> {
+    public async getTransactionsByCard(idVipCard: number, from?: string, to?: string, type?: string, page: number=1, limit: number=20, sortBy:string = "createdBy", sortOrder:string = "DESC"): Promise<VipCardTransactionModel[]> {
 
         const conditions: string[] = ["id_vip_card = ?"];
 
@@ -86,20 +86,18 @@ class VipCardTransactionService {
             conditions.push("transaction_type = ?");
             values.push(type);
         }
-
-    
-
-        let pagination = "";
-        if(page && pageSize){
-            const offset = (page -1) * pageSize;
-
-            pagination = `LIMIT ? OFFSET ?`;
-
-            values.push(pageSize);
-            values.push(offset);
-        }
         
+        const allowedSortColumns:Record<string, string> ={
+            createdAt: "created_at",
+            amount: "amount",
+            transactionType: "transaction_type",
+            balanceBefore: "balance_before",
+            balanceAfter: "balance_after"
+        };
 
+        const sortColumn = allowedSortColumns[sortBy] ?? "created_at"
+        const order = sortOrder.toLowerCase() === "asc" ? "ASC" : "DESC"
+        const offset = (page -1) * limit;
 
         const sql = `
             SELECT
@@ -115,9 +113,13 @@ class VipCardTransactionService {
                 created_at AS createdAt
             FROM vip_card_transactions
             WHERE ${conditions.join(" AND ")}
-            ORDER BY created_at DESC
-            ${pagination}
+            ORDER BY ${sortColumn} ${order}
+            LIMIT ? OFFSET ?
+            
         `;
+        
+        values.push(limit);
+        values.push(offset);
         return await dal.execute(sql, values) as VipCardTransactionModel[];
     }
 }

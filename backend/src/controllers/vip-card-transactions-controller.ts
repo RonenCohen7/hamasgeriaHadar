@@ -32,6 +32,8 @@ class VipCardTransactionsController {
             const type = request.query?.type?.toString();
             const page = request.query.page ? Number(request.query.page) : undefined;
             const pageSize = request.query.pageSize ? Number(request.query.pageSize): undefined;
+            const sortBy = request.query.sortBy as string | undefined;
+            const sortOrder = request.query.sortOrder as string | undefined;
 
             const transactions = await vipCardTransactionService.getTransactionsByCard(
                 idVipCard,
@@ -39,7 +41,9 @@ class VipCardTransactionsController {
                 to,
                 type,
                 page,
-                pageSize
+                pageSize,
+                sortBy,
+                sortOrder
             );
             response.status(200).json(transactions);
 

@@ -28,7 +28,8 @@ import { AddCustomer } from "../../customers-area/add-customer/add-customer";
 import { EditCustomer } from "../../customers-area/edit-customer/edit-customer";
 import { SearchCustomer } from "../../customers-area/search-customer/search-customer";
 import { CardDetails } from "../../vip-card-area/card-details/card-details";
-import { RechargeCard } from "../../vip-card-area/recharge-card/reacharge-card";
+import { RechargeCard } from "../../vip-card-area/recharge-card/recharge-card";
+import { TransactionsPage } from "../../vip-card-area/transactions-page/transactions-page";
 
 export function Routing() {
     return (
@@ -93,7 +94,9 @@ export function Routing() {
 
             <Route path="/vip-cards/customer/:idCustomer" element={<CardDetails/>}/>
 
-            <Route path="/vip-cards/:id/recharge" element={<RechargeCard/>}/>
+            <Route path="/vip-cards/:idVipCard/recharge" element={<RechargeCard/>}/>
+
+            <Route path="/vip-cards/:idVipCard/transactions" element={<TransactionsPage/>}/>
             
 
             <Route path="*" element={<h2>Page Not Found</h2>} />

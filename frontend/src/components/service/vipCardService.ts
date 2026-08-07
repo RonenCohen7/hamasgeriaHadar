@@ -16,17 +16,17 @@ class VipCardService {
 
     //Get Vip Card By Customer id;
     public async getCardByCustomerId(idCustomer: number): Promise<VipCardModel> {
-        
+
         const response = await axios.get<VipCardModel>(`${appConfig.vipCardsUrl}/${idCustomer}`);
-        
+
         return response.data;
     }
 
     //Create Vip Card
     public async createCard(idCustomer: number, cardNumber?: string | null): Promise<VipCardModel> {
-       
+
         const response = await axios.post<VipCardModel>(
-            
+
             appConfig.vipCardsUrl,
             {
                 idCustomer,
@@ -39,7 +39,7 @@ class VipCardService {
 
     //Recharge Vip Card
     public async rechargeCard(idVipCard: number, amount: number, notes?: string): Promise<VipCardModel> {
-       
+
         const response = await axios.post<VipCardModel>(`${appConfig.vipCardsUrl}/${idVipCard}/recharge`,
             {
                 amount,
@@ -51,7 +51,7 @@ class VipCardService {
 
     //Charge Vip Card
     public async chargeCard(idVipCard: number, amount: number, notes?: string): Promise<VipCardModel> {
-        
+
         const response = await axios.post<VipCardModel>(`${appConfig.vipCardsUrl}/${idVipCard}/charge`,
             {
                 amount,
@@ -64,10 +64,19 @@ class VipCardService {
 
 
     //Get All Transactions By Vip Card
-    public async getAllTransactionByCard(idVipCard: number, from?: string, to?: string, type?: string, page?: number, pageSize?: number): Promise<VipCardTransactionModel[]> {
-        
+    public async getAllTransactionByCard(
+        idVipCard: number,
+        from?: string,
+        to?: string,
+        type?: string,
+        page: number = 1,
+        limit: number = 20,
+        sortBy: string = "createdAt",
+        sortOrder: string = "desc"
+    ): Promise<VipCardTransactionModel[]> {
+
         const response = await axios.get<VipCardTransactionModel[]>(
-        
+
             `${appConfig.vipCardsUrl}/${idVipCard}/transactions`,
             {
                 params: {
@@ -75,7 +84,10 @@ class VipCardService {
                     to,
                     type,
                     page,
-                    pageSize
+                    limit,
+                    sortBy,
+                    sortOrder
+
                 }
             }
         )
@@ -85,8 +97,8 @@ class VipCardService {
 
 
     //Get Transaction By Id 
-    public async getTransactionById(idVipCard:number):Promise<VipCardTransactionModel>{
-        
+    public async getTransactionById(idVipCard: number): Promise<VipCardTransactionModel> {
+
         const response = await axios.get<VipCardTransactionModel>(`${appConfig.vipCardsUrl}/transactions/${idVipCard}`);
 
         return response.data;
