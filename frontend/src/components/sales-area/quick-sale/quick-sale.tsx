@@ -52,6 +52,7 @@ export function QuickSale() {
 
     const [phoneLast4, setPhoneLast4] = useState("");
     const [vipVerified, setVipVerified] = useState(false);
+    const [showPaymentMethod , setShowPaymentMethod] = useState(true);
 
     const isVipPayment = paymentMethod === PaymentMethod.VIPCard;
     const filteredProducts = products.filter(product => {
@@ -382,6 +383,17 @@ export function QuickSale() {
             notificationService.success(
                 "Sale completed successfully"
             );
+
+            //Rest VIP payment
+            setSelectedVipCard(null);
+            setVipCardNumber("");
+            setPhoneLast4("");
+            setVipVerified(false);
+
+            setShowPaymentMethod(false)
+
+
+
         } catch (error: any) {
             notificationService.error(
                 error.response?.data?.message ??

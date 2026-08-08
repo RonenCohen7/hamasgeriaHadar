@@ -109,7 +109,7 @@ class VipCardController {
             console.log("regex =", /^\d{4}$/.test(last4Digits));
 
 
-            if (!/^\d{4$}/.test(last4Digits)) {
+            if (!/^\d{4}$/.test(last4Digits)) {
                 response.status(400).json({
                     message: "Last 4 Phone digits must contain exactly 4 digits"
                 });
@@ -122,6 +122,8 @@ class VipCardController {
                 idVipCard,
                 last4Digits
             )
+
+            console.log("=== AFTER REGEX ===");
             response.json({
                 verified
             })
