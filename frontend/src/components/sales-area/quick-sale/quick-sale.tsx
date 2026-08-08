@@ -22,6 +22,9 @@ import { dialogService } from "../../service/dialogService";
 import { VipCardModel } from "../../models/vip-card-model";
 import { vipCardService } from "../../service/vipCardService";
 
+import { RechargeDialog } from "../../vip-card-area/recharge-dialog/recharge-dialog";
+import { useNavigate } from "react-router-dom";
+
 interface QuickSaleItem {
     product: ProductModel;
     quantity: number;
@@ -30,7 +33,7 @@ interface QuickSaleItem {
 export function QuickSale() {
 
     const dispatch = useDispatch<AppDispatch>();
-
+    const navigate = useNavigate();
 
 
     const liveInventory = useSelector(
@@ -52,7 +55,9 @@ export function QuickSale() {
 
     const [phoneLast4, setPhoneLast4] = useState("");
     const [vipVerified, setVipVerified] = useState(false);
-    const [showPaymentMethod , setShowPaymentMethod] = useState(true);
+    const [showPaymentMethod, setShowPaymentMethod] = useState(true);
+    const [showRechargeDialog, setShowRechargeDialog] = useState(false);
+    const [missingAmount, setMissingAmount] = useState(0);
 
     const isVipPayment = paymentMethod === PaymentMethod.VIPCard;
     const filteredProducts = products.filter(product => {
@@ -171,6 +176,25 @@ export function QuickSale() {
     }, [liveInventory]);
 
 
+    useEffect(()=>{
+        const saveDraft = sessionStorage.getItem("quickSaleDraft")
+
+        if(!saveDraft) return;
+
+        const draft = JSON.parse(saveDraft);
+
+        setOrderItems(draft.orderItems ?? []);
+        setPaymentMethod(draft.paymentMethod ?? PaymentMethod.Cash);
+        setVipCardNumber(draft.vipCardNumber ?? "");
+        setSelectedVipCard(draft.selectedVipCard ?? null);
+        setPhoneLast4(draft.phoneLast4 ?? "");
+        setVipVerified(draft.vipVerified ?? false);
+
+        sessionStorage.removeItem("quickSaleDraft")
+
+
+    },[]);
+
 
     async function verifyVipCard() {
         if (!selectedVipCard) return;
@@ -188,7 +212,7 @@ export function QuickSale() {
                 notificationService.error("Phone verification failed");
                 return;
             }
-            
+
 
             setVipVerified(true);
             notificationService.success("Customer verified");
@@ -328,7 +352,7 @@ export function QuickSale() {
 
     async function completeSale() {
 
-        if(paymentMethod === PaymentMethod.VIPCard && !vipVerified){
+        if (paymentMethod === PaymentMethod.VIPCard && !vipVerified) {
             notificationService.error(
                 "Please verify the customer first"
             )
@@ -351,8 +375,11 @@ export function QuickSale() {
         }
 
         if (paymentMethod === PaymentMethod.VIPCard && selectedVipCard && Number(selectedVipCard.balance) < totalAmount) {
-            notificationService.error("Insufficient VIP Card balance")
-            return;
+            const balance = Number(selectedVipCard.balance);
+            const missingAmount = totalAmount - balance;
+            setMissingAmount(missingAmount);
+            setShowRechargeDialog(true)
+            return
         }
 
         const sale: AddSaleOrderModel = {
@@ -909,9 +936,35 @@ export function QuickSale() {
                                 {isSubmitting ? "Processing" : "Confirm"}
                             </button>
                         </div>
+                        {showRechargeDialog && (
+                            <RechargeDialog
+                                balance={Number(selectedVipCard?.balance)}
+                                total={totalAmount}
+                                missing={missingAmount}
+                                onCancel={() => setShowRechargeDialog(false)}
+                                onRecharge={() => {
+                                    setShowRechargeDialog(false)
 
+                                    //save the session
+                                    sessionStorage.setItem(
+                                        "quickSaleDraft",
+                                        JSON.stringify({
+                                            orderItems,
+                                            paymentMethod,
+                                            vipCardNumber,
+                                            selectedVipCard,
+                                            phoneLast4,
+                                            vipVerified
+                                        })
+                                    )
+                                    navigate(`/vip-cards/${selectedVipCard?.idVipCard}/recharge`)
+                                    
+                                }}
+                            />
+                        )}
 
                     </div>
+                 
 
 
                 </div>

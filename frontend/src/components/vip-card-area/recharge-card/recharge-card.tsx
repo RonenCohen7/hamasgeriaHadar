@@ -59,7 +59,9 @@ export function RechargeCard() {
 
             notificationService.success("VIP card recharged successfully")
 
-            navigate(`/vip-cards/customer/${card.idCustomer}`);
+            // navigate(`/vip-cards/customer/${card.idCustomer}`);
+
+            navigate("/quick-sale");
 
         } catch (err: any) {
             notificationService.error(err)
@@ -122,6 +124,8 @@ export function RechargeCard() {
                 </div>
 
             </div>
+
+     
 
         </section>
     )
