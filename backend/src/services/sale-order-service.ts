@@ -4,6 +4,8 @@ import { AddSaleOrderDto, SaleOrderModel } from "../models/sale-order-model";
 import { dal } from "../utils/dal";
 import { getIo } from "../utils/socket";
 import { sanitizeText } from "../utils/sanitize";
+import { PaymentMethod } from "../models/enum";
+import { vipCardService } from "./vip-card-service";
 
 
 
@@ -51,7 +53,7 @@ class SaleOrderService {
     //Get one Sale
     public async getOneSale(id: number): Promise<SaleOrderModel> {
         const sql = `
-                        SELECT
+            SELECT
                 so.id_sale AS idSale,
                 so.sale_number AS saleNumber,
                 so.id_event AS idEvent,
@@ -98,18 +100,62 @@ class SaleOrderService {
         if (sale.notes) {
             sale.notes = sanitizeText(sale.notes);
         }
+
+        if (!sale.items || sale.items.length === 0) {
+            throw new Error("Sale must contain at least one item");
+        }
+
+        if (!sale.paymentMethod) {
+            throw new Error("Payment method is required");
+        }
+
         const createdBy = 2;
         const saleNumber = `SALE-${Date.now()}`
-        const saleStatus = "paid";
+        const saleStatus = "paid"
 
         const subTotal = sale.items.reduce((sum, item) => sum + item.quantity * item.unitPrice, 0);
+
         const discountAmount = sale.discountAmount ?? 0;
-
-
-
 
         const totalAmount = Math.max(subTotal - discountAmount, 0);
 
+
+        //valid all product stock
+        const stockData: {
+            idProduct: number;
+            stockBefore: number;
+            stockAfter: number;
+        }[] = [];
+
+        for (const item of sale.items) {
+            const stockSql = `
+                SELECT
+                    product_stock As productStock
+                FROM products
+                WHERE id_product = ?
+            `;
+            const products = await dal.execute(stockSql, [item.idProduct]) as { productStock: number }[];
+
+            const product = products[0];
+
+            if (!product) {
+                throw new ResourceNotFoundError(item.idProduct);
+            }
+
+            const stockBefore = Number(product.productStock)
+
+            if (stockBefore < item.quantity) {
+                throw new Error(`Not enough stock for product ${item.idProduct}`);
+            }
+
+            stockData.push({
+                idProduct: item.idProduct,
+                stockBefore,
+                stockAfter: stockBefore - item.quantity
+            });
+        }
+
+        // Create Sale 
         const sql = `
             INSERT INTO sales_orders (
                 sale_number,
@@ -132,7 +178,7 @@ class SaleOrderService {
             createdBy,
             sale.customerName ?? null,
             saleStatus,
-            sale.paymentMethod ?? null,
+            sale.paymentMethod,
             subTotal,
             discountAmount,
             totalAmount,
@@ -143,59 +189,43 @@ class SaleOrderService {
 
         const idSale = info.insertId!;
 
+
+        //Add item + Update stock
         for (const item of sale.items) {
 
-            const stockSql = `
-                SELECT product_stock As productStock
-                FROM products
-                WHERE id_product = ?
-            `
+            const stock = stockData.find(data => data.idProduct === item.idProduct);
 
-            const products = await dal.execute(stockSql, [item.idProduct]) as { productStock: number }[];
-
-            const product = products[0]
-            if (!product) {
-                throw new ResourceNotFoundError(item.idProduct);
+            if (!stock) {
+                throw new Error(`Stock data missing for product ${item.idProduct}`);
             }
 
-            const stockBefore = Number(product.productStock);
-            if (stockBefore < item.quantity) {
-                throw new Error(`Not enough stock for product ${item.idProduct}`);
-            }
-
-            const stockAfter = stockBefore - item.quantity;
-
-
-            const itemSql = `
-                INSERT INTO sales_order_items(
-                    id_sale,
-                    id_product,
-                    quantity,
-                    unit_price
-                )
-                VALUES(?,?,?,?)
-            `;
-            const itemValues = [
-                idSale,
-                item.idProduct,
-                item.quantity,
-                item.unitPrice
-            ];
-
-            await dal.execute(itemSql, itemValues);
-
-            const updateStockSql = `
-                UPDATE products
-                SET product_stock = ?
-                WHERE id_product = ? 
+            //Sale item
+            const sql = `
+            INSERT INTO sales_order_items(
+                id_sale,
+                id_product,
+                quantity,
+                unit_price
+            )VALUES (?,?,?,?)
             `;
 
-            const stockInfo = await dal.execute(updateStockSql, [stockAfter, item.idProduct]) as OkPacketParams;
+            await dal.execute(sql, [idSale, item.idProduct, item.quantity, item.unitPrice]);
+
+            //Update Stock;
+            const updateSql = `
+            UPDATE products
+            SET product_stock =?
+            WHERE id_product =?
+        `;
+
+            const stockInfo = await dal.execute(updateSql, [stock.stockAfter, item.idProduct]) as OkPacketParams;
+
             if (stockInfo.affectedRows === 0) {
-                throw new Error(`Not enough stock for product ${item.idProduct}`);
+                throw new Error(`Failed updating stock for product ${item.idProduct}`)
             }
 
 
+            //Inventory movement
             const movementSql = `
                 INSERT INTO inventory_movements (
                     id_product,
@@ -218,23 +248,36 @@ class SaleOrderService {
                 createdBy,
                 "sale",
                 item.quantity,
-                stockBefore,
-                stockAfter,
+                stock.stockBefore,
+                stock.stockAfter,
                 "sale",
                 idSale,
                 sale.notes ?? null
             ])
 
+            //Socket update
             getIo().emit("inventory-update", {
                 idProduct: item.idProduct,
                 idSale,
                 idEvent: sale.idEvent ?? null,
                 quantitySold: item.quantity,
-                stockBefore,
-                stockAfter,
+                stockBefore: stock.stockBefore,
+                stockAfter: stock.stockAfter,
                 movementType: "sale"
             })
         }
+
+
+
+        if (sale.paymentMethod === PaymentMethod.VIPCard && sale.idVipCard) {
+            await vipCardService.chargeBalance(
+                sale.idVipCard,
+                totalAmount,
+                `Quick sale ${saleNumber}`
+            )
+        }
+
+
         return await this.getOneSale(idSale);
     }
 }

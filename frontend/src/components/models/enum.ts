@@ -1,5 +1,5 @@
-export  enum UnitType {
-    Unit ="unit",
+export enum UnitType {
+    Unit = "unit",
     Bottle = "bottle",
     Liter = "liter",
     Milliliter = "milliliter",
@@ -15,7 +15,8 @@ export enum PaymentMethod {
     Cash = "cash",
     CreditCard = "credit_card",
     Bit = "bit",
-    PayBox = "paybox",
+    PayBox = "pay_box",
+    VIPCard = "vip_card",
     Other = "other"
 }
 

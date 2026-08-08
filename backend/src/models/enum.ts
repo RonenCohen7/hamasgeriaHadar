@@ -42,8 +42,10 @@ export enum PaymentMethod {
     Cash = "cash",
     CreditCard = "credit_card",
     Bit = "bit",
-    PayBox = "paybox",
+    PayBox = "pay_box",
+    VIPCard = "vip_card",
     Other = "other"
+    
 }
 
 

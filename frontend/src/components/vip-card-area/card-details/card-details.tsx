@@ -161,7 +161,9 @@ export function CardDetails() {
                         >
                             ← Back
                         </button>
-                        <button className="vip-edit-button">
+                        <button type="button"
+                                className="vip-edit-button"
+                                onClick={()=>navigate(`/vip-cards/${vipCard.idVipCard}/edit`)}>
                             Edit
                         </button>
 

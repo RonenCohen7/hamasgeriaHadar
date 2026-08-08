@@ -17,6 +17,7 @@ import type { SupplierOrderItemModel } from "../../models/supplierOrderItemModel
 
 import { supplierOrderService } from "../../service/supplierOrderService";
 import { notificationService } from "../../service/notificationService";
+import { dialogService } from "../../service/dialogService";
 
 export function SupplierOrderDetails() {
 
@@ -120,11 +121,14 @@ export function SupplierOrderDetails() {
         idOrderItem: number
     ) {
 
-        const answer = window.confirm(
-            "Are you sure you want to delete this product from the order?"
+        const ok = await dialogService.confirm(
+            "Delete Product",
+            "Are you sure you want to delete this order from",
+            "Delete",
+            "Cancel"
         );
 
-        if (!answer) return;
+        if (!ok) return;
 
         try {
 

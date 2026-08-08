@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { FaBeer, FaWineBottle, FaCoffee,  FaUtensils, FaCookieBite, FaBoxOpen, FaThLarge, FaGlassWhiskey, FaCocktail, FaMoneyBillWave, FaCreditCard, FaMobileAlt } from "react-icons/fa";
+import { FaBeer, FaWineBottle, FaCoffee, FaUtensils, FaCookieBite, FaBoxOpen, FaThLarge, FaGlassWhiskey, FaCocktail, FaMoneyBillWave, FaCreditCard, FaMobileAlt } from "react-icons/fa";
 
 import "./quick-sale.css";
 
@@ -18,6 +18,9 @@ import { ProductCategoryModel } from "../../models/category-model";
 import { productCategoryService } from "../../service/productCategoryService";
 import { IoWater } from "react-icons/io5";
 import { LuCupSoda } from "react-icons/lu";
+import { dialogService } from "../../service/dialogService";
+import { VipCardModel } from "../../models/vip-card-model";
+import { vipCardService } from "../../service/vipCardService";
 
 interface QuickSaleItem {
     product: ProductModel;
@@ -25,7 +28,10 @@ interface QuickSaleItem {
 }
 
 export function QuickSale() {
+
     const dispatch = useDispatch<AppDispatch>();
+
+
 
     const liveInventory = useSelector(
         (state: RootState) => state.inventory.items
@@ -41,11 +47,20 @@ export function QuickSale() {
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>(PaymentMethod.Cash);
     const [receivedAmount, setReceivedAmount] = useState("");
 
+    const [selectedVipCard, setSelectedVipCard] = useState<VipCardModel | null>(null);
+    const [vipCardNumber, setVipCardNumber] = useState("")
+
+    const [phoneLast4, setPhoneLast4] = useState("");
+    const [vipVerified, setVipVerified] = useState(false);
+
+    const isVipPayment = paymentMethod === PaymentMethod.VIPCard;
     const filteredProducts = products.filter(product => {
 
         const categoryMatch = selectedCategory === 0 || Number(product.idCategory) === selectedCategory;
 
         const textMatch = product.productName.toLowerCase().includes(searchText.toLowerCase());
+
+
 
         return categoryMatch && textMatch;
     }
@@ -156,6 +171,34 @@ export function QuickSale() {
 
 
 
+    async function verifyVipCard() {
+        if (!selectedVipCard) return;
+
+        if (!/^\d{4}$/.test(phoneLast4)) {
+            notificationService.error(
+                "Please enter the last 4 digits of the phone number"
+            )
+            return;
+        }
+        try {
+            const verified = await vipCardService.verifyCardPhone(selectedVipCard.idVipCard, phoneLast4);
+
+            if (!verified) {
+                notificationService.error("Phone verification failed");
+                return;
+            }
+            
+
+            setVipVerified(true);
+            notificationService.success("Customer verified");
+
+        } catch (err) {
+
+        }
+    }
+
+
+
     //open payment
     function openPayment() {
         if (orderItems.length === 0) return;
@@ -258,12 +301,40 @@ export function QuickSale() {
 
 
 
+    async function searchVipCard() {
+        if (!vipCardNumber.trim()) {
+            notificationService.error("Please enter VIP card number")
+            return;
+        }
+        try {
+            const card = await vipCardService.getCardByCardNumber(vipCardNumber.trim())
 
-  
+            setSelectedVipCard(card);
+            setVipVerified(false);
+            setPhoneLast4("")
+            notificationService.success("VIP Card found")
+
+        } catch (err: any) {
+            console.error(err);
+            setSelectedVipCard(null);
+            notificationService.error("VIP Card not found");
+        }
+
+    }
+
 
 
 
     async function completeSale() {
+
+        if(paymentMethod === PaymentMethod.VIPCard && !vipVerified){
+            notificationService.error(
+                "Please verify the customer first"
+            )
+            return;
+        }
+
+
         if (orderItems.length === 0 || isSubmitting) {
             return;
         }
@@ -273,9 +344,20 @@ export function QuickSale() {
             return;
         }
 
+        if (paymentMethod === PaymentMethod.VIPCard && !selectedVipCard) {
+            notificationService.error("Please select a VIP Card")
+            return;
+        }
+
+        if (paymentMethod === PaymentMethod.VIPCard && selectedVipCard && Number(selectedVipCard.balance) < totalAmount) {
+            notificationService.error("Insufficient VIP Card balance")
+            return;
+        }
+
         const sale: AddSaleOrderModel = {
             customerName: "Quick Sale",
             paymentMethod,
+            idVipCard: selectedVipCard?.idVipCard ?? null,
             discountAmount: 0,
             notes: "Quick sale POS",
 
@@ -382,11 +464,18 @@ export function QuickSale() {
     }
 
 
-    function cancelOrder() {
+    async function cancelOrder() {
         if (orderItems.length === 0) return;
 
-        const confirmed = window.confirm("Cancel the current order ?")
-        if (!confirmed) return;
+        const ok = await dialogService.confirm(
+            "Cancel order",
+            "Are you sure you want to cancel this order?",
+            "Keep order",
+            "Cancel order"
+        )
+
+
+        if (ok) return;
 
         setOrderItems([]);
 
@@ -651,32 +740,123 @@ export function QuickSale() {
                         <div className="quick-sale-payment-section">
                             <label>Payment Method</label>
 
-                            <div className="quick-sale-payment-methods">
-                                <button type="button" className={
-                                    paymentMethod === PaymentMethod.Cash ? "active" : ""}
-                                    onClick={() => setPaymentMethod(PaymentMethod.Cash)}><FaMoneyBillWave /> Cash
-                                </button>
+                            {!isVipPayment ? (
 
-                                <button type="button" className={
-                                    paymentMethod === PaymentMethod.CreditCard ? "active" : ""
-                                }
-                                    onClick={() => { setPaymentMethod(PaymentMethod.CreditCard) }}><FaCreditCard /> Credit Card
-                                </button>
+                                <div className="quick-sale-payment-methods">
 
-                                <button type="button" className={
-                                    paymentMethod === PaymentMethod.Bit ? "active" : ""
-                                }
-                                    onClick={() => { setPaymentMethod(PaymentMethod.Bit) }}><FaMobileAlt /> Bit
-                                </button>
+                                    <button type="button"
+                                        className="vip-card"
+                                        onClick={() => setPaymentMethod(PaymentMethod.VIPCard)}>
+                                        <FaCreditCard />
+                                        VIP Card
+                                    </button>
 
-                                <button type="button" className={
-                                    paymentMethod === PaymentMethod.PayBox ? "active" : ""
-                                }
-                                    onClick={() => { setPaymentMethod(PaymentMethod.PayBox) }}><FaMobileAlt /> PayBox
-                                </button>
 
-                            </div>
+                                    <button type="button" className={
+                                        paymentMethod === PaymentMethod.Cash ? "active" : ""}
+                                        onClick={() => setPaymentMethod(PaymentMethod.Cash)}><FaMoneyBillWave />
+                                        Cash
+                                    </button>
+
+                                    <button type="button" className={
+                                        paymentMethod === PaymentMethod.CreditCard ? "active" : ""
+                                    }
+                                        onClick={() => { setPaymentMethod(PaymentMethod.CreditCard) }}><FaCreditCard /> Credit Card
+                                    </button>
+
+                                    <button type="button" className={
+                                        paymentMethod === PaymentMethod.Bit ? "active" : ""
+                                    }
+                                        onClick={() => { setPaymentMethod(PaymentMethod.Bit) }}><FaMobileAlt /> Bit
+                                    </button>
+
+                                    <button type="button" className={
+                                        paymentMethod === PaymentMethod.PayBox ? "active" : ""
+                                    }
+                                        onClick={() => { setPaymentMethod(PaymentMethod.PayBox) }}><FaMobileAlt /> PayBox
+                                    </button>
+
+                                </div>
+                            ) : (
+                                <button
+                                    type="button"
+                                    className="quick-sale-change-payment"
+                                    onClick={() => {
+                                        setPaymentMethod(PaymentMethod.Cash);
+                                        setSelectedVipCard(null);
+                                        setVipCardNumber("");
+                                    }}
+                                >
+                                    Change Payment Method
+                                </button>
+                            )}
+
+
+
+
+                            {paymentMethod === PaymentMethod.VIPCard && (
+                                <div className="quick-sale-vip-search">
+                                    <label>VIP Card Number</label>
+                                    <input
+                                        type="text"
+                                        placeholder="ENTER VIP Card Number"
+                                        value={vipCardNumber}
+                                        onChange={e => setVipCardNumber(e.target.value)}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={searchVipCard}>
+                                        Search
+                                    </button>
+                                </div>
+                            )}
                         </div>
+                        {selectedVipCard && (
+                            <div className="quick-sale-vip-info">
+
+                                {selectedVipCard && !vipVerified && (
+                                    <div className="quick-sale-vip-verify">
+                                        <label>
+                                            Enter last 4 digits of customer's phone
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            maxLength={4}
+                                            value={phoneLast4}
+                                            onChange={e => setPhoneLast4(e.target.value)}
+                                        />
+
+                                        <button
+                                            type="button"
+                                            onClick={verifyVipCard}
+                                        >
+                                            Verify
+                                        </button>
+                                    </div>
+                                )}
+
+                                <div>
+                                    <span>Customer</span>
+                                    <strong>
+                                        {selectedVipCard.firstName} {selectedVipCard.lastName}
+                                    </strong>
+                                </div>
+
+                                <div>
+                                    <span>Card Number</span>
+                                    <strong>{selectedVipCard.cardNumber}</strong>
+                                </div>
+
+                                <div>
+                                    <span>Balance</span>
+                                    <strong>
+                                        ₪{Number(selectedVipCard.balance).toFixed(2)}
+                                    </strong>
+                                </div>
+                            </div>
+                        )}
+
                         {paymentMethod === PaymentMethod.Cash && (
                             <div className="quick-sale-payment-cash">
                                 <label htmlFor="receivedAmount">
@@ -695,24 +875,24 @@ export function QuickSale() {
                                 <div className="quick-sale-change-row">
                                     <span>Change</span>
                                     <strong>
-                                         ₪{changeAmount.toFixed(2)}
+                                        ₪{changeAmount.toFixed(2)}
                                     </strong>
                                 </div>
                             </div>
                         )}
                         <div className="quick-sale-payment-actions">
                             <button type="button" className="quick-sale-payment-cancel"
-                            onClick={()=>{setIsPaymentOpen(false)}}
-                            disabled={isSubmitting}>
+                                onClick={() => { setIsPaymentOpen(false) }}
+                                disabled={isSubmitting}>
                                 Cancel
                             </button>
 
                             <button type="button" className="quick-sale-payment-confirm"
-                            onClick={completeSale}
-                            disabled={isSubmitting || (
-                                 paymentMethod === PaymentMethod.Cash &&
-                                Number(receivedAmount)< totalAmount)
-                            }
+                                onClick={completeSale}
+                                disabled={isSubmitting || (
+                                    paymentMethod === PaymentMethod.Cash &&
+                                    Number(receivedAmount) < totalAmount)
+                                }
                             >
                                 {isSubmitting ? "Processing" : "Confirm"}
                             </button>

@@ -15,6 +15,7 @@ import { notificationService } from "../../service/notificationService";
 import { ProductModel } from "../../models/product-model";
 import { productService } from "../../service/productService";
 import { supplierOrderService } from "../../service/supplierOrderService";
+import { dialogService } from "../../service/dialogService";
 
 export function AddSupplierOrder() {
 
@@ -54,16 +55,15 @@ export function AddSupplierOrder() {
     const [products, setProducts] =
         useState<ProductModel[]>([]);
 
-    // הספק שנבחר
+    
     const selectedSupplierId = watch("idSupplier");
 
-    // כל שורות המוצרים בטופס
-    // זה מאפשר לנו לדעת אילו מוצרים כבר נבחרו
+
     const selectedItems = watch("items");
 
     useEffect(() => {
 
-        // כאשר מחליפים ספק מוחקים את המוצרים הקודמים
+    
         replace([]);
 
         if (!selectedSupplierId) {
@@ -104,6 +104,22 @@ export function AddSupplierOrder() {
             });
 
     }, []);
+
+
+    async function removeItemFromOrder(index:number){
+        const ok = await dialogService.confirm(
+            "Remove Product",
+            "Are you sur you want to remove this product from this order?",
+            "Remove",
+            "Cancel"
+        )
+
+        if(!ok) return;
+
+        remove(index)
+    }
+
+
 
     async function send(order: AddSupplierOrderModel) {
 
@@ -247,8 +263,9 @@ export function AddSupplierOrder() {
                             step="0.01"
                             placeholder="Unit Cost"{...register(`items.${index}.unitCost`, { valueAsNumber: true, min: 0 })} />
 
-                        <button type="button" onClick={() => remove(index)}>
-                            X
+                        <button type="button"  onClick={() => removeItemFromOrder(index)} >
+                            
+                           🗑 Remove
                         </button>
 
                     </div>

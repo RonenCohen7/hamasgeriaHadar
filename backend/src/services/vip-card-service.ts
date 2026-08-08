@@ -49,10 +49,78 @@ class VipCardService {
     }
 
 
+    //Get 4 digits phone number from customer
+    public async verifyCardPhone(idVipCard: number, last4Digits: string): Promise<boolean> {
+
+        console.log("SERVICE");
+        console.log(idVipCard);
+        console.log(last4Digits);
+
+        const sql = `
+            SELECT 
+                c.phone
+            FROM vip_cards AS vc
+            JOIN customers AS c
+                ON vc.id_customer = c.id_customer
+            WHERE vc.id_vip_card =?
+        `;
+        const rows = await dal.execute(sql, [idVipCard]) as { phone: string | null }[];
+
+        console.log("rows =", rows);
+
+        const customer = rows[0];
+
+        console.log("customer =", customer);
+
+        if (!customer || !customer.phone) {
+            return false
+        }
+
+        const cleanPhone = (customer.phone ?? "").replace(/\D/g, "");
+        console.log("cleanPhone =", cleanPhone);
+        console.log("endsWith =", cleanPhone.endsWith(last4Digits));
 
 
+        return cleanPhone.endsWith(last4Digits)
+    }
 
+    //Get Card By Card Number
+    public async getCardByCardNumber(cardNumber: string): Promise<VipCardModel> {
+        const sql = `
+        SELECT
+            vc.id_vip_card AS idVipCard,
+            vc.card_number AS cardNumber,
+            vc.id_customer AS idCustomer,
+            vc.tier,
+            vc.external_card AS externalCard,
+            vc.balance,
+            vc.issued_at AS issuedAt,
+            vc.expires_at AS expiresAt,
+            vc.card_status AS cardStatus,
+            vc.created_at AS createdAt,
+            vc.updated_at AS updatedAt,
 
+            c.first_name AS firstName,
+            c.last_name AS lastName,
+            c.phone,
+            c.email
+
+        FROM vip_cards AS vc
+
+        JOIN customers AS c
+            ON vc.id_customer = c.id_customer
+
+        WHERE vc.card_number = ?
+        `;
+        const cards = await dal.execute(sql, [cardNumber]) as VipCardModel[];
+
+        const card = cards[0];
+
+        if (!card) {
+            throw new Error("VIP card not found");
+        }
+        return card;
+    }
 
     //Create New Card Vip;
     public async createVipCard(dto: CreateVipCardDto): Promise<VipCardModel> {
@@ -270,7 +338,7 @@ class VipCardService {
 
 
     //Recharge VIP card
-    public async rechargeBalance(idVipCard: number, amount: number): Promise<VipCardModel> {
+    public async rechargeBalance(idVipCard: number, amount: number, notes?: string): Promise<VipCardModel> {
 
         const createdBy = 1;
 
@@ -301,7 +369,7 @@ class VipCardService {
                 amount,
                 balanceBefore,
                 balanceAfter: updatedCard.balance,
-                notes: "VIP card recharge"
+                notes: notes ?? "VIP card recharge"
             },
             createdBy
         )
@@ -311,7 +379,7 @@ class VipCardService {
 
 
     // Charge Balance
-    public async chargeBalance(idVipCard: number, amount: number): Promise<VipCardModel> {
+    public async chargeBalance(idVipCard: number, amount: number, notes?: string): Promise<VipCardModel> {
         const createdBy = 1;
         if (amount <= 0) {
             throw new Error("Charge amount must be greater then zero.")
@@ -340,7 +408,7 @@ class VipCardService {
             amount,
             balanceBefore,
             balanceAfter: updatedCard.balance,
-            notes: "VIP card payment"
+            notes: notes ?? "VIP card payment"
         },
             createdBy
         );

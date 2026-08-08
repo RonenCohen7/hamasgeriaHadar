@@ -2,13 +2,14 @@
 import { PaymentMethod } from "./enum";
 
 export class AddSaleOrderItemModel {
-    idProduct!:number;
-    quantity!:number;
-    unitPrice!:number;
+    idProduct!: number;
+    quantity!: number;
+    unitPrice!: number;
 }
 
 export class AddSaleOrderModel {
     idEvent?: number | null;
+    idVipCard?: number | null;
     customerName?: string | null;
     paymentMethod?: PaymentMethod;
     discountAmount?: number;
@@ -18,22 +19,22 @@ export class AddSaleOrderModel {
 
 
 export class SaleOrderModel {
-    idSale!:number;
+    idSale!: number;
     saleNumber!: string;
-    idEvent!:number | null;
+    idEvent!: number | null;
     createdBy!: number;
-    customerName!:string | null;
+    customerName!: string | null;
     saleDate!: Date;
     saleStatus!: string;
     paymentMethod!: PaymentMethod;
-    subtotal!:number;
-    discountAmount!:number;
+    subtotal!: number;
+    discountAmount!: number;
     totalAmount!: number;
-    notes!:string;
-    createdAt!:Date;
-    updatedAt!:Date;
+    notes!: string;
+    createdAt!: Date;
+    updatedAt!: Date;
 
-    eventName?: string| null;
+    eventName?: string | null;
     createdByName?: string;
 
 }

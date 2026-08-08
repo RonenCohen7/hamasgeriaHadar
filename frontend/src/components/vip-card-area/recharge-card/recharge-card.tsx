@@ -4,6 +4,7 @@ import { useTitle } from "../../utils/UseTitle";
 import { useState } from "react";
 import { notificationService } from "../../service/notificationService";
 import { vipCardService } from "../../service/vipCardService";
+import { dialogService } from "../../service/dialogService";
 
 
 
@@ -30,10 +31,22 @@ export function RechargeCard() {
             return;
         }
 
-        if (!Number.isInteger(rechargeAmount) || rechargeAmount <= 0) {
+        if (Number.isNaN(rechargeAmount) || rechargeAmount <= 0) {
             notificationService.error("Amount must be a greater then zero");
             return;
         }
+
+        const ok = await dialogService.confirm(
+            "Recharge VIP Card",
+            `Recharge  ₪${rechargeAmount.toFixed(2)} to this VIP Card`,
+            "Recharge",
+            "Cancel"
+        )
+
+        if (!ok) {
+            return
+        }
+
 
         try {
             setIsSaving(true);
@@ -89,13 +102,13 @@ export function RechargeCard() {
 
                 <div className="recharge-actions">
 
-                    <button 
+                    <button
                         type="button"
                         className="recharge-cancel-button"
-                        onClick={()=> navigate(-1)}
-                        >
-                            ⬅ Back
-                        </button>
+                        onClick={() => navigate(-1)}
+                    >
+                        ⬅ Back
+                    </button>
 
 
                     <button

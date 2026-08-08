@@ -19,7 +19,120 @@
     background: #f4f7fa;
 }
 
+.quick-sale-vip-search {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    margin-top: 14px;
+    padding: 14px;
+    border: 2px solid gold;
+    border-radius: 14px;
+    background: white;
+}
+.quick-sale-vip-verified {
+    margin-bottom: 12px;
+    padding: 12px 14px;
+    border: 1px solid #9ed6ad;
+    border-radius: 10px;
+    background: #eefaf1;
+    color: #167a35;
+    font-weight: 800;
+    text-align: center;
+}
+.quick-sale-vip-search label {
+    grid-column: 1 / -1;
+    font-weight: 700;
+    color: #173b4d;
+}
 
+.quick-sale-vip-search input {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid hsl(204, 6%, 50%);
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+}
+
+.quick-sale-vip-search input:focus {
+    border-color: #0f7f9d;
+    box-shadow: 0 0 0 3px rgba(15, 127, 157, 0.12);
+}
+
+.quick-sale-vip-search button {
+    border: none;
+    border-radius: 10px;
+    padding: 0 18px;
+    font-weight: 700;
+    cursor: pointer;
+    background: #0f7f9d;
+    color: white;
+}
+
+.quick-sale-vip-info {
+    margin-top: 12px;
+    padding: 14px;
+    border: 1px solid #cce8d5;
+    border-radius: 14px;
+    background: #f2fbf5;
+    display: grid;
+    gap: 10px;
+}
+
+.quick-sale-vip-info > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+}
+.quick-sale-payment-methods .vip-card {
+    background: linear-gradient(
+        135deg,
+        #b8860b,
+        #d4af37,
+        #f4d675
+    );
+    color: #2d2400;
+    border: 1px solid #c89f2d;
+    font-weight: 800;
+    box-shadow: 0 8px 18px rgba(196, 154, 24, 0.18);
+}
+
+.quick-sale-payment-methods .vip-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(196, 154, 24, 0.28);
+}
+
+.quick-sale-change-payment {
+    width: 100%;
+    margin: 6px 0 14px;
+    padding: 11px 14px;
+
+    border: 1px solid #d6e1ea;
+    border-radius: 10px;
+
+    background: #2b8ced49;
+    color: #173b4d;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.quick-sale-change-payment:hover {
+    background: #eef4f8;
+    border-color: #b9ccd9;
+    transform: translateY(-1px);
+}
+.quick-sale-vip-info span {
+    color: #60798a;
+    font-size: 13px;
+}
+
+.quick-sale-vip-info strong {
+    color: #173b4d;
+}
 /* =========================================================
    LEFT AND RIGHT PANELS
 ========================================================= */
@@ -924,8 +1037,8 @@
 .quick-sale-payment-methods button.active {
     border-color: #066c8e;
 
-    background: #066c8e;
-    color: #ffffff;
+    background: #f9fbfd;
+    color: #17324a;
 
     box-shadow:
         0 8px 18px rgba(6, 108, 142, 0.22);

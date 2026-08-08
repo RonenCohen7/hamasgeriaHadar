@@ -30,6 +30,7 @@ import { SearchCustomer } from "../../customers-area/search-customer/search-cust
 import { CardDetails } from "../../vip-card-area/card-details/card-details";
 import { RechargeCard } from "../../vip-card-area/recharge-card/recharge-card";
 import { TransactionsPage } from "../../vip-card-area/transactions-page/transactions-page";
+import { EditCard } from "../../vip-card-area/edit-card/edit-card";
 
 export function Routing() {
     return (
@@ -97,6 +98,8 @@ export function Routing() {
             <Route path="/vip-cards/:idVipCard/recharge" element={<RechargeCard/>}/>
 
             <Route path="/vip-cards/:idVipCard/transactions" element={<TransactionsPage/>}/>
+
+            <Route path="/vip-cards/:idVipCard/edit" element={<EditCard/>}/>
             
 
             <Route path="*" element={<h2>Page Not Found</h2>} />

@@ -8,6 +8,7 @@ import { notificationService } from "../../service/notificationService";
 import { FaArrowLeft, FaEdit, FaEnvelope, FaMapMarkedAlt, FaPhone, FaTrash } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../redux/inventory-store";
+import { dialogService } from "../../service/dialogService";
 
 export function SupplierDetails() {
 
@@ -34,9 +35,14 @@ export function SupplierDetails() {
 
     async function deleteSupplier() {
         if (!supplier) return;
-        const answer = window.confirm(`Delete "${supplier.supplierName}"?`);
+        const ok = await dialogService.confirm(
+            "Delete supplier",
+            `Are you sure you want to delete "${supplier.idSupplier}" ?`,
+            "Delete",
+            "Cancel"
+        );
 
-        if (!answer) return;
+        if (!ok) return;
 
         try {
             await supplierService.deleteSupplier(Number(supplier.idSupplier))

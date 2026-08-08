@@ -22,6 +22,21 @@ class VipCardService {
         return response.data;
     }
 
+
+    // get verify 4 digits card Customer
+    public async verifyCardPhone(idVipCard: number,last4Digits:string):Promise<boolean>{
+        const response = await axios.post<{verified: boolean}>(`${appConfig.vipCardsUrl}/${idVipCard}/verify-phone`,{
+            last4Digits
+        })
+        return response.data.verified;
+    }
+
+    //Get card by card number
+    public async getCardByCardNumber(cardNumber:string):Promise<VipCardModel>{
+        const response = await axios.get<VipCardModel>(`${appConfig.vipCardsUrl}/number/${cardNumber}`);
+        return response.data;
+    }
+
     //Create Vip Card
     public async createCard(idCustomer: number, cardNumber?: string | null): Promise<VipCardModel> {
 
@@ -61,6 +76,22 @@ class VipCardService {
         return response.data;
     }
 
+
+
+    //Get VIP card By Card ID
+    public async getCardById(id:number):Promise<VipCardModel>{
+        const response = await axios.get<VipCardModel>(`${appConfig.vipCardsUrl}/${id}`)
+        return response.data;
+    }
+
+
+
+    //Update VIP Card
+    public async updateVipCard(idVipCard:number,card:Partial<VipCardModel>):Promise<VipCardModel> {
+        const response = await axios.put<VipCardModel>(`${appConfig.vipCardsUrl}/${idVipCard}`, card);
+        return response.data;
+        
+    }
 
 
     //Get All Transactions By Vip Card

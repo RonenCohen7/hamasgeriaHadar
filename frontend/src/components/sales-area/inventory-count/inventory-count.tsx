@@ -12,6 +12,7 @@ import { FaFileExcel, FaFilePdf } from "react-icons/fa";
 import * as XLSX from "xlsx";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
+import { dialogService } from "../../service/dialogService";
 
 
 
@@ -59,8 +60,14 @@ export function InventoryCount() {
             notificationService.error("No inventory changes to save")
             return;
         }
-        const approved = window.confirm(`Save inventory changes for ${changedProducts.length} products?`)
-        if (!approved) return;
+        const ok = await dialogService.confirm(
+            "Save Changes",
+            (`Save inventory changes for ${changedProducts.length} products?`),
+            "Save",
+            "Cancel"
+        );
+
+        if (!ok) return;
         try {
 
             setIsSaving(true)

@@ -21,6 +21,9 @@ export class SaleOrderModel {
 export class AddSaleOrderDto {
     saleNumber!: string;
     idEvent?: number | null;
+
+    idVipCard?: number | null;
+
     customerName?: string;
     paymentMethod?: PaymentMethod;
     discountAmount?: number;

@@ -46,19 +46,24 @@ class SaleOrderController {
     }
 
     //Add Sale
-    private async addSale(request:Request, response:Response, next:NextFunction):Promise<void>{
-        try{
+    private async addSale(request: Request, response: Response, next: NextFunction): Promise<void> {
+        try {
 
-            const sale:AddSaleOrderDto = request.body;
 
+            const sale: AddSaleOrderDto = request.body;
+            console.log("SALE:");
+            console.log(sale);
+            console.log("paymentMethod =", sale.paymentMethod);
+            console.log("sale =", sale);
             const addSale = await saleOrderService.addSale(sale);
-            response.status(200).json(sale);
+            response.status(201).json(addSale);
 
-        }catch(err:any){
+        } catch (err: any) {
+            console.error(err);
             next(err);
         }
     }
 
- }
+}
 
- export const saleOrderController = new SaleOrderController();
+export const saleOrderController = new SaleOrderController();

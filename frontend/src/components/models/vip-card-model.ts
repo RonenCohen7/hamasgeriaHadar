@@ -14,9 +14,9 @@ export type VipCardStatus =
 export class VipCardModel {
     idVipCard!: number;
 
-    cardNumber!: number;
+    cardNumber!: string;
 
-    idCustomer!: Number;
+    idCustomer!: number;
 
     tier!: VipTir;
 
@@ -42,7 +42,7 @@ export class VipCardModel {
 
     email!: string | null;
 
-    datOfBirth!: string | null
+    dateOfBirth!: string | null
 
     isActive!:boolean;
 }

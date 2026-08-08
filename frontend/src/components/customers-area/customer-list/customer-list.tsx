@@ -1,16 +1,15 @@
 import { useEffect } from "react";
-
 import "./customer-list.css";
-
-
 import { customerService } from "../../service/customerService";
-
 import { CustomerCard } from "../customer-card/customer-card";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../redux/inventory-store";
 import { removeCustomerFromStore, setCustomers } from "../../redux/customer-slice";
-
 import { notificationService } from "../../service/notificationService";
+import { dialogService } from "../../service/dialogService";
+
+
+
 
 export function CustomerList() {
     const dispatch = useDispatch<AppDispatch>();
@@ -18,7 +17,17 @@ export function CustomerList() {
     const customers = useSelector((state: RootState) => state.customers.items);
 
     const DeleteCustomer = async(id:number) => {
-        const ok = window.confirm("Delete this customer");
+        const ok = await dialogService.confirm(
+            "Delete Customer",
+            "Are you sure you want to delete this customer?",
+            "Delete",
+            "Cancel"
+        )
+
+
+
+
+
         if(!ok) return;
         try {
 

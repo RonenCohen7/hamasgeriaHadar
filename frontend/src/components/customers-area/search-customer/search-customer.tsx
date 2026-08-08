@@ -7,6 +7,7 @@ import { useTitle } from "../../utils/UseTitle";
 import { customerService } from "../../service/customerService";
 import { notificationService } from "../../service/notificationService";
 import { CustomerCard } from "../customer-card/customer-card";
+import { dialogService } from "../../service/dialogService";
 
 export function SearchCustomer() {
 
@@ -50,11 +51,14 @@ export function SearchCustomer() {
     }
 
     async function deleteCustomer(id: number) {
-        const confirmed = window.confirm(
-            "Delete this customer?"
+        const ok  =  await dialogService.confirm(
+            "Delete customer",
+            "Are you sure you want to delete this customer?",
+            "Delete",
+            "Cancel"
         );
 
-        if (!confirmed) return;
+        if (!ok) return;
 
         try {
             await customerService.deleteCustomer(id);

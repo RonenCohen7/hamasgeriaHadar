@@ -7,6 +7,7 @@ import { productService } from "../../service/productService";
 import { notificationService } from "../../service/notificationService";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../redux/inventory-store";
+import { dialogService } from "../../service/dialogService";
 
 
 
@@ -57,7 +58,12 @@ export function ProductDetails() {
 
     async function deleteCurrentProduct() {
         if (!product) return;
-        const ok = window.confirm(`Delete "${product.productName}`);
+        const ok = await dialogService.confirm(
+            "Delete product",
+            "Are you sure you want to delete this product",
+            "Delete",
+            "Cancel"
+        );
         if (!ok) return;
         try {
             await productService.deleteProduct(product.idProduct);
