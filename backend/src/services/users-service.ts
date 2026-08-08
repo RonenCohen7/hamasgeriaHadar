@@ -18,6 +18,26 @@ class UserService {
 
         const hashedPassword = await bcrypt.hash(user.password, 12);
 
+        //Add data to account table
+        const accountSql = `
+            INSERT INTO accounts (
+            email,
+            password,
+            account_type,
+            is_active
+            )
+            VALUES(?,?,?,?)
+        `;
+
+        const accountInfo = await dal.execute(accountSql,[
+            user.email,
+            hashedPassword,
+            "employee",
+            true
+        ]) as OkPacketParams;
+        const idAccount = Number(accountInfo.insertId);
+
+        //Add data to Users table
         const sql = `
             INSERT INTO users(
                 first_name,
@@ -25,9 +45,10 @@ class UserService {
                 email,
                 password,
                 role,
-                is_active
+                is_active,
+                id_account
             )
-            VALUES (?, ?, ?, ?, ?,?)
+            VALUES (?, ?, ?, ?, ?,?,?)
         `;
 
         const values = [
@@ -36,7 +57,8 @@ class UserService {
             user.email,
             hashedPassword,
             user.role,
-            true
+            true,
+            idAccount
         ];
 
         const info =
@@ -49,6 +71,7 @@ class UserService {
             email: user.email,
             role: user.role,
             isActive: true,
+            idAccount,
             createdAt: new Date()
         };
 
@@ -68,6 +91,7 @@ class UserService {
                 password,
                 role,
                 is_active As isActive,
+                id_account,
                 created_at As createdAt,
                 updated_at As updateAt
             FROM users
@@ -89,6 +113,7 @@ class UserService {
             email: user.email,
             role: user.role,
             isActive: user.isActive,
+            idAccount: user.idAccount,
             createdAt: user.createdAt
         };
         const token = jwt.sign(

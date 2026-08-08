@@ -21,7 +21,7 @@ class UserController {
 
     public constructor() {
 
-        this.router.post("/api/users/register",authLimiter, this.registerUser);
+        this.router.post("/api/users/register",authLimiter,verifyToken,allowRoles("admin"), this.registerUser);
         this.router.post("/api/users/login",authLimiter, this.login);
 
 

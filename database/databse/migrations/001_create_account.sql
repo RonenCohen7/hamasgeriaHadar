@@ -1,0 +1,13 @@
+USE pub_management;
+
+CREATE TABLE accounts (
+    id_account INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(200) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    account_type ENUM('employee', 'customer') NOT NULL,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL
+        DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP
+);

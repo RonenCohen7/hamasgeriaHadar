@@ -10,7 +10,7 @@ import { UserRole } from "../../models/enum";
 export function Register() {
 
 
-    const Title = useTitle("Register");
+    const title = useTitle("Register");
     const navigate = useNavigate();
 
     const { register, handleSubmit,reset, formState: { errors } } = useForm<RegisterUserDto>();

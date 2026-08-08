@@ -10,6 +10,7 @@ export class UserModel {
     isActive!: boolean;
     createdAt!: Date;
     updatedAt!: Date;
+    idAccount!:number;
 }
 
 export class RegisterUserDto {
@@ -32,15 +33,22 @@ export class UpdatedUserDto {
     password?: string;
     role?: UserRole;
     isActive?: boolean;
+    idAccount!:number;
 }
 
 export class SafeUserModel {
     idUser!: number;
+    idAccount!: number;
+
     firstName!: string;
     lastName!: string;
+    
     email!: string;
+    
     role!: UserRole;
+    
     isActive!: boolean;
+    
     createdAt!: Date;
 }
 
