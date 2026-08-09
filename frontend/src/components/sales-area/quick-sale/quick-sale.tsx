@@ -176,10 +176,10 @@ export function QuickSale() {
     }, [liveInventory]);
 
 
-    useEffect(()=>{
+    useEffect(() => {
         const saveDraft = sessionStorage.getItem("quickSaleDraft")
 
-        if(!saveDraft) return;
+        if (!saveDraft) return;
 
         const draft = JSON.parse(saveDraft);
 
@@ -190,10 +190,25 @@ export function QuickSale() {
         setPhoneLast4(draft.phoneLast4 ?? "");
         setVipVerified(draft.vipVerified ?? false);
 
+        if(draft.vipCardNumber) {
+            vipCardService
+                .getCardByCardNumber(draft.vipCardNumber)
+                .then(card => {
+                    setSelectedVipCard(card)
+                })
+                .catch(err => {
+                    console.error(err);
+                    setSelectedVipCard(null);
+                })
+        }
+
         sessionStorage.removeItem("quickSaleDraft")
+        setShowRechargeDialog(false);
+        setMissingAmount(0);
+        
 
 
-    },[]);
+    }, []);
 
 
     async function verifyVipCard() {
@@ -957,14 +972,21 @@ export function QuickSale() {
                                             vipVerified
                                         })
                                     )
-                                    navigate(`/vip-cards/${selectedVipCard?.idVipCard}/recharge`)
-                                    
+                                    navigate(
+                                        `/vip-cards/${selectedVipCard?.idVipCard}/recharge`,
+                                        {
+                                            state: {
+                                                returnTo: "/quick-sale"
+                                            }
+                                        }
+                                    );
+
                                 }}
                             />
                         )}
 
                     </div>
-                 
+
 
 
                 </div>

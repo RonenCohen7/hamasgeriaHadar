@@ -120,14 +120,14 @@ export function Menu() {
                         >
                             💳
                         </NavLink>
-
-                        <NavLink
+                        
+                        {customer?.hasVipCard && (<NavLink
                             to="/transactions"
                             className="menu-link"
                             data-tooltip="My Transactions"
                         >
                             📋
-                        </NavLink>
+                        </NavLink>)}
 
 
                     </>

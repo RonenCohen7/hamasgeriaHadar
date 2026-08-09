@@ -6,7 +6,7 @@ import { notificationService } from "../../service/notificationService";
 import { vipCardService } from "../../service/vipCardService";
 import { dialogService } from "../../service/dialogService";
 
-
+import { useLocation } from "react-router-dom";
 
 
 
@@ -20,7 +20,8 @@ export function RechargeCard() {
     const [amount, setAmount] = useState("")
     const [notes, setNotes] = useState("");
     const [isSaving, setIsSaving] = useState(false);
-
+    const location  = useLocation();
+    
 
     async function recharge() {
         const cardId = Number(idVipCard);
@@ -59,9 +60,12 @@ export function RechargeCard() {
 
             notificationService.success("VIP card recharged successfully")
 
-            // navigate(`/vip-cards/customer/${card.idCustomer}`);
+            const returnTo = location.state?.returnTo ?? 
+            `/vip-cards/customer/${card.idCustomer}`
 
-            navigate("/quick-sale");
+            navigate(returnTo);
+
+            // navigate("/quick-sale");
 
         } catch (err: any) {
             notificationService.error(err)

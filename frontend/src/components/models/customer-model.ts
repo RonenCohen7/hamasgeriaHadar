@@ -42,6 +42,7 @@ export class CustomerRegisterDto {
     email!:string;
     password!:string;
     phone!: string;
+    dateOfBirth!: string | null
 }
 
 
@@ -54,7 +55,9 @@ export class CustomerAuthResponseModel {
         lastName: string;
         email:string;
         phone:string;
+        tier: string | null;
         isActive:boolean;
+        hasVipCard: boolean;
         createdAt:Date;
     }
 }

@@ -1,18 +1,120 @@
-.CustomerLogin {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.customer-login-page {
+    width: 100%;
     min-height: 85vh;
+
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(420px, .9fr);
+
     background: #f5f7fa;
 }
 
-.customer-login-card {
-    width: 430px;
-    background: white;
-    border-radius: 16px;
-    padding: 35px;
-    box-shadow: 0 10px 35px rgba(0,0,0,.12);
+/* ===========================
+   HERO
+=========================== */
+
+.customer-login-hero {
+    position: relative;
+    overflow: hidden;
 }
+
+.customer-login-hero img {
+    width: 100%;
+    height: 100%;
+    display: block;
+
+    object-fit: cover;
+
+    transform: scale(1.02);
+
+    filter:
+        saturate(1.08)
+        contrast(1.04);
+
+    transition:
+        transform .8s ease,
+        filter .8s ease;
+}
+
+.customer-login-hero:hover img {
+    transform: scale(1.06);
+
+    filter:
+        brightness(1.05)
+        saturate(1.15);
+}
+
+.customer-login-hero-overlay {
+    position: absolute;
+    inset: 0;
+
+    background: linear-gradient(
+        90deg,
+        rgba(15,23,42,.08),
+        rgba(15,23,42,.22)
+    );
+}
+
+/* ===========================
+   PANEL
+=========================== */
+
+.customer-login-panel {
+
+    position: relative;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 50px;
+
+    background:
+        radial-gradient(circle at top right, rgba(245,179,1,.10), transparent 35%),
+        radial-gradient(circle at bottom left, rgba(217,119,6,.08), transparent 40%),
+        #f7f8fb;
+}
+
+/* ===========================
+   CARD
+=========================== */
+
+.customer-login-card {
+
+    width: min(100%,430px);
+
+    padding: 36px;
+
+    border: 1px solid rgba(255,255,255,.55);
+    border-radius: 22px;
+
+    background: rgba(255,255,255,.72);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    box-shadow:
+        0 18px 45px rgba(15,23,42,.14),
+        0 0 40px rgba(245,179,1,.08);
+
+    animation: loginFade .7s ease;
+}
+
+@keyframes loginFade {
+
+    from {
+        opacity: 0;
+        transform: translateY(35px) scale(.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ===========================
+   HEADER
+=========================== */
 
 .customer-login-header {
     text-align: center;
@@ -20,111 +122,245 @@
 }
 
 .customer-login-badge {
+
     display: inline-block;
-    background: #1976d2;
+
+    padding: 8px 18px;
+    margin-bottom: 18px;
+
+    border-radius: 30px;
+
+    background: linear-gradient(
+        135deg,
+        #b8860b,
+        #f2c14e
+    );
+
     color: white;
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: .8rem;
-    font-weight: bold;
-    margin-bottom: 15px;
+
+    font-size: .82rem;
+    font-weight: 700;
+
+    letter-spacing: .5px;
+
+    box-shadow: 0 6px 20px rgba(212,160,23,.25);
 }
 
 .customer-login-header h1 {
-    margin: 0;
-    color: #1d3557;
+
+    margin: 0 0 12px;
+
+    color: #17324a;
+
+    font-size: 40px;
+    font-weight: 800;
 }
 
 .customer-login-header p {
-    color: #666;
-    margin-top: 10px;
-    line-height: 1.6;
+
+    color: #64748b;
+    line-height: 1.7;
 }
+
+/* ===========================
+   FIELDS
+=========================== */
+
 .customer-login-field {
+
     display: flex;
     flex-direction: column;
+
     gap: 8px;
-    margin-bottom: 18px;
-}
-.customer-login-field {
-    margin-bottom: 24px;
-}
-.customer-login-field input {
-    width: 100%;
-    box-sizing: border-box;
-}
-.customer-login-field {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 18px;
+
+    margin-bottom: 20px;
 }
 
 .customer-login-field label {
-    margin-bottom: 6px;
-    font-weight: 600;
-    color: #444;
+
+    font-weight: 700;
+    color: #334155;
 }
 
 .customer-login-field input {
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 14px 16px;
+
+    border: 1px solid #d4dde7;
+    border-radius: 10px;
+
+    background: rgba(255,255,255,.75);
+
     font-size: 15px;
-    transition: .25s;
+
+    transition:
+        border-color .3s,
+        box-shadow .3s,
+        transform .3s;
+}
+
+.customer-login-field input:hover {
+    border-color: #d4a017;
 }
 
 .customer-login-field input:focus {
+
     outline: none;
-    border-color: #1976d2;
-    box-shadow: 0 0 0 3px rgba(25,118,210,.15);
+
+    transform: translateY(-2px);
+
+    border-color: #d4a017;
+
+    box-shadow:
+        0 0 0 4px rgba(212,160,23,.15),
+        0 8px 20px rgba(0,0,0,.08);
 }
 
+/* ===========================
+   BUTTON
+=========================== */
+
 .login-button {
+
     width: 100%;
-    padding: 13px;
-    margin-top: 10px;
+
+    padding: 14px;
+
     border: none;
-    border-radius: 8px;
-    background: #1976d2;
-    color: white;
+    border-radius: 12px;
+
+    background: linear-gradient(
+        135deg,
+        #c9972b,
+        #f2c14e
+    );
+
+    color: #1f2937;
+
     font-size: 16px;
-    font-weight: bold;
+    font-weight: 700;
+
     cursor: pointer;
-    transition: .25s;
+
+    transition:
+        transform .3s,
+        box-shadow .3s;
 }
-.employee-access {
-    margin-top: 18px;
+
+.login-button:hover {
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 14px 35px rgba(201,151,43,.35);
+}
+
+.login-button:active {
+    transform: scale(.98);
+}
+
+/* ===========================
+   LINKS
+=========================== */
+
+.customer-login-footer {
+
+    margin-top: 24px;
+
     text-align: center;
+
+    color: #475569;
+}
+
+.customer-login-footer button {
+
+    border: none;
+    background: transparent;
+
+    color: #2563eb;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.customer-login-footer button:hover {
+    text-decoration: underline;
+}
+
+.employee-access {
+
+    margin-top: 16px;
+
+    text-align: center;
+
     color: #64748b;
+
     font-size: 14px;
 }
 
 .employee-access button {
+
     margin-left: 8px;
-    background: transparent;
+
     border: none;
+    background: transparent;
+
     color: #2563eb;
-    font-weight: 600;
+
+    font-weight: 700;
+
     cursor: pointer;
-    text-decoration: underline;
 }
 
 .employee-access button:hover {
-    color: #1d4ed8;
-}
-.login-button:hover {
-    background: #1565c0;
+    text-decoration: underline;
 }
 
-.customer-login-footer {
-    margin-top: 25px;
-    text-align: center;
+/* ===========================
+   MOBILE
+=========================== */
+
+@media (max-width:900px) {
+
+    .customer-login-page {
+        grid-template-columns: 1fr;
+    }
+
+    .customer-login-hero {
+        height: 280px;
+    }
+
+    .customer-login-panel {
+        padding: 24px 18px 34px;
+    }
+
+    .customer-login-card {
+        width: 100%;
+        padding: 28px;
+    }
+
+    .customer-login-header h1 {
+        font-size: 32px;
+    }
+
 }
 
-.customer-login-footer button {
-    border: none;
-    background: transparent;
-    color: #1976d2;
-    cursor: pointer;
-    font-weight: bold;
+@media (max-width:600px) {
+
+    .customer-login-hero {
+        height: 220px;
+    }
+
+    .customer-login-card {
+        padding: 22px;
+    }
+
+    .customer-login-header h1 {
+        font-size: 28px;
+    }
+
 }

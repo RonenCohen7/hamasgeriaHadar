@@ -1,3 +1,502 @@
-.CustomerDashboard {
-	
+.customer-dashboard {
+    width: min(100%, 1280px);
+    margin: 0 auto;
+
+    padding: 34px 22px 50px;
+}
+
+/* ===========================
+   HEADER
+=========================== */
+
+.customer-dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+
+    margin-bottom: 34px;
+    padding: 28px 30px;
+
+    border: 1px solid #dbe7ef;
+    border-radius: 22px;
+
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(245,179,1,.13),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #f7fbfd
+        );
+
+    box-shadow:
+        0 16px 38px rgba(22,50,74,.10);
+}
+
+.dashboard-welcome {
+    display: inline-block;
+
+    margin-bottom: 8px;
+
+    color: #c58c12;
+
+    font-size: 12px;
+    font-weight: 900;
+
+    letter-spacing: 1.8px;
+}
+
+.customer-dashboard-header h1 {
+    margin: 0 0 10px;
+
+    color: #17324a;
+
+    font-size: clamp(30px, 4vw, 42px);
+    font-weight: 900;
+}
+
+.customer-dashboard-header p {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+/* ===========================
+   VIP STATUS
+=========================== */
+
+.dashboard-vip-status {
+    flex-shrink: 0;
+
+    padding: 10px 16px;
+
+    border-radius: 999px;
+
+    font-size: 13px;
+    font-weight: 900;
+}
+
+.dashboard-vip-status.vip {
+    border: 1px solid #e4b73c;
+
+    background: linear-gradient(
+        135deg,
+        #fff4c4,
+        #f5c451
+    );
+
+    color: #6f4b00;
+
+    box-shadow:
+        0 7px 20px rgba(212,160,23,.22);
+}
+
+.dashboard-vip-status.no-vip {
+    border: 1px solid #cbd5e1;
+
+    background: #f1f5f9;
+
+    color: #64748b;
+}
+
+/* ===========================
+   SECTIONS
+=========================== */
+
+.dashboard-section {
+    margin-bottom: 38px;
+}
+
+.dashboard-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+
+    margin-bottom: 18px;
+}
+
+.dashboard-section-header span {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #c58c12;
+
+    font-size: 11px;
+    font-weight: 900;
+
+    letter-spacing: 1.7px;
+}
+
+.dashboard-section-header h2 {
+    margin: 0;
+
+    color: #17324a;
+
+    font-size: 26px;
+    font-weight: 900;
+}
+
+/* ===========================
+   OFFERS
+=========================== */
+
+.dashboard-offers-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.dashboard-offer-card {
+    padding: 22px;
+
+    border: 1px solid #dbe7ef;
+    border-radius: 18px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 10px 26px rgba(22,50,74,.08);
+
+    transition:
+        transform .22s ease,
+        box-shadow .22s ease,
+        border-color .22s ease;
+}
+
+.dashboard-offer-card:hover {
+    transform: translateY(-5px);
+
+    border-color: #e5c066;
+
+    box-shadow:
+        0 18px 34px rgba(22,50,74,.13);
+}
+
+.dashboard-offer-icon {
+    width: 48px;
+    height: 48px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 16px;
+
+    border-radius: 14px;
+
+    background: #fff6db;
+
+    font-size: 25px;
+}
+
+.dashboard-offer-card h3 {
+    margin: 0 0 8px;
+
+    color: #17324a;
+
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.dashboard-offer-card p {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* ===========================
+   EVENTS
+=========================== */
+
+.dashboard-events-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.dashboard-event-card {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    padding: 20px;
+
+    border: 1px solid #dbe7ef;
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #fbfcfd
+        );
+
+    box-shadow:
+        0 10px 26px rgba(22,50,74,.08);
+
+    transition:
+        transform .22s ease,
+        box-shadow .22s ease;
+}
+
+.dashboard-event-card:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 18px 34px rgba(22,50,74,.12);
+}
+
+.dashboard-event-date {
+    width: 72px;
+    min-width: 72px;
+    height: 72px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #17324a,
+            #087ea4
+        );
+
+    color: white;
+
+    box-shadow:
+        0 8px 18px rgba(8,126,164,.20);
+}
+
+.dashboard-event-date strong {
+    font-size: 24px;
+    line-height: 1;
+}
+
+.dashboard-event-date span {
+    margin-top: 5px;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+.dashboard-event-card h3 {
+    margin: 0 0 6px;
+
+    color: #17324a;
+
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.dashboard-event-card p {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* ===========================
+   ACTIVITIES
+=========================== */
+
+.dashboard-activities-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.dashboard-activity-card {
+    position: relative;
+
+    min-height: 320px;
+
+    overflow: hidden;
+
+    border-radius: 22px;
+
+    box-shadow:
+        0 16px 36px rgba(15,23,42,.16);
+
+    cursor: pointer;
+}
+
+.dashboard-activity-card img {
+    width: 100%;
+    height: 100%;
+
+    position: absolute;
+    inset: 0;
+
+    object-fit: cover;
+
+    transition:
+        transform .7s ease,
+        filter .7s ease;
+}
+
+.dashboard-activity-card:hover img {
+    transform: scale(1.07);
+
+    filter:
+        brightness(.92)
+        saturate(1.1);
+}
+
+.dashboard-activity-overlay {
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
+    padding: 26px;
+
+    background:
+        linear-gradient(
+            180deg,
+            transparent 35%,
+            rgba(5,12,20,.82) 100%
+        );
+
+    color: white;
+}
+
+.dashboard-activity-overlay h3 {
+    margin: 0 0 8px;
+
+    font-size: 24px;
+    font-weight: 900;
+}
+
+.dashboard-activity-overlay p {
+    max-width: 420px;
+    margin: 0;
+
+    color: rgba(255,255,255,.88);
+
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* ===========================
+   TABLET
+=========================== */
+
+@media (max-width: 1000px) {
+
+    .dashboard-offers-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .dashboard-activities-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-activity-card {
+        min-height: 300px;
+    }
+}
+
+/* ===========================
+   MOBILE
+=========================== */
+
+@media (max-width: 700px) {
+
+    .customer-dashboard {
+        padding: 20px 14px 34px;
+    }
+
+    .customer-dashboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+
+        padding: 22px 18px;
+    }
+
+    .customer-dashboard-header h1 {
+        font-size: 30px;
+    }
+
+    .dashboard-vip-status {
+        align-self: flex-start;
+    }
+
+    .dashboard-offers-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-events-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-event-card {
+        align-items: flex-start;
+    }
+
+    .dashboard-section-header h2 {
+        font-size: 22px;
+    }
+
+    .dashboard-activity-card {
+        min-height: 250px;
+    }
+
+    .dashboard-activity-overlay {
+        padding: 20px;
+    }
+
+    .dashboard-activity-overlay h3 {
+        font-size: 21px;
+    }
+}
+
+/* ===========================
+   SMALL MOBILE
+=========================== */
+
+@media (max-width: 480px) {
+
+    .dashboard-event-card {
+        gap: 14px;
+        padding: 16px;
+    }
+
+    .dashboard-event-date {
+        width: 62px;
+        min-width: 62px;
+        height: 62px;
+    }
+
+    .dashboard-event-date strong {
+        font-size: 21px;
+    }
+
+    .dashboard-offer-card {
+        padding: 18px;
+    }
+
+    .dashboard-activity-card {
+        min-height: 220px;
+    }
 }

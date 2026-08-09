@@ -1,0 +1,481 @@
+.customer-register-page {
+    width: 100%;
+    min-height: 85vh;
+
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(460px, 0.95fr);
+
+    background: #f5f7fa;
+}
+
+/* ===========================
+   HERO
+=========================== */
+
+.customer-register-hero {
+    position: relative;
+    overflow: hidden;
+    min-height: 100%;
+}
+
+.customer-register-hero img {
+    width: 100%;
+    height: 100%;
+    display: block;
+
+    object-fit: cover;
+
+    transform: scale(1.02);
+
+    filter:
+        saturate(1.08)
+        contrast(1.05);
+
+    transition:
+        transform .8s ease,
+        filter .8s ease;
+}
+
+.customer-register-hero:hover img {
+    transform: scale(1.06);
+
+    filter:
+        brightness(1.05)
+        saturate(1.15);
+}
+
+.customer-register-hero-overlay {
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
+    padding: 48px;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(10, 15, 25, .08) 25%,
+            rgba(10, 15, 25, .78) 100%
+        );
+
+    color: white;
+}
+
+.customer-register-content {
+    display: inline-block;
+    width: fit-content;
+
+    margin-bottom: 10px;
+
+    color: #f5c451;
+
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+.customer-register-hero-overlay h2 {
+    margin: 0 0 12px;
+
+    font-size: clamp(30px, 4vw, 48px);
+    font-weight: 900;
+}
+
+.customer-register-hero-overlay p {
+    max-width: 520px;
+    margin: 0;
+
+    color: rgba(255,255,255,.88);
+
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+/* ===========================
+   PANEL
+=========================== */
+
+.customer-register-panel {
+    position: relative;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 38px;
+
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(245,179,1,.10),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at bottom left,
+            rgba(217,119,6,.08),
+            transparent 40%
+        ),
+        #f7f8fb;
+}
+
+/* ===========================
+   CARD
+=========================== */
+
+.customer-register-card {
+    width: min(100%, 520px);
+
+    padding: 32px;
+
+    border: 1px solid rgba(255,255,255,.65);
+    border-radius: 22px;
+
+    background: rgba(255,255,255,.78);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    box-shadow:
+        0 18px 45px rgba(15,23,42,.14),
+        0 0 40px rgba(245,179,1,.08);
+
+    animation: registerFade .7s ease;
+}
+
+@keyframes registerFade {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ===========================
+   HEADER
+=========================== */
+
+.customer-register-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.customer-register-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 7px 16px;
+    margin-bottom: 14px;
+
+    border-radius: 999px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #b8860b,
+            #f2c14e
+        );
+
+    color: white;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    letter-spacing: .5px;
+
+    box-shadow:
+        0 6px 20px rgba(212,160,23,.25);
+}
+
+.customer-register-header h1 {
+    margin: 0 0 10px;
+
+    color: #17324a;
+
+    font-size: 34px;
+    font-weight: 900;
+}
+
+.customer-register-header p {
+    margin: 0;
+
+    color: #64748b;
+
+    line-height: 1.6;
+}
+
+/* ===========================
+   FORM
+=========================== */
+
+.customer-register-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.customer-register-field {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+.customer-register-field label {
+    color: #334155;
+
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.customer-register-field input,
+.customer-register-field select {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 13px 14px;
+
+    border: 1px solid #d4dde7;
+    border-radius: 10px;
+
+    background: rgba(255,255,255,.82);
+
+    color: #172033;
+
+    font-size: 14px;
+
+    transition:
+        border-color .25s ease,
+        box-shadow .25s ease,
+        transform .25s ease;
+}
+
+.customer-register-field input:hover,
+.customer-register-field select:hover {
+    border-color: #d4a017;
+}
+
+.customer-register-field input:focus,
+.customer-register-field select:focus {
+    outline: none;
+
+    transform: translateY(-1px);
+
+    border-color: #d4a017;
+
+    box-shadow:
+        0 0 0 4px rgba(212,160,23,.13),
+        0 7px 18px rgba(15,23,42,.07);
+}
+
+/* Date + password get full width if desired */
+
+.customer-register-field:nth-of-type(5),
+.customer-register-field:nth-of-type(6),
+.customer-register-field:nth-of-type(7) {
+    grid-column: 1 / -1;
+}
+
+/* ===========================
+   ERROR
+=========================== */
+
+.customer-register-field .error {
+    color: #dc2626;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* ===========================
+   REGISTER BUTTON
+=========================== */
+
+.customer-register-button {
+    grid-column: 1 / -1;
+
+    width: 100%;
+    min-height: 48px;
+
+    margin-top: 6px;
+
+    border: none;
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #c9972b,
+            #f2c14e
+        );
+
+    color: #1f2937;
+
+    font-size: 15px;
+    font-weight: 900;
+
+    cursor: pointer;
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        opacity .25s ease;
+}
+
+.customer-register-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 14px 30px rgba(201,151,43,.32);
+}
+
+.customer-register-button:active:not(:disabled) {
+    transform: scale(.99);
+}
+
+.customer-register-button:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+/* ===========================
+   FOOTER
+=========================== */
+
+.customer-register-footer {
+    margin-top: 22px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+
+    color: #64748b;
+
+    font-size: 14px;
+}
+
+.customer-register-footer button {
+    border: none;
+    background: transparent;
+
+    color: #2563eb;
+
+    font-weight: 800;
+
+    cursor: pointer;
+}
+
+.customer-register-footer button:hover {
+    text-decoration: underline;
+}
+
+/* ===========================
+   TABLET
+=========================== */
+
+@media (max-width: 1000px) {
+
+    .customer-register-page {
+        grid-template-columns: 1fr;
+    }
+
+    .customer-register-hero {
+        height: 360px;
+        min-height: auto;
+    }
+
+    .customer-register-hero-overlay {
+        padding: 32px;
+    }
+
+    .customer-register-panel {
+        padding: 28px 18px 38px;
+    }
+
+    .customer-register-card {
+        width: min(100%, 620px);
+    }
+}
+
+/* ===========================
+   MOBILE
+=========================== */
+
+@media (max-width: 650px) {
+
+    .customer-register-page {
+        min-height: auto;
+    }
+
+    .customer-register-hero {
+        height: 250px;
+    }
+
+    .customer-register-hero-overlay {
+        padding: 22px;
+    }
+
+    .customer-register-hero-overlay h2 {
+        font-size: 30px;
+    }
+
+    .customer-register-hero-overlay p {
+        font-size: 14px;
+    }
+
+    .customer-register-panel {
+        padding: 18px 12px 28px;
+    }
+
+    .customer-register-card {
+        width: 100%;
+        padding: 22px 16px;
+
+        border-radius: 18px;
+    }
+
+    .customer-register-header {
+        margin-bottom: 20px;
+    }
+
+    .customer-register-header h1 {
+        font-size: 28px;
+    }
+
+    .customer-register-form {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .customer-register-field,
+    .customer-register-field:nth-of-type(5),
+    .customer-register-field:nth-of-type(6),
+    .customer-register-field:nth-of-type(7) {
+        grid-column: auto;
+    }
+
+    .customer-register-field input {
+        min-height: 46px;
+        font-size: 16px;
+    }
+
+    .customer-register-button {
+        grid-column: auto;
+        min-height: 50px;
+    }
+
+    .customer-register-footer {
+        flex-direction: column;
+        gap: 4px;
+    }
+}

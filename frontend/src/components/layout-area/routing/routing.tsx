@@ -35,6 +35,7 @@ import { CustomerLogin } from "../../customers-area/customer-login/customer-logi
 import { CustomerDashboard } from "../../customers-area/customer-dashboard/customer-dashboard";
 import { CustomerProtectedRoute } from "../../utils/customerProtectedRouter";
 import { AddCard } from "../../vip-card-area/add-card/add-card";
+import { CustomerRegister } from "../../customers-area/customer-register/customer-register";
 
 
 export function Routing() {
@@ -43,6 +44,8 @@ export function Routing() {
             <Route path="/" element={<AuthGuard><Home /></AuthGuard>} />
 
             <Route path="/customer-login" element={<CustomerLogin />} />
+
+            <Route path="/customer-register" element={<CustomerRegister/>}/>
 
             <Route path="/customer-dashboard" element={<CustomerProtectedRoute><CustomerDashboard /></CustomerProtectedRoute>} />
 

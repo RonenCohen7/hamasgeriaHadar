@@ -157,6 +157,38 @@ class EventService {
     }
 
 
+
+    //Get upcoming active events for customers
+    public async getUpcomingEvents(): Promise<EventModel[]> {
+        const sql = `
+            SELECT
+            e.id_event AS idEvent,
+            e.event_name AS eventName,
+            e.event_description AS eventDescription,
+            e.event_start AS eventStart,
+            e.event_end AS eventEnd,
+            e.event_location AS eventLocation,
+            e.maximum_guests AS maximumGuests,
+            e.expected_guests AS expectedGuests,
+            e.actual_guests AS actualGuests,
+            e.ticket_price AS ticketPrice,
+            e.event_status AS eventStatus,
+            e.created_by AS createdBy,
+            e.created_at AS createdAt,
+            e.updated_at AS updatedAt
+        FROM events AS e
+        WHERE e.event_start >= NOW()
+          AND e.event_status IN ('planned','active')
+        ORDER BY e.event_start ASC
+        LIMIT 5
+        `;
+
+        return await dal.execute(sql) as EventModel[];
+    }
+
+
+
+
     // Delete event:
     public async deleteEvent(id: number): Promise<void> {
 

@@ -1,5 +1,5 @@
-import { OkPacketParams } from "mysql2";
-import { ResourceNotFoundError } from "../models/client-errors";
+import { OkPacketParams, RowDataPacket } from "mysql2";
+import { ConflictError, ResourceNotFoundError } from "../models/client-errors";
 import { AddCustomerDto, CustomerAuthResponseModel, CustomerLoginDto, CustomerModel, UpdateCustomerDto } from "../models/customer-model";
 import { dal } from "../utils/dal";
 import { sanitizeText } from "../utils/sanitize";
@@ -21,6 +21,33 @@ class CustomerService {
         customer.lastName = sanitizeText(customer.lastName);
         customer.email = sanitizeText(customer.email);
         customer.phone = sanitizeText(customer.phone);
+
+        const isMatchEmailSql = `
+            SELECT id_account
+            FROM accounts 
+            WHERE email = ?
+        `;
+        const row = await dal.execute(isMatchEmailSql,[customer.email]) as RowDataPacket[];
+
+        const existingAccount = row[0]
+
+        if(existingAccount) {
+            throw new ConflictError("Email already exists")
+        }
+        
+        const isMatchPhoneSql = `
+            SELECT id_customer
+            FROM customers
+            WHERE phone =?
+        `;
+
+        const listPhone = await dal.execute(isMatchPhoneSql, [customer.phone]) as RowDataPacket[];
+
+        const existingPhone = listPhone[0];
+        if(existingPhone){
+            throw new ConflictError("Phone already exists")
+        }
+
 
         const hashedPassword = await bcrypt.hash(customer.password, 12);
 
@@ -85,6 +112,8 @@ class CustomerService {
                 lastName: customer.lastName,
                 email: customer.email,
                 phone: customer.phone,
+                hasVipCard:false,
+                tier: null,
                 isActive: true,
                 createdAt: new Date()
             }
@@ -110,10 +139,24 @@ class CustomerService {
                 c.email,
                 c.is_active AS isActive,
                 c.created_at AS createdAt,
-                a.password
+                a.password,
+
+            CASE
+                WHEN vc.id_vip_card IS NULL THEN FALSE
+                ELSE TRUE
+            END AS hasVipCard,
+
+            vc.tier AS tier
+
             FROM customers c
+
             INNER JOIN accounts a
                 ON c.id_account = a.id_account
+
+            LEFT JOIN vip_cards vc
+                ON vc.id_customer = c.id_customer
+                AND vc.card_status = 'active'
+
             WHERE c.email = ? 
         `;
 
@@ -160,7 +203,9 @@ class CustomerService {
                 email: customer.email,
                 phone: customer.phone,
                 isActive: customer.isActive,
-                createdAt: customer.createAt
+                hasVipCard: Boolean(customer.hasVipCard),
+                tier: customer.tier ?? null ,
+                createdAt: customer.createdAt
             }
         }
 
@@ -262,8 +307,8 @@ class CustomerService {
         FROM customers c
         LEFT JOIN vip_cards vc
             ON vc.id_customer = c.id_customer
-        WHERE c.is_active = TRUE 
         AND vc.card_status = 'active'
+        WHERE c.is_active = TRUE
           AND (
                 LOWER(c.first_name) LIKE ?
                 OR LOWER(c.last_name) LIKE ?

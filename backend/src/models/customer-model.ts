@@ -17,7 +17,7 @@ export class AddCustomerDto {
     phone?: string | null;
     email?: string | null;
     dateOfBirth?: string | null;
-    hasVipCard!: boolean | null;
+
 }
 
 export class UpdateCustomerDto {
@@ -27,7 +27,7 @@ export class UpdateCustomerDto {
     email?: string | null;
     dateOfBirth?: string | null;
     isActive?: boolean;
-    hasVipCard!: boolean |null;
+
 }
 
 
@@ -35,14 +35,18 @@ export class CustomerRegisterDto {
     firstName!: string;
     lastName!: string;
 
-    email!:string;
+    email!: string;
     password!: string;
 
-    phone!: string
+    hasVipCard!: boolean;
+    tier!: string| null;
+
+    phone!: string;
+    dateOfBirth?: string | null;
 }
 
 
-export class CustomerLoginDto{
+export class CustomerLoginDto {
     email!: string;
     password!: string;
 }
@@ -53,13 +57,13 @@ export class SafeCustomerModel {
 
     firstName!: string;
     lastName!: string;
-
+    tier!: string | null;
     email!: string;
     phone!: string;
-
+    hasVipCard!: boolean;
     isActive!: boolean;
 
-    createdAt!:Date;
+    createdAt!: Date;
 }
 
 

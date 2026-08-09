@@ -29,6 +29,8 @@ class AppConfig {
     public readonly customerRegisterUrl = this.customersUrl + "/register";
  
     public readonly customerLoginUrl = this.customersUrl + "/login";
+
+    public readonly eventsUrl = this.baseUrl + "events/upcoming"
 }
 
 export const appConfig = new AppConfig();
