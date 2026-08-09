@@ -1,8 +1,17 @@
 .add-card-form {
+    width: min(100%, 520px);
+    margin: 60px auto;
+    padding: 32px;
+
     display: flex;
     flex-direction: column;
     gap: 18px;
-    margin-top: 25px;
+
+    background: white;
+    border: 1px solid #dbe7ef;
+    border-radius: 18px;
+
+    box-shadow: 0 14px 34px rgba(22, 50, 74, 0.12);
 }
 
 .add-card-field {

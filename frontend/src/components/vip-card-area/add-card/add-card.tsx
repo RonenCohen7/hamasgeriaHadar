@@ -1,26 +1,39 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./add-card.css";
 import { notificationService } from "../../service/notificationService";
 import { vipCardService } from "../../service/vipCardService";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { customerService } from "../../service/customerService";
+import { CustomerModel } from "../../models/customer-model";
 
 
 
 
 
 
-interface AddCardProps {
-    idCustomer: number;
-    customerName: string;
-    onSuccess?: () => void;
-}
 
-export function AddCard(props: AddCardProps) {
 
+export function AddCard() {
+
+    const {idCustomer} = useParams();
     const [externalCard, setExternalCard] = useState(false);
     const [cardNumber, setCardNumber] = useState("");
     const [isSaving, setIsSaving] = useState(false);
+    const [customer, setCustomer] = useState<CustomerModel | null>(null);
     const navigate = useNavigate();
+
+    const customerId = Number(idCustomer);
+
+    useEffect(()=>{
+        if(!Number.isInteger(customerId) || customerId <= 0){
+            return;
+        }
+
+        customerService
+            .getOneCustomer(customerId)
+            .then(setCustomer)
+            .catch(console.error)
+    },[idCustomer]);
 
     async function createCard() {
         try {
@@ -28,13 +41,13 @@ export function AddCard(props: AddCardProps) {
             setIsSaving(true);
 
             const vipCard = await vipCardService.createCard(
-                props.idCustomer,
+                customerId,
                 externalCard ? cardNumber : null
             )
 
             console.log(vipCard);
             notificationService.success(`Vip Card ${vipCard.cardNumber} Created Successfully`);
-            props.onSuccess?.()
+            
 
         } catch (err: any) {
             notificationService.error(err)
@@ -54,7 +67,11 @@ export function AddCard(props: AddCardProps) {
             <h2>Create VIP Card</h2>
 
             <p>Customer:
-                <strong>{props.customerName}</strong>
+                <strong>
+                    {" "}
+                    {customer ? `{customer?.firstName} ${customer?.lastName}`
+                    : "Loading..."}
+                    </strong>
             </p>
             <div className="add-card-checkbox">
                 <label>

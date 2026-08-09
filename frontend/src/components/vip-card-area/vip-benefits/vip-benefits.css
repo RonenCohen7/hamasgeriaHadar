@@ -1,0 +1,152 @@
+.CustomerVipBenefits{
+    max-width:1400px;
+    margin:40px auto;
+    padding:24px;
+
+    display:grid;
+    grid-template-columns:1fr 520px;
+    gap:40px;
+    align-items:center;
+}
+
+.vip-benefits-image img{
+    width:80%;
+    display:block;
+    border-radius:24px;
+    object-fit:cover;
+}
+
+.vip-benefits-content{
+    padding:24px;
+}
+
+
+/* Tablet */
+
+@media (max-width:1024px){
+
+    .CustomerVipBenefits{
+        grid-template-columns:1fr;
+        gap:28px;
+    }
+
+    .vip-benefits-content{
+        padding:12px;
+    }
+
+}
+
+/* Mobile */
+
+@media (max-width:768px){
+
+    .CustomerVipBenefits{
+
+        margin:0;
+        padding:16px;
+        gap:20px;
+
+    }
+
+    .vip-benefits-image img{
+
+        border-radius:18px;
+
+    }
+
+    .vip-benefits-content{
+
+        padding:0;
+
+    }
+
+    .vip-benefits-content h1{
+
+        font-size:32px;
+
+    }
+
+    .vip-benefits-content p{
+
+        font-size:16px;
+
+        line-height:1.7;
+
+    }
+
+    .vip-benefits-content ul{
+
+        padding-left:22px;
+
+        font-size:16px;
+
+        line-height:2;
+
+    }
+
+}
+
+.vip-create-button {
+    margin-right: 20px;
+}
+.vip-benefits-actions {
+    margin-top: 28px;
+
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.vip-create-button {
+    min-height: 50px;
+    padding: 0 24px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: linear-gradient(135deg, #d99a24, #f5c75e);
+    color: #172033;
+
+    font-size: 15px;
+    font-weight: 900;
+
+    cursor: pointer;
+
+    box-shadow: 0 10px 24px rgba(217, 154, 36, .28);
+
+    transition: .2s;
+}
+
+.vip-create-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(217, 154, 36, .38);
+}
+
+.vip-benefits-back {
+    min-height: 50px;
+    padding: 0 22px;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+
+    background: #f8fafc;
+    color: #475569;
+
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.vip-benefits-back:hover {
+    background: #e2e8f0;
+}
+
+@media (max-width: 768px) {
+    .vip-benefits-actions {
+        flex-direction: column;
+    }
+
+    .vip-create-button,
+    .vip-benefits-back {
+        width: 100%;
+    }
+}

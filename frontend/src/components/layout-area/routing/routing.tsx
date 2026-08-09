@@ -34,6 +34,7 @@ import { EditCard } from "../../vip-card-area/edit-card/edit-card";
 import { CustomerLogin } from "../../customers-area/customer-login/customer-login";
 import { CustomerDashboard } from "../../customers-area/customer-dashboard/customer-dashboard";
 import { CustomerProtectedRoute } from "../../utils/customerProtectedRouter";
+import { AddCard } from "../../vip-card-area/add-card/add-card";
 
 
 export function Routing() {
@@ -101,6 +102,8 @@ export function Routing() {
 
 
             <Route path="/vip-cards/customer/:idCustomer" element={<CardDetails />} />
+
+            <Route path="/vip-cards/create/customer/:idCustomer" element={<AddCard/>}/>
 
             <Route path="/vip-cards/:idVipCard/recharge" element={<RechargeCard />} />
 

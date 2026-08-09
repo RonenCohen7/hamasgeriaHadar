@@ -4,13 +4,14 @@ import { useEffect, useState } from "react";
 import { VipCardModel } from "../../models/vip-card-model";
 import { notificationService } from "../../service/notificationService";
 import { vipCardService } from "../../service/vipCardService";
-import { AddCard } from "../add-card/add-card";
+
 import { CustomerModel } from "../../models/customer-model";
 import { customerService } from "../../service/customerService";
 import { CardTransactions } from "../card-transactions/card-transactions";
 
 import { useSelector } from "react-redux";
 import type { RootState } from "../../redux/inventory-store";
+import { VipBenefits } from "../vip-benefits/vip-benefits";
 
 
 export function CardDetails() {
@@ -62,20 +63,21 @@ export function CardDetails() {
     }
 
     if (!vipCard) {
-        return <section className="CardDetails">
-            <div className="no-vip-card">
-                <h1>No Vip Card</h1>
-                <p>This customer does not have a VIP card</p>
+        // return <section className="CardDetails">
+        //     <div className="no-vip-card">
+        //         <h1>No Vip Card</h1>
+        //         <p>This customer does not have a VIP card</p>
 
-                <AddCard
-                    idCustomer={Number(idCustomer)}
-                    customerName={customer?.firstName ?? "Customer"}
-                    onSuccess={() => window.location.reload()} />
+        //         <AddCard
+        //             idCustomer={Number(idCustomer)}
+        //             customerName={customer?.firstName ?? "Customer"}
+        //             onSuccess={() => window.location.reload()} />
 
 
-            </div>
+        //     </div>
+        return <VipBenefits idCustomer={Number(idCustomer)} />
 
-        </section>
+        // </section>
     }
 
     return (
