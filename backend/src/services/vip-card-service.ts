@@ -228,6 +228,7 @@ class VipCardService {
                 ON c.id_customer = vc.id_customer
 
             WHERE vc.id_customer = ?
+            AND card_status = "active"
 
             LIMIT 1
         `;

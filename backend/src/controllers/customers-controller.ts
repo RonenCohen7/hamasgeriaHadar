@@ -1,9 +1,10 @@
 
-import express, { Request, Response, NextFunction } from "express"
+import express, { Request, Response, NextFunction, response } from "express"
 import { customerService } from "../services/customer-service";
 import { verifyToken } from "../middleware/verify-token";
 import { allowRoles } from "../middleware/role-middleware";
-import { AddCustomerDto, UpdateCustomerDto } from "../models/customer-model";
+import { AddCustomerDto, CustomerRegisterDto, UpdateCustomerDto, CustomerAuthResponseModel   } from "../models/customer-model";
+import { authLimiter } from "../middleware/rate-limit-middleware";
 
 
 
@@ -13,20 +14,62 @@ class CustomerController {
 
 
     public constructor() {
+
+        this.router.post("/api/customers/register", authLimiter, this.registerCustomer);
+        this.router.post("/api/customers/login", authLimiter, this.loginCustomer);
+
         this.router.get("/api/customers", verifyToken, this.getAllCustomers);
 
-        this.router.get("/api/customers/search",verifyToken, this.searchCustomer);
+        this.router.get("/api/customers/search", verifyToken, this.searchCustomer);
 
         this.router.get("/api/customers/:id", verifyToken, this.getOneCustomer);
 
         this.router.post("/api/customers", verifyToken, this.addCustomer);
 
-        this.router.put("/api/customers/:id",verifyToken, this.updateCustomer);
+        this.router.put("/api/customers/:id", verifyToken, this.updateCustomer);
 
         this.router.delete("/api/customers/:id", verifyToken, allowRoles("admin"), this.deleteCustomer);
 
     }
 
+
+    //Customer Register
+    private async registerCustomer(request: Request, response: Response, next: NextFunction): Promise<void> {
+        try {
+
+            const customer: CustomerRegisterDto = request.body;
+
+            const auth: CustomerAuthResponseModel = await customerService.registerCustomer(customer);
+
+            response.status(201).json(auth);
+
+        } catch (err: any) {
+            next(err);
+        }
+    }
+
+
+
+
+    //Customer Login
+    private async loginCustomer(request:Request, response:Response, next:NextFunction):Promise<void>{
+        try{
+            console.log("===CUSTOMER LOGIN ===");
+            
+            const credentials = request.body;
+            
+            console.log(request.body);
+            
+            const auth = await customerService.loginCustomer(credentials);
+
+            response.json(auth);
+
+
+        }
+        catch(err: any){
+            next:err
+        }
+    }
 
 
     //Get all customers

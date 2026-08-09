@@ -152,7 +152,36 @@
     width:20px;
     height:20px;
 }
+.menu-link::after {
+    content: attr(data-tooltip);
 
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: 50%;
+
+    transform: translate(-50%, 6px);
+
+    padding: 6px 10px;
+    border-radius: 7px;
+
+    background: #0f172a;
+    color: white;
+
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition:
+        opacity .18s ease,
+        visibility .18s ease,
+        transform .18s ease;
+
+    z-index: 1000;
+}
 .export-file-action {
     display: flex;
     align-items: center;

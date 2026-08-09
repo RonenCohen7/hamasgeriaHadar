@@ -2,12 +2,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import { inventoryReducer } from "./inventory-slice";
 import authReducer from "./auth-slice";
 import { customerReducer } from "./customer-slice";
+import { customerAuthReducer } from "./customer-auth-slice";
 
 export const store = configureStore({
     reducer: {
         inventory: inventoryReducer,
         auth:authReducer,
-        customers: customerReducer
+        customers: customerReducer,
+        customerAuth: customerAuthReducer
     }
 });
 

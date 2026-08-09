@@ -1,9 +1,46 @@
 import axios from "axios";
-import { AddCustomerDto, CustomerModel, updateCustomerDto } from "../models/customer-model";
+import { AddCustomerDto, CustomerAuthResponseModel, CustomerLoginDto, CustomerModel, CustomerRegisterDto, updateCustomerDto } from "../models/customer-model";
 import { appConfig } from "../utils/app-config";
+import { customerLogin, customerLogout } from "../redux/customer-auth-slice";
+
+import { store } from "../redux/inventory-store";
 
 
 class CustomerService {
+
+
+    //Customer Register
+    public async registerCustomer(customer:CustomerRegisterDto):Promise<CustomerAuthResponseModel>{
+        
+        const response = await axios.post<CustomerAuthResponseModel>(`${appConfig.customerRegisterUrl}`,customer);
+        
+        store.dispatch(customerLogin(response.data))
+        
+        return response.data;
+     
+        
+    }
+
+
+
+    // Customer login
+    public async loginCustomer(credentials:CustomerLoginDto):Promise<CustomerAuthResponseModel>{
+        
+        const response = await axios.post<CustomerAuthResponseModel>(`${appConfig.customerLoginUrl}`,credentials);
+        
+        store.dispatch(customerLogin(response.data))
+        
+        return response.data;
+
+        
+    }
+
+
+    //logout
+    public logoutCustomer():void{
+        store.dispatch(customerLogout());
+    }
+
 
     //Get All Customers
     public async getAllCustomers(): Promise<CustomerModel[]> {

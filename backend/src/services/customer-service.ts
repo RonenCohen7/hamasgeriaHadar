@@ -1,10 +1,176 @@
 import { OkPacketParams } from "mysql2";
 import { ResourceNotFoundError } from "../models/client-errors";
-import { AddCustomerDto, CustomerModel, UpdateCustomerDto } from "../models/customer-model";
+import { AddCustomerDto, CustomerAuthResponseModel, CustomerLoginDto, CustomerModel, UpdateCustomerDto } from "../models/customer-model";
 import { dal } from "../utils/dal";
 import { sanitizeText } from "../utils/sanitize";
+import { CustomerRegisterDto } from "../models/customer-model";
+
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
 
 class CustomerService {
+
+
+
+    //Customer register
+    public async registerCustomer(customer: CustomerRegisterDto): Promise<CustomerAuthResponseModel> {
+
+
+        customer.firstName = sanitizeText(customer.firstName);
+        customer.lastName = sanitizeText(customer.lastName);
+        customer.email = sanitizeText(customer.email);
+        customer.phone = sanitizeText(customer.phone);
+
+        const hashedPassword = await bcrypt.hash(customer.password, 12);
+
+        //Inset to account table
+        const accountSql = `
+            INSERT INTO accounts(
+                email,
+                password,
+                account_type,
+                is_active
+            )
+            VALUES(?,?,?,?)
+        `;
+        const accountInfo = await dal.execute(accountSql, [
+            customer.email,
+            hashedPassword,
+            "customer",
+            true
+        ]) as OkPacketParams;
+
+        const idAccount = Number(accountInfo.insertId);
+
+        //Insert into customer table
+        const sql = `
+            INSERT INTO customers (
+                first_name,
+                last_name,
+                phone,
+                email,
+                id_account
+            )
+            VALUES (?,?,?,?,?)
+        `;
+
+        const info = await dal.execute(sql, [
+            customer.firstName,
+            customer.lastName,
+            customer.phone,
+            customer.email,
+            idAccount
+        ]) as OkPacketParams;
+
+        const idCustomer = Number(info.insertId);
+
+
+        //token 
+        const token = jwt.sign(
+            {
+                idAccount,
+                idCustomer,
+                accountType: "customer"
+            },
+            process.env.JWT_SECRET!,
+            { expiresIn: "8h" }
+        )
+        return {
+            token,
+            customer: {
+                idAccount,
+                idCustomer,
+                firstName: customer.firstName,
+                lastName: customer.lastName,
+                email: customer.email,
+                phone: customer.phone,
+                isActive: true,
+                createdAt: new Date()
+            }
+        }
+    }
+
+
+
+    //Customer Login
+    public async loginCustomer(credentials: CustomerLoginDto): Promise<CustomerAuthResponseModel> {
+
+        credentials.email = sanitizeText(credentials.email).toLowerCase();
+
+        console.log("Customer login service");
+
+        const sql = `
+            SELECT
+                c.id_customer AS idCustomer,
+                c.id_account AS idAccount,
+                c.first_name AS firstName,
+                c.last_name AS lastName,
+                c.phone,
+                c.email,
+                c.is_active AS isActive,
+                c.created_at AS createdAt,
+                a.password
+            FROM customers c
+            INNER JOIN accounts a
+                ON c.id_account = a.id_account
+            WHERE c.email = ? 
+        `;
+
+        console.log("Before login SQL");
+
+        const customers = await dal.execute(sql, [credentials.email]) as any[];
+
+        const customer = customers[0];
+
+        console.log("After login SQL");
+        console.log("customers =", customers);
+
+
+        if (!customer) {
+            throw new Error("Invalid email or password");
+        }
+
+        //check password
+        const isMatch = await bcrypt.compare(
+            credentials.password,
+            customer.password
+        );
+
+        if (!isMatch) {
+            throw new Error("Invalid email or password");
+        }
+
+        const token = jwt.sign({
+            idAccount: customer.idAccount,
+            idCustomer: customer.idCustomer,
+            accountType: "customer"
+        },
+            process.env.JWT_SECRET!,
+            { expiresIn: "8h" }
+        );
+
+        return {
+            token,
+            customer: {
+                idCustomer: customer.idCustomer,
+                idAccount: customer.idAccount,
+                firstName: customer.firstName,
+                lastName: customer.lastName,
+                email: customer.email,
+                phone: customer.phone,
+                isActive: customer.isActive,
+                createdAt: customer.createAt
+            }
+        }
+
+
+
+    }
+
+
+
+
 
     //Get All customers
     public async getAllCustomers(): Promise<CustomerModel[]> {
@@ -27,6 +193,7 @@ class CustomerService {
             FROM customers c
             LEFT JOIN vip_cards vc
                 ON vc.id_customer = c.id_customer
+                AND vc.card_status = "active"             
             WHERE c.is_active = TRUE
             ORDER BY first_name, last_name
         `;
@@ -57,6 +224,7 @@ class CustomerService {
            FROM customers c
            LEFT JOIN vip_cards vc
                 ON vc.id_customer = c.id_customer
+                AND vc.card_status = 'active'
 
             WHERE c.id_customer = ?
         `;
@@ -94,7 +262,8 @@ class CustomerService {
         FROM customers c
         LEFT JOIN vip_cards vc
             ON vc.id_customer = c.id_customer
-        WHERE c.is_active = TRUE
+        WHERE c.is_active = TRUE 
+        AND vc.card_status = 'active'
           AND (
                 LOWER(c.first_name) LIKE ?
                 OR LOWER(c.last_name) LIKE ?

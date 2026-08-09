@@ -30,3 +30,31 @@ export class updateCustomerDto {
     dateOfBirth?:string | null;
     isActive?: boolean;
 }
+
+export class CustomerLoginDto {
+    email!: string;
+    password!: string;
+}
+
+export class CustomerRegisterDto {
+    firstName!:string;
+    lastName!: string;
+    email!:string;
+    password!:string;
+    phone!: string;
+}
+
+
+export class CustomerAuthResponseModel {
+    token!: string;
+    customer!:{
+        idCustomer: number;
+        idAccount: number;
+        firstName: string;
+        lastName: string;
+        email:string;
+        phone:string;
+        isActive:boolean;
+        createdAt:Date;
+    }
+}

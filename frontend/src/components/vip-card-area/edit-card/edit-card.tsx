@@ -100,6 +100,7 @@ export function EditCard() {
                     <label>Expiration Date</label>
 
                     <input type="date"
+                        min={new Date().toISOString().split("T")[0]}
                         {...register("expiresAt", { required: "Expiration date is required" })}
                     />
                     {errors.expiresAt && (
@@ -118,7 +119,7 @@ export function EditCard() {
                         <option value="active">Active</option>
                         <option value="blocked">Blocked</option>
                         <option value="expired">Expired</option>
-                        <option value="canceled">Cancelled</option>
+                        <option value="cancelled">Cancelled</option>
 
                     </select>
 

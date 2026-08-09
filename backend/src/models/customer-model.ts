@@ -29,3 +29,41 @@ export class UpdateCustomerDto {
     isActive?: boolean;
     hasVipCard!: boolean |null;
 }
+
+
+export class CustomerRegisterDto {
+    firstName!: string;
+    lastName!: string;
+
+    email!:string;
+    password!: string;
+
+    phone!: string
+}
+
+
+export class CustomerLoginDto{
+    email!: string;
+    password!: string;
+}
+
+export class SafeCustomerModel {
+    idCustomer!: number;
+    idAccount!: number;
+
+    firstName!: string;
+    lastName!: string;
+
+    email!: string;
+    phone!: string;
+
+    isActive!: boolean;
+
+    createdAt!:Date;
+}
+
+
+export class CustomerAuthResponseModel {
+    token!: string;
+    customer!: SafeCustomerModel;
+}

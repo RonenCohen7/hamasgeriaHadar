@@ -1,0 +1,130 @@
+.CustomerLogin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 85vh;
+    background: #f5f7fa;
+}
+
+.customer-login-card {
+    width: 430px;
+    background: white;
+    border-radius: 16px;
+    padding: 35px;
+    box-shadow: 0 10px 35px rgba(0,0,0,.12);
+}
+
+.customer-login-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.customer-login-badge {
+    display: inline-block;
+    background: #1976d2;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: .8rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.customer-login-header h1 {
+    margin: 0;
+    color: #1d3557;
+}
+
+.customer-login-header p {
+    color: #666;
+    margin-top: 10px;
+    line-height: 1.6;
+}
+.customer-login-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+.customer-login-field {
+    margin-bottom: 24px;
+}
+.customer-login-field input {
+    width: 100%;
+    box-sizing: border-box;
+}
+.customer-login-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 18px;
+}
+
+.customer-login-field label {
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #444;
+}
+
+.customer-login-field input {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: .25s;
+}
+
+.customer-login-field input:focus {
+    outline: none;
+    border-color: #1976d2;
+    box-shadow: 0 0 0 3px rgba(25,118,210,.15);
+}
+
+.login-button {
+    width: 100%;
+    padding: 13px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 8px;
+    background: #1976d2;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .25s;
+}
+.employee-access {
+    margin-top: 18px;
+    text-align: center;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.employee-access button {
+    margin-left: 8px;
+    background: transparent;
+    border: none;
+    color: #2563eb;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.employee-access button:hover {
+    color: #1d4ed8;
+}
+.login-button:hover {
+    background: #1565c0;
+}
+
+.customer-login-footer {
+    margin-top: 25px;
+    text-align: center;
+}
+
+.customer-login-footer button {
+    border: none;
+    background: transparent;
+    color: #1976d2;
+    cursor: pointer;
+    font-weight: bold;
+}

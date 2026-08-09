@@ -43,7 +43,7 @@ export function CustomerCard({ customer, onDelete }: CustomerCardProps) {
                         {customer.lastName || "Customer"}
                     </h3>
 
-                    {Boolean(customer.hasVipCard) && (
+                    {Boolean(customer.hasVipCard ) && (
                         <span className="vip-label">
                             <FaStar />
                             VIP Customer
@@ -97,13 +97,13 @@ export function CustomerCard({ customer, onDelete }: CustomerCardProps) {
 
                 <button
                     type="button"
-                    className="customer-vip-button"
+                    className={customer.hasVipCard ? "customer-vip-button" : "customer-vip-button no-vip"}
                     onClick={() =>
                         navigate(`/vip-cards/customer/${customer.idCustomer}`)
                     }
                 >
                     <FaStar />
-                    <span>VIP</span>
+                    <span>{customer.hasVipCard ? "VIP" : "Create VIP"}</span>
                 </button>
 
                 <button type="button"

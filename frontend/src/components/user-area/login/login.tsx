@@ -57,6 +57,16 @@ export function Login() {
                     </div>
 
                 </form>
+
+                <p className="customer-access">
+                    Customer?
+                    <button
+                        type="button"
+                        onClick={()=> navigate("/customer-login")}>
+                            Customer Login
+                        </button>
+
+                </p>
             </div>
 
         </section>

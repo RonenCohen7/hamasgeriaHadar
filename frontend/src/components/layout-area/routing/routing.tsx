@@ -31,12 +31,19 @@ import { CardDetails } from "../../vip-card-area/card-details/card-details";
 import { RechargeCard } from "../../vip-card-area/recharge-card/recharge-card";
 import { TransactionsPage } from "../../vip-card-area/transactions-page/transactions-page";
 import { EditCard } from "../../vip-card-area/edit-card/edit-card";
+import { CustomerLogin } from "../../customers-area/customer-login/customer-login";
+import { CustomerDashboard } from "../../customers-area/customer-dashboard/customer-dashboard";
+import { CustomerProtectedRoute } from "../../utils/customerProtectedRouter";
+
 
 export function Routing() {
     return (
         <Routes>
             <Route path="/" element={<AuthGuard><Home /></AuthGuard>} />
 
+            <Route path="/customer-login" element={<CustomerLogin />} />
+
+            <Route path="/customer-dashboard" element={<CustomerProtectedRoute><CustomerDashboard /></CustomerProtectedRoute>} />
 
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
@@ -78,29 +85,29 @@ export function Routing() {
 
             <Route path="/inventory-count" element={<AuthGuard><InventoryCount /></AuthGuard>} />
 
-            <Route path="/customers" element={<AuthGuard><CustomerCrud /></AuthGuard> }>
+            <Route path="/customers" element={<AuthGuard><CustomerCrud /></AuthGuard>}>
 
                 <Route index element={<CustomerList />} />
 
-                <Route path="list" element={<CustomerList />}/>
+                <Route path="list" element={<CustomerList />} />
 
-                <Route path="add" element={<AddCustomer />}/>
+                <Route path="add" element={<AddCustomer />} />
 
-                <Route path="edit/:id" element={<EditCustomer />}/>
+                <Route path="edit/:id" element={<EditCustomer />} />
 
-                <Route path="search"element={<SearchCustomer />}/>
+                <Route path="search" element={<SearchCustomer />} />
 
             </Route>
 
 
-            <Route path="/vip-cards/customer/:idCustomer" element={<CardDetails/>}/>
+            <Route path="/vip-cards/customer/:idCustomer" element={<CardDetails />} />
 
-            <Route path="/vip-cards/:idVipCard/recharge" element={<RechargeCard/>}/>
+            <Route path="/vip-cards/:idVipCard/recharge" element={<RechargeCard />} />
 
-            <Route path="/vip-cards/:idVipCard/transactions" element={<TransactionsPage/>}/>
+            <Route path="/vip-cards/:idVipCard/transactions" element={<TransactionsPage />} />
 
-            <Route path="/vip-cards/:idVipCard/edit" element={<EditCard/>}/>
-            
+            <Route path="/vip-cards/:idVipCard/edit" element={<EditCard />} />
+
 
             <Route path="*" element={<h2>Page Not Found</h2>} />
         </Routes>

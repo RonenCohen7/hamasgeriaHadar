@@ -9,6 +9,8 @@ import { CustomerModel } from "../../models/customer-model";
 import { customerService } from "../../service/customerService";
 import { CardTransactions } from "../card-transactions/card-transactions";
 
+import { useSelector } from "react-redux";
+import type { RootState } from "../../redux/inventory-store";
 
 
 export function CardDetails() {
@@ -19,6 +21,8 @@ export function CardDetails() {
     const [vipCard, setVipCard] = useState<VipCardModel | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [customer, setCustomer] = useState<CustomerModel | null>(null);
+
+    const loggedCustomer = useSelector((stat: RootState) => stat.customerAuth.customer);
 
 
     useEffect(() => {
@@ -58,20 +62,21 @@ export function CardDetails() {
     }
 
     if (!vipCard) {
-        return <section className="cardDetails">
-            <h1>No Vip Card</h1>
-            <p>This customer does not have a VIP card</p>
+        return <section className="CardDetails">
+            <div className="no-vip-card">
+                <h1>No Vip Card</h1>
+                <p>This customer does not have a VIP card</p>
 
-            <AddCard
-                idCustomer={Number(idCustomer)}
-                customerName={customer?.firstName ?? "Customer"}
-                onSuccess={() => window.location.reload()} />
+                <AddCard
+                    idCustomer={Number(idCustomer)}
+                    customerName={customer?.firstName ?? "Customer"}
+                    onSuccess={() => window.location.reload()} />
 
+
+            </div>
 
         </section>
     }
-
-
 
     return (
         <section className="CardDetails">
@@ -161,12 +166,12 @@ export function CardDetails() {
                         >
                             ← Back
                         </button>
-                        <button type="button"
-                                className="vip-edit-button"
-                                onClick={()=>navigate(`/vip-cards/${vipCard.idVipCard}/edit`)}>
+                        {!loggedCustomer && (<button type="button"
+                            className="vip-edit-button"
+                            onClick={() => navigate(`/vip-cards/${vipCard.idVipCard}/edit`)}>
                             Edit
                         </button>
-
+                        )}
                     </div>
 
                 </article>
@@ -186,8 +191,6 @@ export function CardDetails() {
                     <CardTransactions idVipCard={vipCard.idVipCard} />
 
                 </aside>
-
-
 
             </div>
 

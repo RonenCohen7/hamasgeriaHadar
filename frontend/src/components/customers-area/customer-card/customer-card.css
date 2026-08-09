@@ -102,7 +102,21 @@
     filter:
         drop-shadow(0 2px 3px rgba(245, 179, 1, 0.28));
 }
+.customer-vip-button.no-vip {
+    background: linear-gradient(135deg,#eef2f7,#dde5ee) !important;
+    color: #4b5563 !important;
+    border: 2px dashed #94a3b8;
+}
 
+.customer-vip-button.no-vip svg {
+    color: #6b7280;
+}
+
+.customer-vip-button.no-vip:hover {
+    background: #e5e7eb !important;
+    color: #087494 !important;
+    transform: translateY(-2px);
+}
 
 /* Status */
 
