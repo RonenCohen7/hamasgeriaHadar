@@ -15,19 +15,34 @@ class ImageService {
 
     private readonly productsImagesFolder = path.join(process.cwd(), "storage", "products");
 
-    public async saveProductImage(image: UploadedImage): Promise<string> {
+    private readonly eventsImageFolder = path.join(process.cwd(), "storage", "events");
 
-        await fs.mkdir(this.productsImagesFolder, {recursive:true})
+    
+
+    //save images
+    public async saveImage(folder:string,image: UploadedImage): Promise<string> {
+
+        await fs.mkdir(folder, {recursive:true})
 
         const extension = path.extname(image.originalname);
 
         const fileName = randomUUID() + extension;
 
-        const absolutePath = path.join(this.productsImagesFolder, fileName);
-
-        await fs.writeFile(absolutePath, image.buffer);
+        await fs.writeFile(path.join(folder, fileName),image.buffer);
 
         return fileName;
+    }
+
+
+
+    //save product image
+    public saveProductImage(image: UploadedImage):Promise<string>{
+        return this.saveImage(this.productsImagesFolder, image)
+    }
+
+    //save event image
+    public saveEventImage(image: UploadedImage):Promise<string>{
+        return this.saveImage(this.eventsImageFolder,image)
     }
 }
 

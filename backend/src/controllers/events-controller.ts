@@ -1,8 +1,9 @@
 import express, { Request, Response, NextFunction } from "express";
 import { eventService } from "../services/event-service";
-import { EventModel } from "../models/event-model";
+import { AddEventDto, EventModel, UpdateEventDto } from "../models/event-model";
 import { verifyToken } from "../middleware/verify-token";
 import { allowRoles } from "../middleware/role-middleware";
+import { UploadedFile } from "express-fileupload";
 
 
 class EventController {
@@ -64,8 +65,12 @@ class EventController {
     //Add new event 
     private async addEvent(request: Request, response: Response, next: NextFunction): Promise<void> {
         try {
-            const event: EventModel = request.body;
+            const event: AddEventDto = request.body;
 
+            if(request.files?.image){
+                event.image = request.files?.image as UploadedFile
+            }
+            
             const addEvent = await eventService.addEvent(event);
 
             response.status(201).json(addEvent);
@@ -85,7 +90,7 @@ class EventController {
                 response.status(400).json({ message: "Event must be a positive number" });
                 return
             }
-            const event: EventModel = request.body;
+            const event: UpdateEventDto = request.body;
 
             event.idEvent = id;
 
