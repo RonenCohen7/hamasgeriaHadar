@@ -36,6 +36,11 @@ import { CustomerDashboard } from "../../customers-area/customer-dashboard/custo
 import { CustomerProtectedRoute } from "../../utils/customerProtectedRouter";
 import { AddCard } from "../../vip-card-area/add-card/add-card";
 import { CustomerRegister } from "../../customers-area/customer-register/customer-register";
+import { EventsList } from "../../events-area/events-list/events-list";
+import { AddEvent } from "../../events-area/add-event/add-event";
+import { EditEvent } from "../../events-area/edit-event/edit-event";
+import { EventMedia } from "../../events-area/event-media/event-media";
+import { EventDetails } from "../../events-area/event-details/event-details";
 
 
 export function Routing() {
@@ -45,7 +50,7 @@ export function Routing() {
 
             <Route path="/customer-login" element={<CustomerLogin />} />
 
-            <Route path="/customer-register" element={<CustomerRegister/>}/>
+            <Route path="/customer-register" element={<CustomerRegister />} />
 
             <Route path="/customer-dashboard" element={<CustomerProtectedRoute><CustomerDashboard /></CustomerProtectedRoute>} />
 
@@ -106,13 +111,26 @@ export function Routing() {
 
             <Route path="/vip-cards/customer/:idCustomer" element={<CardDetails />} />
 
-            <Route path="/vip-cards/create/customer/:idCustomer" element={<AddCard/>}/>
+            <Route path="/vip-cards/create/customer/:idCustomer" element={<AddCard />} />
 
             <Route path="/vip-cards/:idVipCard/recharge" element={<RechargeCard />} />
 
             <Route path="/vip-cards/:idVipCard/transactions" element={<TransactionsPage />} />
 
             <Route path="/vip-cards/:idVipCard/edit" element={<EditCard />} />
+
+            <Route path="/events" element={<EventsList />} />
+
+            <Route path="/events/add" element={<AddEvent />} />
+
+            <Route path="/events/edit/:idEvent" element={<EditEvent />} />
+
+            <Route path="/events/details/:idEvent" element={<EventDetails />} />
+
+            <Route path="/events/media/:idEvent" element={<EventMedia />} />
+
+
+
 
 
             <Route path="*" element={<h2>Page Not Found</h2>} />

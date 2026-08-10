@@ -1,13 +1,25 @@
 export class EventModel {
-    idEvent!: string;
+    idEvent!: number;
     eventName!: string;
-    eventDescription!: string;
+    eventDescription!: string | null;
+
+
+    image!: string | null;
+    coverImage!: string | null;
+    coverImageUrl!: string | null;
+
     eventStart!: string;
     eventEnd!: string;
-    eventLocation!: string;
-    maximumGuests!: number;
-    expectedGuests!: number;
+    eventLocation!: string | null;
+
+    maximumGuests!: number | null;
+    expectedGuests!: number | null;
+    actualGuests!: number | null;
+
     ticketPrice!: number;
+    eventStatus!: string;
 
+    createdBy!: number;
+    createdAt!: string;
+    updatedAt!: string;
 }
-

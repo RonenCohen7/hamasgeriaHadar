@@ -25,14 +25,14 @@ export function CustomerDashboard() {
 
 
 
-    useEffect(()=>{
+    useEffect(() => {
         eventService
             .getUpcomingEvents()
             .then(setEvents)
             .catch(console.error);
-            
 
-    },[]);
+
+    }, []);
 
 
 
@@ -81,7 +81,7 @@ export function CustomerDashboard() {
                 </div>
 
                 <div className="dashboard-offers-grid">
-                        
+
 
                     <article className="dashboard-offer-card">
                         <span className="dashboard-offer-icon">
@@ -141,41 +141,50 @@ export function CustomerDashboard() {
                 <div className="dashboard-events-grid">
                     {events.map(event => {
                         const eventDate = new Date(event.eventStart);
-                    return (
-                        <article
-                            key={event.idEvent}
-                            className="dashboard-event-card"
-                        >
-                            <div className="dashboard-event-date">
-                                <strong>
-                                    {eventDate.getDate()}
-                                </strong>
-
-                                <span>
-                                    {eventDate.toLocaleString("en-US",{month:"short"}).toUpperCase()}
-                                </span>
-                            </div>
-                            <div>
-                                <h3>{event.eventName}</h3>
-
-                                <p>{event.eventDescription}</p>
-
-                                <small>
-                                    {eventDate.toLocaleString()}
-                                </small>
-
-                                {event.eventLocation && (
-                                    <p>
-                                        📍 {event.eventLocation}
-                                    </p>
+                        return (
+                            <article
+                                key={event.idEvent}
+                                className="dashboard-event-card"
+                            >
+                                {event.coverImageUrl && (
+                                    <img
+                                        src={event.coverImageUrl}
+                                        alt={event.eventName}
+                                        className="customer-event-cover"
+                                    />
                                 )}
-                                <strong>
-                                    {Number(event.ticketPrice) > 0 ? `₪${event.ticketPrice}` : "Free Entry"} 
-                                </strong>
-                            </div>
+                                <div className="dashboard-event-date">
+                                    <strong>
+                                        {eventDate.getDate()}
+                                    </strong>
 
-                        </article>
-                    )
+                                    <span>
+                                        {eventDate.toLocaleString("en-US", { month: "short" }).toUpperCase()}
+                                    </span>
+                                </div>
+                                <div>
+                                    <h3>{event.eventName}</h3>
+
+                                    <p>{event.eventDescription}</p>
+
+                                    <small>
+                                        {eventDate.toLocaleString()}
+                                    </small>
+
+                                    {event.eventLocation && (
+                                        <p>
+                                            📍 {event.eventLocation}
+                                        </p>
+                                    )}
+                                    <strong>
+                                        {Number(event.ticketPrice) > 0 ? `₪${event.ticketPrice}` : "Free Entry"}
+                                    </strong>
+
+
+                                </div>
+
+                            </article>
+                        )
                     })}
 
                     <article className="dashboard-event-card">

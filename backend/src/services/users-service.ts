@@ -3,7 +3,7 @@ import { AuthResponseModel, LoginUserDto, RegisterUserDto, SafeUserModel, Update
 
 import { dal } from "../utils/dal";
 
-import { ResourceNotFoundError } from "../models/client-errors";
+import { ConflictError, ResourceNotFoundError } from "../models/client-errors";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { sanitizeText } from "../utils/sanitize";
@@ -15,6 +15,25 @@ class UserService {
         user.firstName = sanitizeText(user.firstName);
         user.lastName = sanitizeText(user.lastName);
         user.email = sanitizeText(user.email).toLowerCase();
+
+
+        const checkAccountSql = `
+            SELECT id_account
+            FROM accounts
+            WHERE email = ?
+            `;
+
+        const existingAccounts =
+            await dal.execute(checkAccountSql, [user.email]) as any[];
+
+        if (existingAccounts[0]) {
+            throw new ConflictError("Email already exists");
+        }
+
+        if (existingAccounts[0]) {
+            throw new Error("Email already exists");
+        }
+
 
         const hashedPassword = await bcrypt.hash(user.password, 12);
 
@@ -29,7 +48,7 @@ class UserService {
             VALUES(?,?,?,?)
         `;
 
-        const accountInfo = await dal.execute(accountSql,[
+        const accountInfo = await dal.execute(accountSql, [
             user.email,
             hashedPassword,
             "employee",
@@ -83,21 +102,29 @@ class UserService {
     public async login(credentials: LoginUserDto): Promise<AuthResponseModel> {
         credentials.email = sanitizeText(credentials.email).toLowerCase();
         const sql = `
-            SELECT 
-                id_user As idUser,
-                first_name As firstName,
-                last_name As lastName,
-                email,
-                password,
-                role,
-                is_active As isActive,
-                id_account,
-                created_at As createdAt,
-                updated_at As updateAt
-            FROM users
-            WHERE email = ?
-        `
-        const users = await dal.execute(sql, [credentials.email]) as UserModel[];
+            SELECT
+                u.id_user AS idUser,
+                u.id_account AS idAccount,
+                u.first_name AS firstName,
+                u.last_name AS lastName,
+                u.email,
+                u.role,
+                u.is_active AS isActive,
+                u.created_at AS createdAt,
+
+                a.password
+
+            FROM users u
+
+            INNER JOIN accounts a
+                ON u.id_account = a.id_account
+
+            WHERE a.email = ?
+            AND a.account_type = 'employee'
+            AND a.is_active = TRUE
+            AND u.is_active = TRUE
+        `;
+        const users = await dal.execute(sql, [credentials.email]) as any[];
         const user = users[0];
         if (!user) {
             throw new Error("Invalid email or password");
@@ -119,7 +146,9 @@ class UserService {
         const token = jwt.sign(
             {
                 idUser: user.idUser,
-                role: user.role
+                idAccount: user.idAccount,
+                role: user.role,
+                accountType: "employee"
             },
             process.env.JWT_SECRET!, { expiresIn: "8h" }
         )

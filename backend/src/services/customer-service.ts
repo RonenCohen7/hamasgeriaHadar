@@ -1,9 +1,11 @@
 import { OkPacketParams, RowDataPacket } from "mysql2";
+
 import { ConflictError, ResourceNotFoundError } from "../models/client-errors";
-import { AddCustomerDto, CustomerAuthResponseModel, CustomerLoginDto, CustomerModel, UpdateCustomerDto } from "../models/customer-model";
+
+import { AddCustomerDto, CustomerAuthResponseModel, CustomerLoginDto, CustomerModel, CustomerRegisterDto, UpdateCustomerDto } from "../models/customer-model";
+
 import { dal } from "../utils/dal";
 import { sanitizeText } from "../utils/sanitize";
-import { CustomerRegisterDto } from "../models/customer-model";
 
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -12,88 +14,121 @@ import jwt from "jsonwebtoken";
 class CustomerService {
 
 
+    // ============================================================
+    // REGISTER CUSTOMER
+    // ============================================================
 
-    //Customer register
     public async registerCustomer(customer: CustomerRegisterDto): Promise<CustomerAuthResponseModel> {
-
 
         customer.firstName = sanitizeText(customer.firstName);
         customer.lastName = sanitizeText(customer.lastName);
-        customer.email = sanitizeText(customer.email);
+        customer.email = sanitizeText(customer.email).toLowerCase();
         customer.phone = sanitizeText(customer.phone);
 
-        const isMatchEmailSql = `
+
+        // --------------------------------------------------------
+        // Check duplicate email
+        // --------------------------------------------------------
+
+        const emailSql = `
             SELECT id_account
-            FROM accounts 
+            FROM accounts
             WHERE email = ?
         `;
-        const row = await dal.execute(isMatchEmailSql,[customer.email]) as RowDataPacket[];
 
-        const existingAccount = row[0]
+        const emailRows = await dal.execute(emailSql, [customer.email]) as RowDataPacket[];
 
-        if(existingAccount) {
-            throw new ConflictError("Email already exists")
+        if (emailRows[0]) {
+            throw new ConflictError("Email already exists");
         }
-        
-        const isMatchPhoneSql = `
+
+
+        // --------------------------------------------------------
+        // Check duplicate phone
+        // --------------------------------------------------------
+
+        const phoneSql = `
             SELECT id_customer
             FROM customers
-            WHERE phone =?
+            WHERE phone = ?
         `;
 
-        const listPhone = await dal.execute(isMatchPhoneSql, [customer.phone]) as RowDataPacket[];
+        const phoneRows = await dal.execute(phoneSql, [customer.phone]) as RowDataPacket[];
 
-        const existingPhone = listPhone[0];
-        if(existingPhone){
-            throw new ConflictError("Phone already exists")
+        if (phoneRows[0]) {
+            throw new ConflictError("Phone already exists");
         }
 
+
+        // --------------------------------------------------------
+        // Password
+        // --------------------------------------------------------
 
         const hashedPassword = await bcrypt.hash(customer.password, 12);
 
-        //Inset to account table
+
+        // --------------------------------------------------------
+        // Create Account
+        // --------------------------------------------------------
+
         const accountSql = `
-            INSERT INTO accounts(
+            INSERT INTO accounts (
                 email,
                 password,
                 account_type,
                 is_active
             )
-            VALUES(?,?,?,?)
+            VALUES (?, ?, ?, ?)
         `;
-        const accountInfo = await dal.execute(accountSql, [
-            customer.email,
-            hashedPassword,
-            "customer",
-            true
-        ]) as OkPacketParams;
+
+        const accountInfo = await dal.execute(
+            accountSql,
+            [
+                customer.email,
+                hashedPassword,
+                "customer",
+                true
+            ]
+        ) as OkPacketParams;
+
 
         const idAccount = Number(accountInfo.insertId);
 
-        //Insert into customer table
-        const sql = `
+
+        // --------------------------------------------------------
+        // Create Customer
+        // --------------------------------------------------------
+
+        const customerSql = `
             INSERT INTO customers (
+                id_account,
                 first_name,
                 last_name,
                 phone,
-                email,
-                id_account
+                email
             )
-            VALUES (?,?,?,?,?)
+            VALUES (?, ?, ?, ?, ?)
         `;
 
-        const info = await dal.execute(sql, [
-            customer.firstName,
-            customer.lastName,
-            customer.phone,
-            customer.email,
-            idAccount
-        ]) as OkPacketParams;
+        const customerInfo = await dal.execute(
+            customerSql,
+            [
+                idAccount,
+                customer.firstName,
+                customer.lastName,
+                customer.phone,
+                customer.email
+            ]
+        ) as OkPacketParams;
 
-        const idCustomer = Number(info.insertId);
+
+        const idCustomer = Number(customerInfo.insertId);
 
 
-        //token 
+        // --------------------------------------------------------
+        // JWT
+        // --------------------------------------------------------
+
         const token = jwt.sign(
             {
                 idAccount,
@@ -101,277 +136,622 @@ class CustomerService {
                 accountType: "customer"
             },
             process.env.JWT_SECRET!,
-            { expiresIn: "8h" }
-        )
+            {
+                expiresIn: "8h"
+            }
+        );
+
+
         return {
+
             token,
+
             customer: {
+
                 idAccount,
                 idCustomer,
+
                 firstName: customer.firstName,
                 lastName: customer.lastName,
+
                 email: customer.email,
                 phone: customer.phone,
-                hasVipCard:false,
+
+                hasVipCard: false,
                 tier: null,
+
                 isActive: true,
+
                 createdAt: new Date()
             }
-        }
+        };
     }
 
 
 
-    //Customer Login
+
+    // ============================================================
+    // CUSTOMER LOGIN
+    // ============================================================
+
     public async loginCustomer(credentials: CustomerLoginDto): Promise<CustomerAuthResponseModel> {
 
         credentials.email = sanitizeText(credentials.email).toLowerCase();
 
-        console.log("Customer login service");
 
         const sql = `
             SELECT
+
                 c.id_customer AS idCustomer,
                 c.id_account AS idAccount,
+
                 c.first_name AS firstName,
                 c.last_name AS lastName,
+
                 c.phone,
                 c.email,
+
                 c.is_active AS isActive,
+
                 c.created_at AS createdAt,
+
                 a.password,
 
-            CASE
-                WHEN vc.id_vip_card IS NULL THEN FALSE
-                ELSE TRUE
-            END AS hasVipCard,
+                CASE
+                    WHEN vc.id_vip_card IS NULL
+                    THEN FALSE
+                    ELSE TRUE
+                END AS hasVipCard,
 
-            vc.tier AS tier
+                vc.tier AS tier
 
-            FROM customers c
+            FROM customers AS c
 
-            INNER JOIN accounts a
+            INNER JOIN accounts AS a
                 ON c.id_account = a.id_account
 
-            LEFT JOIN vip_cards vc
+            LEFT JOIN vip_cards AS vc
                 ON vc.id_customer = c.id_customer
                 AND vc.card_status = 'active'
 
-            WHERE c.email = ? 
+            WHERE a.email = ?
+              AND a.account_type = 'customer'
+              AND a.is_active = TRUE
+              AND c.is_active = TRUE
         `;
 
-        console.log("Before login SQL");
 
-        const customers = await dal.execute(sql, [credentials.email]) as any[];
+        const customers = await dal.execute(
+            sql,
+            [credentials.email]
+        ) as any[];
+
 
         const customer = customers[0];
-
-        console.log("After login SQL");
-        console.log("customers =", customers);
 
 
         if (!customer) {
             throw new Error("Invalid email or password");
         }
 
-        //check password
+
+        // --------------------------------------------------------
+        // Password verification
+        // --------------------------------------------------------
+
         const isMatch = await bcrypt.compare(
             credentials.password,
             customer.password
         );
 
+
         if (!isMatch) {
             throw new Error("Invalid email or password");
         }
 
-        const token = jwt.sign({
-            idAccount: customer.idAccount,
-            idCustomer: customer.idCustomer,
-            accountType: "customer"
-        },
+
+        // --------------------------------------------------------
+        // JWT
+        // --------------------------------------------------------
+
+        const token = jwt.sign(
+            {
+                idAccount: customer.idAccount,
+                idCustomer: customer.idCustomer,
+                accountType: "customer"
+            },
             process.env.JWT_SECRET!,
-            { expiresIn: "8h" }
+            {
+                expiresIn: "8h"
+            }
         );
 
+
         return {
+
             token,
+
             customer: {
+
                 idCustomer: customer.idCustomer,
                 idAccount: customer.idAccount,
+
                 firstName: customer.firstName,
                 lastName: customer.lastName,
+
                 email: customer.email,
                 phone: customer.phone,
-                isActive: customer.isActive,
-                hasVipCard: Boolean(customer.hasVipCard),
-                tier: customer.tier ?? null ,
-                createdAt: customer.createdAt
+
+                isActive: Boolean(customer.isActive),
+
+                hasVipCard:
+                    Boolean(customer.hasVipCard),
+
+                tier:
+                    customer.tier ?? null,
+
+                createdAt:
+                    customer.createdAt
             }
-        }
-
-
-
+        };
     }
 
 
 
 
+    // ============================================================
+    // GET ALL CUSTOMERS
+    // ============================================================
 
-    //Get All customers
     public async getAllCustomers(): Promise<CustomerModel[]> {
+
         const sql = `
-            SELECT 
+            SELECT
+
                 c.id_customer AS idCustomer,
+                c.id_account AS idAccount,
+
                 c.first_name AS firstName,
                 c.last_name AS lastName,
+
                 c.phone,
                 c.email,
+
                 c.date_of_birth AS dateOfBirth,
+
                 c.is_active AS isActive,
+
                 c.created_at AS createdAt,
                 c.updated_at AS updatedAt,
-            CASE
-                WHEN vc.id_vip_card IS NULL THEN FALSE
-                ELSE TRUE
-            END AS hasVipCard
 
-            FROM customers c
-            LEFT JOIN vip_cards vc
+                CASE
+                    WHEN vc.id_vip_card IS NULL
+                    THEN FALSE
+                    ELSE TRUE
+                END AS hasVipCard,
+
+                vc.tier AS tier
+
+            FROM customers AS c
+
+            LEFT JOIN vip_cards AS vc
                 ON vc.id_customer = c.id_customer
-                AND vc.card_status = "active"             
-            WHERE c.is_active = TRUE
-            ORDER BY first_name, last_name
-        `;
-        return await dal.execute(sql) as CustomerModel[];
+                AND vc.card_status = 'active'
 
+            WHERE c.is_active = TRUE
+
+            ORDER BY
+                c.first_name,
+                c.last_name
+        `;
+
+
+        return await dal.execute(sql) as CustomerModel[];
     }
 
 
 
 
-    //Get One customer
+    // ============================================================
+    // GET ONE CUSTOMER
+    // ============================================================
+
     public async getOneCustomer(id: number): Promise<CustomerModel> {
+
         const sql = `
-            SELECT 
-                c.id_customer As idCustomer,
-                c.first_name As firstName,
-                c.last_name As lastName,
+            SELECT
+
+                c.id_customer AS idCustomer,
+                c.id_account AS idAccount,
+
+                c.first_name AS firstName,
+                c.last_name AS lastName,
+
                 c.phone,
                 c.email,
-                c.date_of_birth As dateOfBirth,
+
+                c.date_of_birth AS dateOfBirth,
+
                 c.is_active AS isActive,
-                c.created_at As createdAt,
-                c.updated_at As updatedAt,
+
+                c.created_at AS createdAt,
+                c.updated_at AS updatedAt,
+
                 CASE
-                    WHEN vc.id_vip_card IS NULL THEN FALSE
+                    WHEN vc.id_vip_card IS NULL
+                    THEN FALSE
                     ELSE TRUE
-                END AS hasVipCard
-           FROM customers c
-           LEFT JOIN vip_cards vc
+                END AS hasVipCard,
+
+                vc.tier AS tier
+
+            FROM customers AS c
+
+            LEFT JOIN vip_cards AS vc
                 ON vc.id_customer = c.id_customer
                 AND vc.card_status = 'active'
 
             WHERE c.id_customer = ?
         `;
-        const customers = await dal.execute(sql, [id]) as CustomerModel[];
+
+
+        const customers = await dal.execute(
+            sql,
+            [id]
+        ) as CustomerModel[];
+
 
         const customer = customers[0];
+
+
         if (!customer) {
             throw new ResourceNotFoundError(id);
         }
+
+
         return customer;
     }
 
 
 
-    //Search customer
+
+    // ============================================================
+    // SEARCH CUSTOMERS
+    // ============================================================
+
     public async searchCustomers(text: string): Promise<CustomerModel[]> {
-        const cleanText = sanitizeText(text.trim());
-        const searchText = `%${cleanText}%`
+
+        const cleanText =
+            sanitizeText(text.trim()).toLowerCase();
+
+        const searchText =
+            `%${cleanText}%`;
+
 
         const sql = `
-        SELECT
-            c.id_customer AS idCustomer,
-            c.first_name AS firstName,
-            c.last_name AS lastName,
-            c.phone,
-            c.email,
-            c.date_of_birth AS dateOfBirth,
-            c.is_active AS isActive,
-            c.created_at AS createdAt,
-            c.updated_at AS updatedAt,
-            CASE
-                WHEN vc.id_vip_card IS NULL THEN FALSE
-                ELSE TRUE
-            END AS hasVipCard
-        FROM customers c
-        LEFT JOIN vip_cards vc
-            ON vc.id_customer = c.id_customer
-        AND vc.card_status = 'active'
-        WHERE c.is_active = TRUE
-          AND (
+            SELECT
+
+                c.id_customer AS idCustomer,
+                c.id_account AS idAccount,
+
+                c.first_name AS firstName,
+                c.last_name AS lastName,
+
+                c.phone,
+                c.email,
+
+                c.date_of_birth AS dateOfBirth,
+
+                c.is_active AS isActive,
+
+                c.created_at AS createdAt,
+                c.updated_at AS updatedAt,
+
+                CASE
+                    WHEN vc.id_vip_card IS NULL
+                    THEN FALSE
+                    ELSE TRUE
+                END AS hasVipCard,
+
+                vc.tier AS tier
+
+            FROM customers AS c
+
+            LEFT JOIN vip_cards AS vc
+                ON vc.id_customer = c.id_customer
+                AND vc.card_status = 'active'
+
+            WHERE c.is_active = TRUE
+
+            AND (
                 LOWER(c.first_name) LIKE ?
                 OR LOWER(c.last_name) LIKE ?
                 OR c.phone LIKE ?
                 OR LOWER(c.email) LIKE ?
-          )
-        ORDER BY c.first_name, c.last_name
+            )
+
+            ORDER BY
+                c.first_name,
+                c.last_name
         `;
-        return await dal.execute(sql, [
-            searchText,
-            searchText,
-            searchText,
-            searchText
-        ]) as CustomerModel[];
+
+
+        return await dal.execute(
+            sql,
+            [
+                searchText,
+                searchText,
+                searchText,
+                searchText
+            ]
+        ) as CustomerModel[];
     }
 
 
 
-    //Add customer
+
+    // ============================================================
+    // ADD CUSTOMER BY ADMIN
+    // Creates both ACCOUNT + CUSTOMER
+    // ============================================================
+
     public async addCustomer(customer: AddCustomerDto): Promise<CustomerModel> {
+
         customer.firstName = sanitizeText(customer.firstName);
-        customer.lastName = sanitizeText(customer.lastName)
-        if (customer.phone) { customer.phone = sanitizeText(customer.phone) }
-        if (customer.email) { customer.email = sanitizeText(customer.email) }
 
-        const dateOfBirth = customer.dateOfBirth ? String(customer.dateOfBirth).slice(0, 10) : null;
+        customer.lastName = sanitizeText(customer.lastName);
 
-        const sql = `
+
+        if (customer.phone) {
+            customer.phone = sanitizeText(customer.phone);
+        }
+
+
+        if (customer.email) {
+            customer.email = sanitizeText(customer.email).toLowerCase();
+        }
+
+
+        // --------------------------------------------------------
+        // Email required for account
+        // --------------------------------------------------------
+
+        if (!customer.email) {
+            throw new ConflictError("Customer email is required");
+        }
+
+
+        // --------------------------------------------------------
+        // Password required for account
+        // Add password!: string to AddCustomerDto
+        // --------------------------------------------------------
+
+        if (!customer.password) {
+            throw new ConflictError("Customer password is required");
+        }
+
+
+        // --------------------------------------------------------
+        // Duplicate Email
+        // --------------------------------------------------------
+
+        const existingAccountSql = `
+            SELECT id_account
+            FROM accounts
+            WHERE email = ?
+        `;
+
+        const accounts = await dal.execute(
+            existingAccountSql,
+            [customer.email]
+        ) as RowDataPacket[];
+
+
+        if (accounts[0]) {
+            throw new ConflictError(
+                "Email already exists"
+            );
+        }
+
+
+        // --------------------------------------------------------
+        // Duplicate Phone
+        // --------------------------------------------------------
+
+        if (customer.phone) {
+
+            const phoneSql = `
+                SELECT id_customer
+                FROM customers
+                WHERE phone = ?
+            `;
+
+            const customers = await dal.execute(
+                phoneSql,
+                [customer.phone]
+            ) as RowDataPacket[];
+
+
+            if (customers[0]) {
+                throw new ConflictError(
+                    "Phone already exists"
+                );
+            }
+        }
+
+
+        // --------------------------------------------------------
+        // Password
+        // --------------------------------------------------------
+
+        const hashedPassword = await bcrypt.hash(customer.password, 12);
+
+
+        // --------------------------------------------------------
+        // Create Account
+        // --------------------------------------------------------
+
+        const accountSql = `
+            INSERT INTO accounts (
+                email,
+                password,
+                account_type,
+                is_active
+            )
+            VALUES (?, ?, ?, ?)
+        `;
+
+
+        const accountInfo = await dal.execute(
+            accountSql,
+            [
+                customer.email,
+                hashedPassword,
+                "customer",
+                true
+            ]
+        ) as OkPacketParams;
+
+
+        const idAccount =
+            Number(accountInfo.insertId);
+
+
+        // --------------------------------------------------------
+        // Date
+        // --------------------------------------------------------
+
+        const dateOfBirth =
+            customer.dateOfBirth
+                ? String(customer.dateOfBirth)
+                    .slice(0, 10)
+                : null;
+
+
+        // --------------------------------------------------------
+        // Create Customer
+        // --------------------------------------------------------
+
+        const customerSql = `
             INSERT INTO customers (
+                id_account,
                 first_name,
                 last_name,
                 phone,
                 email,
                 date_of_birth
             )
-            VALUES (?,?,?,?,?)            
+            VALUES (?, ?, ?, ?, ?, ?)
         `;
-        const values = [
-            customer.firstName,
-            customer.lastName,
-            customer.phone ?? null,
-            customer.email ?? null,
-            dateOfBirth
-        ]
-        const info = await dal.execute(sql, values) as OkPacketParams;
-        return await this.getOneCustomer(Number(info.insertId))
+
+
+        const customerInfo = await dal.execute(
+            customerSql,
+            [
+                idAccount,
+                customer.firstName,
+                customer.lastName,
+                customer.phone ?? null,
+                customer.email,
+                dateOfBirth
+            ]
+        ) as OkPacketParams;
+
+
+        return await this.getOneCustomer(
+            Number(customerInfo.insertId)
+        );
     }
 
 
 
-    //Update customer
+
+    // ============================================================
+    // UPDATE CUSTOMER
+    // Updates customer + linked account
+    // ============================================================
+
     public async updateCustomer(id: number, customer: UpdateCustomerDto): Promise<CustomerModel> {
 
         const existing = await this.getOneCustomer(id);
 
-        const firstName = customer.firstName !== undefined ? sanitizeText(customer.firstName) : existing.firstName;
-        const lastName = customer.lastName !== undefined ? sanitizeText(customer.lastName) : existing.lastName;
-        const phone = customer.phone !== undefined ? sanitizeText(customer.phone) : existing.phone;
-        const email = customer.email !== undefined ? sanitizeText(customer.email) : existing.email;
-        const dateOfBirth = customer !== undefined ? customer.dateOfBirth ? String(customer.dateOfBirth).slice(0, 10) : null : existing.dateOfBirth;
-        const isActive = customer.isActive !== undefined ? customer.isActive : existing.isActive;
 
-        const sql = `
+        const firstName =
+            customer.firstName !== undefined
+                ? sanitizeText(customer.firstName)
+                : existing.firstName;
+
+
+        const lastName =
+            customer.lastName !== undefined
+                ? sanitizeText(customer.lastName)
+                : existing.lastName;
+
+
+        const phone =
+            customer.phone !== undefined
+                ? sanitizeText(customer.phone)
+                : existing.phone;
+
+
+        const email =
+            customer.email !== undefined
+                ? sanitizeText(customer.email)
+                    .toLowerCase()
+                : existing.email;
+
+
+        const dateOfBirth =
+            customer.dateOfBirth !== undefined
+                ? customer.dateOfBirth
+                    ? String(customer.dateOfBirth)
+                        .slice(0, 10)
+                    : null
+                : existing.dateOfBirth;
+
+
+        const isActive =
+            customer.isActive !== undefined
+                ? customer.isActive
+                : existing.isActive;
+
+
+        // --------------------------------------------------------
+        // Prevent duplicate email
+        // --------------------------------------------------------
+
+        if (email !== existing.email) {
+
+            const emailSql = `
+                SELECT id_account
+                FROM accounts
+                WHERE email = ?
+                  AND id_account <> ?
+            `;
+
+
+            const rows = await dal.execute(
+                emailSql,
+                [
+                    email,
+                    existing.idAccount
+                ]
+            ) as RowDataPacket[];
+
+
+            if (rows[0]) {
+                throw new ConflictError(
+                    "Email already exists"
+                );
+            }
+        }
+
+
+        // --------------------------------------------------------
+        // Update customer
+        // --------------------------------------------------------
+
+        const customerSql = `
             UPDATE customers
             SET
                 first_name = ?,
@@ -379,35 +759,97 @@ class CustomerService {
                 phone = ?,
                 email = ?,
                 date_of_birth = ?,
-                is_active =?
+                is_active = ?
             WHERE id_customer = ?
         `;
-        const values = [
-            firstName,
-            lastName,
-            phone,
-            email,
-            dateOfBirth,
-            isActive,
-            id
-        ];
-        await dal.execute(sql, values)
-        return this.getOneCustomer(id);
+
+
+        await dal.execute(
+            customerSql,
+            [
+                firstName,
+                lastName,
+                phone,
+                email,
+                dateOfBirth,
+                isActive,
+                id
+            ]
+        );
+
+
+        // --------------------------------------------------------
+        // Update account
+        // --------------------------------------------------------
+
+        const accountSql = `
+            UPDATE accounts
+            SET
+                email = ?,
+                is_active = ?
+            WHERE id_account = ?
+        `;
+
+
+        await dal.execute(
+            accountSql,
+            [
+                email,
+                isActive,
+                existing.idAccount
+            ]
+        );
+
+
+        return await this.getOneCustomer(id);
     }
 
 
-    //Soft Delete
-    public async deleteCustomer(id: number): Promise<void> {
-        await this.getOneCustomer(id)
 
-        const sql = `
+
+    // ============================================================
+    // SOFT DELETE CUSTOMER
+    // Disables customer + account
+    // ============================================================
+
+    public async deleteCustomer(
+        id: number
+    ): Promise<void> {
+
+        const customer =
+            await this.getOneCustomer(id);
+
+
+        // Customer
+        const customerSql = `
             UPDATE customers
             SET is_active = FALSE
             WHERE id_customer = ?
         `;
-        await dal.execute(sql, [id])
+
+
+        await dal.execute(
+            customerSql,
+            [id]
+        );
+
+
+        // Account
+        const accountSql = `
+            UPDATE accounts
+            SET is_active = FALSE
+            WHERE id_account = ?
+        `;
+
+
+        await dal.execute(
+            accountSql,
+            [customer.idAccount]
+        );
     }
 
 }
 
-export const customerService = new CustomerService();
+
+export const customerService =
+    new CustomerService();

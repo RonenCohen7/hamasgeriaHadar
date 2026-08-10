@@ -18,9 +18,14 @@ backend/.env
 frontend/.env
 
 # ==========================
-# Uploaded images
+# Runtime Storage (Uploads)
 # ==========================
-backend/src/assets/images/
+backend/storage/
+
+# Keep folder structure
+!backend/storage/
+!backend/storage/**/
+!backend/storage/**/.gitkeep
 
 # ==========================
 # Logs

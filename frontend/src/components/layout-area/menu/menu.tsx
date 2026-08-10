@@ -111,7 +111,8 @@ export function Menu() {
                                 🚪 Logout
                             </button>
                         </div>
-                        <NavLink to="/customer-dashboard" className="menu-link" data-tooltip="Dashboard">🏠</NavLink>
+
+                        <NavLink to="/customer-dashboard" className="menu-link" data-tooltip="Dashboard"> 🎭</NavLink>
 
                         <NavLink
                             to={`/vip-cards/customer/${customer.idCustomer}`}
@@ -120,7 +121,7 @@ export function Menu() {
                         >
                             💳
                         </NavLink>
-                        
+
                         {customer?.hasVipCard && (<NavLink
                             to="/transactions"
                             className="menu-link"
@@ -145,25 +146,41 @@ export function Menu() {
                             <NavLink
                                 to="/inventory-live"
                                 className="menu-link"
-                                data-tooltip ="Inventory-Live"
+                                data-tooltip="Inventory-Live"
                             >
                                 <FaWarehouse />
                             </NavLink>
                         )}
 
-                        <NavLink to="/sales/new" className="menu-link" data-tooltip ="Create Sale">
+
+
+
+                        {(role === "admin" || role === "manager") && (
+                            <NavLink
+                                to="/events"
+                                className="menu-link"
+                                data-tooltip="Events"
+                            >
+                                🎭
+                            </NavLink>
+                        )}
+
+
+
+
+                        <NavLink to="/sales/new" className="menu-link" data-tooltip="Create Sale">
                             <FaSackDollar />
                         </NavLink>
 
-                        <NavLink to="/quick-sale" className="menu-link" data-tooltip ="Quick Sale">
+                        <NavLink to="/quick-sale" className="menu-link" data-tooltip="Quick Sale">
                             <FaSalesforce />
                         </NavLink>
 
-                        <NavLink to="/products" className="menu-link" data-tooltip ="Products">
+                        <NavLink to="/products" className="menu-link" data-tooltip="Products">
                             <FaBoxOpen />
                         </NavLink>
 
-                        <NavLink to="/inventory-count" className="menu-link" data-tooltip ="Inventory Count">
+                        <NavLink to="/inventory-count" className="menu-link" data-tooltip="Inventory Count">
                             <FaClipboardCheck />
                         </NavLink>
 
@@ -172,7 +189,7 @@ export function Menu() {
                                 <NavLink
                                     to="/suppliers"
                                     className="menu-link"
-                                    data-tooltip ="Suppliers"
+                                    data-tooltip="Suppliers"
                                 >
                                     <FaTruck />
                                 </NavLink>
@@ -180,7 +197,7 @@ export function Menu() {
                                 <NavLink
                                     to="/supplier-orders"
                                     className="menu-link"
-                                    data-tooltip ="Suppliers Orders"
+                                    data-tooltip="Suppliers Orders"
                                 >
                                     <FaFileInvoice />
                                 </NavLink>
@@ -188,18 +205,18 @@ export function Menu() {
                                 <NavLink
                                     to="/customers"
                                     className="menu-link"
-                                    data-tooltip ="Customers"
+                                    data-tooltip="Customers"
                                 >
                                     👥
                                 </NavLink>
                             </>
                         )}
 
-                        <NavLink to="/about" className="menu-link" data-tooltip ="About">
+                        <NavLink to="/about" className="menu-link" data-tooltip="About">
                             <FaInfoCircle />
                         </NavLink>
 
-                        <NavLink to="/contact-us" className="menu-link" data-tooltip ="Contact Us">
+                        <NavLink to="/contact-us" className="menu-link" data-tooltip="Contact Us">
                             <FaEnvelope />
                         </NavLink>
                     </>

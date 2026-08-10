@@ -118,7 +118,7 @@ class EventService {
                 event_status,
                 created_by
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `
         const values = [
             event.eventName,
@@ -131,7 +131,7 @@ class EventService {
             event.expectedGuests ?? null,
             event.actualGuests ?? null,
             event.ticketPrice ?? 0,
-            event.eventStatus ?? EventStatus.Planned,
+            event.eventStatus ?? "planned",
             event.createdBy ?? 1
         ];
         const info = await dal.execute(sql, values) as OkPacketParams;
@@ -140,20 +140,20 @@ class EventService {
         return event
     }
     // Update event:
- public async updateEvent(event: UpdateEventDto): Promise<EventModel> {
+    public async updateEvent(event: UpdateEventDto): Promise<EventModel> {
 
-    event.eventName = sanitizeText(event.eventName);
-    event.eventDescription = sanitizeText(event.eventDescription);
-    event.eventLocation = sanitizeText(event.eventLocation);
+        event.eventName = sanitizeText(event.eventName);
+        event.eventDescription = sanitizeText(event.eventDescription);
+        event.eventLocation = sanitizeText(event.eventLocation);
 
-    if (event.image) {
-        event.coverImage = await imageService.saveEventImage({
-            originalname: event.image.name,
-            buffer: event.image.data
-        });
-    }
+        if (event.image) {
+            event.coverImage = await imageService.saveEventImage({
+                originalname: event.image.name,
+                buffer: event.image.data
+            });
+        }
 
-    const sql = `
+        const sql = `
         UPDATE events
         SET
             event_name = ?,
@@ -169,28 +169,28 @@ class EventService {
         WHERE id_event = ?
     `;
 
-    const values = [
-        event.eventName ?? null,
-        event.eventDescription ?? null,
-        event.coverImage ?? null,
-        event.eventStart ?? null,
-        event.eventEnd ?? null,
-        event.eventLocation ?? null,
-        event.maximumGuests ?? null,
-        event.expectedGuests ?? null,
-        event.ticketPrice ?? 0,
-        event.eventStatus ?? "planned",
-        event.idEvent!
-    ];
+        const values = [
+            event.eventName ?? null,
+            event.eventDescription ?? null,
+            event.coverImage ?? null,
+            event.eventStart ?? null,
+            event.eventEnd ?? null,
+            event.eventLocation ?? null,
+            event.maximumGuests ?? null,
+            event.expectedGuests ?? null,
+            event.ticketPrice ?? 0,
+            event.eventStatus ?? "planned",
+            event.idEvent!
+        ];
 
-    const info = await dal.execute(sql, values) as OkPacketParams;
+        const info = await dal.execute(sql, values) as OkPacketParams;
 
-    if (info.affectedRows === 0) {
-        throw new ResourceNotFoundError(event.idEvent!);
+        if (info.affectedRows === 0) {
+            throw new ResourceNotFoundError(event.idEvent!);
+        }
+
+        return await this.getOneEvent(event.idEvent!);
     }
-
-    return await this.getOneEvent(event.idEvent!);
-}
 
 
 

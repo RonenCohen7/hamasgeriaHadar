@@ -1,23 +1,32 @@
 export class CustomerModel {
     idCustomer!: number;
+    idAccount!: number;
+
     firstName!: string;
     lastName!: string;
     phone!: string | null;
-    email!: string | null;
-    dateOfBirth!: string | null;
+    email!: string;
+
+    dateOfBirth!: Date | null;
+
     isActive!: boolean;
+    hasVipCard!: boolean;
+    tier!: string | null;
+
     createdAt!: Date;
     updatedAt!: Date;
-    hasVipCard!: boolean;
 }
 
 export class AddCustomerDto {
     firstName!: string;
     lastName!: string;
-    phone?: string | null;
-    email?: string | null;
-    dateOfBirth?: string | null;
 
+    phone?: string;
+    email!: string;
+
+    password!: string;
+
+    dateOfBirth?: Date;
 }
 
 export class UpdateCustomerDto {

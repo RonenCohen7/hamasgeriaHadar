@@ -15,8 +15,8 @@ class CustomerController {
 
     public constructor() {
 
-        this.router.post("/api/customers/register", authLimiter, this.registerCustomer);
-        this.router.post("/api/customers/login", authLimiter, this.loginCustomer);
+        this.router.post("/api/customers/register",  this.registerCustomer);
+        this.router.post("/api/customers/login",  this.loginCustomer);
 
         this.router.get("/api/customers", verifyToken, this.getAllCustomers);
 
@@ -67,7 +67,7 @@ class CustomerController {
 
         }
         catch(err: any){
-            next:err
+            next(err)
         }
     }
 
@@ -134,7 +134,7 @@ class CustomerController {
             const customer: AddCustomerDto = request.body;
 
             const addCustomer = await customerService.addCustomer(customer)
-            response.sendStatus(201).json(addCustomer)
+            response.status(201).json(addCustomer)
         } catch (err: any) {
             next(err)
         }
@@ -148,7 +148,7 @@ class CustomerController {
             const id = Number(request.params.id);
 
             if (!Number.isInteger(id) || id <= 0) {
-                response.status(400).json({ message: "Id Must be a positive number" })
+                response.json({ message: "Id Must be a positive number" })
                 return;
             }
             const customer: UpdateCustomerDto = request.body;
