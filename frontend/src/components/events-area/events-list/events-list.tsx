@@ -140,7 +140,14 @@ export function EventsList() {
                     >
 
                         <div className="event-card-header">
-
+                            {event.coverImageUrl && (
+                                <div className="event-card-image">
+                                    <img
+                                        src={event.coverImageUrl}
+                                        alt={event.eventName}
+                                    />
+                                </div>
+                            )}
                             <span
                                 className={`status ${event.eventStatus}`}
                             >
@@ -179,6 +186,14 @@ export function EventsList() {
                             <span>
                                 💰 ₪{event.ticketPrice}
                             </span>
+                            <span>
+                                💰 Regular: ₪{Number(event.ticketPrice).toFixed(2)}
+                            </span>
+                            {event.vipPrice != null && (
+                                <span className="event-vip-price">
+                                    ⭐ VIP: ₪{Number(event.vipPrice).toFixed(2)}
+                                </span>
+                            )}
 
                         </div>
 

@@ -45,8 +45,9 @@ class EventService {
         formData.append("eventEnd", event.eventEnd);
         formData.append("eventLocation", event.eventLocation ?? "");
         formData.append("maximumGuests", String(event.maximumGuests ?? ""));
-        formData.append("exceptedGuests", String(event.expectedGuests ?? ""));
+        formData.append("expectedGuests", String(event.expectedGuests ?? ""));
         formData.append("ticketPrice", String(event.ticketPrice ?? 0));
+        formData.append("vipPrice",String(event.vipPrice !== null && event.vipPrice !== undefined ? String(event.vipPrice): ""));
         formData.append("eventStatus", event.eventStatus);
 
         if (image) {
@@ -71,6 +72,7 @@ class EventService {
         formData.append("maximumGuests", String(event.maximumGuests ?? ""));
         formData.append("expectedGuests", String(event.expectedGuests ?? ""));
         formData.append("ticketPrice", String(event.ticketPrice ?? 0));
+        formData.append("vipPrice",String(event.vipPrice !== null && event.vipPrice !== undefined ? String(event.vipPrice): ""));
         formData.append("eventStatus", event.eventStatus);
 
         if (image) {

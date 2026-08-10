@@ -17,6 +17,7 @@ export class EventModel {
     actualGuests!: number | null;
 
     ticketPrice!: number;
+    vipPrice!: number | null;
     eventStatus!: string;
 
     createdBy!: number;

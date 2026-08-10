@@ -30,6 +30,7 @@ class EventService {
                 e.expected_guests AS expectedGuests,
                 e.actual_guests AS actualGuests,
                 e.ticket_price AS ticketPrice,
+                e.vip_price AS vipPrice,
                 e.event_status AS eventStatus,
                 e.created_by AS createdBy,
                 e.created_at AS createdAt,
@@ -41,7 +42,7 @@ class EventService {
             ORDER BY e.event_start DESC
         `;
         const events = await dal.execute(sql,
-            [appConfig.baseImageUrl]
+            [appConfig.baseEventImageUrl]
         ) as EventModel[];
         return events;
 
@@ -49,6 +50,8 @@ class EventService {
 
     //Get One Event
     public async getOneEvent(id: number): Promise<EventModel> {
+
+
         const sql = `
             SELECT 
                 e.id_event AS idEvent,
@@ -69,6 +72,7 @@ class EventService {
                 e.expected_guests AS expectedGuests,
                 e.actual_guests AS actualGuests,
                 e.ticket_price AS ticketPrice,
+                e.vip_price As vipPrice,
                 e.event_status AS eventStatus,
                 e.created_by AS createdBy,
                 e.created_at AS createdAt,
@@ -79,7 +83,7 @@ class EventService {
                 ON e.created_by = u.id_user
             WHERE e.id_event = ?
         `;
-        const values = [id];
+        const values = [appConfig.baseEventImageUrl, id];
 
         const events = await dal.execute(sql, values) as EventModel[];
         const event = events[0];
@@ -115,10 +119,11 @@ class EventService {
                 expected_guests,
                 actual_guests,
                 ticket_price,
+                vip_price,
                 event_status,
                 created_by
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?)
         `
         const values = [
             event.eventName,
@@ -131,6 +136,7 @@ class EventService {
             event.expectedGuests ?? null,
             event.actualGuests ?? null,
             event.ticketPrice ?? 0,
+            event.vipPrice ?? null,
             event.eventStatus ?? "planned",
             event.createdBy ?? 1
         ];
@@ -142,12 +148,16 @@ class EventService {
     // Update event:
     public async updateEvent(event: UpdateEventDto): Promise<EventModel> {
 
+        const existingEvent = await this.getOneEvent(event.idEvent);
+
         event.eventName = sanitizeText(event.eventName);
         event.eventDescription = sanitizeText(event.eventDescription);
         event.eventLocation = sanitizeText(event.eventLocation);
 
+        let coverImage = existingEvent.coverImage;
+
         if (event.image) {
-            event.coverImage = await imageService.saveEventImage({
+            coverImage = await imageService.saveEventImage({
                 originalname: event.image.name,
                 buffer: event.image.data
             });
@@ -165,6 +175,7 @@ class EventService {
             maximum_guests = ?,
             expected_guests = ?,
             ticket_price = ?,
+            vip_price =?,
             event_status = ?
         WHERE id_event = ?
     `;
@@ -172,15 +183,16 @@ class EventService {
         const values = [
             event.eventName ?? null,
             event.eventDescription ?? null,
-            event.coverImage ?? null,
+            coverImage,
             event.eventStart ?? null,
             event.eventEnd ?? null,
             event.eventLocation ?? null,
             event.maximumGuests ?? null,
             event.expectedGuests ?? null,
             event.ticketPrice ?? 0,
+            event.vipPrice ?? null,      
             event.eventStatus ?? "planned",
-            event.idEvent!
+            event.idEvent
         ];
 
         const info = await dal.execute(sql, values) as OkPacketParams;
@@ -217,6 +229,7 @@ class EventService {
                 expected_guests AS expectedGuests,
                 actual_guests AS actualGuests,
                 ticket_price AS ticketPrice,
+                vip_price As vipPrice,
                 event_status AS eventStatus,
                 created_by AS createdBy,
                 created_at AS createdAt,

@@ -94,6 +94,10 @@ class EventController {
 
             event.idEvent = id;
 
+            if(request.files?.image){
+                event.image = request.files.image as UploadedFile;
+            }
+
             const updateEvent = await eventService.updateEvent(event);
             response.json(updateEvent);
 
