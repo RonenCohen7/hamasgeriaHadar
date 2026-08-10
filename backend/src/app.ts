@@ -45,8 +45,12 @@ class App {
 
             process.env.JWT_SECRET
 
-            app.use("/api/products/images", express.static("src/assets/images/products"));
+            app.use("/api/products/images", express.static("storage/products"));
+            app.use("/api/events/media", express.static("storage/events"));
+            app.use("/api/customers/images", express.static("storage/customers"));
+            app.use("/api/videos", express.static("storage/videos"));
 
+            
             app.use(fileUpload());
             app.use(cors());
             app.use(express.json());

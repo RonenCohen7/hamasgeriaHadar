@@ -11,7 +11,9 @@ class AppConfig {
     public readonly mysqlPassword = process.env.MYSQL_PASSWORD;
     public readonly mysqlDatabase = process.env.MYSQL_DATABASE;
 
-    public readonly productImages = "src/assets/images/products";
+    // public readonly productImages = "src/assets/images/products";
+    public readonly productImages = "storage/products";  //save in docker 
+
     public readonly baseImageUrl = process.env.BASE_IMAGE_URL!;
 }
 

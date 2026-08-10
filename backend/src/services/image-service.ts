@@ -11,10 +11,14 @@ interface UploadedImage {
 }
 class ImageService {
 
-    private readonly productsImagesFolder = path.join(process.cwd(), "src", "assets", "images", "products");
+    // private readonly productsImagesFolder = path.join(process.cwd(), "src", "assets", "images", "products");
+
+    private readonly productsImagesFolder = path.join(process.cwd(), "storage", "products");
 
     public async saveProductImage(image: UploadedImage): Promise<string> {
-        
+
+        await fs.mkdir(this.productsImagesFolder, {recursive:true})
+
         const extension = path.extname(image.originalname);
 
         const fileName = randomUUID() + extension;

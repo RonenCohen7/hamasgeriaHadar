@@ -57,7 +57,10 @@ services:
       - "4000:4000"
 
     volumes:
-      - hadar_product_images:/app/src/assets/images/products
+        - ./storage/products:/app/storage/products
+        - ./storage/events:/app/storage/events
+        - ./storage/customers:/app/storage/customers
+        - ./storage/videos:/app/storage/videos
 
   adminer:
     image: adminer
@@ -73,4 +76,4 @@ services:
 
 volumes:
   hadar_mysql_data:
-  hadar_product_images:
+   
