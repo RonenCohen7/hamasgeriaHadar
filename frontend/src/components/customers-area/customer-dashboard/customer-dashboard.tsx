@@ -141,6 +141,12 @@ export function CustomerDashboard() {
                 <div className="dashboard-events-grid">
                     {events.map(event => {
                         const eventDate = new Date(event.eventStart);
+
+                        const eventTime = eventDate.toLocaleTimeString("en-US", {
+                            hour: "2-digit",
+                            minute: "2-digit"
+                        });
+
                         return (
                             <article
                                 key={event.idEvent}
@@ -153,38 +159,58 @@ export function CustomerDashboard() {
                                         className="customer-event-cover"
                                     />
                                 )}
+
                                 <div className="dashboard-event-date">
                                     <strong>
                                         {eventDate.getDate()}
                                     </strong>
 
                                     <span>
-                                        {eventDate.toLocaleString("en-US", { month: "short" }).toUpperCase()}
+                                        {eventDate
+                                            .toLocaleString("en-US", {
+                                                month: "short"
+                                            })
+                                            .toUpperCase()}
                                     </span>
                                 </div>
-                                <div>
-                                    <h3>{event.eventName}</h3>
 
-                                    <p>{event.eventDescription}</p>
+                                <div className="dashboard-event-content">
 
-                                    <small>
-                                        {eventDate.toLocaleString()}
-                                    </small>
+                                    <div className="dashboard-event-main">
+                                        <h3>
+                                            {event.eventName}
+                                        </h3>
 
-                                    {event.eventLocation && (
-                                        <p>
-                                            📍 {event.eventLocation}
-                                        </p>
-                                    )}
-                                    <strong>
-                                        {Number(event.ticketPrice) > 0 ? `₪${event.ticketPrice}` : "Free Entry"}
-                                    </strong>
+                                        {event.eventDescription && (
+                                            <p className="dashboard-event-description">
+                                                {event.eventDescription}
+                                            </p>
+                                        )}
 
+                                        <div className="dashboard-event-meta">
+
+                                            <span>
+                                                🕒 {eventTime}
+                                            </span>
+
+                                            {event.eventLocation && (
+                                                <span>
+                                                    📍 {event.eventLocation}
+                                                </span>
+                                            )}
+
+                                        </div>
+                                    </div>
+
+                                    <div className="dashboard-event-price">
+                                        {Number(event.ticketPrice) > 0
+                                            ? `₪${Number(event.ticketPrice).toFixed(2)}`
+                                            : "Free Entry"}
+                                    </div>
 
                                 </div>
-
                             </article>
-                        )
+                        );
                     })}
 
                     <article className="dashboard-event-card">

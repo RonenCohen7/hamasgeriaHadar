@@ -214,7 +214,6 @@
     font-size: 14px;
     line-height: 1.6;
 }
-
 /* ===========================
    EVENTS
 =========================== */
@@ -222,96 +221,195 @@
 .dashboard-events-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 18px;
+    gap: 20px;
 }
 
+
+/* Event card */
+
 .dashboard-event-card {
-    display: flex;
+    min-height: 170px;
+
+    display: grid;
+    grid-template-columns: 130px 76px minmax(0, 1fr);
     align-items: center;
+
     gap: 18px;
 
-    padding: 20px;
+    padding: 18px;
+
+    overflow: hidden;
 
     border: 1px solid #dbe7ef;
-    border-radius: 18px;
+    border-radius: 22px;
 
     background:
         linear-gradient(
             135deg,
-            #ffffff,
-            #fbfcfd
+            #ffffff 0%,
+            #fbfdff 100%
         );
 
     box-shadow:
-        0 10px 26px rgba(22,50,74,.08);
+        0 10px 28px rgba(22, 50, 74, .08);
 
     transition:
         transform .22s ease,
-        box-shadow .22s ease;
+        box-shadow .22s ease,
+        border-color .22s ease;
 }
+
 
 .dashboard-event-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-5px);
+
+    border-color: rgba(197, 140, 18, .45);
 
     box-shadow:
-        0 18px 34px rgba(22,50,74,.12);
+        0 18px 38px rgba(22, 50, 74, .14);
 }
 
+
+/* Cover image */
+
+.customer-event-cover {
+    width: 130px;
+    height: 134px;
+
+    display: block;
+
+    object-fit: cover;
+
+    border-radius: 18px;
+
+    background: #f8fafc;
+
+    box-shadow:
+        0 7px 18px rgba(15, 23, 42, .10);
+}
+
+
+/* Date badge */
+
 .dashboard-event-date {
-    width: 72px;
-    min-width: 72px;
-    height: 72px;
+    width: 76px;
+    height: 76px;
 
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 
-    border-radius: 18px;
+    border-radius: 20px;
 
     background:
         linear-gradient(
-            135deg,
+            145deg,
             #17324a,
             #087ea4
         );
 
-    color: white;
+    color: #ffffff;
 
     box-shadow:
-        0 8px 18px rgba(8,126,164,.20);
+        0 9px 22px rgba(8, 126, 164, .23);
 }
 
+
 .dashboard-event-date strong {
-    font-size: 24px;
+    font-size: 27px;
+    font-weight: 900;
+
     line-height: 1;
 }
 
+
 .dashboard-event-date span {
-    margin-top: 5px;
+    margin-top: 6px;
 
     font-size: 11px;
-    font-weight: 800;
+    font-weight: 900;
 
-    letter-spacing: 1px;
+    letter-spacing: 1.2px;
 }
 
+
+/* Content */
+
+.dashboard-event-content {
+    min-width: 0;
+    min-height: 130px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+.dashboard-event-main {
+    min-width: 0;
+}
+
+
 .dashboard-event-card h3 {
-    margin: 0 0 6px;
+    margin: 0 0 7px;
 
     color: #17324a;
 
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 900;
+
+    line-height: 1.25;
 }
 
-.dashboard-event-card p {
-    margin: 0;
+
+.dashboard-event-description {
+    margin: 0 0 13px !important;
+
+    color: #64748b !important;
+
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+}
+
+
+/* Time + location */
+
+.dashboard-event-meta {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 8px 16px;
 
     color: #64748b;
 
-    font-size: 14px;
-    line-height: 1.5;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+.dashboard-event-meta span {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 5px;
+}
+
+
+/* Price always last */
+
+.dashboard-event-price {
+    margin-top: 16px;
+    padding-top: 12px;
+
+    border-top: 1px solid #edf2f7;
+
+    color: #17324a;
+
+    font-size: 17px;
+    font-weight: 900;
+
+    text-align: right;
 }
 
 /* ===========================
@@ -396,6 +494,22 @@
 
     font-size: 14px;
     line-height: 1.6;
+}
+
+
+.customer-event-cover {
+    width: 120px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 14px;
+    flex-shrink: 0;
+    display: block;
+}
+
+.dashboard-event-card {
+    display: flex;
+    align-items: center;
+    gap: 18px;
 }
 
 /* ===========================

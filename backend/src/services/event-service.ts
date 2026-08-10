@@ -198,28 +198,40 @@ class EventService {
     public async getUpcomingEvents(): Promise<EventModel[]> {
         const sql = `
             SELECT
-            e.id_event AS idEvent,
-            e.event_name AS eventName,
-            e.event_description AS eventDescription,
-            e.event_start AS eventStart,
-            e.event_end AS eventEnd,
-            e.event_location AS eventLocation,
-            e.maximum_guests AS maximumGuests,
-            e.expected_guests AS expectedGuests,
-            e.actual_guests AS actualGuests,
-            e.ticket_price AS ticketPrice,
-            e.event_status AS eventStatus,
-            e.created_by AS createdBy,
-            e.created_at AS createdAt,
-            e.updated_at AS updatedAt
-        FROM events AS e
-        WHERE e.event_start >= NOW()
-          AND e.event_status IN ('planned','active')
-        ORDER BY e.event_start ASC
-        LIMIT 5
-        `;
+                id_event AS idEvent,
+                event_name AS eventName,
+                event_description AS eventDescription,
 
-        return await dal.execute(sql) as EventModel[];
+                cover_image AS coverImage,
+
+                CASE
+                    WHEN cover_image IS NOT NULL
+                    THEN CONCAT(?, cover_image)
+                    ELSE NULL
+                END AS coverImageUrl,
+
+                event_start AS eventStart,
+                event_end AS eventEnd,
+                event_location AS eventLocation,
+                maximum_guests AS maximumGuests,
+                expected_guests AS expectedGuests,
+                actual_guests AS actualGuests,
+                ticket_price AS ticketPrice,
+                event_status AS eventStatus,
+                created_by AS createdBy,
+                created_at AS createdAt,
+                updated_at AS updatedAt
+
+            FROM events
+
+            WHERE event_start >= NOW()
+            AND event_status <> 'cancelled'
+
+            ORDER BY event_start
+        `;
+        const events = await dal.execute(sql, [appConfig.baseEventImageUrl]) as EventModel[];
+
+        return events;
     }
 
 
