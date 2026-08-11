@@ -147,8 +147,9 @@ export function CustomerDashboard() {
                             minute: "2-digit"
                         });
 
+
                         return (
-                            <article
+                            <article onClick={()=> navigate(`/events/details/${event.idEvent}`)}
                                 key={event.idEvent}
                                 className="dashboard-event-card"
                             >
@@ -206,6 +207,15 @@ export function CustomerDashboard() {
                                         {Number(event.ticketPrice) > 0
                                             ? `₪${Number(event.ticketPrice).toFixed(2)}`
                                             : "Free Entry"}
+
+
+                                    </div>
+                                    <div>
+                                        {event.vipPrice != null && (
+                                            <span className="vip-price">
+                                                ⭐️ VIP ₪{Number(event.vipPrice).toFixed(2)}
+                                            </span>
+                                        )}
                                     </div>
 
                                 </div>

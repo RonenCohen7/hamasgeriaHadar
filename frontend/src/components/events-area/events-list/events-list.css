@@ -9,7 +9,11 @@
 
     color: #17324a;
 }
-
+.event-vip-price {
+    font: bold;
+    color: orangered;
+    font-size: large;
+}
 
 /* =========================================
    HEADER
