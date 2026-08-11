@@ -415,24 +415,31 @@
 /* ===========================
    ACTIVITIES
 =========================== */
+/* ===========================
+   ACTIVITIES
+=========================== */
 
-.dashboard-events-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 20px;
-
+.dashboard-activities-grid {
     width: 100%;
-    min-width: 0;
+
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 20px;
 }
 
 .dashboard-activity-card {
     position: relative;
 
-    min-height: 320px;
+    width: 100%;
+    min-width: 0;
+    height: 320px;
 
     overflow: hidden;
 
     border-radius: 22px;
+
+    background: #ffffff;
 
     box-shadow:
         0 16px 36px rgba(15, 23, 42, .16);
@@ -441,13 +448,16 @@
 }
 
 .dashboard-activity-card img {
-    width: 100%;
-    height: 100%;
-
     position: absolute;
     inset: 0;
 
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
     object-fit: cover;
+    object-position: center;
 
     transition:
         transform .7s ease,
@@ -458,12 +468,15 @@
     transform: scale(1.07);
 
     filter:
-        brightness(.92) saturate(1.1);
+        brightness(.92)
+        saturate(1.1);
 }
 
 .dashboard-activity-overlay {
     position: absolute;
     inset: 0;
+
+    z-index: 2;
 
     display: flex;
     flex-direction: column;
@@ -472,11 +485,13 @@
     padding: 26px;
 
     background:
-        linear-gradient(180deg,
+        linear-gradient(
+            180deg,
             transparent 35%,
-            rgba(5, 12, 20, .82) 100%);
+            rgba(5, 12, 20, .82) 100%
+        );
 
-    color: white;
+    color: #ffffff;
 }
 
 .dashboard-activity-overlay h3 {
@@ -488,12 +503,65 @@
 
 .dashboard-activity-overlay p {
     max-width: 420px;
+
     margin: 0;
 
     color: rgba(255, 255, 255, .88);
 
     font-size: 14px;
     line-height: 1.6;
+}
+
+
+/* ===========================
+   TABLET
+=========================== */
+
+@media (max-width: 1000px) {
+
+    .dashboard-activities-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-activity-card {
+        height: 280px;
+    }
+}
+
+
+/* ===========================
+   MOBILE
+=========================== */
+
+@media (max-width: 700px) {
+
+    .dashboard-activities-grid {
+        gap: 16px;
+    }
+
+    .dashboard-activity-card {
+        height: 240px;
+    }
+
+    .dashboard-activity-overlay {
+        padding: 20px;
+    }
+
+    .dashboard-activity-overlay h3 {
+        font-size: 21px;
+    }
+}
+
+
+/* ===========================
+   SMALL MOBILE
+=========================== */
+
+@media (max-width: 480px) {
+
+    .dashboard-activity-card {
+        height: 210px;
+    }
 }
 
 

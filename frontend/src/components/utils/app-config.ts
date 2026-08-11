@@ -2,6 +2,8 @@ class AppConfig {
 
     public baseUrl = "http://localhost:4000/api/"
 
+    public baseMediaUrl = "http://localhost:4000";  // for media only 
+
     public readonly productUrl = this.baseUrl + "products";
 
     public readonly productCategoriesUrl = this.baseUrl + "categories";

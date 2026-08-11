@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { EventModel } from "../../models/event-model";
 import { eventService } from "../../service/eventService";
 import { notificationService } from "../../service/notificationService";
+import { dialogService } from "../../service/dialogService";
+import { current } from "@reduxjs/toolkit";
 
 export function EventsList() {
 
@@ -50,6 +52,38 @@ export function EventsList() {
             (sum, event) => sum + (event.expectedGuests ?? 0),
             0
         );
+
+    
+
+
+    async function deleteEvent(idEvent:number){
+        const confirm =  await dialogService.confirm(
+            "Delete Event?",
+            "Are you sure you want to delete this event?",
+            "Delete",
+            "Cancel"
+        );
+
+        if(!confirm) {
+            return;
+        };
+
+        try{
+            await eventService.deleteEvent(idEvent);
+
+            setEvents(currentEvents => 
+                currentEvents.filter(
+                    event => event.idEvent !== idEvent
+            ))
+            notificationService.success(
+                "Event delete successfully")
+        }catch(err){
+            console.error(err)
+            notificationService.error("Failed to delete event")
+        }
+        
+    }
+
 
 
     return (
@@ -238,6 +272,7 @@ export function EventsList() {
 
                             <button
                                 type="button"
+                                onClick={()=> deleteEvent(event.idEvent)}
                             >
                                 🗑 Delete
                             </button>

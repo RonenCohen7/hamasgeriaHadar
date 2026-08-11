@@ -26,10 +26,16 @@ export function CustomerDashboard() {
 
 
     useEffect(() => {
+
         eventService
-            .getUpcomingEvents()
-            .then(setEvents)
-            .catch(console.error);
+                   .getUpcomingEvents()
+        .then(result => {
+
+            console.log("UPCOMING EVENTS FROM SERVER:", result);
+
+            setEvents(result);
+        })
+        .catch(console.error);
 
 
     }, []);

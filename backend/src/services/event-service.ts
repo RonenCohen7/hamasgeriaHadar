@@ -39,6 +39,7 @@ class EventService {
             FROM events AS e
             JOIN users AS u
                 ON e.created_by = u.id_user
+            WHERE e.is_deleted = 0
             ORDER BY e.event_start DESC
         `;
         const events = await dal.execute(sql,
@@ -178,6 +179,7 @@ class EventService {
             vip_price =?,
             event_status = ?
         WHERE id_event = ?
+        AND id_delete = 0
     `;
 
         const values = [
@@ -190,7 +192,7 @@ class EventService {
             event.maximumGuests ?? null,
             event.expectedGuests ?? null,
             event.ticketPrice ?? 0,
-            event.vipPrice ?? null,      
+            event.vipPrice ?? null,
             event.eventStatus ?? "planned",
             event.idEvent
         ];
@@ -239,6 +241,7 @@ class EventService {
 
             WHERE event_start >= NOW()
             AND event_status <> 'cancelled'
+            AND is_deleted = 0
 
             ORDER BY event_start
         `;
@@ -254,8 +257,10 @@ class EventService {
     public async deleteEvent(id: number): Promise<void> {
 
         const sql = `
-            DELETE FROM events
+            UPDATE events
+            SET is_deleted = 1
             WHERE id_event = ?
+            AND is_deleted = 0
         `;
 
         const values = [id];
@@ -267,6 +272,9 @@ class EventService {
             throw new ResourceNotFoundError(id);
         }
     }
+
+
+
 
     //Get event Count
     public async getEventCount(): Promise<number> {

@@ -2,6 +2,7 @@ import Swal from "sweetalert2";
 
 
 class DialogService {
+    
     public async confirm(
         title: string,
         text:string,

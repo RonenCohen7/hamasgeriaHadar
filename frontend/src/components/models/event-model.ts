@@ -23,4 +23,6 @@ export class EventModel {
     createdBy!: number;
     createdAt!: string;
     updatedAt!: string;
+
+    isDelete!: number | null;
 }
