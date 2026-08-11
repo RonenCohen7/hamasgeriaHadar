@@ -7,7 +7,24 @@
 
     background: #f5f7fa;
 }
+.forgot-password {
+    margin-top: 12px;
+    text-align: center;
+}
 
+.forgot-password button {
+    border: none;
+    background: none;
+    cursor: pointer;
+
+    color: #087f9c;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.forgot-password button:hover {
+    text-decoration: underline;
+}
 /* ===========================
    HERO
 =========================== */

@@ -168,9 +168,9 @@ export function Menu() {
 
 
 
-                        <NavLink to="/sales/new" className="menu-link" data-tooltip="Create Sale">
+                        {/* <NavLink to="/sales/new" className="menu-link" data-tooltip="Create Sale">
                             <FaSackDollar />
-                        </NavLink>
+                        </NavLink> */}
 
                         <NavLink to="/quick-sale" className="menu-link" data-tooltip="Quick Sale">
                             <FaSalesforce />

@@ -31,7 +31,7 @@ import { CardDetails } from "../../vip-card-area/card-details/card-details";
 import { RechargeCard } from "../../vip-card-area/recharge-card/recharge-card";
 import { TransactionsPage } from "../../vip-card-area/transactions-page/transactions-page";
 import { EditCard } from "../../vip-card-area/edit-card/edit-card";
-import { CustomerLogin } from "../../customers-area/customer-login/customer-login";
+
 import { CustomerDashboard } from "../../customers-area/customer-dashboard/customer-dashboard";
 import { CustomerProtectedRoute } from "../../utils/customerProtectedRouter";
 import { AddCard } from "../../vip-card-area/add-card/add-card";
@@ -41,6 +41,8 @@ import { AddEvent } from "../../events-area/add-event/add-event";
 import { EditEvent } from "../../events-area/edit-event/edit-event";
 import { EventMedia } from "../../events-area/event-media/event-media";
 import { EventDetails } from "../../events-area/event-details/event-details";
+import { ForgotPassword } from "../../customers-area/forgot-password/forgot-password";
+import { CustomerLogin } from "../../customers-area/customer-login/customer-login";
 
 
 export function Routing() {
@@ -49,6 +51,8 @@ export function Routing() {
             <Route path="/" element={<AuthGuard><Home /></AuthGuard>} />
 
             <Route path="/customer-login" element={<CustomerLogin />} />
+
+            <Route path="/customer-forgot-password" element={<ForgotPassword/>}/>
 
             <Route path="/customer-register" element={<CustomerRegister />} />
 
