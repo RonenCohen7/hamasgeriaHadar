@@ -9,6 +9,7 @@ import { sanitizeText } from "../utils/sanitize";
 
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { error } from "console";
 
 
 class CustomerService {
@@ -295,6 +296,134 @@ class CustomerService {
             }
         };
     }
+
+    // ============================================================
+    // FORGOT PASSWORD -STEP 1 -CHECK EMAIL
+    // ============================================================
+
+    public async checkEmailExists(email: string): Promise<boolean> {
+
+        const cleanEmail = sanitizeText(email).trim().toLowerCase();
+
+        const sql = `
+                SELECT id_account
+                FROM accounts
+                WHERE email = ? 
+                    AND account_type = 'customer'
+                    AND is_active = TRUE
+            `;
+
+        const row = await dal.execute(sql, [cleanEmail]) as RowDataPacket[];
+
+        return row.length > 0;
+    }
+
+    // ============================================================
+    // FORGOT PASSWORD -STEP 2 - VERIFY CUSTOMER
+    // ============================================================
+    public async verifyCustomerForGot(email: string, phone: string, birthDate: string): Promise<string> {
+
+        const cleanEmail = sanitizeText(email).trim().toLowerCase();
+        const cleanPhone = sanitizeText(phone).trim();
+        const cleanBirthDate = sanitizeText(birthDate).slice(0, 10);
+
+        const sql = `
+                    SELECT 
+                        c.id_customer AS idCustomer,
+                        c.id_account AS idAccount
+                    FROM customers AS c
+
+                    INNER JOIN accounts AS a
+                        ON c.id_account = a.id_account
+
+                    WHERE a.email = ?
+                    AND c.phone = ?
+                    AND DATE(c.date_of_birth) = ?
+                    AND a.account_type = 'customer'
+                    AND a.is_active = TRUE
+                    AND c.is_active = TRUE
+            `;
+
+        const rows = await dal.execute(sql, [
+            cleanEmail,
+            cleanPhone,
+            cleanBirthDate
+        ]) as RowDataPacket[];
+
+        const customer = rows[0];
+
+        if (!customer) {
+            throw new Error(
+                "Customer verification failed"
+            )
+        }
+        //temp token
+        const resetToken = jwt.sign({
+            idAccount: customer.idAccount,
+            idCustomer: customer.idCustomer,
+            purpose: "password-reset"
+        },
+            process.env.JWT_SECRET!,
+            {
+                expiresIn: "15m"
+            })
+
+        return resetToken;
+    }
+
+    // ============================================================
+    // FORGOT PASSWORD -STEP 3 - RESET PASSWORD
+    // ============================================================
+
+        public async resetpassword(resetToken: string, newPassword: string):Promise<void>{
+
+            if(!resetToken){
+                throw new Error("Reset token is required")
+            }
+
+            if(!newPassword || newPassword.length < 6){
+                throw error("Password must contain at least 6 characters")
+            }
+
+            //verify token
+            const payload = jwt.verify(
+                resetToken,
+                process.env.JWT_SECRET!
+            ) as {
+                idAccount: number,
+                idCustomer: number,
+                purpose: string;
+            }
+
+            //Make sure token us really for password reset
+            if(payload.purpose !== "password-reset"){
+                throw new Error("Invalid reset token")
+            }
+
+            //hash new password
+            const passwordHash = await bcrypt.hash(newPassword, 10)
+
+            //update account password
+            const sql = `
+                UPDATE accounts
+                SET password = ?
+                WHERE id_account = ?
+                    AND account_type = 'customer'
+                    AND is_active = TRUE
+            `;
+            const info = await dal.execute(sql,[
+                passwordHash,
+                payload.idAccount
+            ]) as OkPacketParams
+
+            if(info.affectedRows === 0){
+                throw new Error("Failed to update password")
+            }
+        }
+
+
+
+
 
 
 

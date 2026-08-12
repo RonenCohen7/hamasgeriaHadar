@@ -3,7 +3,7 @@ import express, { Request, Response, NextFunction, response } from "express"
 import { customerService } from "../services/customer-service";
 import { verifyToken } from "../middleware/verify-token";
 import { allowRoles } from "../middleware/role-middleware";
-import { AddCustomerDto, CustomerRegisterDto, UpdateCustomerDto, CustomerAuthResponseModel   } from "../models/customer-model";
+import { AddCustomerDto, CustomerRegisterDto, UpdateCustomerDto, CustomerAuthResponseModel } from "../models/customer-model";
 import { authLimiter } from "../middleware/rate-limit-middleware";
 
 
@@ -15,8 +15,8 @@ class CustomerController {
 
     public constructor() {
 
-        this.router.post("/api/customers/register",  this.registerCustomer);
-        this.router.post("/api/customers/login",  this.loginCustomer);
+        this.router.post("/api/customers/register", this.registerCustomer);
+        this.router.post("/api/customers/login", this.loginCustomer);
 
         this.router.get("/api/customers", verifyToken, this.getAllCustomers);
 
@@ -29,6 +29,12 @@ class CustomerController {
         this.router.put("/api/customers/:id", verifyToken, this.updateCustomer);
 
         this.router.delete("/api/customers/:id", verifyToken, allowRoles("admin"), this.deleteCustomer);
+
+        this.router.post("/api/customers/forgot-password/check-email", this.checkEmail);
+
+        this.router.post("/api/customers/forgot-password/verify", this.verifyCustomerForReset);
+
+        this.router.patch("/api/customers/forgot-password/reset",this.resetPassword);
 
     }
 
@@ -52,24 +58,98 @@ class CustomerController {
 
 
     //Customer Login
-    private async loginCustomer(request:Request, response:Response, next:NextFunction):Promise<void>{
-        try{
+    private async loginCustomer(request: Request, response: Response, next: NextFunction): Promise<void> {
+        try {
             console.log("===CUSTOMER LOGIN ===");
-            
+
             const credentials = request.body;
-            
+
             console.log(request.body);
-            
+
             const auth = await customerService.loginCustomer(credentials);
 
             response.json(auth);
 
 
         }
-        catch(err: any){
+        catch (err: any) {
             next(err)
         }
     }
+
+
+    //Check Email
+    private async checkEmail(request: Request, response: Response, next: NextFunction): Promise<void> {
+        try {
+            const email = String(request.body.email ?? "").trim();
+
+            if (!email) {
+                response.status(400).json({
+                    message: "Email is Required"
+                });
+                return;
+            }
+
+            const exists = await customerService.checkEmailExists(email);
+            if (!exists) {
+                response.status(400).json({
+                    message: "Customer Not found"
+                });
+                return;
+            }
+            response.json({
+                exit: true
+            })
+
+
+        } catch (err) {
+            next(err)
+        }
+    }
+
+
+
+    //Verify Customer ForGot
+    private async verifyCustomerForReset(request: Request, response: Response, next: NextFunction): Promise<void> {
+        try {
+            const { email, phone, birthDate } = request.body;
+
+            const resetToken =
+                await customerService.verifyCustomerForGot(
+                    email,
+                    phone,
+                    birthDate
+                );
+            response.json({ resetToken })
+        }
+        catch (err) {
+            next(err)
+        }
+    }
+
+
+    //Reset Password
+    private async resetPassword(request:Request, response: Response, next:NextFunction): Promise<void>{
+        try{
+
+            const  { resetToken, newPassword } = request.body;
+
+            await customerService.resetpassword(
+                resetToken,
+                newPassword
+            )
+
+            response.json({
+                message: "Password updated successfully"
+            })
+
+        }
+        catch(err){
+            next(err)
+        }
+    }
+
+
 
 
     //Get all customers
