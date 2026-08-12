@@ -10,34 +10,85 @@ class CustomerService {
 
 
     //Customer Register
-    public async registerCustomer(customer:CustomerRegisterDto):Promise<CustomerAuthResponseModel>{
-        
-        const response = await axios.post<CustomerAuthResponseModel>(`${appConfig.customerRegisterUrl}`,customer);
-        
+    public async registerCustomer(customer: CustomerRegisterDto): Promise<CustomerAuthResponseModel> {
+
+        const response = await axios.post<CustomerAuthResponseModel>(`${appConfig.customerRegisterUrl}`, customer);
+
         store.dispatch(customerLogin(response.data))
-        
+
         return response.data;
-     
-        
+
+
     }
 
 
 
     // Customer login
-    public async loginCustomer(credentials:CustomerLoginDto):Promise<CustomerAuthResponseModel>{
-        
-        const response = await axios.post<CustomerAuthResponseModel>(`${appConfig.customerLoginUrl}`,credentials);
-        
+    public async loginCustomer(credentials: CustomerLoginDto): Promise<CustomerAuthResponseModel> {
+
+        const response = await axios.post<CustomerAuthResponseModel>(`${appConfig.customerLoginUrl}`, credentials);
+
         store.dispatch(customerLogin(response.data))
-        
+
         return response.data;
 
-        
+
     }
 
 
+
+    // =====================================================
+    // FORGOT PASSWORD - STEP 1 
+    // =====================================================
+
+    public async checkForgotPasswordEmail(email: string): Promise<{ exists: boolean }> {
+
+        const response = await axios.post<{ exists: boolean }>(
+            `${appConfig.customersUrl}/forgot-password/check-email`,
+            { email }
+        );
+
+        return response.data;
+    }
+
+
+    // =====================================================
+    // FORGOT PASSWORD - STEP 2 
+    // ======================================================
+
+    public async verifyForgotPasswordCustomer(email: string, phone: string, birthDate: string): Promise<{ resetToken: string }> {
+
+        const response = await axios.post<{ resetToken: string }>(
+            `${appConfig.customersUrl}/forgot-password/verify`,
+            {
+                email,
+                phone,
+                birthDate
+            }
+        )
+        return response.data
+    }
+
+    // =====================================================
+    // FORGOT PASSWORD - STEP 23
+    // ======================================================
+    public async resetForgotPassword(resetToken: string, newPassword: string): Promise<{ message: string }> {
+        const response = await axios.patch<{ message: string }>(
+
+
+            
+            `${appConfig.customersUrl}/forgot-password/reset`, {
+            resetToken,
+            newPassword
+        }
+        )
+        return response.data
+    }
+
+
+
     //logout
-    public logoutCustomer():void{
+    public logoutCustomer(): void {
         store.dispatch(customerLogout());
     }
 

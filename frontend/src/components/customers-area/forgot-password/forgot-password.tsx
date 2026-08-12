@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useTitle } from "../../utils/UseTitle";
 import { dialogService } from "../../service/dialogService";
+import { customerService } from "../../service/customerService";
 
 
 export function ForgotPassword() {
@@ -75,14 +76,8 @@ export function ForgotPassword() {
 
         try {
 
-            // TODO: replace with real API call, e.g.
-            // const res = await api.post("/auth/forgot-password/check-email", { email });
-            // if (!res.ok) throw new Error(res.message);
-
-            console.log(
-                "CHECK EMAIL:",
-                email
-            );
+            //step -1
+            await customerService.checkForgotPasswordEmail(email.trim())
 
             setStep(2);
 
@@ -92,6 +87,8 @@ export function ForgotPassword() {
                 "Account Not Found",
                 "We couldn't find an account with that email"
             );
+
+            setEmail("");
 
         } finally {
 
@@ -133,10 +130,15 @@ export function ForgotPassword() {
 
         try {
 
-            // TODO: replace with real API call, e.g.
-            // const res = await api.post("/auth/forgot-password/verify", { email, phone, birthDate });
-            // if (!res.ok) throw new Error(res.message);
-            // setResetToken(res.resetToken);
+            const result =
+                await customerService.verifyForgotPasswordCustomer(
+                    email,
+                    phone,
+                    birthDate
+                );
+
+            setResetToken(result.resetToken);
+            setStep(3);
 
             console.log({
                 email,
@@ -144,8 +146,6 @@ export function ForgotPassword() {
                 birthDate
             });
 
-            setResetToken("temporary-mock-token");
-            setStep(3);
 
         } catch {
 
@@ -178,9 +178,10 @@ export function ForgotPassword() {
             return;
         }
 
-
+           
         if (newPassword.length < 6) {
-
+            console.log("New Password ENTER: ", newPassword);
+            
             await dialogService.error(
                 "Password Too Short",
                 "Password must contain at least 6 characters"
@@ -216,24 +217,20 @@ export function ForgotPassword() {
 
         try {
 
-            // TODO: replace with real API call, e.g.
-            // const res = await api.post("/auth/forgot-password/reset", { resetToken, newPassword });
-            // if (!res.ok) throw new Error(res.message);
-
-            console.log({
+            await customerService.resetForgotPassword(
                 resetToken,
                 newPassword
-            });
+            );
 
-            await dialogService.success?.(
+            await dialogService.success?.( 
                 "Password Changed",
                 "Your password has been reset successfully"
             );
 
             navigate("/customer-login");
 
-        } catch {
-
+        } catch (err){
+            console.error("RESET PASSWORD ERROR: ",err)
             await dialogService.error(
                 "Something Went Wrong",
                 "We couldn't reset your password. Please try again"

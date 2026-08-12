@@ -81,7 +81,12 @@ class CustomerController {
     //Check Email
     private async checkEmail(request: Request, response: Response, next: NextFunction): Promise<void> {
         try {
+
+            console.log("CHECK EMAIL BODY:", request.body);
+
             const email = String(request.body.email ?? "").trim();
+
+            
 
             if (!email) {
                 response.status(400).json({

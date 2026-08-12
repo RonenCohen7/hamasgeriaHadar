@@ -385,6 +385,10 @@ class CustomerService {
                 throw error("Password must contain at least 6 characters")
             }
 
+         
+            
+
+
             //verify token
             const payload = jwt.verify(
                 resetToken,

@@ -39,6 +39,16 @@ class DialogService {
         })
     }
 
+    public async success(title:string, text: string): Promise<void>{
+        await Swal.fire({
+            title,
+            text,
+            icon: "success",
+            confirmButtonText: "ok",
+            confirmButtonColor: "#198245"
+        })
+    }
+
 }
 
 export const dialogService = new DialogService();
