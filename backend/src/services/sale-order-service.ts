@@ -1,10 +1,10 @@
 import { OkPacketParams } from "mysql2";
 import { ResourceNotFoundError } from "../models/client-errors";
-import { AddSaleOrderDto, SaleOrderModel } from "../models/sale-order-model";
+import { AddSaleOrderDto, PurchaseEventTicketsDto, SaleOrderModel } from "../models/sale-order-model";
 import { dal } from "../utils/dal";
 import { getIo } from "../utils/socket";
 import { sanitizeText } from "../utils/sanitize";
-import { PaymentMethod } from "../models/enum";
+import { EventStatus, PaymentMethod } from "../models/enum";
 import { vipCardService } from "./vip-card-service";
 
 
@@ -56,6 +56,10 @@ class SaleOrderService {
             SELECT
                 so.id_sale AS idSale,
                 so.sale_number AS saleNumber,
+                so.id_customer AS idCustomer,
+                so.id_vip_card AS idVipCard,
+                so.ticket_quantity AS ticketQuantity,
+                so.ticket_unit_price AS ticketUnitPrice,
                 so.id_event AS idEvent,
                 so.created_by AS createdBy,
                 so.customer_name AS customerName,
@@ -279,6 +283,153 @@ class SaleOrderService {
 
 
         return await this.getOneSale(idSale);
+    }
+
+
+
+    //Sale tickets
+    public async PurchaseEventTickets(order: PurchaseEventTicketsDto): Promise<SaleOrderModel> {
+
+        if (!Number.isInteger(order.idEvent) || order.idEvent <= 0) {
+            throw new Error("Invalid event id")
+        }
+
+        if (!Number.isInteger(order.idCustomer) || order.idCustomer <= 0) {
+            throw new Error("Invalid customer id")
+        }
+
+        if (!Number.isInteger(order.quantity) || order.quantity <= 0) {
+            throw new Error("Ticket quantity must be  greater then zero")
+        }
+
+        // if (!order.paymentMethod) {
+        //     throw new Error("Payment method is required")
+        // }
+
+        const eventSql = `
+            SELECT
+                id_event AS idEvent,
+                event_name AS eventName,
+                maximum_Guests As maximumGuests,
+                expected_Guests As expectedGuests,
+                ticket_price AS ticketPrice,
+                vip_price AS vipPrice,
+                event_status AS eventStatus
+            FROM events
+            WHERE id_event = ? 
+            AND is_deleted = 0
+        `;
+
+        const events = await dal.execute(eventSql, [order.idEvent]) as {
+            idEvent: number;
+            eventName: string;
+            maximumGuests: number | null;
+            expectedGuests: number | null;
+            ticketPrice: number;
+            vipPrice: number;
+            event_status: string;
+
+        }[];
+
+        const event = events[0];
+
+        if (!event) {
+            throw new ResourceNotFoundError(order.idEvent);
+        }
+
+        if (event.event_status === EventStatus.Cancelled) {
+            throw new Error("This Event has been cancelled")
+        }
+
+        const maximumGuests = Number(event.maximumGuests ?? 0);
+
+        const expectedGuests = Number(event.expectedGuests ?? 0);
+
+        const availablePlaces = maximumGuests - expectedGuests;
+
+        if (order.quantity > availablePlaces) {
+            throw new Error(`Only ${availablePlaces} places are available for this event`)
+        }
+
+
+
+        //check price and vip price
+        const regularPrice = Number(event.ticketPrice);
+
+        const vipPrice =
+            event.vipPrice !== null
+                ? Number(event.vipPrice)
+                : regularPrice;
+
+        let ticketUnitPrice = regularPrice;
+
+        if (order.idVipCard != null) {
+
+            const vipCard = await vipCardService.getCardById(order.idVipCard);
+
+            if (vipCard.cardStatus !== "active") {
+                throw new Error("VIP card is not active")
+            }
+
+            if (vipCard.idCustomer !== order.idCustomer) {
+                throw new Error("VIP card does not belong to this customer")
+            }
+
+            ticketUnitPrice = vipPrice;
+
+        }
+
+        const totalAmount = ticketUnitPrice * order.quantity;
+
+        //create sale 
+
+        const saleNumber = `EVENT-${Date.now()}`
+        const createdBy = 2; //number id of Hadar levi manager
+
+
+        const saleSql = `
+            INSERT INTO sales_orders (
+                sale_number,
+                id_event,
+                id_customer,
+                id_vip_card,
+                ticket_quantity,
+                ticket_unit_price,
+                created_by,
+                sale_status,
+                payment_method,
+                subtotal,
+                discount_amount,
+                total_amount,
+                notes
+            )
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)
+        `;
+
+        const saleValues = [
+            saleNumber,
+            order.idEvent,
+            order.idCustomer,
+            order.idVipCard ?? null,
+            order.quantity,
+            ticketUnitPrice,
+            createdBy,
+            "open",
+            order.paymentMethod ?? null,
+            totalAmount,
+            0,
+            totalAmount,
+            `EVENT ticket order - ${event.eventName}`
+        ];
+
+        const info = await dal.execute(saleSql, saleValues) as OkPacketParams;
+        const idSale = info.insertId!;
+
+        console.log("INSERT INFO:", info);
+        console.log("NEW SALE ID:", idSale);
+
+        return await this.getOneSale(idSale)
+
     }
 }
 

@@ -14,6 +14,8 @@ class SaleOrderController {
         this.router.get("/api/sales/:id", this.getOneSale);
 
         this.router.post("/api/sales", this.addSale);
+
+        this.router.post("/api/sales/event-tickets", this.purchaseEventTickets);
     }
 
 
@@ -63,6 +65,23 @@ class SaleOrderController {
             next(err);
         }
     }
+
+    // purchaseEventTickets
+    private async purchaseEventTickets(request:Request, response:Response, next:NextFunction):Promise<void>{
+        try{
+
+            const order = request.body;
+
+            const sale = await saleOrderService.PurchaseEventTickets(order);
+
+            response.status(201).json(sale)
+        }   
+        catch(err){
+            next(err)
+        }
+    }
+
+
 
 }
 
