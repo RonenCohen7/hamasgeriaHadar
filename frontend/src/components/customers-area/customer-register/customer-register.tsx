@@ -10,6 +10,7 @@ import { customerService } from "../../service/customerService";
 import { useForm } from "react-hook-form";
 
 import registerImag from "../../../assets/images/registerImage.jpg";
+import { FaHome } from "react-icons/fa";
 
 
 type CustomerRegisterForm = CustomerRegisterDto & {
@@ -391,6 +392,12 @@ export function CustomerRegister() {
                         </button>
 
                     </div>
+                    <button
+                        type="button"
+                        onClick={() => navigate("/")}
+                    >
+                        <FaHome size={15} color="red" />
+                    </button>
 
                 </div>
 

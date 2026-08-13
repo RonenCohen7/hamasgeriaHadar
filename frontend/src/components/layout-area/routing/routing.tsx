@@ -44,12 +44,13 @@ import { EventDetails } from "../../events-area/event-details/event-details";
 import { ForgotPassword } from "../../customers-area/forgot-password/forgot-password";
 import { CustomerLogin } from "../../customers-area/customer-login/customer-login";
 import { EventOrder } from "../../events-area/event-order/event-order";
+import { PublicHome } from "../../pages-area/public-home/public-home";
 
 
 export function Routing() {
     return (
         <Routes>
-            <Route path="/" element={<AuthGuard><Home /></AuthGuard>} />
+            <Route path="/" element={<PublicHome />} />
 
             <Route path="/customer-login" element={<CustomerLogin />} />
 

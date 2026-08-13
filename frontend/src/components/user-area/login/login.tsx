@@ -6,6 +6,7 @@ import { useTitle } from "../../utils/UseTitle";
 import { LoginUserDto } from "../../models/user-model";
 import { authService } from "../../service/authService";
 import { notificationService } from "../../service/notificationService";
+import { FaHome } from "react-icons/fa";
 
 
 
@@ -67,7 +68,16 @@ export function Login() {
                         </button>
 
                 </p>
+
+                  <button
+                        type="button"
+                        onClick={()=>navigate("/")}
+                        >
+                    <FaHome size={15} color="red" />
+                                        
+                </button>
             </div>
+            
 
         </section>
     );

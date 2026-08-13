@@ -155,6 +155,9 @@ class EventService {
         event.eventDescription = sanitizeText(event.eventDescription);
         event.eventLocation = sanitizeText(event.eventLocation);
 
+        const vipPrice = event.vipPrice == null ? null : Number(event.vipPrice);
+        
+        
         let coverImage = existingEvent.coverImage;
 
         if (event.image) {
@@ -176,10 +179,10 @@ class EventService {
             maximum_guests = ?,
             expected_guests = ?,
             ticket_price = ?,
-            vip_price =?,
+            vip_price = ?,
             event_status = ?
         WHERE id_event = ?
-        AND id_delete = 0
+        AND is_deleted = 0
     `;
 
         const values = [
@@ -192,7 +195,7 @@ class EventService {
             event.maximumGuests ?? null,
             event.expectedGuests ?? null,
             event.ticketPrice ?? 0,
-            event.vipPrice ?? null,
+            vipPrice,
             event.eventStatus ?? "planned",
             event.idEvent
         ];

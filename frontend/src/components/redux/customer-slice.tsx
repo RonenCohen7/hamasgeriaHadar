@@ -48,7 +48,7 @@ const customerSlice = createSlice({
                 customer =>
                     customer.idCustomer === action.payload.idCustomer
             );
-            if (index !== 1) {
+            if (index !== -1) {
                 state.items[index] = action.payload;
             }
         },

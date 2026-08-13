@@ -1,5 +1,5 @@
 import "./customer-login.css";
-
+import { FaHome } from "react-icons/fa";
 import { useState } from "react";
 import { useTitle } from "../../utils/UseTitle";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +8,8 @@ import { customerService } from "../../service/customerService";
 import { dialogService } from "../../service/dialogService";
 
 import pubDrink from "../../../assets/images/pubDrinks.jpg";
+import { useDispatch } from "react-redux";
+import { logout } from "../../redux/auth-slice";
 
 
 export function CustomerLogin() {
@@ -15,6 +17,8 @@ export function CustomerLogin() {
     useTitle("Login");
 
     const navigate = useNavigate();
+
+    const dispatch = useDispatch();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -61,6 +65,7 @@ export function CustomerLogin() {
                 email,
                 password
             });
+            dispatch(logout());
 
 
             navigate("/customer-dashboard");
@@ -224,6 +229,13 @@ export function CustomerLogin() {
                         </button>
 
                     </div>
+                    <button
+                            type="button"
+                            onClick={()=>navigate("/")}
+                        >
+                        <FaHome size={15} color="red" />
+                        
+                    </button>
 
 
                 </div>
