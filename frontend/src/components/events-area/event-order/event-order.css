@@ -1,0 +1,70 @@
+.EventTicketOrder {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 40px 20px;
+}
+
+.ticket-order-card {
+    width: 100%;
+    max-width: 700px;
+
+    background: white;
+    border-radius: 16px;
+
+    padding: 30px;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.ticket-order-card h1 {
+    margin-bottom: 15px;
+}
+
+.ticket-order-price {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.ticket-order-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ticket-order-field input {
+    width: 120px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.ticket-order-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 15px;
+
+    background: #f5f8fb;
+    border-radius: 10px;
+
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.ticket-order-card button {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.ticket-order-card button:last-child {
+    background: #0f9d58;
+    color: white;
+    font-weight: bold;
+}

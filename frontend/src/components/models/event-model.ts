@@ -26,3 +26,10 @@ export class EventModel {
 
     isDelete!: number | null;
 }
+
+export interface PurchaseEventTicketsModel {
+    idEvent: number;
+    idCustomer: number;
+    quantity: number;
+    idVipCard?: number | null;
+}

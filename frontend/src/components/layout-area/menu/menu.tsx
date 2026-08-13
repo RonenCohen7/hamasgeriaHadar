@@ -123,9 +123,10 @@ export function Menu() {
                         </NavLink>
 
                         {customer?.hasVipCard && (<NavLink
-                            to="/transactions"
+                            to={`/vip-cards/${customer.idCustomer}/transactions`}
                             className="menu-link"
                             data-tooltip="My Transactions"
+                            
                         >
                             📋
                         </NavLink>)}

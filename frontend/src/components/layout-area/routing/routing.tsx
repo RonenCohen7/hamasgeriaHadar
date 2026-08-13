@@ -43,6 +43,7 @@ import { EventMedia } from "../../events-area/event-media/event-media";
 import { EventDetails } from "../../events-area/event-details/event-details";
 import { ForgotPassword } from "../../customers-area/forgot-password/forgot-password";
 import { CustomerLogin } from "../../customers-area/customer-login/customer-login";
+import { EventOrder } from "../../events-area/event-order/event-order";
 
 
 export function Routing() {
@@ -97,6 +98,12 @@ export function Routing() {
             <Route path="/quick-sale" element={<AuthGuard><QuickSale /></AuthGuard>} />
 
             <Route path="/inventory-count" element={<AuthGuard><InventoryCount /></AuthGuard>} />
+
+            <Route path="/events/order/:idEvent" element={<EventOrder/>}/>
+
+
+            {/* <Route path="/events/payment/:idSale" element={<EventPayment/>}/> */}
+        
 
             <Route path="/customers" element={<AuthGuard><CustomerCrud /></AuthGuard>}>
 

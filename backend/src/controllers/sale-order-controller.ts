@@ -15,7 +15,9 @@ class SaleOrderController {
 
         this.router.post("/api/sales", this.addSale);
 
-        this.router.post("/api/sales/event-tickets", this.purchaseEventTickets);
+        this.router.post("/api/sales/events-tickets", this.purchaseEventTickets);
+
+        this.router.patch("/api/sales/:id/payment", this.completePayment);
     }
 
 
@@ -67,20 +69,38 @@ class SaleOrderController {
     }
 
     // purchaseEventTickets
-    private async purchaseEventTickets(request:Request, response:Response, next:NextFunction):Promise<void>{
-        try{
+    private async purchaseEventTickets(request: Request, response: Response, next: NextFunction): Promise<void> {
+        try {
 
             const order = request.body;
 
             const sale = await saleOrderService.PurchaseEventTickets(order);
 
             response.status(201).json(sale)
-        }   
-        catch(err){
+        }
+        catch (err) {
             next(err)
         }
     }
 
+
+    //Complete Payment Sal
+    private async completePayment(request: Request, response: Response, next: NextFunction): Promise<void> {
+
+        try {
+            const idSale = Number(request.params.id);
+
+            const { paymentMethod, idVipCard } = request.body;
+
+            const sale = await saleOrderService.completePayment(idSale, paymentMethod,idVipCard);
+
+            response.json(sale);
+
+
+        } catch (err: any) {
+            next(err)
+        }
+    }
 
 
 }

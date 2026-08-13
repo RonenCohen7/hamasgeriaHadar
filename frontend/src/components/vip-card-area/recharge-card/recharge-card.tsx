@@ -11,6 +11,7 @@ import { useLocation } from "react-router-dom";
 
 
 
+
 export function RechargeCard() {
     useTitle("Recharge");
 
@@ -62,10 +63,18 @@ export function RechargeCard() {
 
             const returnTo = location.state?.returnTo ?? 
             `/vip-cards/customer/${card.idCustomer}`
+            
+            console.log("RETURN STATE", location.state);
 
-            navigate(returnTo);
+            navigate(returnTo,{
+                state: {
+                    idSale:location.state?.idSale,
+                    idVipCard: location.state?.idVipCard,
+                    PaymentMethod: location.state?.paymentMethod
+                }
+            })
 
-            // navigate("/quick-sale");
+            
 
         } catch (err: any) {
             notificationService.error(err)

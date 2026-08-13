@@ -302,9 +302,7 @@ class SaleOrderService {
             throw new Error("Ticket quantity must be  greater then zero")
         }
 
-        // if (!order.paymentMethod) {
-        //     throw new Error("Payment method is required")
-        // }
+
 
         const eventSql = `
             SELECT
@@ -430,6 +428,86 @@ class SaleOrderService {
 
         return await this.getOneSale(idSale)
 
+    }
+
+
+
+
+    //Complete Pay Sale
+    public async completePayment(idSale: number, paymentMethod: string, idVipCard: number | null): Promise<SaleOrderModel> {
+
+        const sale = await this.getOneSale(idSale)
+
+        if (!sale) {
+            throw new ResourceNotFoundError(idSale);
+        }
+
+
+
+        //Prevent double payment
+        if (sale.saleStatus == "paid") {
+            return sale
+        }
+
+
+
+        console.log("=== COMPLETE VIP PAYMENT ===");
+        console.log("paymentMethod:", paymentMethod);
+        console.log("idVipCard:", idVipCard);
+        console.log("total:", sale.totalAmount);
+
+
+        //Check if pay with VIP Card
+        if (paymentMethod == "vip_card" && idVipCard) {
+
+            console.log(">>> CHARGE BALANCE RUNNING");
+
+            await vipCardService.chargeBalance(idVipCard, Number(sale.totalAmount),
+                `Event Ticket #${sale.idSale}`)
+        }
+
+        const sql = `
+            UPDATE sales_orders
+            SET
+                sale_status = ?,
+                payment_method = ?,
+                id_vip_card = ?
+            WHERE id_sale = ?
+        `;
+
+        await dal.execute(sql, [
+            "paid",
+            paymentMethod,
+            idVipCard,
+            idSale
+        ])
+
+
+        //if this sale belong to an event,
+        //update expected guests by purchased ticket quantity
+
+        if (sale.idEvent && sale.ticketQuantity) {
+
+            const updateEventSql = `
+                UPDATE events
+                SET expected_guests = COALESCE(expected_guests,0) + ?
+                WHERE id_event = ?
+                    AND is_deleted = 0
+            `;
+
+
+            const updateInfo = await dal.execute(updateEventSql, [
+                sale.ticketQuantity,
+                sale.idEvent
+            ]) as OkPacketParams;
+
+            console.log("EVENT UPDATE INFO:", updateInfo);
+
+            console.log(`EVENT GUESTS UPDATE: event=${sale.idEvent}, +${sale.ticketQuantity}`);
+
+        }
+
+        return await this.getOneSale(idSale);
     }
 }
 
