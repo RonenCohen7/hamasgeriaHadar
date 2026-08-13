@@ -27,6 +27,8 @@ class ProductService {
             p.is_active AS isActive,
             p.created_at AS createdAt,
             p.updated_at AS updatedAt,
+            p.is_featured AS isFeatured,
+            p.display_order AS displayOrder,
             c.category_name AS categoryName,
 
             CASE
@@ -71,6 +73,8 @@ class ProductService {
             p.is_active AS isActive,
             p.created_at AS createdAt,
             p.updated_at AS updatedAt,
+            p.is_featured AS isFeatured,
+            p.display_order AS displayOrder,
 
             c.category_name AS categoryName,
 
@@ -128,6 +132,10 @@ class ProductService {
             product.supplierCatalogNumber = sanitizeText(product.supplierCatalogNumber)
         }
 
+        const displayOrder = product.displayOrder == null  ? 0 : Number(product.displayOrder)
+                                
+        const isFeatured = !!product.isFeatured;
+
         const checkIfBarcodeExists = `
             SELECT id_product As idProduct
             FROM products
@@ -152,9 +160,11 @@ class ProductService {
             product_stock,
             minimum_stock,
             unit_type,
+            is_featured,
+            display_order,
             image_name
             )
-            VALUES (?,?,?,?,?,?,?,?,?);
+            VALUES (?,?,?,?,?,?,?,?,?,?,?);
         `
 
         const values = [
@@ -166,6 +176,8 @@ class ProductService {
             product.productStock ?? 0,
             product.minimumStock ?? 0,
             product.unitType ?? null,
+            isFeatured,
+            displayOrder,
             product.imageName ?? null
         ]
 
@@ -206,6 +218,10 @@ class ProductService {
         product.productName = sanitizeText(product.productName);
         product.catalogNumber = sanitizeText(product.catalogNumber);
 
+        const displayOrder = product.displayOrder == null  ? 0 : Number(product.displayOrder)
+                                
+        const isFeatured = !!product.isFeatured;
+
         if (product.supplierCatalogNumber) {
             product.supplierCatalogNumber = sanitizeText(product.supplierCatalogNumber)
         }
@@ -236,6 +252,8 @@ class ProductService {
                 minimum_stock = ?,
                 unit_type = ?,
                 is_active = ?,
+                is_featured = ?,
+                display_order = ?,
                 image_name = ?
             WHERE id_product = ?
         `
@@ -250,6 +268,8 @@ class ProductService {
             product.minimumStock,
             product.unitType,
             product.isActive,
+            isFeatured,
+            displayOrder,
             product.imageName ?? null,
             product.idProduct
         ]
@@ -302,13 +322,18 @@ class ProductService {
                 p.unit_type AS unitType,
                 p.is_active AS isActive,
                 p.created_at AS createdAt,
+                p.is_featured AS isFeatured,
+                p.display_order AS displayOrder,
                 p.updated_at AS updatedAt,
                 c.category_name AS categoryName
+
             FROM products AS p
             LEFT JOIN product_categories AS c
                 ON p.id_category = c.id_category
+            
             WHERE p.product_stock <= p.minimum_stock
               AND p.is_active = true
+            
             ORDER BY p.product_stock
         `
         const products = await dal.execute(sql) as ProductModel[];
@@ -325,6 +350,8 @@ class ProductService {
             p.product_stock AS productStock,
             p.minimum_stock AS minimumStock,
             p.image_name AS imageName,
+            p.is_featured AS isFeatured,
+            p.display_order AS displayOrder,
 
             s.id_supplier AS supplierId,
             s.supplier_name AS supplierName

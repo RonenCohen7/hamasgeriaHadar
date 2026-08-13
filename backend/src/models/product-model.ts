@@ -21,6 +21,9 @@ export class ProductModel {
     supplierCost?: number;
     isPreferredSupplier?: boolean;
 
+    isFeatured?: boolean;
+    displayOrder?: number;
+
 
     image?: UploadedFile;
     imageName?: string;
@@ -46,6 +49,9 @@ export class AddProductModel {
     productStock?: number;
     minimumStock?: number;
     unitType?: UnitType;
+
+    isFeatured?: boolean;
+    displayOrder?: number;
 }
 
 
@@ -60,6 +66,12 @@ export class UpdateProductDto {
     minimumStock?: number;
     unitType?: UnitType;
     isActive?: boolean;
+
+    isFeatured?: boolean;
+    displayOrder?: number;
+
+    image?: UploadedFile;
+    imageName?: string | null;
 }
 
 
@@ -72,4 +84,6 @@ export class LowStockProductModel {
     minimumStock!: number;
     unitType!: UnitType;
     categoryName!: string | null;
+
+
 }

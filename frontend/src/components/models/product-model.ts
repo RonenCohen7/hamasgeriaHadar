@@ -27,6 +27,9 @@ export class ProductModel {
     createdAt!: string;
     updatedAt!: string;
 
-    
+    isFeatured?: boolean;
+    displayOrder?: number;
+
+
     isPreferredSupplier?: boolean;
 }

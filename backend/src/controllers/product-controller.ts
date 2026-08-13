@@ -65,6 +65,10 @@ class ProductController {
 
             const product: AddProductModel = request.body;
 
+            product.isFeatured = request.body.isFeatured == "true" || request.body.isFeatured == true;
+
+            product.displayOrder =Number(request.body.displayOrder ?? 0);
+
             product.image = request.files?.image as UploadedFile;
 
             const addProduct = await productService.addProduct(product);
@@ -89,12 +93,19 @@ class ProductController {
                 return;
             }
             const product: ProductModel = request.body
+            
             product.idProduct = id;
+            
             product.idCategory = Number(request.body.idCategory);
-            product.isActive = request.body.isActive;
+            
+            product.isActive = request.body.isActive == "true" || request.body.isActive == true;
+
+            product.isFeatured = request.body.isFeatured == "true" || request.body.isFeatured == true;
+
+            product.displayOrder = Number(request.body.displayOrder ?? 0);
+            
             product.image = request.files?.image as UploadedFile;
 
-            product.image = request.files?.image as UploadedFile;
 
             const updateProduct = await productService.updateProduct(product);
             response.json(updateProduct);

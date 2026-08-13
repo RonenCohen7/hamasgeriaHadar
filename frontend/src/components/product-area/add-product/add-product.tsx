@@ -15,6 +15,7 @@ import { supplierService } from "../../service/supplierService";
 import { UnitType } from "../../models/enum";
 
 
+
 export function AddProduct() {
 
     useTitle("Add new Product")
@@ -22,11 +23,11 @@ export function AddProduct() {
     const [categories, setCategories] =
         useState<ProductCategoryModel[]>([]);
 
-    const { register, handleSubmit, formState: { errors } } = useForm<ProductModel>();
+    const { register, handleSubmit, formState: { errors } } = useForm<ProductModel>({ defaultValues: { isFeatured: false, displayOrder: 0 } });
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [suppliers, setSuppliers] = useState<SupplierModel[]>([]);
 
-   
+
 
     const navigate = useNavigate();
 
@@ -90,78 +91,95 @@ export function AddProduct() {
     }
 
 
-return (
-    <div className="AddProduct">
+    return (
+        <div className="AddProduct">
 
-        <h1>Add Product</h1>
+            <h1>Add Product</h1>
 
-        <form className="add-form" onSubmit={handleSubmit(send)}>
-            <label>Category</label>
-            <select
-                defaultValue=""
-                {...register("idCategory", {
-                    required: true,
-                    valueAsNumber: true
-                })}
-            >
-                <option value="" disabled>
-                    Select Category
-                </option>
-
-                {categories.map(category => (
-                    <option
-                        key={category.idCategory}
-                        value={category.idCategory}
-                    >
-                        {category.categoryName}
+            <form className="add-form" onSubmit={handleSubmit(send)}>
+                <label>Category</label>
+                <select
+                    defaultValue=""
+                    {...register("idCategory", {
+                        required: true,
+                        valueAsNumber: true
+                    })}
+                >
+                    <option value="" disabled>
+                        Select Category
                     </option>
-                ))}
-            </select>
 
-            <label>Supplier</label>
-            <select defaultValue="" {...register("idSupplier", { required: "Supplier is Required", valueAsNumber: true })}>
-                <option value="" disabled>Select Supplier</option>
-                {suppliers.map(supplier => (<option key={supplier.idSupplier} value={supplier.idSupplier}>{supplier.supplierName}</option>))}
-                {errors.idSupplier && <span className="error">{errors.idSupplier.message}</span>}
-            </select>
-            <label>Product Name</label>
-            <input type="text" {...register("productName", { required: true })} />
+                    {categories.map(category => (
+                        <option
+                            key={category.idCategory}
+                            value={category.idCategory}
+                        >
+                            {category.categoryName}
+                        </option>
+                    ))}
+                </select>
 
-            <label>Catalog Number</label>
-            <input type="text" {...register("catalogNumber", { required: true })} />
+                <label>Supplier</label>
+                <select defaultValue="" {...register("idSupplier", { required: "Supplier is Required", valueAsNumber: true })}>
+                    <option value="" disabled>Select Supplier</option>
+                    {suppliers.map(supplier => (<option key={supplier.idSupplier} value={supplier.idSupplier}>{supplier.supplierName}</option>))}
+                    {errors.idSupplier && <span className="error">{errors.idSupplier.message}</span>}
+                </select>
+                <label>Product Name</label>
+                <input type="text" {...register("productName", { required: true })} />
 
-            <label>Cost</label>
-            <input type="number" step="0.01" {...register("productCost", { required: true })} />
+                <label>Catalog Number</label>
+                <input type="text" {...register("catalogNumber", { required: true })} />
 
-            <label>Price</label>
-            <input type="number" step="0.01" {...register("productPrice", { required: true })} />
+                <label>Cost</label>
+                <input type="number" step="0.01" {...register("productCost", { required: true })} />
 
-            <label>Stock</label>
-            <input type="number" step="0.01" {...register("productStock", { required: true })} />
+                <label>Price</label>
+                <input type="number" step="0.01" {...register("productPrice", { required: true })} />
 
-            <label>Minimum Stock</label>
-            <input type="number" step="0.01" {...register("minimumStock", { required: true })} />
+                <label>Stock</label>
+                <input type="number" step="0.01" {...register("productStock", { required: true })} />
 
-            <label>Unit</label>
-            <select defaultValue="" {...register("unitType", { required: true })}>
-                <option value="" disabled>Select Unit</option>
-                {Object.values(UnitType).map(unit => (<option key={unit} value={unit}>{unit}</option>))}
-            </select>
+                <label>Minimum Stock</label>
+                <input type="number" step="0.01" {...register("minimumStock", { required: true })} />
 
-            <label>Image</label>
-            {previewUrl && (<div className="image-preview">
-                <img src={previewUrl} alt="product preview" />
-            </div>)}
+                <label>Unit</label>
+                <select defaultValue="" {...register("unitType", { required: true })}>
+                    <option value="" disabled>Select Unit</option>
+                    {Object.values(UnitType).map(unit => (<option key={unit} value={unit}>{unit}</option>))}
+                </select>
 
-            <input type="file" accept="image/*" {...register("image", { onChange: handleImageChange })} />
+                <div className="extra-fields-row">
 
-            <div className="form-button">
-                <button type="submit">Save</button>
-                <button type="button" onClick={() => navigate("/products")}>Cancel</button>
-            </div>
+                    <div className="extra-field">
+                        <label>Featured</label>
 
-        </form>
+                        <label className="switch">
+                            <input
+                                type="checkbox"
+                                {...register("isFeatured")}
+                            />
+                            <span className="slider"></span>
+                        </label>
+                    </div>
 
-    </div>
-);
+                    <div className="extra-fields-row">
+                        <div className="featured-group"></div>
+
+                        <div className="display-order-group">
+                            <label>Display Order</label>
+                            <input type="number" />
+                        </div>
+
+                        <div className="image-field">
+                            <label>Image</label>
+                            <input type="file" />
+                        </div>
+                    </div>
+                   
+                </div>
+            </form>
+
+        </div>
+    );
 }
