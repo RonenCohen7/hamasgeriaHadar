@@ -1,0 +1,219 @@
+.experience-details {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 36px 44px 50px;
+}
+
+.experience-content {
+    display: grid;
+    grid-template-columns: 1fr 520px;
+    gap: 56px;
+    align-items: center;
+}
+
+.experience-info {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.experience-type {
+    width: fit-content;
+    padding: 8px 16px;
+    border-radius: 999px;
+
+    background: #e8f5ff;
+    color: #0f7abf;
+
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.experience-info h1 {
+    margin: 0;
+
+    color: #17324a;
+
+    font-size: 46px;
+    line-height: 1.1;
+    font-weight: 900;
+}
+
+.experience-info p {
+    margin: 0;
+
+    max-width: 620px;
+
+    color: #475569;
+
+    font-size: 18px;
+    line-height: 1.8;
+}
+
+.experience-info h2 {
+    margin: 8px 0 0;
+
+    color: #0f7abf;
+
+    font-size: 34px;
+    font-weight: 900;
+}
+
+
+/* EDIT MODE */
+
+.experience-info input,
+.experience-info textarea {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 12px 14px;
+
+    border: 1px solid #cbdce7;
+    border-radius: 12px;
+
+    background: #fff;
+
+    color: #17324a;
+
+    font-size: 16px;
+    font-family: inherit;
+
+    outline: none;
+}
+
+.experience-info input:focus,
+.experience-info textarea:focus {
+    border-color: #0f7abf;
+    box-shadow: 0 0 0 3px rgba(15, 122, 191, 0.12);
+}
+
+.experience-info textarea {
+    min-height: 160px;
+    resize: vertical;
+}
+
+
+/* IMAGE */
+
+.experience-image-box {
+    width: 100%;
+}
+
+.experience-image {
+    width: 100%;
+    height: 440px;
+
+    display: block;
+
+    object-fit: cover;
+
+    border-radius: 22px;
+
+    box-shadow:
+        0 18px 40px rgba(15, 23, 42, 0.16);
+}
+
+
+/* FILE INPUT */
+
+.experience-file-input {
+    margin-top: 16px;
+
+    padding: 10px;
+
+    border: 1px dashed #b8ccd9;
+    border-radius: 12px;
+
+    background: #f8fbfd;
+}
+
+
+/* BUTTONS */
+
+.experience-actions {
+    display: flex;
+    gap: 12px;
+
+    margin-top: 28px;
+}
+.experience-file-input {
+    margin-top: 24px;
+    margin-bottom: 20px;
+
+    padding: 10px 12px;
+
+    border: 1px dashed #b8ccd9;
+    border-radius: 12px;
+
+    background: #f8fbfd;
+}
+
+.experience-actions {
+    display: flex;
+    gap: 14px;
+
+    margin-top: 8px;
+}
+
+.button-back,
+.edit-btn,
+.save-btn {
+    margin: 0;
+}
+.button-back,
+.edit-btn,
+.save-btn {
+    min-width: 96px;
+
+    padding: 10px 22px;
+    
+
+    border: none;
+    border-radius: 12px;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        transform .2s ease,
+        opacity .2s ease;
+}
+
+.button-back {
+    background: #17324a;
+    color: #fff;
+}
+
+.edit-btn {
+    background: #2563eb;
+    color: #fff;
+}
+
+.save-btn {
+    background: #16a34a;
+    color: #fff;
+}
+
+.button-back:hover,
+.edit-btn:hover,
+.save-btn:hover {
+    transform: translateY(-2px);
+    opacity: .92;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 1000px) {
+
+    .experience-content {
+        grid-template-columns: 1fr;
+    }
+
+    .experience-image {
+        height: 360px;
+    }
+}

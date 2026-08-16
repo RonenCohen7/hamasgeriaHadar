@@ -73,6 +73,7 @@ class ProductService {
             p.is_active AS isActive,
             p.created_at AS createdAt,
             p.updated_at AS updatedAt,
+            
             p.is_featured AS isFeatured,
             p.display_order AS displayOrder,
 

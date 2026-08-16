@@ -7,6 +7,12 @@ import { ProductModel } from "../../models/product-model";
 import { useForm } from "react-hook-form";
 
 import { notificationService } from "../../service/notificationService";
+import { ProductCategoryModel } from "../../models/category-model";
+import { SupplierModel } from "../../models/supplier-model";
+import { productCategoryService } from "../../service/productCategoryService";
+import { supplierService } from "../../service/supplierService";
+import { UnitType } from "../../models/enum";
+
 
 
 export function EditProduct() {
@@ -16,12 +22,29 @@ export function EditProduct() {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const { register, handleSubmit, reset } = useForm<ProductModel>()
     const [product, setProduct] = useState<ProductModel | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const [categories, setCategories] = useState<ProductCategoryModel[]>([]);
+    const [suppliers, setSuppliers] = useState<SupplierModel[]>([]);
+
+
+
+    const { register, handleSubmit, reset } = useForm<ProductModel>()
+
 
     useEffect(() => {
         if (!id) return;
+
+        productCategoryService
+            .getAllCategories()
+            .then(setCategories)
+            .catch(console.error)
+
+
+        supplierService
+            .getAllSuppliers()
+            .then(setSuppliers)
+            .catch(console.error)
 
         productService
             .getOneProduct(Number(id))
@@ -48,13 +71,13 @@ export function EditProduct() {
         });
     }
 
-    useEffect(()=>{
-        return()=> {
-            if(previewUrl?.startsWith("blob")){
+    useEffect(() => {
+        return () => {
+            if (previewUrl?.startsWith("blob")) {
                 URL.revokeObjectURL(previewUrl);
             }
         }
-    },[previewUrl]);
+    }, [previewUrl]);
 
     function backToProducts() {
         navigate("/products")
@@ -64,7 +87,6 @@ export function EditProduct() {
         try {
 
             formData.idProduct = Number(id);
-            formData.idCategory = product!.idCategory;
             formData.isActive = product!.isActive;
             formData.imageName = product!.imageName;
 
@@ -77,8 +99,13 @@ export function EditProduct() {
                 delete formData.image;
             }
 
-            await productService.updateProduct(formData);
+           
+
+            console.log(formData);
+            await productService.updateProduct(formData)
+            
             notificationService.success("Product Update successfully")
+            
             navigate(`/products/${formData.idProduct}`)
         } catch (err: any) {
             notificationService.error(err.message);
@@ -94,43 +121,106 @@ export function EditProduct() {
 
             {product && (
                 <form className="edit-form" onSubmit={handleSubmit(send)}>
+
                     <label>Product Name</label>
                     <input type="text" {...register("productName")} />
 
-                    <label>Catalog Number</label>
-                    <input type="text" {...register("catalogNumber")} />
 
-                    <label>Cost</label>
-                    <input type="number" step="0.01" {...register("productCost")} />
+                    <label>Supplier</label>
+                    <input
+                        type="text"
+                        value={product.supplierName ?? ""}
+                        readOnly
+                        className="readonly-field"
+                        />
 
-                    <label>Price</label>
-                    <input type="number" step="0.01" {...register("productPrice")} />
+                    
+                    <label>Category</label>
+                    <select
+                        defaultValue=""
+                        {...register("idCategory", {
+                            required: true,
+                            valueAsNumber: true
+                        })}
+                    >
+                        <option value="" disabled>
+                            Select Category
+                        </option>
+                        {categories.map(category => (
+                            <option 
+                                key={category.idCategory}
+                                value={category.idCategory}
+                                >
+                                    {category.categoryName}
+                                </option>
+                        ))}
+                        </select>
 
-                    <label>Stock</label>
-                    <input type="number" step="0.01" {...register("productStock")} />
 
-                    <label>Minimum Stock</label>
-                    <input type="number" step="0.01" {...register("minimumStock")} />
+                        <label>Cost</label>
+                        <input type="number" step="0.01" {...register("productCost")} />
 
-                    <label>Unit</label>
-                    <input type="text" {...register("unitType")} />
+                        <label>Price</label>
+                        <input type="number" step="0.01" {...register("productPrice")} />
 
-                    <label>Image</label>
-                    {previewUrl && (
-                        <div className="image-preview">
-                            <img
-                                src={previewUrl}
-                                alt={product.productName}
-                            />
+                        <label>Stock</label>
+                        <input type="number" step="0.01" {...register("productStock")} />
+
+                        <label>Minimum Stock</label>
+                        <input type="number" step="0.01" {...register("minimumStock")} />
+
+                        <label>Unit</label>
+                        <select {...register("unitType")}>
+                            {Object.values(UnitType).map(unit => (
+                                <option key={unit} value={unit}>
+                                    {unit}
+                                </option>
+                            ))}
+                        </select>
+
+                        <div className="extra-fields-row">
+
+                            <div className="extra-field">
+
+                                <label>Featured</label>
+
+                                <label className="switch">
+                                    <input 
+                                        type="checkbox"
+                                        {...register("isFeatured")}
+                                    />
+                                    <span className="slider"></span>
+
+                                </label>
+                            </div>
+                            <div className="display-order-group">
+                                <label>Display Order</label>
+                                <input
+                                    type="number"
+                                    min="0"
+                                    {...register("displayOrder", {valueAsNumber: true})}
+                                    />
+
+                            </div>
+
                         </div>
-                    )}
-                    <input type="file" accept="image/*" {...register("image", { onChange: handleImageChange })} />
 
-                    <div className="form-button">
-                        <button type="submit">Save</button>
-                        <button type="button">Cancel</button>
-                        <button type="button" onClick={backToProducts}>Back to products ⬅</button>
-                    </div>
+                        <label>Image</label>
+                        {previewUrl && (
+                            <div className="image-preview">
+                                <img
+                                    src={previewUrl}
+                                    alt={product.productName}
+                                />
+                            </div>
+                        )}
+                        <input type="file" accept="image/*" {...register("image", { onChange: handleImageChange })} />
+
+                        <div className="form-button">
+                            <button type="submit">Save</button>
+                            <button type="button" onClick={()=> navigate(-1)}>Cancel</button>
+                            <button type="button" onClick={backToProducts}>Back to products ⬅</button>
+                        </div>
                 </form>
             )}
 

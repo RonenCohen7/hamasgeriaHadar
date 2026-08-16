@@ -1,0 +1,192 @@
+.experience-edit-page {
+    width: min(100%, 1180px);
+    margin: 0 auto;
+    padding: 36px 24px 50px;
+}
+
+.experience-edit-page h1 {
+    margin: 0 0 24px;
+
+    color: #17324a;
+
+    font-size: 34px;
+    font-weight: 900;
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+.experience-edit-form {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 18px 24px;
+
+    padding: 30px;
+
+    border: 1px solid #dbe7ef;
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #f8fbfd
+        );
+
+    box-shadow:
+        0 16px 38px rgba(22, 50, 74, .10);
+}
+
+.experience-edit-form label {
+    align-self: center;
+
+    color: #17324a;
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.experience-edit-form input,
+.experience-edit-form select,
+.experience-edit-form textarea {
+    width: 100%;
+
+    padding: 12px 14px;
+
+    border: 1px solid #cfdde7;
+    border-radius: 12px;
+
+    background: #ffffff;
+
+    color: #17324a;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+.experience-edit-form input:focus,
+.experience-edit-form select:focus,
+.experience-edit-form textarea:focus {
+    border-color: #087ea4;
+
+    box-shadow:
+        0 0 0 3px rgba(8, 126, 164, .12);
+}
+
+.experience-edit-form textarea {
+    resize: vertical;
+    min-height: 130px;
+}
+
+
+/* =========================
+   IMAGE PREVIEW
+========================= */
+
+.experience-edit-preview {
+    width: 100%;
+
+    display: flex;
+    justify-content: flex-start;
+}
+
+.experience-edit-preview img {
+    width: 320px;
+    height: 220px;
+
+    object-fit: cover;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 12px 28px rgba(15, 23, 42, .14);
+}
+
+
+/* =========================
+   CHECKBOX
+========================= */
+
+.experience-edit-form input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+
+    cursor: pointer;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.experience-edit-actions {
+    grid-column: 2;
+
+    display: flex;
+    gap: 12px;
+
+    margin-top: 10px;
+}
+
+.experience-edit-actions button {
+    padding: 12px 22px;
+
+    border: none;
+    border-radius: 12px;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        transform .2s ease,
+        opacity .2s ease;
+}
+
+.experience-edit-actions button:first-child {
+    background: #087ea4;
+    color: #ffffff;
+}
+
+.experience-edit-actions button:last-child {
+    background: #e8eef3;
+    color: #17324a;
+}
+
+.experience-edit-actions button:hover {
+    transform: translateY(-2px);
+    opacity: .92;
+}
+
+
+/* =========================
+   TABLET / MOBILE
+========================= */
+
+@media (max-width: 800px) {
+
+    .experience-edit-form {
+        grid-template-columns: 1fr;
+    }
+
+    .experience-edit-form label {
+        margin-bottom: -8px;
+    }
+
+    .experience-edit-actions {
+        grid-column: 1;
+    }
+
+    .experience-edit-preview img {
+        width: 100%;
+        height: 240px;
+    }
+}

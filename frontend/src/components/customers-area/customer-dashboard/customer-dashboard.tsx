@@ -282,7 +282,9 @@ export function CustomerDashboard() {
 
                 <div className="dashboard-activities-grid">
 
-                    <article className="dashboard-activity-card">
+                    <article className="dashboard-activity-card"
+                        onClick={()=> navigate("/experiences/cocktail")}
+                    >
                         <img
                             src="/src/assets/images/pubDrinks.jpg"
                             alt="Hadar Pub cocktails"
@@ -299,7 +301,9 @@ export function CustomerDashboard() {
                     </article>
 
 
-                    <article className="dashboard-activity-card">
+                    <article className="dashboard-activity-card"
+                            onClick={()=> navigate("/experiences/chef")}
+                    >
                         <img
                             src="/src/assets/images/vip-chef.jpg"
                             alt="Hadar Pub chef"

@@ -15,6 +15,10 @@ class AppConfig {
     public readonly productImages = "storage/products";  //save in docker 
     public readonly baseEventImageUrl = "http://localhost:4000/api/events/media/";
 
+
+    public readonly experienceImages = "storage/experiences";
+    public readonly baseExperienceImageUrl = "http://localhost:4000/api/experiences/images/";
+
     public readonly baseImageUrl = process.env.BASE_IMAGE_URL!;
 }
 

@@ -61,6 +61,7 @@ services:
         - ./storage/events:/app/storage/events
         - ./storage/customers:/app/storage/customers
         - ./storage/videos:/app/storage/videos
+        - ./storage/experiences:/app/storage/experiences
 
   adminer:
     image: adminer

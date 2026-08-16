@@ -20,10 +20,10 @@ class ProductController {
         this.router.get("/api/products/low-stock", this.getLowStockProducts);
         this.router.get("/api/products/:id", this.getOneProduct);
 
-        this.router.post("/api/products",verifyToken, allowRoles("admin"), this.addProduct);
-        this.router.put("/api/products/:id",verifyToken, allowRoles("admin"), this.updateProduct);
+        this.router.post("/api/products", verifyToken, allowRoles("admin"), this.addProduct);
+        this.router.put("/api/products/:id", verifyToken, allowRoles("admin"), this.updateProduct);
 
-        this.router.delete("/api/products/:id",verifyToken,allowRoles("admin"), this.deleteProduct);
+        this.router.delete("/api/products/:id", verifyToken, allowRoles("admin"), this.deleteProduct);
 
         this.router.get("/api/inventory/live", this.getLiveInventory);
     }
@@ -67,7 +67,7 @@ class ProductController {
 
             product.isFeatured = request.body.isFeatured == "true" || request.body.isFeatured == true;
 
-            product.displayOrder =Number(request.body.displayOrder ?? 0);
+            product.displayOrder = Number(request.body.displayOrder ?? 0);
 
             product.image = request.files?.image as UploadedFile;
 
@@ -85,7 +85,7 @@ class ProductController {
     //Update products
     private async updateProduct(request: Request, response: Response, next: NextFunction): Promise<void> {
         try {
-
+            console.log("=== UPDATE PRODUCT CONTROLLER HIT ===");
             const id = Number(request.params.id);
 
             if (!Number.isInteger(id) || id <= 0) {
@@ -93,17 +93,26 @@ class ProductController {
                 return;
             }
             const product: ProductModel = request.body
-            
+
             product.idProduct = id;
-            
+
             product.idCategory = Number(request.body.idCategory);
-            
-            product.isActive = request.body.isActive == "true" || request.body.isActive == true;
+
+            product.isActive = request.body.isActive == "true" || request.body.isActive == "1";
+            product.isActive = request.body.isActive == true || request.body.isActive == 1;
 
             product.isFeatured = request.body.isFeatured == "true" || request.body.isFeatured == true;
 
             product.displayOrder = Number(request.body.displayOrder ?? 0);
-            
+
+
+
+            console.log("PARSED:", {
+                isFeatured: product.isFeatured,
+                displayOrder: product.displayOrder,
+                isActive: product.isActive
+            });
+
             product.image = request.files?.image as UploadedFile;
 
 
@@ -148,13 +157,13 @@ class ProductController {
 
 
     //Get Inventory Live
-    private async getLiveInventory(request:Request, response:Response, next:NextFunction):Promise<void>{
-        try{
+    private async getLiveInventory(request: Request, response: Response, next: NextFunction): Promise<void> {
+        try {
 
             const inventory = await productService.getLiveInventory();
             response.json(inventory);
 
-        }catch(err:any){
+        } catch (err: any) {
             next(err);
         }
 

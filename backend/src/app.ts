@@ -25,6 +25,7 @@ import { customerController } from "./controllers/customers-controller";
 import { vipCardController } from "./controllers/vip-card-controller";
 import { vipCardTransactionsController } from "./controllers/vip-card-transactions-controller";
 import { eventMediaController } from "./controllers/event-media-controller";
+import { experienceController } from "./controllers/experience-controller";
 
 
 
@@ -50,6 +51,7 @@ class App {
             app.use("/api/events/media", express.static("storage/events"));
             app.use("/api/customers/images", express.static("storage/customers"));
             app.use("/api/videos", express.static("storage/videos"));
+            app.use("/api/experiences/images", express.static("storage/experiences"))
 
             
             app.use(fileUpload());
@@ -68,6 +70,7 @@ class App {
             app.use(vipCardController.router);
             app.use(vipCardTransactionsController.router);
             app.use(eventMediaController.router);
+            app.use(experienceController.router);
 
             app.use(errorMiddleware.routeNotFound);
             app.use(errorMiddleware.catchAll);

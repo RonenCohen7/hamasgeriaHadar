@@ -6,44 +6,67 @@ import { Routing } from "../routing/routing";
 import "./layout.css";
 import { useEffect } from "react";
 import { socketService } from "../../service/socket-service";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateInventoryProduct } from "../../redux/inventory-slice";
+import type { RootState } from "../../redux/inventory-store";
 
 export function Layout() {
 
+    const employeeUser = useSelector((state: RootState) => state.auth.user)
+
+    const customerUser = useSelector((state: RootState) => state.customerAuth.customer);
+
+
+    const isLoggedIn = !!employeeUser || !!customerUser;
+
     const dispatch = useDispatch();
-    useEffect(()=>{
+
+
+
+    useEffect(() => {
 
         const handleInventoryUpdated = (data: {
-            idProduct:number;
+            idProduct: number;
             stockAfter: number;
         }): void => {
             console.log("inventory-updated received:", data);
 
             dispatch(updateInventoryProduct({
-                idProduct:Number(data.idProduct),
-                stockAfter:Number(data.stockAfter)
+                idProduct: Number(data.idProduct),
+                stockAfter: Number(data.stockAfter)
             }))
         };
         socketService.onInventoryUpdated(handleInventoryUpdated);
 
-        return()=>{
+        return () => {
             socketService.offInventoryUpdated(handleInventoryUpdated);
         }
 
-    },[dispatch]);
+    }, [dispatch]);
 
+    console.log("employeeUser:", employeeUser);
+    console.log("customerUser:", customerUser);
+    console.log("isLoggedIn:", isLoggedIn);
 
+    console.log(
+        "layout class:",
+        isLoggedIn ? "layout" : "layout no-menu"
+    );
 
     return (
-        <div className="layout">
+        <div className={isLoggedIn ? "layout": "layout no-menu"}>
 
             <header>
                 <Header />
             </header>
-            <nav>
-                <Menu />
-            </nav>
+
+            {isLoggedIn && (
+                <nav>
+                    <Menu />
+                </nav>
+
+            )}
+
             <main>
                 <Routing />
             </main>

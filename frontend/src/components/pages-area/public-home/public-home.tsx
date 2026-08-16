@@ -35,6 +35,64 @@ export function PublicHome() {
 
     }, []);
 
+    useEffect(() => {
+
+        const updateParallax = () => {
+
+            document
+                .querySelectorAll<HTMLElement>(".parallax-image")
+                .forEach(img => {
+
+                    const parent = img.parentElement;
+
+                    if (!parent) return;
+
+                    const rect = parent.getBoundingClientRect();
+
+                    const center =
+                        window.innerHeight / 2 -
+                        (rect.top + rect.height / 2);
+
+                    const offset = center * 0.06;
+
+                    img.style.transform =
+                        `translate3d(0, ${offset}px, 0) scale(1.12)`;
+                });
+        }});
+
+useEffect(() => {
+
+    const observer = new IntersectionObserver(
+        entries => {
+
+            entries.forEach(entry => {
+
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("show");
+                }
+
+            });
+
+        },
+        {
+            threshold: 0.2
+        }
+    );
+
+    const images =
+        document.querySelectorAll(".reveal-image");
+
+    images.forEach(image =>
+        observer.observe(image)
+    );
+
+    return () => {
+        images.forEach(image =>
+            observer.unobserve(image)
+        );
+    };
+
+}, []);
 
     return (
         <main className="PublicHome">
@@ -144,7 +202,7 @@ export function PublicHome() {
 
                                 <div className="public-event-image">
 
-                                    <img
+                                    <img className="parallax-image"
                                         src={event.coverImageUrl ? String(event.coverImageUrl) : "/placeholder-event.jpg"}
                                         alt={event.eventName}
                                     />
@@ -278,7 +336,7 @@ export function PublicHome() {
 
                 <div className="benefit-card">
 
-                    <div className="benefit-icon">
+                    <div className="benefit-icon" onClick={()=> navigate(`/customer-login`)}>
                         ⭐
                     </div>
 
@@ -294,9 +352,9 @@ export function PublicHome() {
                 </div>
 
 
-                <div className="benefit-card">
+                <div className="benefit-card" >
 
-                    <div className="benefit-icon">
+                    <div className="benefit-icon" onClick={()=> navigate(`/customer-login`)}>
                         🎟️
                     </div>
 
@@ -314,7 +372,7 @@ export function PublicHome() {
 
                 <div className="benefit-card">
 
-                    <div className="benefit-icon">
+                    <div className="benefit-icon" onClick={()=> navigate(`/customer-login`)}>
                         🍺
                     </div>
 

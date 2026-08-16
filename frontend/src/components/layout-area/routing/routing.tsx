@@ -45,6 +45,11 @@ import { ForgotPassword } from "../../customers-area/forgot-password/forgot-pass
 import { CustomerLogin } from "../../customers-area/customer-login/customer-login";
 import { EventOrder } from "../../events-area/event-order/event-order";
 import { PublicHome } from "../../pages-area/public-home/public-home";
+import { ExperienceList } from "../../experiencs-area/experience-list/experience-list";
+import { ExperienceDetails } from "../../experiencs-area/experience-details/experience-details";
+import { ExperienceEdit } from "../../experiencs-area/experience-edit/experience-edit";
+import { AddExperience } from "../../experiencs-area/add-experience/add-experience";
+
 
 
 export function Routing() {
@@ -76,6 +81,7 @@ export function Routing() {
             <Route path="/product/new" element={<AuthGuard><AddProduct /></AuthGuard>} />
 
 
+
             <Route path="/suppliers" element={<AuthGuard><SupplierList /></AuthGuard>} />
 
             <Route path="/supplier/add" element={<AuthGuard><AddSupplier /></AuthGuard>} />
@@ -86,10 +92,11 @@ export function Routing() {
 
             <Route path="/supplier-orders" element={<AuthGuard><SupplierOrderList /></AuthGuard>} />
 
-
             <Route path="/supplier-orders/add" element={<AuthGuard><AddSupplierOrder /></AuthGuard>} />
 
             <Route path="/supplier-orders/:id" element={<AuthGuard><SupplierOrderDetails /></AuthGuard>} />
+
+
 
             <Route path="/inventory-live" element={<AuthGuard><InventoryMonitor /></AuthGuard>} />
 
@@ -140,6 +147,16 @@ export function Routing() {
             <Route path="/events/details/:idEvent" element={<EventDetails />} />
 
             <Route path="/events/media/:idEvent" element={<EventMedia />} />
+
+
+            <Route path="/experiences/" element={<ExperienceList/>}/>
+            <Route path="/experiences/:type" element={<ExperienceList/>}/>
+
+            <Route path="/experience/:id" element={<ExperienceDetails/>}/>
+
+            <Route path="/experiences/edit/:id" element={<ExperienceEdit/>}/>
+
+            <Route path="/experiences/add" element={<AddExperience/>}/>
 
 
 

@@ -165,6 +165,15 @@ export function Menu() {
                                 🎭
                             </NavLink>
                         )}
+                             {(role === "admin" || role === "manager") && (
+                            <NavLink
+                                to="/experiences"
+                                className="menu-link"
+                                data-tooltip="Experiences"
+                            >
+                                🧪
+                            </NavLink>
+                        )}
 
 
 
