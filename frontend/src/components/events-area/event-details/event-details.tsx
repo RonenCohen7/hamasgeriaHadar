@@ -12,11 +12,19 @@ import { notificationService } from "../../service/notificationService";
 
 import { useTitle } from "../../utils/UseTitle";
 import { appConfig } from "../../utils/app-config";
-
+import { useTranslation } from "react-i18next";
+import i18n from "../../../i18n/i18n";
 
 export function EventDetails() {
 
-    useTitle("Event Details");
+    const local = i18n.language == "he" ? "he-IL" : "en-US";
+
+
+
+    const { t } = useTranslation();
+
+
+    useTitle(t("events.details.title"));
 
     const navigate = useNavigate();
 
@@ -48,7 +56,7 @@ export function EventDetails() {
         ) {
 
             notificationService.error(
-                "Event not found"
+                t("events.details.eventNotFound")
             );
 
             navigate("/customer-dashboard");
@@ -69,6 +77,9 @@ export function EventDetails() {
 
                 setEvent(eventFromApi);
 
+
+
+
             } catch (err) {
 
                 console.error(
@@ -77,7 +88,7 @@ export function EventDetails() {
                 );
 
                 notificationService.error(
-                    "Failed to load event"
+                    t("events.details.eventNotFound")
                 );
 
                 navigate("/customer-dashboard");
@@ -145,7 +156,7 @@ export function EventDetails() {
             <section className="EventDetails">
 
                 <div className="event-details-loading">
-                    Loading event...
+                    {t("events.details.loading")}
                 </div>
 
             </section>
@@ -164,7 +175,7 @@ export function EventDetails() {
 
     const formattedDate =
         eventDate.toLocaleDateString(
-            "en-US",
+            local,
             {
                 weekday: "long",
                 day: "numeric",
@@ -173,10 +184,9 @@ export function EventDetails() {
             }
         );
 
-
     const formattedTime =
         eventDate.toLocaleTimeString(
-            "en-US",
+            local,
             {
                 hour: "2-digit",
                 minute: "2-digit"
@@ -239,7 +249,7 @@ export function EventDetails() {
                         className="event-details-back"
                         onClick={() => navigate(-1)}
                     >
-                        ← Back
+                        ← {t("events.details.back")}
                     </button>
 
 
@@ -258,7 +268,7 @@ export function EventDetails() {
                             <span>🎭</span>
 
                             <p>
-                                Event image unavailable
+                                {t("events.details.imageUnavailable")}
                             </p>
 
                         </div>
@@ -277,7 +287,7 @@ export function EventDetails() {
 
 
                         <span className="event-details-eyebrow">
-                            Hadar Pub Event
+                            {t("events.details.event")}
                         </span>
 
 
@@ -310,7 +320,7 @@ export function EventDetails() {
                                 <div>
 
                                     <small>
-                                        Date
+                                        <small>{t("events.details.date")}</small>
                                     </small>
 
                                     <strong>
@@ -332,7 +342,7 @@ export function EventDetails() {
                                 <div>
 
                                     <small>
-                                        Time
+                                        {t("events.details.time")}
                                     </small>
 
                                     <strong>
@@ -356,7 +366,7 @@ export function EventDetails() {
                                     <div>
 
                                         <small>
-                                            Location
+                                            <small>{t("events.details.location")}</small>
                                         </small>
 
                                         <strong>
@@ -382,7 +392,7 @@ export function EventDetails() {
                                     <div>
 
                                         <small>
-                                            Available Places
+                                            <small>{t("events.details.availablePlaces")}</small>
                                         </small>
 
                                         <strong>
@@ -407,7 +417,7 @@ export function EventDetails() {
                             <div className="event-price-box regular">
 
                                 <span>
-                                    Regular Price
+                                    {t("events.details.regularPrice")}
                                 </span>
 
                                 <strong>
@@ -416,7 +426,7 @@ export function EventDetails() {
                                         ? `₪${Number(
                                             event.ticketPrice
                                         ).toFixed(2)}`
-                                        : "Free Entry"}
+                                        : t("events.details.freeEntry")}
 
                                 </strong>
 
@@ -429,7 +439,7 @@ export function EventDetails() {
                                 <div className="event-price-box vip">
 
                                     <span>
-                                        ⭐ VIP Price
+                                        ⭐ {t("events.details.vipPrice")}
                                     </span>
 
                                     <strong>
@@ -468,11 +478,11 @@ export function EventDetails() {
                         <div>
 
                             <span>
-                                EVENT GALLERY
+                                {t("events.details.gallery")}
                             </span>
 
                             <h2>
-                                Photos & Videos
+                                {t("events.details.photosVideos")}
                             </h2>
 
                         </div>
@@ -480,8 +490,8 @@ export function EventDetails() {
                         <small>
                             {media.length}{" "}
                             {media.length === 1
-                                ? "item"
-                                : "items"}
+                                ? t("events.details.item")
+                                : t("events.details.items")}
                         </small>
 
                     </div>
@@ -528,7 +538,7 @@ export function EventDetails() {
                                     {item.isCover && (
 
                                         <span className="event-gallery-cover">
-                                            ⭐ Cover
+                                            ⭐ {t("events.details.cover")}
                                         </span>
 
                                     )}
@@ -594,12 +604,11 @@ export function EventDetails() {
                 <div className="event-gallery-order-text">
 
                     <strong>
-                        Ready to join us?
+                        {t("events.details.readyToJoin")}
                     </strong>
 
                     <span>
-                        Choose your tickets and continue
-                        to secure payment.
+                        {t("events.details.chooseTickets")}
                     </span>
 
                 </div>
@@ -614,15 +623,14 @@ export function EventDetails() {
                 >
 
                     {availablePlaces === 0
-                        ? "Sold Out"
-                        : "🎟 Order Tickets"}
+                        ? t("events.details.soldOut")
+                        : `🎟 ${t("events.details.orderTickets")}`}
 
                 </button>
 
 
                 <small>
-                    Secure your place
-                    for this event.
+                    {t("events.details.securePlace")}
                 </small>
 
 

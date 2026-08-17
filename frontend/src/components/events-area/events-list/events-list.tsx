@@ -6,9 +6,11 @@ import { EventModel } from "../../models/event-model";
 import { eventService } from "../../service/eventService";
 import { notificationService } from "../../service/notificationService";
 import { dialogService } from "../../service/dialogService";
-import { current } from "@reduxjs/toolkit";
+import { useTranslation } from "react-i18next";
 
 export function EventsList() {
+
+    const { t } = useTranslation();
 
     useTitle("Event-List");
 
@@ -53,35 +55,38 @@ export function EventsList() {
             0
         );
 
-    
 
 
-    async function deleteEvent(idEvent:number){
-        const confirm =  await dialogService.confirm(
-            "Delete Event?",
-            "Are you sure you want to delete this event?",
-            "Delete",
-            "Cancel"
+
+    async function deleteEvent(idEvent: number) {
+        const confirm = await dialogService.confirm(
+            t("events.deleteTitle"),
+            t("events.deleteMessage"),
+            t("events.deleteConfirm"),
+            t("events.cancel")
         );
 
-        if(!confirm) {
+        if (!confirm) {
             return;
         };
 
-        try{
+        try {
             await eventService.deleteEvent(idEvent);
 
-            setEvents(currentEvents => 
+            setEvents(currentEvents =>
                 currentEvents.filter(
                     event => event.idEvent !== idEvent
-            ))
+                ))
             notificationService.success(
-                "Event delete successfully")
-        }catch(err){
+                t("events.deleteSuccess")
+            )
+        } catch (err) {
             console.error(err)
-            notificationService.error("Failed to delete event")
+            notificationService.error(
+                t("events.deleteError")
+            )
         }
-        
+
     }
 
 
@@ -93,13 +98,11 @@ export function EventsList() {
             <header className="events-list-header">
 
                 <div>
-                    <span>EVENT MANAGEMENT</span>
+                    <span>{t("events.management")}</span>
 
-                    <h1>Events</h1>
+                    <h1>{t("events.title")}</h1>
 
-                    <p>
-                        Manage all pub events in one place.
-                    </p>
+                    <p>{t("events.description")}</p>
                 </div>
 
                 <button
@@ -107,7 +110,7 @@ export function EventsList() {
                     className="add-event-button"
                     onClick={() => navigate("/events/add")}
                 >
-                    + Add Event
+                    + {t("events.addEvent")}
                 </button>
 
             </header>
@@ -118,35 +121,35 @@ export function EventsList() {
                 <article className="event-stat-card">
                     <span>📆</span>
                     <h2>{events.length}</h2>
-                    <p>Total Events</p>
+                    <p>{t("events.totalEvents")}</p>
                 </article>
 
 
                 <article className="event-stat-card">
                     <span>🟢</span>
                     <h2>{activeEvents}</h2>
-                    <p>Active</p>
+                    <p>{t("events.active")}</p>
                 </article>
 
 
                 <article className="event-stat-card">
                     <span>✴️</span>
                     <h2>{plannedEvents}</h2>
-                    <p>Planned</p>
+                    <p>{t("events.planned")}</p>
                 </article>
 
 
                 <article className="event-stat-card">
                     <span>✅</span>
                     <h2>{completedEvents}</h2>
-                    <p>Completed</p>
+                    <p>{t("events.completed")}</p>
                 </article>
 
 
                 <article className="event-stat-card">
                     <span>👥</span>
                     <h2>{totalExpectedGuests}</h2>
-                    <p>Expected Guests</p>
+                    <p>{t("events.expectedGuests")}</p>
                 </article>
 
             </section>
@@ -156,7 +159,7 @@ export function EventsList() {
 
                 <input
                     type="text"
-                    placeholder="Search event..."
+                    placeholder={t("events.searchPlaceholder")}
                     value={search}
                     onChange={e => setSearch(e.target.value)}
                 />
@@ -183,9 +186,9 @@ export function EventsList() {
                                 </div>
                             )}
                             <span
-                                className={`status ${event.eventStatus}`}
+                                className={t(`events.status.${event.eventStatus}`)}
                             >
-                                {event.eventStatus}
+                                {t("events.planned")}
                             </span>
 
                         </div>
@@ -194,7 +197,7 @@ export function EventsList() {
                         <h2>{event.eventName}</h2>
 
                         <p>
-                            {event.eventDescription}
+                            {t("events.detailsForm")}
                         </p>
 
 
@@ -221,11 +224,11 @@ export function EventsList() {
                                 💰 ₪{event.ticketPrice}
                             </span>
                             <span>
-                                💰 Regular: ₪{Number(event.ticketPrice).toFixed(2)}
+                                💰 {t("events.regularPrice")}: ₪{Number(event.ticketPrice).toFixed(2)}
                             </span>
                             {event.vipPrice != null && (
                                 <span className="event-vip-price">
-                                    ⭐ VIP: ₪{Number(event.vipPrice).toFixed(2)}
+                                    ⭐ {t("events.vipPrice")}: ₪{Number(event.vipPrice).toFixed(2)}
                                 </span>
                             )}
 
@@ -242,7 +245,7 @@ export function EventsList() {
                                     )
                                 }
                             >
-                                👁 Details
+                                👁 {t("events.detailsForm")}
                             </button>
 
 
@@ -254,7 +257,7 @@ export function EventsList() {
                                     )
                                 }
                             >
-                                ✏️ Edit
+                                ✏️ {t("events.editForm")}
                             </button>
 
 
@@ -266,15 +269,15 @@ export function EventsList() {
                                     )
                                 }
                             >
-                                🖼 Media
+                                🖼 {t("events.media")}
                             </button>
 
 
                             <button
                                 type="button"
-                                onClick={()=> deleteEvent(event.idEvent)}
+                                onClick={() => deleteEvent(event.idEvent)}
                             >
-                                🗑 Delete
+                                🗑 {t("events.delete")}
                             </button>
 
                         </div>

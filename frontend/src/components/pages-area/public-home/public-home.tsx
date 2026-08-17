@@ -11,7 +11,7 @@ import pubDrinks from "../../../assets/images/pubDrinks.jpg";
 
 export function PublicHome() {
 
-    useTitle("HAMASGERIYA");
+    useTitle("HAMASGERIA");
 
     const navigate = useNavigate();
 
@@ -119,7 +119,7 @@ useEffect(() => {
                     </span>
 
                     <h1>
-                        HAMASGERIYA
+                        HAMASGERIA
                     </h1>
 
                     <p>

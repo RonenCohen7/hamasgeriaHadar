@@ -2,16 +2,20 @@ import { NavLink } from "react-router-dom";
 import "./menu.css";
 import { FaHome, FaBoxOpen, FaInfoCircle, FaEnvelope, FaTruck, FaFileInvoice, FaWarehouse, FaClipboardCheck, FaSalesforce } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import { FaSackDollar } from "react-icons/fa6";
+
 import type { RootState } from "../../redux/inventory-store";
 import { useSelector } from "react-redux";
 
 import { useNavigate } from "react-router-dom";
 import { authService } from "../../service/authService";
 import { customerService } from "../../service/customerService";
+import { useTranslation } from "react-i18next";
 
 
 export function Menu() {
+
+    const  { t } = useTranslation();
+
     const customer = useSelector((state: RootState) => state.customerAuth.customer);
     const user = useSelector((state: RootState) => state.auth.user);
 
@@ -46,12 +50,12 @@ export function Menu() {
 
     function logout() {
         authService.logout();
-        navigate("/login");
+        navigate("/");
     }
 
     function logoutCustomer() {
         customerService.logoutCustomer()
-        navigate("/customer-login");
+        navigate("/");
 
     }
 
@@ -83,8 +87,9 @@ export function Menu() {
                         <button
                             className="logout-button"
                             onClick={logout}
+                            
                         >
-                            🚪 Logout
+                            🚪 {t("menu.logout")}
                         </button>
 
                     </div>
@@ -101,23 +106,28 @@ export function Menu() {
                                     <strong>
                                         {customer.firstName} {customer.lastName}
                                     </strong>
-                                    <small>Customer</small>
+                                    <small>{t("menu.customer")}</small>
                                 </div>
                             </div>
                             <button
                                 type="button"
                                 className="logout-button"
                                 onClick={logoutCustomer}>
-                                🚪 Logout
+                                🚪 {t("menu.logout")}
                             </button>
                         </div>
 
-                        <NavLink to="/customer-dashboard" className="menu-link" data-tooltip="Dashboard"> 🎭</NavLink>
+                        <NavLink to="/customer-dashboard" 
+                        className="menu-link" 
+                        data-tooltip={t("menu.dashboard")}>
+
+                         🎭
+                         </NavLink>
 
                         <NavLink
                             to={`/vip-cards/customer/${customer.idCustomer}`}
                             className="menu-link"
-                            data-tooltip="My VIP Card"
+                            data-tooltip={t("menu.dashboard")}
                         >
                             💳
                         </NavLink>
@@ -125,7 +135,7 @@ export function Menu() {
                         {customer?.hasVipCard && (<NavLink
                             to={`/vip-cards/${customer.idCustomer}/transactions`}
                             className="menu-link"
-                            data-tooltip="My Transactions"
+                            data-tooltip={t("menu.myTransactions")}
                             
                         >
                             📋
@@ -139,7 +149,7 @@ export function Menu() {
 
                 {user && (
                     <>
-                        <NavLink to="/" className="menu-link">
+                        <NavLink to="/" className="menu-link" data-tooltip ={t("menu.home")}>
                             <FaHome />
                         </NavLink>
 
@@ -147,7 +157,7 @@ export function Menu() {
                             <NavLink
                                 to="/inventory-live"
                                 className="menu-link"
-                                data-tooltip="Inventory-Live"
+                                data-tooltip={t("menu.inventoryLive")}
                             >
                                 <FaWarehouse />
                             </NavLink>
@@ -160,7 +170,7 @@ export function Menu() {
                             <NavLink
                                 to="/events"
                                 className="menu-link"
-                                data-tooltip="Events"
+                                data-tooltip={t("menu.events")}
                             >
                                 🎭
                             </NavLink>
@@ -169,7 +179,7 @@ export function Menu() {
                             <NavLink
                                 to="/experiences"
                                 className="menu-link"
-                                data-tooltip="Experiences"
+                                data-tooltip={t("menu.experiences")}
                             >
                                 🧪
                             </NavLink>
@@ -182,15 +192,15 @@ export function Menu() {
                             <FaSackDollar />
                         </NavLink> */}
 
-                        <NavLink to="/quick-sale" className="menu-link" data-tooltip="Quick Sale">
+                        <NavLink to="/quick-sale" className="menu-link" data-tooltip={t("menu.quickSale")}>
                             <FaSalesforce />
                         </NavLink>
 
-                        <NavLink to="/products" className="menu-link" data-tooltip="Products">
+                        <NavLink to="/products" className="menu-link" data-tooltip={t("menu.products")}>
                             <FaBoxOpen />
                         </NavLink>
 
-                        <NavLink to="/inventory-count" className="menu-link" data-tooltip="Inventory Count">
+                        <NavLink to="/inventory-count" className="menu-link" data-tooltip={t("menu.inventoryCount")}>
                             <FaClipboardCheck />
                         </NavLink>
 
@@ -199,7 +209,7 @@ export function Menu() {
                                 <NavLink
                                     to="/suppliers"
                                     className="menu-link"
-                                    data-tooltip="Suppliers"
+                                    data-tooltip={t("menu.suppliers")}
                                 >
                                     <FaTruck />
                                 </NavLink>
@@ -207,7 +217,7 @@ export function Menu() {
                                 <NavLink
                                     to="/supplier-orders"
                                     className="menu-link"
-                                    data-tooltip="Suppliers Orders"
+                                    data-tooltip={t("menu.supplierOrders")}
                                 >
                                     <FaFileInvoice />
                                 </NavLink>
@@ -215,18 +225,18 @@ export function Menu() {
                                 <NavLink
                                     to="/customers"
                                     className="menu-link"
-                                    data-tooltip="Customers"
+                                    data-tooltip={t("menu.customers")}
                                 >
                                     👥
                                 </NavLink>
                             </>
                         )}
 
-                        <NavLink to="/about" className="menu-link" data-tooltip="About">
+                        <NavLink to="/about" className="menu-link" data-tooltip={t("menu.about")}>
                             <FaInfoCircle />
                         </NavLink>
 
-                        <NavLink to="/contact-us" className="menu-link" data-tooltip="Contact Us">
+                        <NavLink to="/contact-us" className="menu-link" data-tooltip={t("menu.contactUs")}>
                             <FaEnvelope />
                         </NavLink>
                     </>

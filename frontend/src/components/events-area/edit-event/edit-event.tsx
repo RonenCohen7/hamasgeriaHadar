@@ -8,8 +8,12 @@ import { EventModel } from "../../models/event-model";
 import { eventService } from "../../service/eventService";
 import { notificationService } from "../../service/notificationService";
 import { useTitle } from "../../utils/UseTitle";
+import { useTranslation } from "react-i18next";
+
 
 export function EditEvent() {
+
+    const { t } = useTranslation();
     useTitle("Edit Event");
 
     const { idEvent } = useParams();
@@ -53,7 +57,7 @@ export function EditEvent() {
             .catch(err => {
                 console.error(err);
                 notificationService.error(
-                    "Failed to load event"
+                    t("events.edit.loadError")
                 );
 
                 navigate("/events");
@@ -105,7 +109,7 @@ export function EditEvent() {
                 imageFile
             );
 
-            notificationService.success("Event update successfully");
+            notificationService.success(t("events.edit.updateSuccess"));
 
             navigate("/events")
 
@@ -116,7 +120,7 @@ export function EditEvent() {
 
             console.error("Server response:", err.response?.data);
 
-            notificationService.error("Failed to update event");
+            notificationService.error(t("events.edit.updateError"));
         }
     }
 
@@ -127,10 +131,10 @@ export function EditEvent() {
             <div className="edit-event-page-header">
                 <div>
                     <span className="edit-event-eyebrow">
-                        Event Management
+                        {t("events.edit.management")}
                     </span>
 
-                    <h2>Edit Event</h2>
+                    <h2>{t("events.edit.title")}</h2>
                 </div>
 
                 <button
@@ -138,7 +142,7 @@ export function EditEvent() {
                     className="edit-event-back-button"
                     onClick={() => navigate("/events")}
                 >
-                    Back to Events
+                    {t("events.edit.backToEvents")}
                 </button>
             </div>
 
@@ -149,7 +153,7 @@ export function EditEvent() {
             >
 
                 <div className="edit-event-field event-name">
-                    <label>Event Name</label>
+                    <label>{t("events.add.eventName")}</label>
 
                     <input
                         type="text"
@@ -161,7 +165,7 @@ export function EditEvent() {
 
 
                 <div className="edit-event-field description">
-                    <label>Description</label>
+                    <label>{t("events.add.eventDescription")}</label>
 
                     <textarea
                         {...register("eventDescription")}
@@ -170,7 +174,7 @@ export function EditEvent() {
 
 
                 <div className="edit-event-field">
-                    <label>Start</label>
+                    <label>{t("events.add.start")}</label>
 
                     <input
                         type="datetime-local"
@@ -182,7 +186,7 @@ export function EditEvent() {
 
 
                 <div className="edit-event-field">
-                    <label>End</label>
+                    <label>{t("events.add.end")}</label>
 
                     <input
                         type="datetime-local"
@@ -192,7 +196,7 @@ export function EditEvent() {
 
 
                 <div className="edit-event-field">
-                    <label>Location</label>
+                    <label>{t("events.add.location")}</label>
 
                     <input
                         type="text"
@@ -202,32 +206,32 @@ export function EditEvent() {
 
 
                 <div className="edit-event-field">
-                    <label>Status</label>
+                    <label>{t("events.add.status")}</label>
 
                     <select
                         {...register("eventStatus")}
                     >
                         <option value="planned">
-                            Planned
+                            {t("events.status.planned")}
                         </option>
 
                         <option value="active">
-                            Active
+                            {t("events.status.active")}
                         </option>
 
                         <option value="completed">
-                            Completed
+                            {t("events.status.planned")}
                         </option>
 
                         <option value="cancelled">
-                            Cancelled
+                            {t("events.status.cancelled")}
                         </option>
                     </select>
                 </div>
 
 
                 <div className="edit-event-field">
-                    <label>Maximum Guests</label>
+                    <label>{t("events.add.maximumGuests")}</label>
 
                     <input
                         type="number"
@@ -240,7 +244,7 @@ export function EditEvent() {
 
 
                 <div className="edit-event-field">
-                    <label>Expected Guests</label>
+                    <label>{t("events.add.expectedGuests")}</label>
 
                     <input
                         type="number"
@@ -253,7 +257,7 @@ export function EditEvent() {
 
 
                 <div className="edit-event-field">
-                    <label>Ticket Price</label>
+                    <label>{t("events.add.ticketPrice")}</label>
 
                     <input
                         type="number"
@@ -266,7 +270,7 @@ export function EditEvent() {
                 </div>
 
                 <div className="edit-event-field">
-                    <label>VIP Price</label>
+                    <label>{t("events.vipPrice")}</label>
 
                     <input
                         type="number"
@@ -296,7 +300,7 @@ export function EditEvent() {
                                 </span>
 
                                 <span>
-                                    No event image
+                                    {t("events.edit.noEventImage")}
                                 </span>
                             </div>
                         )}
@@ -307,7 +311,7 @@ export function EditEvent() {
                     <div className="edit-event-image-upload">
 
                         <span className="edit-event-image-title">
-                            Cover Image
+                            {t("events.edit.coverImage")}
                         </span>
 
                         <input
@@ -320,8 +324,7 @@ export function EditEvent() {
                         />
 
                         <small>
-                            Select a new image only if you want
-                            to replace the current cover.
+                            {t("events.edit.replaceImageHint")}
                         </small>
 
                     </div>
@@ -336,7 +339,7 @@ export function EditEvent() {
                         className="edit-event-cancel"
                         onClick={() => navigate("/events")}
                     >
-                        Cancel
+                        {t("events.edit.cancel")}
                     </button>
 
                     <button
@@ -345,8 +348,8 @@ export function EditEvent() {
                         disabled={isSubmitting}
                     >
                         {isSubmitting
-                            ? "Saving..."
-                            : "Save Changes"}
+                            ? t("events.edit.saving")
+                            : t("events.edit.saveChanges")}
                     </button>
 
                 </div>

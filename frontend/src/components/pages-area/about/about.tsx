@@ -17,7 +17,7 @@ export function About() {
                 <div className="about-hero-content">
 
                     <span className="about-eyebrow">
-                        About Hamasgeriya
+                        About HAMASGERIA
                     </span>
 
                     <h1>

@@ -5,12 +5,13 @@ import { useState } from "react";
 import { notificationService } from "../../service/notificationService";
 import { eventService } from "../../service/eventService";
 import { EventModel } from "../../models/event-model";
-
+import { useTranslation } from "react-i18next";
 
 
 
 
 export function AddEvent() {
+    const { t } = useTranslation();
     useTitle("Add Event")
     const navigate = useNavigate();
 
@@ -18,7 +19,7 @@ export function AddEvent() {
     const [eventName, setEventName] = useState("");
     const [eventDescription, setEventDescription] = useState("");
     const [eventStart, setEventStart] = useState("");
-    const [eventEnd, setEvntEnd] = useState("");
+    const [eventEnd, setEventEnd] = useState("");
     const [eventLocation, setEventLocation] = useState("");
     const [maximumGuests, setMaximumGuests] = useState("");
     const [exceptedGuests, setExceptedGuests] = useState("");
@@ -100,11 +101,11 @@ export function AddEvent() {
             <header className="add-event-header">
 
                 <div>
-                    <span>Event MANAGEMENT</span>
+                    <span>{t("events.add.management")}</span>
 
-                    <h1>Add Event</h1>
+                    <h1>{t("events.add.title")}</h1>
 
-                    <p>Create a new event for Hadar Pub</p>
+                    <p>{t("events.add.description")}</p>
                 </div>
             </header>
 
@@ -115,21 +116,21 @@ export function AddEvent() {
                 <div className="add-event-form"></div>
                 <div className="form-group"></div>
 
-                <label>Event Name</label>
+                <label>{t("events.add.eventName")}</label>
 
                 <input
                     type="text"
                     value={eventName}
-                    placeholder="Example: Whisky Tasting Night"
+                    placeholder={t("events.add.eventNamePlaceholder")}
                     onChange={e => setEventName(e.target.value)}
                 />
             </div>
 
             <div className="form-group">
-                <label>Description</label>
+                <label>{t("events.add.description")}</label>
                 <textarea
                     value={eventDescription}
-                    placeholder="Event Description"
+                    placeholder={t("events.add.eventDescriptionPlaceholder")}
                     onChange={e => setEventDescription(e.target.value)}
                 />
             </div>
@@ -138,7 +139,7 @@ export function AddEvent() {
 
                 <div className="form-group">
 
-                    <label>Start</label>
+                    <label>{t("events.add.start")}</label>
 
                     <input
                         type="datetime-local"
@@ -148,26 +149,26 @@ export function AddEvent() {
                 </div>
 
                 <div className="form-group">
-                    <label>End</label>
+                    <label>{t("events.add.end")}</label>
                     <input
                         type="datetime-local"
                         value={eventEnd}
-                        onChange={e => setEvntEnd(e.target.value)}
+                        onChange={e => setEventEnd(e.target.value)}
                     />
                 </div>
 
                 <div className="form-group">
-                    <label>Location</label>
+                    <label>{t("events.add.location")}</label>
                     <input
                         type="text"
                         value={eventLocation}
-                        placeholder="Hadar Pub"
+                        placeholder={t("events.add.locationPlaceholder")}
                         onChange={e => setEventLocation(e.target.value)}
                     />
                 </div>
                 <div className="form-row">
                     <div className="form-group">
-                        <label>Maximum Guests</label>
+                        <label>{t("events.add.maximumGuests")}</label>
                         <input
                             type="number"
                             min="0"
@@ -177,7 +178,7 @@ export function AddEvent() {
                     </div>
 
                     <div className="form-group">
-                        <label>Excepted Guests</label>
+                        <label>{t("events.add.expectedGuests")}</label>
                         <input
                             type="number"
                             min="0"
@@ -188,7 +189,7 @@ export function AddEvent() {
 
                     <div className="form-row">
                         <div className="form-group">
-                            <label>Ticket Price</label>
+                            <label>{t("events.add.ticketPrice")}</label>
                             <input
                                 type="number"
                                 min="0"
@@ -198,7 +199,7 @@ export function AddEvent() {
                         </div>
 
                         <div className="from-group">
-                            <label>Status</label>
+                            <label>{t("events.add.status")}</label>
                             <select
                                 value={eventStatus}
                                 onChange={e => setEventStatus(e.target.value)}>
@@ -210,10 +211,10 @@ export function AddEvent() {
                             </select>
                         </div>
                     </div>
-                    
+
                     {/*==================IMAGE=====================*/}
                     <div className="form-group">
-                        <label>Cover Image</label>
+                        <label>{t("events.add.coverImage")}</label>
                         <input
                             type="file"
                             accept="image/*"
@@ -225,9 +226,9 @@ export function AddEvent() {
                         <button
                             type="button"
                             className="cancel-button"
-                            onClick={() => navigate(".events")}
+                            onClick={() => navigate("/events")}
                         >
-                            Cancel
+                            {t("events.add.cancel")}
                         </button>
 
                         <button
@@ -236,7 +237,9 @@ export function AddEvent() {
                             disabled={isSaving}
                             onClick={addEvent}
                         >
-                            {isSaving ? "Saving" : "Create Event"}
+                            {isSaving
+                                ? t("events.add.saving")
+                                : t("events.add.createEvent")}
 
                         </button>
                     </div>
@@ -244,19 +247,19 @@ export function AddEvent() {
 
                 {/*========Preview========*/}
                 <aside className="event-cover-preview">
-                    <h3>Event Cover</h3>
+                    <h3>{t("events.add.eventCover")}</h3>
                     {preview ? (
                         <img
-                            src={preview} 
+                            src={preview}
                             alt="Event Preview"
-                            />
-                    ):(
+                        />
+                    ) : (
                         <div className="empty-cover">
                             🎭
                             <span>
-                                Select an event image
+                                {t("events.add.selectImage")}
                             </span>
-                        </div>   
+                        </div>
                     )}
 
                 </aside>

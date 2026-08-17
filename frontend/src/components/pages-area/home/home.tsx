@@ -101,7 +101,7 @@ export function Home() {
             <div className="home-heading">
                 <div>
                     <h1>
-                        HAMASGERIYA
+                        HAMASGERIA
                     </h1>
 
                     <p>

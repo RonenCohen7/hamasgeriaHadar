@@ -12,9 +12,11 @@ import { socketService } from "./components/service/socket-service";
 import { notificationService } from "./components/service/notificationService";
 import axios from "axios";
 import { store } from "./components/redux/inventory-store";
+import "./i18n/i18n";
+
+
 
 socketService.connect();
-
 
 
 socketService.onInventoryUpdated(data => {
