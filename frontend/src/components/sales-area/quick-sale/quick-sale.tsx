@@ -635,14 +635,12 @@ export function QuickSale() {
                                 </div>
 
                                 <span className="quick-sale-product-name">
-                                    {product.productName}
+                                      {product.productName}
                                 </span>
 
                                 <strong className="quick-sale-product-price">
                                     ₪
-                                    {Number(
-                                        product.productPrice
-                                    ).toFixed(2)}
+                                        {Number(product.productPrice).toFixed(0)}
                                 </strong>
                             </button>
                         );
@@ -701,7 +699,7 @@ export function QuickSale() {
                                             <span>
                                                 ₪
                                                 {unitPrice.toFixed(
-                                                    2
+                                                    0
                                                 )}
                                             </span>
                                         </div>

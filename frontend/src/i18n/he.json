@@ -268,8 +268,8 @@
             "title": "תשלום",
             "paymentMethod": "אמצעי תשלום",
             "cash": "מזומן",
-            "bit":"bit",
-            "paybox":"payBox",
+            "bit": "bit",
+            "paybox": "payBox",
             "creditCard": "כרטיס אשראי",
             "vipCard": "כרטיס VIP",
             "changePaymentMethod": "שינוי אמצעי תשלום",
@@ -285,7 +285,7 @@
             "change": "עודף",
             "cancel": "ביטול",
             "confirm": "אישור תשלום"
-    }
+        }
     },
     "orderCanceled": "ההזמנה בוטלה",
     "cancelDialog": {
@@ -293,6 +293,17 @@
         "message": "האם אתה בטוח שברצונך לבטל את ההזמנה?",
         "keep": "השאר הזמנה",
         "cancel": "בטל הזמנה"
+    },
+    "products": {
+        "pageTitle": "מוצרים",
+        "inventory": "מלאי",
+        "title": "מוצרים",
+        "description": "ניהול המוצרים, המחירים ורמות המלאי של המסגריה.",
+        "addProduct": "הוספת מוצר",
+        "searchPlaceholder": "חיפוש מוצרים...",
+        "totalProducts": "סה״כ מוצרים",    
+        "stock": "מלאי: ",
+        "minimum": "מינימום: ",
+        "noImage": "אין תמונה"
     }
-  
 }

@@ -276,6 +276,19 @@
             "confirm": "Confirm Payment",
             "bit": "Bit",
             "payBox": "PayBox"
-        }
+        },
+        "products": {
+            "pageTitle": "Products",
+            "inventory": "Inventory",
+            "title": "Products",
+            "description": "Manage the products, prices and stock levels of Hadar Pub.",
+            "addProduct": "Add Product",
+            "searchPlaceholder": "Search products...",
+            "totalProducts": "Total Products",
+                "stock": "Stock: ",
+                "minimum": "Minimum: ",
+                "noImage": "No Image..."
+            }
+        
     }
 }
