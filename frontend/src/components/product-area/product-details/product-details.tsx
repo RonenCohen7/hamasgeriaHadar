@@ -8,21 +8,31 @@ import { notificationService } from "../../service/notificationService";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../redux/inventory-store";
 import { dialogService } from "../../service/dialogService";
+import { useTranslation } from "react-i18next";
 
 
 
 
 export function ProductDetails() {
 
-    useTitle("Details")
+    const { t, i18n } = useTranslation();
+
+    const isHebrew = i18n.language === "he";
+
+    useTitle(t("productDetails.pageTitle"))
 
     const { id } = useParams()
+
     const [product, setProduct] = useState<ProductModel | null>(null);
+
     const navigate = useNavigate()
+
     const user = useSelector((state: RootState) => state.auth.user)
+
     const isAdmin = user?.role === "admin";
 
     useEffect(() => {
+
         if (!id) return;
 
 
@@ -36,40 +46,65 @@ export function ProductDetails() {
 
 
     function showProducts() {
+
         navigate("/products");
+
     }
 
     function editProduct() {
+
         navigate(`/products/edit/${product?.idProduct}`);
 
     }
+
     function showSupplier() {
+
         if (!product?.idSupplier) {
-            notificationService.error("No supplier assigned to this product");
+
+            notificationService.error(
+                t("productDetails.noSupplier")
+            );
+
             return
         }
+
         navigate(`/suppliers/${product.idSupplier}`);
+
     }
 
     function showInventory() {
+
         if (!product) return;
+
         navigate(`/inventory-live?productId=${product.idProduct}`);
+
     }
 
     async function deleteCurrentProduct() {
+
         if (!product) return;
+
         const ok = await dialogService.confirm(
-            "Delete product",
-            "Are you sure you want to delete this product",
-            "Delete",
-            "Cancel"
+            t("productDetails.deleteDialog.title"),
+            t("productDetails.deleteDialog.message"),
+            t("productDetails.deleteDialog.delete"),
+            t("productDetails.deleteDialog.cancel")
         );
+
         if (!ok) return;
+
         try {
+
             await productService.deleteProduct(product.idProduct);
-            notificationService.success("Product deleted successfully")
+
+            notificationService.success(
+                t("productDetails.deleteSuccess")
+            )
+
             navigate("/products");
+
         } catch (err: any) {
+
             notificationService.error(err.message);
 
         }
@@ -77,64 +112,153 @@ export function ProductDetails() {
 
 
     return (
-        <div className="ProductDetails">
+
+        <div
+            className="ProductDetails"
+            dir={isHebrew ? "rtl" : "ltr"}
+        >
 
             <section className="product-details">
+
                 <div className="product-header">
+
                     <div className="details-image">
+
                         {product?.imageUrl ? (
-                            <img src={product.imageUrl} alt={product.imageName ?? ""} />
-                        ) : (<span>No Image</span>)}
+
+                            <img
+                                src={product.imageUrl}
+                                alt={product.imageName ?? ""}
+                            />
+
+                        ) : (
+
+                            <span>
+                                {t("productDetails.noImage")}
+                            </span>
+
+                        )}
+
                     </div>
+
                     <div className="details-info">
-                        <h1>{product?.productName}</h1>
+
+                        <h1>
+                            {product?.productName}
+                        </h1>
+
                         <div className="info-row">
-                            <span>Price</span>
-                            <strong>₪{product?.productPrice}</strong>
+
+                            <span>
+                                {t("productDetails.price")}
+                            </span>
+
+                            <strong>
+                                ₪{Number(product?.productPrice ?? 0).toFixed(0)}
+                            </strong>
+
                         </div>
+
                         <div className="info-row">
-                            <span>Stock</span>
-                            <strong>{product?.productStock}</strong>
+
+                            <span>
+                                {t("productDetails.stock")}
+                            </span>
+
+                            <strong>
+                                {Number(product?.productStock ?? 0).toFixed(0)}
+                            </strong>
+
                         </div>
+
                         <div className="info-row">
-                            <span>Minimum Stock</span>
-                            <strong>{product?.minimumStock}</strong>
+
+                            <span>
+                                {t("productDetails.minimumStock")}
+                            </span>
+
+                            <strong>
+                                {Number(product?.minimumStock ?? 0).toFixed(0)}
+                            </strong>
+
                         </div>
+
                         <div className="info-row">
-                            <span>Catalog Number</span>
-                            <strong>{product?.catalogNumber}</strong>
+
+                            <span>
+                                {t("productDetails.catalogNumber")}
+                            </span>
+
+                            <strong>
+                                {product?.catalogNumber}
+                            </strong>
+
                         </div>
+
                         <div className="info-row">
-                            <span>Cost</span>
-                            <strong>₪{product?.productCost}</strong>
+
+                            <span>
+                                {t("productDetails.cost")}
+                            </span>
+
+                            <strong>
+                                ₪{Number(product?.productCost ?? 0).toFixed(0)}
+                            </strong>
+
                         </div>
+
                         <div className="product-actions">
+
                             {isAdmin && (
+
                                 <>
+
                                     <button
-                                        className="btn-action" onClick={editProduct}>Edit ✍🏻
+                                        className="btn-action"
+                                        onClick={editProduct}
+                                    >
+                                        {t("productDetails.edit")} ✍🏻
                                     </button>
 
                                     <button
-                                        className="btn-action"onClick={deleteCurrentProduct}>Delete 🗑️
+                                        className="btn-action"
+                                        onClick={deleteCurrentProduct}
+                                    >
+                                        {t("productDetails.delete")} 🗑️
                                     </button>
+
                                 </>
+
                             )}
 
                             <button
-                                className="btn-action" onClick={showInventory}>Inventory 📦
+                                className="btn-action"
+                                onClick={showInventory}
+                            >
+                                {t("productDetails.inventory")} 📦
                             </button>
 
                             <button
-                                className="btn-action" onClick={showSupplier} >Supplier 🚚
+                                className="btn-action"
+                                onClick={showSupplier}
+                            >
+                                {t("productDetails.supplier")} 🚚
                             </button>
+
                         </div>
 
-                        
+
                         <br></br>
-                        <button className="btn-back-to-products" onClick={showProducts}>Back to products ⬅</button>
+
+                        <button
+                            className="btn-back-to-products"
+                            onClick={showProducts}
+                        >
+                            {t("productDetails.backToProducts")} ⬅
+                        </button>
 
                     </div>
+
                 </div>
 
             </section>

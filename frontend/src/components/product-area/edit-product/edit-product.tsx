@@ -12,11 +12,17 @@ import { SupplierModel } from "../../models/supplier-model";
 import { productCategoryService } from "../../service/productCategoryService";
 import { supplierService } from "../../service/supplierService";
 import { UnitType } from "../../models/enum";
+import { useTranslation } from "react-i18next";
 
 
 
 export function EditProduct() {
-    useTitle("Edit Product");
+
+    const { t, i18n } = useTranslation();
+
+    const isHebrew = i18n.language === "he";
+
+    useTitle(t("editProduct.pageTitle"));
 
 
     const { id } = useParams();
@@ -99,15 +105,20 @@ export function EditProduct() {
                 delete formData.image;
             }
 
-           
+
 
             console.log(formData);
+
             await productService.updateProduct(formData)
-            
-            notificationService.success("Product Update successfully")
-            
+
+            notificationService.success(
+                t("editProduct.updateSuccess")
+            )
+
             navigate(`/products/${formData.idProduct}`)
+
         } catch (err: any) {
+
             notificationService.error(err.message);
 
         }
@@ -115,27 +126,48 @@ export function EditProduct() {
 
 
     return (
-        <div className="EditProduct">
 
-            <h1>Edit Product</h1>
+        <div
+            className="EditProduct" dir={isHebrew ? "rtl" : "ltr"}
+        >
+
+            <h1>
+                {t("editProduct.title")}
+            </h1>
 
             {product && (
-                <form className="edit-form" onSubmit={handleSubmit(send)}>
 
-                    <label>Product Name</label>
-                    <input type="text" {...register("productName")} />
+                <form
+                    className="edit-form"
+                    onSubmit={handleSubmit(send)}
+                >
+
+                    <label>
+                        {t("editProduct.productName")}
+                    </label>
+
+                    <input
+                        type="text"
+                        {...register("productName")}
+                    />
 
 
-                    <label>Supplier</label>
+                    <label>
+                        {t("editProduct.supplier")}
+                    </label>
+
                     <input
                         type="text"
                         value={product.supplierName ?? ""}
                         readOnly
                         className="readonly-field"
-                        />
+                    />
 
-                    
-                    <label>Category</label>
+
+                    <label>
+                        {t("editProduct.category")}
+                    </label>
+
                     <select
                         defaultValue=""
                         {...register("idCategory", {
@@ -143,85 +175,187 @@ export function EditProduct() {
                             valueAsNumber: true
                         })}
                     >
-                        <option value="" disabled>
-                            Select Category
+
+                        <option
+                            value=""
+                            disabled
+                        >
+                            {t("editProduct.selectCategory")}
                         </option>
+
                         {categories.map(category => (
-                            <option 
+
+                            <option
                                 key={category.idCategory}
                                 value={category.idCategory}
-                                >
-                                    {category.categoryName}
-                                </option>
+                            >
+                                {category.categoryName}
+                            </option>
+
                         ))}
-                        </select>
+
+                    </select>
 
 
-                        <label>Cost</label>
-                        <input type="number" step="0.01" {...register("productCost")} />
+                    <label>
+                        {t("editProduct.cost")}
+                    </label>
 
-                        <label>Price</label>
-                        <input type="number" step="0.01" {...register("productPrice")} />
+                    <input
+                        type="number"
+                        step="0.01"
+                        {...register("productCost")}
+                    />
 
-                        <label>Stock</label>
-                        <input type="number" step="0.01" {...register("productStock")} />
 
-                        <label>Minimum Stock</label>
-                        <input type="number" step="0.01" {...register("minimumStock")} />
+                    <label>
+                        {t("editProduct.price")}
+                    </label>
 
-                        <label>Unit</label>
-                        <select {...register("unitType")}>
-                            {Object.values(UnitType).map(unit => (
-                                <option key={unit} value={unit}>
-                                    {unit}
-                                </option>
-                            ))}
-                        </select>
+                    <input
+                        type="number"
+                        step="0.01"
+                        {...register("productPrice")}
+                    />
 
-                        <div className="extra-fields-row">
 
-                            <div className="extra-field">
+                    <label>
+                        {t("editProduct.stock")}
+                    </label>
 
-                                <label>Featured</label>
+                    <input
+                        type="number"
+                        step="0.01"
+                        {...register("productStock")}
+                    />
 
-                                <label className="switch">
-                                    <input 
-                                        type="checkbox"
-                                        {...register("isFeatured")}
-                                    />
-                                    <span className="slider"></span>
 
-                                </label>
-                            </div>
-                            <div className="display-order-group">
-                                <label>Display Order</label>
+                    <label>
+                        {t("editProduct.minimumStock")}
+                    </label>
+
+                    <input
+                        type="number"
+                        step="0.01"
+                        {...register("minimumStock")}
+                    />
+
+
+                    <label>
+                        {t("editProduct.unit")}
+                    </label>
+
+                    <select
+                        {...register("unitType")}
+                    >
+
+                        {Object.values(UnitType).map(unit => (
+
+                            <option
+                                key={unit}
+                                value={unit}
+                            >
+                                {unit}
+                            </option>
+
+                        ))}
+
+                    </select>
+
+
+                    <div className="extra-fields-row">
+
+                        <div className="extra-field">
+
+                            <label>
+                                {t("editProduct.featured")}
+                            </label>
+
+                            <label className="switch">
+
                                 <input
-                                    type="number"
-                                    min="0"
-                                    {...register("displayOrder", {valueAsNumber: true})}
-                                    />
-
-                            </div>
-
-                        </div>
-
-                        <label>Image</label>
-                        {previewUrl && (
-                            <div className="image-preview">
-                                <img
-                                    src={previewUrl}
-                                    alt={product.productName}
+                                    type="checkbox"
+                                    {...register("isFeatured")}
                                 />
-                            </div>
-                        )}
-                        <input type="file" accept="image/*" {...register("image", { onChange: handleImageChange })} />
 
-                        <div className="form-button">
-                            <button type="submit">Save</button>
-                            <button type="button" onClick={()=> navigate(-1)}>Cancel</button>
-                            <button type="button" onClick={backToProducts}>Back to products ⬅</button>
+                                <span className="slider"></span>
+
+                            </label>
+
                         </div>
+
+
+                        <div className="display-order-group">
+
+                            <label>
+                                {t("editProduct.displayOrder")}
+                            </label>
+
+                            <input
+                                type="number"
+                                min="0"
+                                {...register("displayOrder", {
+                                    valueAsNumber: true
+                                })}
+                            />
+
+                        </div>
+
+                    </div>
+
+
+                    <label>
+                        {t("editProduct.image")}
+                    </label>
+
+                    {previewUrl && (
+
+                        <div className="image-preview">
+
+                            <img
+                                src={previewUrl}
+                                alt={product.productName}
+                            />
+
+                        </div>
+
+                    )}
+
+                    <input
+                        type="file"
+                        accept="image/*"
+                        {...register("image", {
+                            onChange: handleImageChange
+                        })}
+                    />
+
+
+                    <div className="form-button">
+
+                        <button
+                            type="submit"
+                        >
+                            {t("editProduct.save")}
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={() => navigate(-1)}
+                        >
+                            {t("editProduct.cancel")}
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={backToProducts}
+                        >
+                            {t("editProduct.backToProducts")} ⬅
+                        </button>
+
+                    </div>
+
                 </form>
+
             )}
 
 
