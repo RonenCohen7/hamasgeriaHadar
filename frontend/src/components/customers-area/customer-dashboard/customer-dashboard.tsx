@@ -6,10 +6,16 @@ import { useEffect, useState } from "react";
 import { EventModel } from "../../models/event-model";
 import { useTitle } from "../../utils/UseTitle";
 import { eventService } from "../../service/eventService";
+import { useTranslation } from "react-i18next";
 
 export function CustomerDashboard() {
 
-    useTitle("Events")
+    const { t, i18n } = useTranslation();
+
+    const isHebrew = i18n.language === "he";
+
+    useTitle(t("customerDashboard.pageTitle"))
+
     const navigate = useNavigate()
 
 
@@ -28,14 +34,14 @@ export function CustomerDashboard() {
     useEffect(() => {
 
         eventService
-                   .getUpcomingEvents()
-        .then(result => {
+            .getUpcomingEvents()
+            .then(result => {
 
-            console.log("UPCOMING EVENTS FROM SERVER:", result);
+                console.log("UPCOMING EVENTS FROM SERVER:", result);
 
-            setEvents(result);
-        })
-        .catch(console.error);
+                setEvents(result);
+            })
+            .catch(console.error);
 
 
     }, []);
@@ -44,22 +50,28 @@ export function CustomerDashboard() {
 
 
     return (
-        <section className="customer-dashboard">
+
+        <section
+            className="customer-dashboard"
+            dir={isHebrew ? "rtl" : "ltr"}
+        >
 
             <header className="customer-dashboard-header">
 
                 <div>
+
                     <span className="dashboard-welcome">
-                        Customer Portal
+                        {t("customerDashboard.portal")}
                     </span>
 
                     <h1>
-                        Welcome {customer.firstName} 👋
+                        {t("customerDashboard.welcome")} {customer.firstName} 👋
                     </h1>
 
                     <p>
-                        Discover offers, events and experiences at Hadar Pub.
+                        {t("customerDashboard.description")}
                     </p>
+
                 </div>
 
                 <span
@@ -70,8 +82,8 @@ export function CustomerDashboard() {
                     }
                 >
                     {customer.hasVipCard
-                        ? "⭐ VIP Member"
-                        : "Guest Customer"}
+                        ? t("customerDashboard.vipMember")
+                        : t("customerDashboard.guestCustomer")}
                 </span>
 
             </header>
@@ -80,54 +92,73 @@ export function CustomerDashboard() {
             <section className="dashboard-section">
 
                 <div className="dashboard-section-header">
+
                     <div>
-                        <span>FOR YOU</span>
-                        <h2>Special Offers</h2>
+
+                        <span>
+                            {t("customerDashboard.offers.eyebrow")}
+                        </span>
+
+                        <h2>
+                            {t("customerDashboard.offers.title")}
+                        </h2>
+
                     </div>
+
                 </div>
+
 
                 <div className="dashboard-offers-grid">
 
 
                     <article className="dashboard-offer-card">
+
                         <span className="dashboard-offer-icon">
                             🍺
                         </span>
 
-                        <h3>Happy Hour</h3>
+                        <h3>
+                            {t("customerDashboard.offers.happyHour.title")}
+                        </h3>
 
                         <p>
-                            Special prices on selected beers
-                            and cocktails.
+                            {t("customerDashboard.offers.happyHour.description")}
                         </p>
+
                     </article>
 
 
                     <article className="dashboard-offer-card">
+
                         <span className="dashboard-offer-icon">
                             🥃
                         </span>
 
-                        <h3>VIP Tasting</h3>
+                        <h3>
+                            {t("customerDashboard.offers.vipTasting.title")}
+                        </h3>
 
                         <p>
-                            Exclusive tasting evenings for
-                            VIP members.
+                            {t("customerDashboard.offers.vipTasting.description")}
                         </p>
+
                     </article>
 
 
                     <article className="dashboard-offer-card">
+
                         <span className="dashboard-offer-icon">
                             🎂
                         </span>
 
-                        <h3>Birthday Experience</h3>
+                        <h3>
+                            {t("customerDashboard.offers.birthday.title")}
+                        </h3>
 
                         <p>
-                            Celebrate your birthday with a
-                            reserved table and a special treat.
+                            {t("customerDashboard.offers.birthday.description")}
                         </p>
+
                     </article>
 
                 </div>
@@ -138,61 +169,99 @@ export function CustomerDashboard() {
             <section className="dashboard-section">
 
                 <div className="dashboard-section-header">
+
                     <div>
-                        <span>WHAT'S NEXT</span>
-                        <h2>Upcoming Events</h2>
+
+                        <span>
+                            {t("customerDashboard.events.eyebrow")}
+                        </span>
+
+                        <h2>
+                            {t("customerDashboard.events.title")}
+                        </h2>
+
                     </div>
+
                 </div>
 
+
                 <div className="dashboard-events-grid">
+
                     {events.map(event => {
+
                         const eventDate = new Date(event.eventStart);
 
-                        const eventTime = eventDate.toLocaleTimeString("en-US", {
-                            hour: "2-digit",
-                            minute: "2-digit"
-                        });
+                        const eventTime = eventDate.toLocaleTimeString(
+                            isHebrew ? "he-IL" : "en-US",
+                            {
+                                hour: "2-digit",
+                                minute: "2-digit"
+                            }
+                        );
 
 
                         return (
-                            <article onClick={()=> navigate(`/events/details/${event.idEvent}`)}
+
+                            <article
+                                onClick={() =>
+                                    navigate(
+                                        `/events/details/${event.idEvent}`
+                                    )
+                                }
                                 key={event.idEvent}
                                 className="dashboard-event-card"
                             >
+
                                 {event.coverImageUrl && (
+
                                     <img
                                         src={event.coverImageUrl}
                                         alt={event.eventName}
                                         className="customer-event-cover"
                                     />
+
                                 )}
 
+
                                 <div className="dashboard-event-date">
+
                                     <strong>
                                         {eventDate.getDate()}
                                     </strong>
 
                                     <span>
                                         {eventDate
-                                            .toLocaleString("en-US", {
-                                                month: "short"
-                                            })
+                                            .toLocaleString(
+                                                isHebrew
+                                                    ? "he-IL"
+                                                    : "en-US",
+                                                {
+                                                    month: "short"
+                                                }
+                                            )
                                             .toUpperCase()}
                                     </span>
+
                                 </div>
+
 
                                 <div className="dashboard-event-content">
 
                                     <div className="dashboard-event-main">
+
                                         <h3>
                                             {event.eventName}
                                         </h3>
 
+
                                         {event.eventDescription && (
+
                                             <p className="dashboard-event-description">
                                                 {event.eventDescription}
                                             </p>
+
                                         )}
+
 
                                         <div className="dashboard-event-meta">
 
@@ -200,49 +269,75 @@ export function CustomerDashboard() {
                                                 🕒 {eventTime}
                                             </span>
 
+
                                             {event.eventLocation && (
+
                                                 <span>
                                                     📍 {event.eventLocation}
                                                 </span>
+
                                             )}
 
                                         </div>
+
                                     </div>
+
 
                                     <div className="dashboard-event-price">
+
                                         {Number(event.ticketPrice) > 0
                                             ? `₪${Number(event.ticketPrice).toFixed(2)}`
-                                            : "Free Entry"}
-
+                                            : t("customerDashboard.events.freeEntry")}
 
                                     </div>
+
+
                                     <div>
+
                                         {event.vipPrice != null && (
+
                                             <span className="vip-price">
                                                 ⭐️ VIP ₪{Number(event.vipPrice).toFixed(2)}
                                             </span>
+
                                         )}
+
                                     </div>
 
                                 </div>
+
                             </article>
+
                         );
+
                     })}
+
 
                     <article className="dashboard-event-card">
 
                         <div className="dashboard-event-date">
-                            <strong>18</strong>
-                            <span>AUG</span>
+
+                            <strong>
+                                18
+                            </strong>
+
+                            <span>
+                                {t("customerDashboard.events.aug")}
+                            </span>
+
                         </div>
 
+
                         <div>
-                            <h3>Whisky Tasting Night</h3>
+
+                            <h3>
+                                {t("customerDashboard.events.whisky.title")}
+                            </h3>
 
                             <p>
-                                Premium whisky tasting with
-                                food pairing.
+                                {t("customerDashboard.events.whisky.description")}
                             </p>
+
                         </div>
 
                     </article>
@@ -251,17 +346,28 @@ export function CustomerDashboard() {
                     <article className="dashboard-event-card">
 
                         <div className="dashboard-event-date">
-                            <strong>25</strong>
-                            <span>AUG</span>
+
+                            <strong>
+                                25
+                            </strong>
+
+                            <span>
+                                {t("customerDashboard.events.aug")}
+                            </span>
+
                         </div>
 
+
                         <div>
-                            <h3>Live Music Evening</h3>
+
+                            <h3>
+                                {t("customerDashboard.events.liveMusic.title")}
+                            </h3>
 
                             <p>
-                                Cocktails, food and live music
-                                at Hadar Pub.
+                                {t("customerDashboard.events.liveMusic.description")}
                             </p>
+
                         </div>
 
                     </article>
@@ -274,49 +380,78 @@ export function CustomerDashboard() {
             <section className="dashboard-section">
 
                 <div className="dashboard-section-header">
+
                     <div>
-                        <span>DISCOVER</span>
-                        <h2>Pub Experiences</h2>
+
+                        <span>
+                            {t("customerDashboard.experiences.eyebrow")}
+                        </span>
+
+                        <h2>
+                            {t("customerDashboard.experiences.title")}
+                        </h2>
+
                     </div>
+
                 </div>
+
 
                 <div className="dashboard-activities-grid">
 
-                    <article className="dashboard-activity-card"
-                        onClick={()=> navigate("/experiences/cocktail")}
+
+                    <article
+                        className="dashboard-activity-card"
+                        onClick={() =>
+                            navigate("/experiences/cocktail")
+                        }
                     >
+
                         <img
                             src="/src/assets/images/pubDrinks.jpg"
-                            alt="Hadar Pub cocktails"
+                            alt={t("customerDashboard.experiences.cocktail.alt")}
                         />
 
+
                         <div className="dashboard-activity-overlay">
-                            <h3>Cocktail Experience</h3>
+
+                            <h3>
+                                {t("customerDashboard.experiences.cocktail.title")}
+                            </h3>
 
                             <p>
-                                Discover signature cocktails
-                                from our bar.
+                                {t("customerDashboard.experiences.cocktail.description")}
                             </p>
+
                         </div>
+
                     </article>
 
 
-                    <article className="dashboard-activity-card"
-                            onClick={()=> navigate("/experiences/chef")}
+                    <article
+                        className="dashboard-activity-card"
+                        onClick={() =>
+                            navigate("/experiences/chef")
+                        }
                     >
+
                         <img
                             src="/src/assets/images/vip-chef.jpg"
-                            alt="Hadar Pub chef"
+                            alt={t("customerDashboard.experiences.chef.alt")}
                         />
 
+
                         <div className="dashboard-activity-overlay">
-                            <h3>Chef Specials</h3>
+
+                            <h3>
+                                {t("customerDashboard.experiences.chef.title")}
+                            </h3>
 
                             <p>
-                                Discover special dishes from
-                                our kitchen.
+                                {t("customerDashboard.experiences.chef.description")}
                             </p>
+
                         </div>
+
                     </article>
 
                 </div>
@@ -324,5 +459,6 @@ export function CustomerDashboard() {
             </section>
 
         </section>
+
     );
 }

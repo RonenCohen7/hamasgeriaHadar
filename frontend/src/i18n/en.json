@@ -380,5 +380,57 @@
         "minimum": "Minimum",
         "supplier": "Supplier",
         "noSupplier": "No supplier"
+    },
+    "customerDashboard": {
+        "pageTitle": "Customer Dashboard",
+        "portal": "Customer Portal",
+        "welcome": "Welcome",
+        "description": "Discover offers, events and experiences at Hadar Pub.",
+        "vipMember": "⭐ VIP Member",
+        "guestCustomer": "Guest Customer",
+        "offers": {
+            "eyebrow": "FOR YOU",
+            "title": "Special Offers",
+            "happyHour": {
+                "title": "Happy Hour",
+                "description": "Special prices on selected beers and cocktails."
+            },
+            "vipTasting": {
+                "title": "VIP Tasting",
+                "description": "Exclusive tasting evenings for VIP members."
+            },
+            "birthday": {
+                "title": "Birthday Experience",
+                "description": "Celebrate your birthday with a reserved table and a special treat."
+            }
+        },
+        "events": {
+            "eyebrow": "WHAT'S NEXT",
+            "title": "Upcoming Events",
+            "freeEntry": "Free Entry",
+            "aug": "AUG",
+            "whisky": {
+                "title": "Whisky Tasting Night",
+                "description": "Premium whisky tasting with food pairing."
+            },
+            "liveMusic": {
+                "title": "Live Music Evening",
+                "description": "Cocktails, food and live music at Hadar Pub."
+            }
+        },
+        "experiences": {
+            "eyebrow": "DISCOVER",
+            "title": "Pub Experiences",
+            "cocktail": {
+                "title": "Cocktail Experience",
+                "description": "Discover signature cocktails from our bar.",
+                "alt": "Hadar Pub cocktails"
+            },
+            "chef": {
+                "title": "Chef Specials",
+                "description": "Discover special dishes from our kitchen.",
+                "alt": "Hadar Pub chef"
+            }
+        }
     }
 }
