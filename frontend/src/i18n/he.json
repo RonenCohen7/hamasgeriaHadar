@@ -175,32 +175,124 @@
         "success": "ברוכים הבאים"
     },
     "customerLogin": {
-    "pageTitle": "כניסת לקוחות",
-    "badge": "אזור הלקוחות",
-    "welcomeBack": "ברוכים השבים",
-    "description": "התחברו כדי לצפות בכרטיס ה-VIP שלכם, ביתרה, בעסקאות ובהטבות הלקוחות",
-    "email": "אימייל",
-    "password": "סיסמה",
-    "passwordPlaceholder": "הזינו סיסמה",
-    "login": "כניסה",
-    "forgotPassword": "שכחתם סיסמה?",
-    "newCustomer": "לקוחות חדשים?",
-    "createAccount": "יצירת חשבון",
-    "employeeQuestion": "עובדים במסגריה?",
-    "employeeLogin": "כניסת עובדים",
-    "heroAlt": "קוקטיילים במסגריה",
-
-    "errors": {
-        "emailRequiredTitle": "נדרש אימייל",
-        "emailRequiredMessage": "יש להזין כתובת אימייל",
-        "invalidEmailTitle": "אימייל לא תקין",
-        "invalidEmailMessage": "יש להזין כתובת אימייל תקינה",
-        "passwordRequiredTitle": "נדרשת סיסמה",
-        "passwordRequiredMessage": "יש להזין סיסמה",
-        "loginFailedTitle": "ההתחברות נכשלה",
-        "loginFailedMessage": "האימייל או הסיסמה שגויים"
+        "pageTitle": "כניסת לקוחות",
+        "badge": "אזור הלקוחות",
+        "welcomeBack": "ברוכים השבים",
+        "description": "התחברו כדי לצפות בכרטיס ה-VIP שלכם, ביתרה, בעסקאות ובהטבות הלקוחות",
+        "email": "אימייל",
+        "password": "סיסמה",
+        "passwordPlaceholder": "הזינו סיסמה",
+        "login": "כניסה",
+        "forgotPassword": "שכחתם סיסמה?",
+        "newCustomer": "לקוחות חדשים?",
+        "createAccount": "יצירת חשבון",
+        "employeeQuestion": "עובדים במסגריה?",
+        "employeeLogin": "כניסת עובדים",
+        "heroAlt": "קוקטיילים במסגריה",
+        "errors": {
+            "emailRequiredTitle": "נדרש אימייל",
+            "emailRequiredMessage": "יש להזין כתובת אימייל",
+            "invalidEmailTitle": "אימייל לא תקין",
+            "invalidEmailMessage": "יש להזין כתובת אימייל תקינה",
+            "passwordRequiredTitle": "נדרשת סיסמה",
+            "passwordRequiredMessage": "יש להזין סיסמה",
+            "loginFailedTitle": "ההתחברות נכשלה",
+            "loginFailedMessage": "האימייל או הסיסמה שגויים"
+        }
+    },
+    "customerRegister": {
+        "pageTitle": "הרשמת לקוח",
+        "heroAlt": "המסגריה",
+        "heroBadge": "המסגריה",
+        "heroTitle": "הצטרפו לחוויה",
+        "heroDescription": "צרו חשבון לקוח וגלו הטבות VIP, אירועים מיוחדים ומבצעים בלעדיים.",
+        "newCustomer": "לקוח חדש",
+        "createAccount": "יצירת חשבון",
+        "headerDescription": "הצטרפו למסגריה והתחילו ליהנות מהטבות לקוח ו־VIP.",
+        "firstName": "שם פרטי",
+        "lastName": "שם משפחה",
+        "email": "אימייל",
+        "phone": "טלפון",
+        "dateOfBirth": "תאריך לידה",
+        "password": "סיסמה",
+        "confirmPassword": "אימות סיסמה",
+        "customerLogin": "כניסת לקוח קיים",
+        "alreadyHaveAccount": "קיים חשבון ?",
+        "createPassword": "הכנס סיסמה",
+        "repeatPassword": "הכנס סיסמה שוב"
+    },
+    "addExperience": {
+        "pageTitle": "הוספת חוויה",
+        "title": "הוספת חוויה",
+        "type": "סוג",
+        "types": {
+            "chef": "שף",
+            "cocktail": "קוקטייל"
+        },
+        "experienceTitle": "כותרת",
+        "description": "תיאור",
+        "price": "מחיר",
+        "displayOrder": "סדר תצוגה",
+        "active": "פעיל",
+        "image": "תמונה",
+        "imagePreview": "תצוגה מקדימה של החוויה",
+        "save": "שמירה",
+        "cancel": "ביטול",
+        "success": "החוויה נוספה בהצלחה",
+        "error": "הוספת החוויה נכשלה",
+        "validation": {
+            "titleRequired": "יש להזין כותרת"
+        }
+    },
+    "quickSale": {
+        "pageTitle": "מכירה מהירה",
+        "currentOrder": "הזמנה נוכחית",
+        "searchProduct": "חיפוש מוצר...",
+        "all": "הכל",
+        "noItemsYet": "אין מוצרים בהזמנה",
+        "clickProductToAdd": "לחצו על מוצר כדי להוסיף אותו",
+        "noImage": "אין תמונה",
+        "noMatchingProducts": "לא נמצאו מוצרים",
+        "total": "סה״כ",
+        "cancelOrder": "ביטול הזמנה",
+        "processing": "מעבד...",
+        "completeSale": "השלמת מכירה",
+        "orderCanceled": "ההזמנה בוטלה",
+        "cancelDialog": {
+            "title": "ביטול הזמנה",
+            "message": "האם אתה בטוח שברצונך לבטל את ההזמנה?",
+            "keep": "השאר הזמנה",
+            "cancel": "בטל הזמנה"
+        },
+        "payment": {
+            "title": "תשלום",
+            "paymentMethod": "אמצעי תשלום",
+            "cash": "מזומן",
+            "bit":"bit",
+            "paybox":"payBox",
+            "creditCard": "כרטיס אשראי",
+            "vipCard": "כרטיס VIP",
+            "changePaymentMethod": "שינוי אמצעי תשלום",
+            "vipCardNumber": "מספר כרטיס VIP",
+            "vipCardPlaceholder": "הזינו מספר כרטיס VIP",
+            "search": "חיפוש",
+            "phoneLast4": "הזינו את 4 הספרות האחרונות של מספר הטלפון",
+            "verify": "אימות",
+            "customer": "לקוח",
+            "cardNumber": "מספר כרטיס",
+            "balance": "יתרה",
+            "receivedAmount": "סכום שהתקבל",
+            "change": "עודף",
+            "cancel": "ביטול",
+            "confirm": "אישור תשלום"
     }
-}
-
-
+    },
+    "orderCanceled": "ההזמנה בוטלה",
+    "cancelDialog": {
+        "title": "ביטול הזמנה",
+        "message": "האם אתה בטוח שברצונך לבטל את ההזמנה?",
+        "keep": "השאר הזמנה",
+        "cancel": "בטל הזמנה"
+    }
+  
 }

@@ -24,13 +24,19 @@ import { vipCardService } from "../../service/vipCardService";
 
 import { RechargeDialog } from "../../vip-card-area/recharge-dialog/recharge-dialog";
 import { useNavigate } from "react-router-dom";
-
+import { useTranslation } from "react-i18next";
+import { useTitle } from "../../utils/UseTitle";
 interface QuickSaleItem {
     product: ProductModel;
     quantity: number;
 }
 
 export function QuickSale() {
+
+    const { t, i18n } = useTranslation();
+    const isHebrew = i18n.language === "he";
+
+    useTitle(t("quickSale.pageTitle"));
 
     const dispatch = useDispatch<AppDispatch>();
     const navigate = useNavigate();
@@ -190,7 +196,7 @@ export function QuickSale() {
         setPhoneLast4(draft.phoneLast4 ?? "");
         setVipVerified(draft.vipVerified ?? false);
 
-        if(draft.vipCardNumber) {
+        if (draft.vipCardNumber) {
             vipCardService
                 .getCardByCardNumber(draft.vipCardNumber)
                 .then(card => {
@@ -205,7 +211,7 @@ export function QuickSale() {
         sessionStorage.removeItem("quickSaleDraft")
         setShowRechargeDialog(false);
         setMissingAmount(0);
-        
+
 
 
     }, []);
@@ -522,10 +528,10 @@ export function QuickSale() {
         if (orderItems.length === 0) return;
 
         const ok = await dialogService.confirm(
-            "Cancel order",
-            "Are you sure you want to cancel this order?",
-            "Keep order",
-            "Cancel order"
+            t("quickSale.cancelDialog.title"),
+            t("quickSale.cancelDialog.message"),
+            t("quickSale.cancelDialog.keep"),
+            t("quickSale.cancelDialog.cancel")
         )
 
 
@@ -533,18 +539,20 @@ export function QuickSale() {
 
         setOrderItems([]);
 
-        notificationService.success("Current order canceled");
+        notificationService.success(t("quickSale.orderCanceled"))
     }
 
 
 
     return (
-        <div className="QuickSale">
+        <div className="QuickSale" dir={isHebrew ? "rtl" : "ltr"}>
+
             <section className="quick-sale-left">
+
                 <div className="quick-sale-toolbar">
                     <input
                         type="search"
-                        placeholder="Search product..."
+                        placeholder={t("quickSale.searchProduct")}
                         value={searchText}
                         onChange={event =>
                             setSearchText(event.target.value)
@@ -563,7 +571,7 @@ export function QuickSale() {
                         onClick={() => setSelectedCategory(0)}
                     >
                         <FaThLarge />
-                        <span>All</span>
+                        <span>{t("quickSale.all")}</span>
                     </button>
 
                     {categories.map(category => (
@@ -621,7 +629,7 @@ export function QuickSale() {
                                         />
                                     ) : (
                                         <div className="quick-sale-no-image">
-                                            No image
+                                              {t("quickSale.noImage")}
                                         </div>
                                     )}
                                 </div>
@@ -642,20 +650,27 @@ export function QuickSale() {
 
                     {filteredProducts.length === 0 && (
                         <div className="quick-sale-no-results">
-                            No matching products
+                            {t("quickSale.noMatchingProducts")}
                         </div>
                     )}
                 </div>
             </section>
 
             <aside className="quick-sale-right">
-                <h2>Current Order</h2>
+                <h2>{t("quickSale.currentOrder")}</h2>
 
                 {orderItems.length === 0 ? (
                     <div className="quick-sale-empty-order">
                         <span>🛒</span>
-                        <strong>No items yet</strong>
-                        <p>Click a product to add it</p>
+                        <strong>
+                            {t("quickSale.noItemsYet")}
+                        </strong>
+
+                        <p>
+                            {t("quickSale.clickProductToAdd")}
+                        </p>
+
+
                     </div>
                 ) : (
                     <>
@@ -733,7 +748,7 @@ export function QuickSale() {
                         </div>
 
                         <div className="quick-sale-summary">
-                            <span>Total</span>
+                            {t("quickSale.total")}
 
                             <strong>
                                 ₪{totalAmount.toFixed(2)}
@@ -747,7 +762,7 @@ export function QuickSale() {
                                 onClick={cancelOrder}
                                 disabled={isSubmitting}
                             >
-                                Cancel Order
+                                {t("quickSale.cancelOrder")}
                             </button>
 
                             <button
@@ -757,8 +772,8 @@ export function QuickSale() {
                                 disabled={isSubmitting}
                             >
                                 {isSubmitting
-                                    ? "Processing..."
-                                    : "Complete Sale"}
+                                    ? t("quickSale.processing")
+                                    : t("quickSale.completeSale")}
                             </button>
                         </div>
                     </>
@@ -777,8 +792,8 @@ export function QuickSale() {
                     >
                         <div className="quick-sale-payment-header">
                             <div>
-                                <span>PAYMENT</span>
-                                <h2>Complete Sale</h2>
+                                <span>{t("quickSale.payment.title")}</span>
+                                <h2>{t("quickSale.completeSale")}</h2>
                             </div>
                             <button type="button"
                                 className="quick-sale-payment-close"
@@ -787,12 +802,12 @@ export function QuickSale() {
                         </div>
 
                         <div className="quick-sale-payment-total">
-                            <span>Total</span>
+                            <span>{t("quickSale.total")}</span>
                             <strong>₪{totalAmount.toFixed(2)}</strong>
                         </div>
 
                         <div className="quick-sale-payment-section">
-                            <label>Payment Method</label>
+                            {t("quickSale.payment.paymentMethod")}
 
                             {!isVipPayment ? (
 
@@ -802,32 +817,35 @@ export function QuickSale() {
                                         className="vip-card"
                                         onClick={() => setPaymentMethod(PaymentMethod.VIPCard)}>
                                         <FaCreditCard />
-                                        VIP Card
+                                        {t("quickSale.payment.vipCard")}
                                     </button>
 
 
                                     <button type="button" className={
                                         paymentMethod === PaymentMethod.Cash ? "active" : ""}
                                         onClick={() => setPaymentMethod(PaymentMethod.Cash)}><FaMoneyBillWave />
-                                        Cash
+                                        {t("quickSale.payment.cash")}
                                     </button>
 
                                     <button type="button" className={
                                         paymentMethod === PaymentMethod.CreditCard ? "active" : ""
                                     }
-                                        onClick={() => { setPaymentMethod(PaymentMethod.CreditCard) }}><FaCreditCard /> Credit Card
+                                        onClick={() => { setPaymentMethod(PaymentMethod.CreditCard) }}><FaCreditCard />
+                                        {t("quickSale.payment.creditCard")}
                                     </button>
 
                                     <button type="button" className={
                                         paymentMethod === PaymentMethod.Bit ? "active" : ""
                                     }
-                                        onClick={() => { setPaymentMethod(PaymentMethod.Bit) }}><FaMobileAlt /> Bit
+                                        onClick={() => { setPaymentMethod(PaymentMethod.Bit) }}><FaMobileAlt />
+                                        {t("quickSale.payment.bit")}
                                     </button>
 
                                     <button type="button" className={
                                         paymentMethod === PaymentMethod.PayBox ? "active" : ""
                                     }
-                                        onClick={() => { setPaymentMethod(PaymentMethod.PayBox) }}><FaMobileAlt /> PayBox
+                                        onClick={() => { setPaymentMethod(PaymentMethod.PayBox) }}><FaMobileAlt />
+                                        {t("quickSale.payment.paybox")}
                                     </button>
 
                                 </div>
@@ -841,7 +859,7 @@ export function QuickSale() {
                                         setVipCardNumber("");
                                     }}
                                 >
-                                    Change Payment Method
+                                    {t("quickSale.payment.changePaymentMethod")}
                                 </button>
                             )}
 
@@ -850,17 +868,17 @@ export function QuickSale() {
 
                             {paymentMethod === PaymentMethod.VIPCard && (
                                 <div className="quick-sale-vip-search">
-                                    <label>VIP Card Number</label>
+                                    <label>{t("quickSale.payment.vipCardNumber")}</label>
                                     <input
                                         type="text"
-                                        placeholder="ENTER VIP Card Number"
+                                        placeholder={t("quickSale.payment.vipCardPlaceholder")}
                                         value={vipCardNumber}
                                         onChange={e => setVipCardNumber(e.target.value)}
                                     />
                                     <button
                                         type="button"
                                         onClick={searchVipCard}>
-                                        Search
+                                        {t("quickSale.payment.search")}
                                     </button>
                                 </div>
                             )}
@@ -871,7 +889,7 @@ export function QuickSale() {
                                 {selectedVipCard && !vipVerified && (
                                     <div className="quick-sale-vip-verify">
                                         <label>
-                                            Enter last 4 digits of customer's phone
+                                            {t("quickSale.payment.phoneLast4")}
                                         </label>
 
                                         <input
@@ -885,25 +903,25 @@ export function QuickSale() {
                                             type="button"
                                             onClick={verifyVipCard}
                                         >
-                                            Verify
+                                            {t("quickSale.payment.verify")}
                                         </button>
                                     </div>
                                 )}
 
                                 <div>
-                                    <span>Customer</span>
+                                    <span>{t("quickSale.payment.customer")}</span>
                                     <strong>
                                         {selectedVipCard.firstName} {selectedVipCard.lastName}
                                     </strong>
                                 </div>
 
                                 <div>
-                                    <span>Card Number</span>
+                                    <span>{t("quickSale.payment.cardNumber")}</span>
                                     <strong>{selectedVipCard.cardNumber}</strong>
                                 </div>
 
                                 <div>
-                                    <span>Balance</span>
+                                    <span>{t("quickSale.payment.balance")}</span>
                                     <strong>
                                         ₪{Number(selectedVipCard.balance).toFixed(2)}
                                     </strong>
@@ -914,7 +932,7 @@ export function QuickSale() {
                         {paymentMethod === PaymentMethod.Cash && (
                             <div className="quick-sale-payment-cash">
                                 <label htmlFor="receivedAmount">
-                                    Received Amount
+                                    {t("quickSale.payment.receivedAmount")}
                                 </label>
                                 <input
                                     id="receivedAmount"
@@ -927,7 +945,7 @@ export function QuickSale() {
                                     autoFocus
                                 />
                                 <div className="quick-sale-change-row">
-                                    <span>Change</span>
+                                    <span>{t("quickSale.payment.change")}</span>
                                     <strong>
                                         ₪{changeAmount.toFixed(2)}
                                     </strong>
@@ -938,17 +956,23 @@ export function QuickSale() {
                             <button type="button" className="quick-sale-payment-cancel"
                                 onClick={() => { setIsPaymentOpen(false) }}
                                 disabled={isSubmitting}>
-                                Cancel
+                                {t("quickSale.payment.cancel")}
                             </button>
-
-                            <button type="button" className="quick-sale-payment-confirm"
+                            <button
+                                type="button"
+                                className="quick-sale-payment-confirm"
                                 onClick={completeSale}
-                                disabled={isSubmitting || (
-                                    paymentMethod === PaymentMethod.Cash &&
-                                    Number(receivedAmount) < totalAmount)
+                                disabled={
+                                    isSubmitting ||
+                                    (
+                                        paymentMethod === PaymentMethod.Cash &&
+                                        Number(receivedAmount) < totalAmount
+                                    )
                                 }
                             >
-                                {isSubmitting ? "Processing" : "Confirm"}
+                                {isSubmitting
+                                    ? t("quickSale.processing")
+                                    : t("quickSale.payment.confirm")}
                             </button>
                         </div>
                         {showRechargeDialog && (

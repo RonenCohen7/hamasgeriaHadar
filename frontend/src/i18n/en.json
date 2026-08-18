@@ -190,5 +190,92 @@
             "loginFailedTitle": "Login Failed",
             "loginFailedMessage": "Email or password is incorrect"
         }
+    },
+    "customerRegister": {
+        "pageTitle": "Customer Register",
+        "heroAlt": "Hadar Pub",
+        "heroBadge": "HADAR PUB",
+        "heroTitle": "Join the Experience",
+        "heroDescription": "Create your customer account and discover VIP benefits, special events and exclusive offers.",
+        "newCustomer": "New Customer",
+        "createAccount": "Create Account",
+        "headerDescription": "Join Hadar Pub and start enjoying customer and VIP benefits.",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email",
+        "phone": "Phone",
+        "dateOfBirth": "Date of Birth",
+        "password": "Password",
+        "confirmPassword": "Confirm Password",
+        "customerLogin": "Customer Account",
+        "alreadyHaveAccount": " Already Have Account ?",
+        "createPassword": "Enter Password",
+        "repeatPassword": "ReEnter Password"
+    },
+    "addExperience": {
+        "pageTitle": "Add Experience",
+        "title": "Add Experience",
+        "type": "Type",
+        "types": {
+            "chef": "Chef",
+            "cocktail": "Cocktail"
+        },
+        "experienceTitle": "Title",
+        "description": "Description",
+        "price": "Price",
+        "displayOrder": "Display Order",
+        "active": "Active",
+        "image": "Image",
+        "imagePreview": "Experience Preview",
+        "save": "Save",
+        "cancel": "Cancel",
+        "success": "Experience added successfully",
+        "error": "Failed to add experience",
+        "validation": {
+            "titleRequired": "Title is required"
+        }
+    },
+    "quickSale": {
+        "pageTitle": "Quick Sale",
+        "currentOrder": "Current Order",
+        "searchProduct": "Search Product...",
+        "all": "All",
+        "noItemsYet": "No items yet",
+        "clickProductToAdd": "Click a product to add it",
+        "noImage": "No Image",
+        "noMatchingProducts": "No matching products",
+        "total": "Total",
+        "cancelOrder": "Cancel Order",
+        "processing": "Processing...",
+        "completeSale": "Complete Sale",
+        "orderCanceled": "Current order canceled",
+        "cancelDialog": {
+            "title": "Cancel Order",
+            "message": "Are you sure you want to cancel this order?",
+            "keep": "Keep Order",
+            "cancel": "Cancel Order"
+        },
+        "payment": {
+            "title": "Payment",
+            "paymentMethod": "Payment Method",
+            "cash": "Cash",
+            "creditCard": "Credit Card",
+            "vipCard": "VIP Card",
+            "changePaymentMethod": "Change Payment Method",
+            "vipCardNumber": "VIP Card Number",
+            "vipCardPlaceholder": "Enter VIP card number",
+            "search": "Search",
+            "phoneLast4": "Enter last 4 digits of phone number",
+            "verify": "Verify",
+            "customer": "Customer",
+            "cardNumber": "Card Number",
+            "balance": "Balance",
+            "receivedAmount": "Received Amount",
+            "change": "Change",
+            "cancel": "Cancel",
+            "confirm": "Confirm Payment",
+            "bit": "Bit",
+            "payBox": "PayBox"
+        }
     }
 }

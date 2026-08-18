@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form";
 
 import registerImag from "../../../assets/images/registerImage.jpg";
 import { FaHome } from "react-icons/fa";
-
+import { useTranslation } from "react-i18next";
 
 type CustomerRegisterForm = CustomerRegisterDto & {
     confirmPassword: string;
@@ -20,7 +20,12 @@ type CustomerRegisterForm = CustomerRegisterDto & {
 
 export function CustomerRegister() {
 
-    useTitle("Customer - Register");
+    const { t, i18n } = useTranslation();
+
+    const isHebrew = i18n.language === "he";
+
+    useTitle(t("customerRegister.pageTitle"));
+
 
     const navigate = useNavigate();
 
@@ -72,7 +77,7 @@ export function CustomerRegister() {
 
 
     return (
-        <section className="customer-register-page">
+        <section className="customer-register-page" dir={isHebrew ? "rtl" : "ltr"}>
 
             {/* IMAGE SIDE */}
 
@@ -80,22 +85,21 @@ export function CustomerRegister() {
 
                 <img
                     src={registerImag}
-                    alt="Hadar Pub"
+                    alt={t("customerRegister.heroAlt")}
                 />
 
                 <div className="customer-register-hero-overlay">
 
                     <span className="customer-register-content">
-                        HADAR PUB
+                        {t("customerRegister.heroBadge")}
                     </span>
 
                     <h2>
-                        Join the experience
+                        {t("customerRegister.heroTitle")}
                     </h2>
 
                     <p>
-                        Create your customer account and discover
-                        VIP benefits, special events and exclusive offers.
+                        {t("customerRegister.heroDescription")}
                     </p>
 
                 </div>
@@ -112,16 +116,15 @@ export function CustomerRegister() {
                     <div className="customer-register-header">
 
                         <span className="customer-register-badge">
-                            New Customer
+                            {t("customerRegister.newCustomer")}
                         </span>
 
                         <h1>
-                            Create Account
+                            {t("customerRegister.createAccount")}
                         </h1>
 
                         <p>
-                            Join Hadar Pub and start enjoying
-                            customer and VIP benefits.
+                            {t("customerRegister.headerDescription")}
                         </p>
 
                     </div>
@@ -137,12 +140,12 @@ export function CustomerRegister() {
                         <div className="customer-register-field">
 
                             <label>
-                                First Name
+                                {t("customerRegister.firstName")}
                             </label>
 
                             <input
                                 type="text"
-                                placeholder="First Name"
+                                placeholder={t("customerRegister.firstName")}
                                 {...register("firstName", {
                                     required: "First Name is required",
 
@@ -174,12 +177,12 @@ export function CustomerRegister() {
                         <div className="customer-register-field">
 
                             <label>
-                                Last Name
+                                {t("customerRegister.lastName")}
                             </label>
 
                             <input
                                 type="text"
-                                placeholder="Last Name"
+                                placeholder={t("customerRegister.lastName")}
                                 {...register("lastName", {
                                     required: "Last Name is required",
 
@@ -211,12 +214,12 @@ export function CustomerRegister() {
                         <div className="customer-register-field">
 
                             <label>
-                                Email
+                                {t("customerRegister.email")}
                             </label>
 
                             <input
                                 type="email"
-                                placeholder="Email"
+                                placeholder={t("customerRegister.email")}
                                 {...register("email", {
                                     required: "Email is required",
 
@@ -243,7 +246,7 @@ export function CustomerRegister() {
                         <div className="customer-register-field">
 
                             <label>
-                                Phone
+                                {t("customerRegister.phone")}
                             </label>
 
                             <input
@@ -274,7 +277,7 @@ export function CustomerRegister() {
                         <div className="customer-register-field">
 
                             <label>
-                                Date of Birth
+                                {t("customerRegister.dateOfBirth")}
                             </label>
 
                             <input
@@ -304,12 +307,12 @@ export function CustomerRegister() {
                         <div className="customer-register-field">
 
                             <label>
-                                Password
+                                {t("customerRegister.password")}
                             </label>
 
                             <input
                                 type="password"
-                                placeholder="Create Password"
+                                placeholder={t("customerRegister.createPassword")}
                                 {...register("password", {
                                     required:
                                         "Password is required",
@@ -336,12 +339,12 @@ export function CustomerRegister() {
                         <div className="customer-register-field">
 
                             <label>
-                                Confirm Password
+                                {t("customerRegister.confirmPassword")}
                             </label>
 
                             <input
                                 type="password"
-                                placeholder="Repeat Password"
+                                placeholder={t("customerRegister.repeatPassword")}
                                 {...register("confirmPassword", {
                                     required:
                                         "Please confirm your password",
@@ -369,8 +372,8 @@ export function CustomerRegister() {
                             disabled={isSubmitting}
                         >
                             {isSubmitting
-                                ? "Creating Account..."
-                                : "Create Account"}
+                                ? t("customerRegister.creatingAccount")
+                                : t("customerRegister.createAccount")}
                         </button>
 
                     </form>
@@ -379,16 +382,17 @@ export function CustomerRegister() {
                     <div className="customer-register-footer">
 
                         <span>
-                            Already have an account?
+                            {t("customerRegister.alreadyHaveAccount")}
                         </span>
 
                         <button
                             type="button"
+
                             onClick={() =>
                                 navigate("/customer-login")
                             }
                         >
-                            Customer Login
+                            {t("customerRegister.customerLogin")}
                         </button>
 
                     </div>

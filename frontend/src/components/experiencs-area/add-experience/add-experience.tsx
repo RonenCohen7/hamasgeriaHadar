@@ -7,14 +7,15 @@ import { ExperienceModel } from "../../models/experience-mode";
 import { experienceService } from "../../service/experienceService";
 import { notificationService } from "../../service/notificationService";
 import { store } from "../../redux/inventory-store";
-
+import { useTranslation } from "react-i18next";
 
 
 
 export function AddExperience() {
+    const { t, i18n } = useTranslation();
+    const isHebrew = i18n.language === "he";
 
-
-    useTitle("Add Experience");
+    useTitle(t("addExperience.pageTitle"));
 
 
     const user = store.getState().auth.user;
@@ -67,11 +68,11 @@ export function AddExperience() {
         } catch (err: any) {
             console.error(err)
 
-            const serverDate = err.response?.data;
+            const serverData = err.response?.data;
 
-            const message = typeof serverDate == "string"
-                ? serverDate
-                : serverDate?.message ??
+            const message = typeof serverData == "string"
+                ? serverData
+                : serverData?.message ??
                 err.message ??
                 "Failed to add experience"
 
@@ -83,32 +84,32 @@ export function AddExperience() {
 
 
     return (
-        <div className="AddExperience">
+        <div className="AddExperience" dir={isHebrew ? "rtl" : "ltr"}>
 
-            <h1>Add Experience</h1>
+            <h1>{t("addExperience.title")}</h1>
 
             <form
                 className="add-experience-form"
                 onSubmit={handleSubmit(send)}
             >
 
-                <label>Type</label>
+               <label>{t("addExperience.type")}</label>
                 <select
                     {...register("experienceType", { required: true })}
                 >
                     <option value="chef">
-                        Chef
+                       {t("addExperience.types.chef")}
                     </option>
 
                     <option value="cocktail">
-                        Cocktail
+                       {t("addExperience.types.cocktail")}
                     </option>
                 </select>
 
-                <label>Title</label>
+               <label>{t("addExperience.experienceTitle")}</label>
                 <input
                     type="text"
-                    {...register("title", { required: "Title is required" })}
+                    {...register("title", { required: t("addExperience.validation.titleRequired")})}
                 />
                 {errors.title && (
                     <span className="error">
@@ -117,33 +118,33 @@ export function AddExperience() {
                 )}
 
 
-                <label>Description</label>
+               <label>{t("addExperience.description")}</label>
                 <textarea
                     rows={6}
                     {...register("description")}
                 />
 
-                <label>Price</label>
+               <label>{t("addExperience.price")}</label>
                 <input
                     type="number"
                     step="0.01"
                     {...register("price", { required: true, valueAsNumber: true })}
                 />
 
-                <label>Display Order</label>
+                <label>{t("addExperience.displayOrder")}</label>
                 <input
                     type="number"
                     min="0"
                     {...register("displayOrder", { valueAsNumber: true })}
                 />
 
-                <label>Active</label>
+               <label>{t("addExperience.active")}</label>
                 <input
                     type="checkbox"
                     {...register("isActive")}
                 />
 
-                <label>Image</label>
+               <label>{t("addExperience.image")}</label>
                 <input
                     type="file"
                     accept="image/*"
@@ -166,7 +167,7 @@ export function AddExperience() {
                             type="submit"
                             className="save-btn"
                         >
-                            Save
+                            {t("addExperience.save")}
                         </button>
 
                     )}
@@ -177,7 +178,7 @@ export function AddExperience() {
                             className="button-back"
                             onClick={() => navigate(-1)}
                         >
-                            Cancel
+                            {t("addExperience.cancel")}
                         </button>
                     )}
 
