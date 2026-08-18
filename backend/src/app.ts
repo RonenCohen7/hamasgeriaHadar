@@ -26,6 +26,7 @@ import { vipCardController } from "./controllers/vip-card-controller";
 import { vipCardTransactionsController } from "./controllers/vip-card-transactions-controller";
 import { eventMediaController } from "./controllers/event-media-controller";
 import { experienceController } from "./controllers/experience-controller";
+import { vipReportController } from "./controllers/vip-report-controller";
 
 
 
@@ -71,6 +72,7 @@ class App {
             app.use(vipCardTransactionsController.router);
             app.use(eventMediaController.router);
             app.use(experienceController.router);
+            app.use(vipReportController.router);
 
             app.use(errorMiddleware.routeNotFound);
             app.use(errorMiddleware.catchAll);

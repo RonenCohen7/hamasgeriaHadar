@@ -25,9 +25,6 @@ export function CustomerList() {
         )
 
 
-
-
-
         if(!ok) return;
         try {
 

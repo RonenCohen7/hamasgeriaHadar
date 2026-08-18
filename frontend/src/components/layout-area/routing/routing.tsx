@@ -49,6 +49,7 @@ import { ExperienceList } from "../../experiencs-area/experience-list/experience
 import { ExperienceDetails } from "../../experiencs-area/experience-details/experience-details";
 import { ExperienceEdit } from "../../experiencs-area/experience-edit/experience-edit";
 import { AddExperience } from "../../experiencs-area/add-experience/add-experience";
+import { VipReport } from "../../customers-area/vip-report/vip-report";
 
 
 
@@ -157,6 +158,8 @@ export function Routing() {
             <Route path="/experiences/edit/:id" element={<ExperienceEdit/>}/>
 
             <Route path="/experiences/add" element={<AddExperience/>}/>
+
+            <Route path="/customers/vip-report" element={<VipReport/>}/>
 
 
 

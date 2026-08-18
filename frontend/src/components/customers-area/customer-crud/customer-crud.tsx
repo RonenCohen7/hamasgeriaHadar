@@ -20,6 +20,10 @@ export function CustomerCrud() {
                 <span> | </span>
 
                 <NavLink to="/customers/search">Search</NavLink>
+
+                <span>|</span>
+
+                <NavLink to="/customers/vip-report">VIP Report</NavLink>
             </nav>
             <hr />
             <Outlet />
