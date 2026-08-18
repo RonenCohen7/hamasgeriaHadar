@@ -112,12 +112,95 @@
             "soldOut": "אזל המלאי",
             "securePlace": "שמרו את מקומכם באירוע",
             "imageUnavailable": "תמונת האירוע אינה זמינה",
-        
             "gallery": "גלריית האירוע",
             "photosVideos": "תמונות וסרטונים",
             "item": "פריט",
             "items": "פריטים",
             "cover": "תמונת שער"
         }
+    },
+    "publicHome": {
+        "hero": {
+            "hamasgeria": "המסגריה",
+            "badge": "חוויה במסגריה",
+            "description": "אוכל, משקאות, אירועים חיים וחוויות VIP. הצטרפו למועדון הלקוחות שלנו ותיהנו מהטבות בלעדיות.",
+            "joinNow": "הצטרפו עכשיו",
+            "customerLogin": "כניסת לקוחות",
+            "employeeLogin": "כניסת עובדים"
+        },
+        "events": {
+            "next": "מה קורה בקרוב",
+            "title": "אירועים קרובים",
+            "description": "גלו את האירועים הקרובים במסגריה.",
+            "defaultLocation": "המסגריה",
+            "regular": "רגיל",
+            "soldOut": "אזל מהמלאי",
+            "loginToOrder": "התחברו להזמנה"
+        },
+        "benefits": {
+            "vip": {
+                "title": "חברות VIP",
+                "description": "מחירי VIP לאירועים, מבצעים בלעדיים והטבות מיוחדות ללקוחות."
+            },
+            "events": {
+                "title": "אירועים חיים",
+                "description": "מסיבות, ערבי טעימות, מוזיקה חיה ואירועים מיוחדים."
+            },
+            "experience": {
+                "title": "חוויית פאב",
+                "description": "משקאות מעולים, אוכל איכותי וחוויה ייחודית במסגריה."
+            }
+        },
+        "cta": {
+            "badge": "הצטרפו לקהילה",
+            "title": "הפכו ללקוחות המסגריה",
+            "description": "הירשמו עוד היום להזמנת כרטיסים, גישה להטבות VIP וניהול החשבון שלכם.",
+            "createAccount": "יצירת חשבון"
+        }
+    },
+    "login": {
+        "pageTitle": "כניסה",
+        "welcomeBack": "ברוכים השבים",
+        "title": "המסגריה - פאב הדר",
+        "description": "התחברו כדי לגשת למערכת הניהול",
+        "email": "אימייל",
+        "emailPlaceholder": "הזינו אימייל",
+        "password": "סיסמה",
+        "passwordPlaceholder": "הזינו סיסמה",
+        "login": "כניסה",
+        "noAccount": "אין לכם חשבון?",
+        "createAccount": "יצירת חשבון",
+        "customer": "לקוחות?",
+        "customerLogin": "כניסת לקוחות",
+        "success": "ברוכים הבאים"
+    },
+    "customerLogin": {
+    "pageTitle": "כניסת לקוחות",
+    "badge": "אזור הלקוחות",
+    "welcomeBack": "ברוכים השבים",
+    "description": "התחברו כדי לצפות בכרטיס ה-VIP שלכם, ביתרה, בעסקאות ובהטבות הלקוחות",
+    "email": "אימייל",
+    "password": "סיסמה",
+    "passwordPlaceholder": "הזינו סיסמה",
+    "login": "כניסה",
+    "forgotPassword": "שכחתם סיסמה?",
+    "newCustomer": "לקוחות חדשים?",
+    "createAccount": "יצירת חשבון",
+    "employeeQuestion": "עובדים במסגריה?",
+    "employeeLogin": "כניסת עובדים",
+    "heroAlt": "קוקטיילים במסגריה",
+
+    "errors": {
+        "emailRequiredTitle": "נדרש אימייל",
+        "emailRequiredMessage": "יש להזין כתובת אימייל",
+        "invalidEmailTitle": "אימייל לא תקין",
+        "invalidEmailMessage": "יש להזין כתובת אימייל תקינה",
+        "passwordRequiredTitle": "נדרשת סיסמה",
+        "passwordRequiredMessage": "יש להזין סיסמה",
+        "loginFailedTitle": "ההתחברות נכשלה",
+        "loginFailedMessage": "האימייל או הסיסמה שגויים"
     }
+}
+
+
 }

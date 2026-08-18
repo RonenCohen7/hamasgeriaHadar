@@ -109,5 +109,86 @@
         "item": "item",
         "items": "items",
         "cover": "Cover"
+    },
+    "publicHome": {
+        "hero": {
+            "hamasgeria": "HAMASGERIA",
+            "badge": "Hadar Pub Experience",
+            "description": "Food, drinks, live events and VIP experiences. Join our customer club and enjoy exclusive benefits.",
+            "joinNow": "Join Now",
+            "customerLogin": "Customer Login",
+            "employeeLogin": "Employee Login"
+        },
+        "events": {
+            "next": "WHAT'S NEXT",
+            "title": "Upcoming Events",
+            "description": "Discover upcoming events at Hadar Pub.",
+            "defaultLocation": "Hadar Pub",
+            "regular": "Regular",
+            "soldOut": "Sold Out",
+            "loginToOrder": "Login To Order"
+        },
+        "benefits": {
+            "vip": {
+                "title": "VIP Membership",
+                "description": "Enjoy VIP event prices, exclusive offers and special customer benefits."
+            },
+            "events": {
+                "title": "Live Events",
+                "description": "Discover parties, tasting nights, live music and special pub events."
+            },
+            "experience": {
+                "title": "Pub Experience",
+                "description": "Great drinks, food and experiences at Hadar Pub."
+            }
+        },
+        "cta": {
+            "badge": "JOIN THE COMMUNITY",
+            "title": "Become a Hadar Pub Customer",
+            "description": "Register today to order event tickets, access VIP benefits and manage your account.",
+            "createAccount": "Create Account"
+        }
+    },
+    "login": {
+        "pageTitle": "Login",
+        "welcomeBack": "Welcome Back",
+        "title": "HAMASGERIA - Hadar Pub",
+        "description": "Sign in to access the management dashboard",
+        "email": "Email",
+        "emailPlaceholder": "Enter your email",
+        "password": "Password",
+        "passwordPlaceholder": "Enter your password",
+        "login": "Login",
+        "noAccount": "Don't have an account?",
+        "createAccount": "Create Account",
+        "customer": "Customer?",
+        "customerLogin": "Customer Login",
+        "success": "Welcome"
+    },
+    "customerLogin": {
+        "pageTitle": "Customer Login",
+        "badge": "Customer Portal",
+        "welcomeBack": "Welcome Back",
+        "description": "Login to view your VIP card, balance, transactions and customer benefits",
+        "email": "Email",
+        "password": "Password",
+        "passwordPlaceholder": "Enter your password",
+        "login": "Login",
+        "forgotPassword": "Forgot Password?",
+        "newCustomer": "New Customer?",
+        "createAccount": "Create Account",
+        "employeeQuestion": "Are you an employee?",
+        "employeeLogin": "Employee Login",
+        "heroAlt": "Hadar Pub cocktails",
+        "errors": {
+            "emailRequiredTitle": "Email Required",
+            "emailRequiredMessage": "Please enter your email",
+            "invalidEmailTitle": "Invalid Email",
+            "invalidEmailMessage": "Please enter a valid email address",
+            "passwordRequiredTitle": "Password Required",
+            "passwordRequiredMessage": "Please enter your password",
+            "loginFailedTitle": "Login Failed",
+            "loginFailedMessage": "Email or password is incorrect"
+        }
     }
 }

@@ -7,9 +7,14 @@ import { useTitle } from "../../utils/UseTitle";
 import { eventService } from "../../service/eventService";
 import { EventModel } from "../../models/event-model";
 import pubDrinks from "../../../assets/images/pubDrinks.jpg";
+import { useTranslation } from "react-i18next";
+import i18n from "../../../i18n/i18n";
 
 
 export function PublicHome() {
+    
+    const {t} = useTranslation();
+    const isHebrew = i18n.language === "he";
 
     useTitle("HAMASGERIA");
 
@@ -95,7 +100,7 @@ useEffect(() => {
 }, []);
 
     return (
-        <main className="PublicHome">
+        <main className="PublicHome" dir={isHebrew ? "rtl" : "ltr"}>
 
             <section
                 className="public-hero"
@@ -115,16 +120,15 @@ useEffect(() => {
                 <div className="public-hero-content">
 
                     <span className="public-hero-badge">
-                        Hadar Pub Experience
+                          {t("publicHome.hero.badge")}
                     </span>
 
                     <h1>
-                        HAMASGERIA
+                         {t("publicHome.hero.hamasgeria")}
                     </h1>
 
                     <p>
-                        Food, drinks, live events and VIP experiences.
-                        Join our customer club and enjoy exclusive benefits.
+                       {t("publicHome.hero.description")}
                     </p>
 
                     <div className="public-hero-actions">
@@ -135,7 +139,7 @@ useEffect(() => {
                                 navigate("/customer-register")
                             }
                         >
-                            Join Now
+                           {t("publicHome.hero.joinNow")}
                         </button>
 
                         <button
@@ -144,7 +148,7 @@ useEffect(() => {
                                 navigate("/customer-login")
                             }
                         >
-                            Customer Login
+                           {t("publicHome.hero.customerLogin")}
                         </button>
 
                         <button
@@ -153,7 +157,7 @@ useEffect(() => {
                                 navigate("/login")
                             }
                         >
-                            Employee Login
+                            {t("publicHome.hero.employeeLogin")}
                         </button>
 
                     </div>
@@ -167,14 +171,14 @@ useEffect(() => {
 
                 <div className="public-section-header">
 
-                    <span>WHAT'S NEXT</span>
+                    {/* <span>WHAT'S NEXT</span> */}
 
                     <h2>
-                        Upcoming Events
+                        <span>{t("publicHome.events.next")}</span>
                     </h2>
 
                     <p>
-                        Discover upcoming events at Hadar Pub.
+                       <p>{t("publicHome.events.description")}</p>
                     </p>
 
                 </div>
@@ -236,8 +240,7 @@ useEffect(() => {
 
                                         <span>
                                             📍{" "}
-                                            {event.eventLocation ??
-                                                "Hadar Pub"}
+                                           {t("publicHome.events.defaultLocation")}
                                         </span>
 
                                         {event.maximumGuests != null && (
@@ -259,7 +262,7 @@ useEffect(() => {
                                         <div>
 
                                             <span className="price-label">
-                                                Regular
+                                                {t("events.regularPrice")}
                                             </span>
 
                                             <strong>
@@ -277,7 +280,7 @@ useEffect(() => {
                                             <div className="vip-price">
 
                                                 <span className="price-label">
-                                                    ⭐ VIP
+                                                    {t("events.vipPrice")} ⭐
                                                 </span>
 
                                                 <strong>
@@ -301,7 +304,7 @@ useEffect(() => {
                                             className="sold-out-btn"
                                             disabled
                                         >
-                                            Sold Out
+                                           {t("publicHome.events.soldOut")}
                                         </button>
 
                                     ) : (
@@ -314,7 +317,7 @@ useEffect(() => {
                                                 )
                                             }
                                         >
-                                            Login To Order
+                                           {t("publicHome.events.loginToOrder")}
                                         </button>
 
                                     )}
@@ -341,12 +344,11 @@ useEffect(() => {
                     </div>
 
                     <h3>
-                        VIP Membership
+                        <h3>{t("publicHome.benefits.vip.title")}</h3>
                     </h3>
 
                     <p>
-                        Enjoy VIP event prices, exclusive offers
-                        and special customer benefits.
+                       <p>{t("publicHome.benefits.vip.description")}</p>
                     </p>
 
                 </div>
@@ -359,12 +361,11 @@ useEffect(() => {
                     </div>
 
                     <h3>
-                        Live Events
+                      <h3>{t("publicHome.benefits.events.title")}</h3>
                     </h3>
 
                     <p>
-                        Discover parties, tasting nights,
-                        live music and special pub events.
+                      <p>{t("publicHome.benefits.events.description")}</p>
                     </p>
 
                 </div>
@@ -377,12 +378,11 @@ useEffect(() => {
                     </div>
 
                     <h3>
-                        Pub Experience
+                        <h3>{t("publicHome.benefits.experience.title")}</h3>
                     </h3>
 
                     <p>
-                        Great drinks, food and experiences
-                        at Hadar Pub.
+                        <p>{t("publicHome.benefits.experience.description")}</p>
                     </p>
 
                 </div>
@@ -395,16 +395,15 @@ useEffect(() => {
                 <div>
 
                     <span>
-                        JOIN THE COMMUNITY
+                       <span>{t("publicHome.cta.badge")}</span>
                     </span>
 
                     <h2>
-                        Become a Hadar Pub customer
+                       <h2>{t("publicHome.cta.title")}</h2>
                     </h2>
 
                     <p>
-                        Register today to order event tickets,
-                        access VIP benefits and manage your account.
+                       <p>{t("publicHome.cta.description")}</p>
                     </p>
 
                 </div>
@@ -415,7 +414,7 @@ useEffect(() => {
                         navigate("/customer-register")
                     }
                 >
-                    Create Account
+                    {t("publicHome.cta.createAccount")}
                 </button>
 
             </section>

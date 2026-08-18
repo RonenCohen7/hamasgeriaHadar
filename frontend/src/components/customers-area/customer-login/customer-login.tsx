@@ -10,11 +10,14 @@ import { dialogService } from "../../service/dialogService";
 import pubDrink from "../../../assets/images/pubDrinks.jpg";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/auth-slice";
-
+import { useTranslation } from "react-i18next";
 
 export function CustomerLogin() {
 
-    useTitle("Login");
+    const { t, i18n } = useTranslation();
+    const isHebrew = i18n.language === "he";
+
+    useTitle(t("customerLogin.pageTitle"));
 
     const navigate = useNavigate();
 
@@ -29,8 +32,8 @@ export function CustomerLogin() {
         if (!email.trim()) {
 
             await dialogService.error(
-                "Email Required",
-                "Please enter your email"
+                t("customerLogin.errors.emailRequiredTitle"),
+                t("customerLogin.errors.emailRequiredMessage")
             );
 
             return;
@@ -40,8 +43,8 @@ export function CustomerLogin() {
         if (!email.includes("@")) {
 
             await dialogService.error(
-                "Invalid Email",
-                "Please enter a valid email address"
+                t("customerLogin.errors.invalidEmailTitle"),
+                t("customerLogin.errors.invalidEmailMessage")
             );
 
             return;
@@ -51,8 +54,8 @@ export function CustomerLogin() {
         if (!password.trim()) {
 
             await dialogService.error(
-                "Password Required",
-                "Please enter your password"
+                t("customerLogin.errors.passwordRequiredTitle"),
+                t("customerLogin.errors.passwordRequiredMessage")
             );
 
             return;
@@ -77,8 +80,8 @@ export function CustomerLogin() {
 
 
             await dialogService.error(
-                "Login Failed",
-                "Email or password is incorrect"
+                t("customerLogin.errors.loginFailedTitle"),
+                t("customerLogin.errors.loginFailedMessage")
             );
         }
     };
@@ -86,7 +89,7 @@ export function CustomerLogin() {
 
     return (
 
-        <section className="customer-login-page">
+        <section className="customer-login-page" dir={isHebrew ? "rtl" : "ltr"}>
 
 
             <div className="customer-login-hero">
@@ -110,17 +113,15 @@ export function CustomerLogin() {
                     <div className="customer-login-header">
 
                         <span className="customer-login-badge">
-                            Customer Portal
+                             {t("customerLogin.badge")}
                         </span>
 
                         <h1>
-                            Welcome Back
+                             {t("customerLogin.welcomeBack")}
                         </h1>
 
                         <p>
-                            Login to view your VIP card,
-                            balance, transactions and
-                            customer benefits
+                           {t("customerLogin.description")}
                         </p>
 
                     </div>
@@ -139,7 +140,7 @@ export function CustomerLogin() {
                         <div className="customer-login-field">
 
                             <label>
-                                Email
+                                  {t("customerLogin.email")}
                             </label>
 
                             <input
@@ -165,7 +166,7 @@ export function CustomerLogin() {
                                 onChange={e =>
                                     setPassword(e.target.value)
                                 }
-                                placeholder="Enter your password"
+                               placeholder={t("customerLogin.passwordPlaceholder")}
                             />
 
                         </div>
@@ -175,7 +176,7 @@ export function CustomerLogin() {
                             type="submit"
                             className="login-button"
                         >
-                            Login
+                             {t("customerLogin.login")}
                         </button>
 
                     </form>
@@ -191,7 +192,7 @@ export function CustomerLogin() {
                                 )
                             }
                         >
-                            Forgot Password?
+                              {t("customerLogin.createAccount")}
                         </button>
 
                     </div>
@@ -199,7 +200,7 @@ export function CustomerLogin() {
 
                     <div className="customer-login-footer">
 
-                        New Customer?{" "}
+                        {t("customerLogin.employeeQuestion")}
 
                         <button
                             type="button"
@@ -209,7 +210,7 @@ export function CustomerLogin() {
                                 )
                             }
                         >
-                            Create Account
+                            {t("customerLogin.employeeLogin")}
                         </button>
 
                     </div>
@@ -217,7 +218,7 @@ export function CustomerLogin() {
 
                     <div className="employee-access">
 
-                        Are you employee?
+                       {t("customerLogin.employeeQuestion")}
 
                         <button
                             type="button"
@@ -225,16 +226,16 @@ export function CustomerLogin() {
                                 navigate("/login")
                             }
                         >
-                            Employee Login
+                            {t("customerLogin.employeeLogin")}
                         </button>
 
                     </div>
                     <button
-                            type="button"
-                            onClick={()=>navigate("/")}
-                        >
+                        type="button"
+                        onClick={() => navigate("/")}
+                    >
                         <FaHome size={15} color="red" />
-                        
+
                     </button>
 
 
