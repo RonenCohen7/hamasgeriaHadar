@@ -25,11 +25,11 @@ class UserController {
         this.router.post("/api/users/login", this.login);
 
 
-        this.router.get("/api/users",verifyToken, allowRoles("admin"), this.getAllUsers);
-        this.router.get("/api/users/:id",verifyToken, allowRoles("admin"), this.getOneUser);
+        this.router.get("/api/users", verifyToken, allowRoles("admin"), this.getAllUsers);
+        this.router.get("/api/users/:id", verifyToken, allowRoles("admin"), this.getOneUser);
 
-        this.router.put("/api/users/:id", verifyToken,allowRoles("admin"), this.updateUser);
-        this.router.delete("/api/users/:id",verifyToken, allowRoles("admin"), this.deleteUser);
+        this.router.put("/api/users/:id", verifyToken, allowRoles("admin"), this.updateUser);
+        this.router.delete("/api/users/:id", verifyToken, allowRoles("admin"), this.deleteUser);
     }
 
     //Register
@@ -52,14 +52,26 @@ class UserController {
 
 
     //Login
-    private async login(request:Request, response:Response, next:NextFunction):Promise<void>{
-        try{
+    private async login(request: Request, response: Response, next: NextFunction): Promise<void> {
+        try {
 
-            const credentials:LoginUserDto = request.body;
+            const credentials: LoginUserDto = request.body;
+
             const auth = await userService.login(credentials);
+
+            console.log("LOGIN SUCCESS - SETTING COOKIE");
+
+            response.cookie("accessToken", auth.token, {
+                httpOnly: true,
+                secure: false,
+                sameSite: "lax",
+                maxAge: 8 * 60 * 60 * 1000
+
+            });
+
             response.json(auth);
-            
-        }catch(err){
+
+        } catch (err) {
             next(err)
         }
     }
@@ -125,7 +137,7 @@ class UserController {
             await userService.deleteUser(id);
 
             response.sendStatus(204);
-            
+
         } catch (err: any) {
             next(err)
         }

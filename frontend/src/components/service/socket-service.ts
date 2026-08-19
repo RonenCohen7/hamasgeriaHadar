@@ -1,4 +1,5 @@
 import { io, Socket } from "socket.io-client";
+import { appConfig } from "../utils/app-config";
 
 export type InventoryUpdatedData = {
     idProduct: number;
@@ -20,7 +21,7 @@ class SocketService {
     private listenersRegistered = false
 
     public constructor() {
-        this.socket = io("http://localhost:4000"), {
+        this.socket = io(appConfig.baseMediaUrl), {
             autoConnect: false,
             transports: ["websocket", "polling"]
         };

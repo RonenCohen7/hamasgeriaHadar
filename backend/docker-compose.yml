@@ -50,8 +50,13 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
 
       JWT_SECRET: ${JWT_SECRET}
+      FRONTEND_URL: ${FRONTEND_URL}
 
-      BASE_IMAGE_URL: http://localhost:4000/api/products/images/
+      BASE_IMAGE_URL: ${BASE_IMAGE_URL}
+      BASE_EVENT_IMAGE_URL: ${BASE_EVENT_IMAGE_URL}
+      BASE_EXPERIENCE_IMAGE_URL: ${BASE_EXPERIENCE_IMAGE_URL}
+
+     
 
     ports:
       - "4000:4000"

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+
 import { useTitle } from "../../utils/UseTitle";
 import "./add-sale.css";
 import { useEffect, useState } from "react";
@@ -12,7 +12,7 @@ export function AddSale() {
 
 
     useTitle("Sale")
-    const navigate = useNavigate();
+  
 
     const [products, setProducts] = useState<ProductModel[]>([]);
     const [selectedProductID, setSelectedProductId] = useState<number>(0);

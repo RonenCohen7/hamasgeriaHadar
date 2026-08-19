@@ -6,6 +6,8 @@ export function verifyToken(request: Request,response: Response,next: NextFuncti
 
     const authorization = request.header("authorization");
 
+    let token: string | undefined
+
     if (!authorization) {
         response.sendStatus(401);
         return;
@@ -14,11 +16,18 @@ export function verifyToken(request: Request,response: Response,next: NextFuncti
     const [scheme, rawToken] = authorization.trim().split(/\s+/);
 
     if (scheme !== "Bearer" || !rawToken) {
+        token = rawToken.trim();
+    }
+
+
+    if(!token) {
+        token  = request.cookies?.accessToken;
+    }
+    
+    if(!token) {
         response.sendStatus(401);
         return;
     }
-
-    const token = rawToken.trim();
 
     try {
         const payload = jwt.verify(
@@ -26,13 +35,17 @@ export function verifyToken(request: Request,response: Response,next: NextFuncti
             process.env.JWT_SECRET!
         ) as {
             idUser:number,
-            role:string
+            idAccount?: number,
+            role:string,
+            accountType?: string;
         }
+
         (request as any).user = payload;
         next();
     }
     catch (err: any) {
         console.log("JWT verification failed:", err.message);
+        
         response.sendStatus(401);
     }
 }

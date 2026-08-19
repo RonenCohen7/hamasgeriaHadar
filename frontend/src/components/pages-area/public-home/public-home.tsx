@@ -178,7 +178,7 @@ useEffect(() => {
                     </h2>
 
                     <p>
-                       <p>{t("publicHome.events.description")}</p>
+                        {t("publicHome.events.description")}
                     </p>
 
                 </div>
@@ -344,11 +344,11 @@ useEffect(() => {
                     </div>
 
                     <h3>
-                        <h3>{t("publicHome.benefits.vip.title")}</h3>
+                        {t("publicHome.benefits.vip.title")}
                     </h3>
 
                     <p>
-                       <p>{t("publicHome.benefits.vip.description")}</p>
+                       {t("publicHome.benefits.vip.description")}
                     </p>
 
                 </div>
@@ -361,11 +361,11 @@ useEffect(() => {
                     </div>
 
                     <h3>
-                      <h3>{t("publicHome.benefits.events.title")}</h3>
+                      {t("publicHome.benefits.events.title")}
                     </h3>
 
                     <p>
-                      <p>{t("publicHome.benefits.events.description")}</p>
+                      {t("publicHome.benefits.events.description")}
                     </p>
 
                 </div>
@@ -378,11 +378,11 @@ useEffect(() => {
                     </div>
 
                     <h3>
-                        <h3>{t("publicHome.benefits.experience.title")}</h3>
+                        {t("publicHome.benefits.experience.title")}
                     </h3>
 
                     <p>
-                        <p>{t("publicHome.benefits.experience.description")}</p>
+                        {t("publicHome.benefits.experience.description")}
                     </p>
 
                 </div>
@@ -399,11 +399,11 @@ useEffect(() => {
                     </span>
 
                     <h2>
-                       <h2>{t("publicHome.cta.title")}</h2>
+                       {t("publicHome.cta.title")}
                     </h2>
 
                     <p>
-                       <p>{t("publicHome.cta.description")}</p>
+                       {t("publicHome.cta.description")}
                     </p>
 
                 </div>

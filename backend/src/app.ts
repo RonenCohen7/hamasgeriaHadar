@@ -28,6 +28,8 @@ import { eventMediaController } from "./controllers/event-media-controller";
 import { experienceController } from "./controllers/experience-controller";
 import { vipReportController } from "./controllers/vip-report-controller";
 
+import cookieParser from "cookie-parser";
+
 
 
 
@@ -37,6 +39,11 @@ class App {
         try {
 
             const app = express();
+            
+            app.use(cookieParser());
+
+            app.set("trust proxy", 1);
+
             app.use(
                 helmet({
                     crossOriginResourcePolicy: {
@@ -54,9 +61,15 @@ class App {
             app.use("/api/videos", express.static("storage/videos"));
             app.use("/api/experiences/images", express.static("storage/experiences"))
 
-            
+
             app.use(fileUpload());
-            app.use(cors());
+
+            app.use(cors({
+                origin: appConfig.frontendUrl,
+                credentials:true
+
+            }));
+
             app.use(express.json());
             app.use(eventInventoryController.router)
             app.use(eventController.router);
@@ -83,7 +96,7 @@ class App {
 
 
             httpServer.listen(appConfig.port, () => {
-                console.log("Listening on http://localhost:" + appConfig.port);
+                console.log(`Backend server started on port ${appConfig.port}`);
 
             })
 

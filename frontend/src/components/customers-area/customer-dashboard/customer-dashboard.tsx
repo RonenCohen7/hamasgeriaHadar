@@ -8,6 +8,9 @@ import { useTitle } from "../../utils/UseTitle";
 import { eventService } from "../../service/eventService";
 import { useTranslation } from "react-i18next";
 
+import pubDrinks from "../../../assets/images/pubDrinks.jpg";
+
+
 export function CustomerDashboard() {
 
     const { t, i18n } = useTranslation();
@@ -407,7 +410,7 @@ export function CustomerDashboard() {
                     >
 
                         <img
-                            src="/src/assets/images/pubDrinks.jpg"
+                            src={pubDrinks}
                             alt={t("customerDashboard.experiences.cocktail.alt")}
                         />
 

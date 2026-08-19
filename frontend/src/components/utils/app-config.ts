@@ -1,8 +1,7 @@
 class AppConfig {
 
-    public baseUrl = "http://localhost:4000/api/"
-
-    public baseMediaUrl = "http://localhost:4000";  // for media only 
+    public baseUrl = import.meta.env.VITE_API_URL;
+    public baseMediaUrl = import.meta.env.VITE_MEDIA_URL;
 
     public readonly productUrl = this.baseUrl + "products";
 
@@ -29,7 +28,7 @@ class AppConfig {
     public readonly vipCardsUrl = this.baseUrl + "vip-cards"
 
     public readonly customerRegisterUrl = this.customersUrl + "/register";
- 
+
     public readonly customerLoginUrl = this.customersUrl + "/login";
 
     public readonly eventsUpcomingUrl = this.baseUrl + "events/upcoming"
@@ -38,7 +37,7 @@ class AppConfig {
 
     public readonly experiencesUrl = this.baseUrl + "experiences"
 
-    
+
 }
 
 export const appConfig = new AppConfig();

@@ -10,7 +10,12 @@ class AuthService {
 
     //Login
     public async login(credentials:LoginUserDto):Promise<AuthResponseModel>{
-        const response = await axios.post<AuthResponseModel>(appConfig.loginUrl,credentials)
+        const response = await axios.post<AuthResponseModel>(appConfig.loginUrl,credentials,
+            {
+                withCredentials: true
+            }
+
+        )
         store.dispatch(login(response.data))
         return response.data;
     }
