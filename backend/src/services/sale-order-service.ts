@@ -23,7 +23,12 @@ class SaleOrderService {
                 so.customer_name AS customerName,
                 so.sale_date AS saleDate,
                 so.sale_status AS saleStatus,
+                
                 so.payment_method AS paymentMethod,
+                so.payment_reference AS paymentReference,
+                so.external_document_id AS externalDocumentId,
+                so.external_document_number AS externalDocumentNumber,
+
                 so.subtotal AS subtotal,
                 so.discount_amount AS discountAmount,
                 so.total_amount AS totalAmount,
@@ -65,7 +70,13 @@ class SaleOrderService {
                 so.customer_name AS customerName,
                 so.sale_date AS saleDate,
                 so.sale_status AS saleStatus,
+                
                 so.payment_method AS paymentMethod,
+                so.payment_reference AS paymentReference,
+                so.external_document_id AS externalDocumentId,
+                so.external_document_number AS externalDocumentNumber,
+
+                
                 so.subtotal AS subtotal,
                 so.discount_amount AS discountAmount,
                 so.total_amount AS totalAmount,
