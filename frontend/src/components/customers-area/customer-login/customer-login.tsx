@@ -2,7 +2,7 @@ import "./customer-login.css";
 import { FaHome } from "react-icons/fa";
 import { useState } from "react";
 import { useTitle } from "../../utils/UseTitle";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { customerService } from "../../service/customerService";
 import { dialogService } from "../../service/dialogService";
@@ -14,10 +14,24 @@ import { useTranslation } from "react-i18next";
 
 export function CustomerLogin() {
 
+
+    const [searchParams] = useSearchParams();
+
+    const eventId = searchParams.get("eventId");
+
+    console.log("Event ID from extension: ", eventId);
+
+
+
+
+
     const { t, i18n } = useTranslation();
     const isHebrew = i18n.language === "he";
 
     useTitle(t("customerLogin.pageTitle"));
+
+
+
 
     const navigate = useNavigate();
 
@@ -69,9 +83,15 @@ export function CustomerLogin() {
                 password
             });
             dispatch(logout());
+            
+            if (eventId) {
+                navigate(`/events/details/${eventId}`)
+            } else {
+                navigate("/customer-dashboard");
+            }
 
 
-            navigate("/customer-dashboard");
+
 
         }
         catch (err) {
@@ -113,15 +133,15 @@ export function CustomerLogin() {
                     <div className="customer-login-header">
 
                         <span className="customer-login-badge">
-                             {t("customerLogin.badge")}
+                            {t("customerLogin.badge")}
                         </span>
 
                         <h1>
-                             {t("customerLogin.welcomeBack")}
+                            {t("customerLogin.welcomeBack")}
                         </h1>
 
                         <p>
-                           {t("customerLogin.description")}
+                            {t("customerLogin.description")}
                         </p>
 
                     </div>
@@ -140,7 +160,7 @@ export function CustomerLogin() {
                         <div className="customer-login-field">
 
                             <label>
-                                  {t("customerLogin.email")}
+                                {t("customerLogin.email")}
                             </label>
 
                             <input
@@ -166,7 +186,7 @@ export function CustomerLogin() {
                                 onChange={e =>
                                     setPassword(e.target.value)
                                 }
-                               placeholder={t("customerLogin.passwordPlaceholder")}
+                                placeholder={t("customerLogin.passwordPlaceholder")}
                             />
 
                         </div>
@@ -176,7 +196,7 @@ export function CustomerLogin() {
                             type="submit"
                             className="login-button"
                         >
-                             {t("customerLogin.login")}
+                            {t("customerLogin.login")}
                         </button>
 
                     </form>
@@ -192,7 +212,7 @@ export function CustomerLogin() {
                                 )
                             }
                         >
-                              {t("customerLogin.createAccount")}
+                            {t("customerLogin.createAccount")}
                         </button>
 
                     </div>
@@ -218,7 +238,7 @@ export function CustomerLogin() {
 
                     <div className="employee-access">
 
-                       {t("customerLogin.employeeQuestion")}
+                        {t("customerLogin.employeeQuestion")}
 
                         <button
                             type="button"

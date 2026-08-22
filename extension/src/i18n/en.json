@@ -1,0 +1,23 @@
+{
+    "app": {
+        "title": "Hadar Pub"
+    },
+    "events": {
+        "upcoming": "Upcoming Events",
+        "found": "Found {{count}} upcoming events",
+        "noEvents": "No upcoming events",
+        "loadError": "Failed to load events",
+        "location": "Location",
+        "noLocation": "Location not set yet",
+        "regularPrice": "Regular Price",
+        "vipPrice": "VIP Price"
+    },
+    "language": {
+        "hebrew": "עברית",
+        "english": "English"
+    },
+    "order": {
+        "login": "Login to Order",
+         "tickets": "Order Tickets"
+    }
+}

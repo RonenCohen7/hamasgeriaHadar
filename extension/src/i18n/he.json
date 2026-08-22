@@ -1,0 +1,24 @@
+{
+    "app": {
+        "title": "המסגריה"
+    },
+    "events": {
+        "upcoming": "אירועים קרובים",
+        "found": "נמצאו {{count}} אירועים קרובים",
+        "noEvents": "אין אירועים קרובים",
+        "loadError": "טעינת האירועים נכשלה",
+        "location": "מיקום",
+        "noLocation": "המיקום טרם נקבע",
+        "regularPrice": "מחיר רגיל",
+        "vipPrice": "מחיר VIP"
+    },
+    "language": {
+        "hebrew": "עברית",
+        "english": "English"
+    },
+    "order": {
+        "login": "התחברות להזמנה",
+        "tickets": "הזמנת כרטיסים"
+        
+    }
+}

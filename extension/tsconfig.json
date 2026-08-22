@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "target": "ES2020",
+        "useDefineForClassFields": true,
+        "module": "ESnext",
+        "moduleResolution": "Bundler",
+        "strict": true,
+        "noEmit": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "types": ["vite/client", "node", "chrome"]
+    },
+    "include": ["src/**/*.ts", "vite.config.ts"]
+}

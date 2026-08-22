@@ -29,6 +29,7 @@ import { experienceController } from "./controllers/experience-controller";
 import { vipReportController } from "./controllers/vip-report-controller";
 
 import cookieParser from "cookie-parser";
+import { error } from "console";
 
 
 
@@ -65,8 +66,23 @@ class App {
             app.use(fileUpload());
 
             app.use(cors({
-                origin: appConfig.frontendUrl,
-                credentials:true
+               origin: (origin, callback) => {
+
+                    if(!origin){
+                        return callback(null, true);
+                    }
+
+                    if(origin == appConfig.frontendUrl){
+                        return callback(null, true);
+                    }
+
+                    if(origin.startsWith("chrome-extension://")){
+                        return callback(null, true);
+                    }
+
+                    callback(new Error("Not allowed by CORS"));
+               },
+               credentials: true
 
             }));
 

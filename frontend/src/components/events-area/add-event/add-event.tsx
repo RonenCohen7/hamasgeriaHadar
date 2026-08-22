@@ -24,6 +24,7 @@ export function AddEvent() {
     const [maximumGuests, setMaximumGuests] = useState("");
     const [exceptedGuests, setExceptedGuests] = useState("");
     const [ticketPrice, setTicketPrice] = useState("");
+    const [vipPrice, setVipPrice] = useState("");
     const [eventStatus, setEventStatus] = useState("planned");
 
     const [image, setImage] = useState<File | undefined>();
@@ -75,6 +76,8 @@ export function AddEvent() {
             event.expectedGuests = exceptedGuests ? Number(exceptedGuests) : null;
 
             event.ticketPrice = ticketPrice ? Number(ticketPrice) : 0;
+
+            event.vipPrice = vipPrice ? Number(vipPrice) : null;
 
             event.eventStatus = eventStatus;
 
@@ -197,6 +200,23 @@ export function AddEvent() {
                                 onChange={e => setTicketPrice(e.target.value)}
                             />
                         </div>
+
+                        <div className="form-row">
+
+                            <div className="form-group">
+
+                                <label>{t("events.add.vipPrice")}</label>
+
+                                <input
+                                    type="number"
+                                    min="0"
+                                    step="0.01"
+                                    value={vipPrice}
+                                    onChange={e => setVipPrice(e.target.value)}
+                                />
+                            </div>
+                        </div>
+
 
                         <div className="from-group">
                             <label>{t("events.add.status")}</label>

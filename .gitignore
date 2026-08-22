@@ -3,6 +3,7 @@
 # ==========================
 backend/node_modules/
 frontend/node_modules/
+extension/node_modules/
 
 # ==========================
 # Build folders
@@ -10,20 +11,23 @@ frontend/node_modules/
 backend/dist/
 frontend/dist/
 frontend/build/
+extension/dist/
+
 
 # ==========================
 # Environment files
 # ==========================
 backend/.env
 frontend/.env
+extension/.env
 
 # ==========================
 # Runtime Storage (Uploads)
 # ==========================
-backend/storage/
+backend/storage/**
 
-# Keep folder structure
-!backend/storage/
+
+# Keep only .gitkeep files
 !backend/storage/**/
 !backend/storage/**/.gitkeep
 

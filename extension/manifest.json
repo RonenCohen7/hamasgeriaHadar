@@ -1,0 +1,22 @@
+{
+    "manifest_version": 3,
+    "name": "hadar Pub",
+    "version": "1.0.0",
+    "description": "Chrome extension for hadar Pub management system",
+    "icons": {
+        "128": "dist/icons/icon128.png"
+    },
+    "action": {
+        "default_popup": "dist/src/popup/popup.html"
+    },
+    "background": {
+        "service_worker": "dist/assets/background.js",
+        "type": "module"
+    },
+    "permissions": [
+        "storage",
+        "tabs",
+        "notifications",
+        "alarms"
+    ]
+}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width , initial-scale=1.0">
+    <link rel="stylesheet" href="./popup.css">
+
+    <title>Hadar Pub</title>
+</head>
+
+<body>
+
+    <main>
+
+        <header class="pub-header">
+        
+            <img id="pub-header-image" alt="hadar Pub">
+        
+            <h1 id="app-title">Hadar Pub</h1>
+        
+        </header>
+        <div class="language-switcher">
+            <button id="lang-he" type="button">עברית</button>
+            <span>|</span>
+            <button id="lang-en" type="button">English</button>
+        </div>
+
+        <h2 id="event-title">Coming Soon events</h2>
+
+        <p id="status"> Load Events... </p>
+
+        <section id="event-container"></section>
+
+        <button id="login-button" class="login-button" type="button">Login to Order</button>
+
+    </main>
+
+
+    <script type="module" src="./popup.ts"></script>
+</body>
+
+</html>
