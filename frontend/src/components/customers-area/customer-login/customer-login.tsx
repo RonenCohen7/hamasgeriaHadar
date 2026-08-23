@@ -212,7 +212,8 @@ export function CustomerLogin() {
                                 )
                             }
                         >
-                            {t("customerLogin.createAccount")}
+                            {t("customerLogin.forgotPassword")}
+                            
                         </button>
 
                     </div>
@@ -226,7 +227,7 @@ export function CustomerLogin() {
                             type="button"
                             onClick={() =>
                                 navigate(
-                                    "/customer-register"
+                                    "/login"
                                 )
                             }
                         >
@@ -237,16 +238,13 @@ export function CustomerLogin() {
 
 
                     <div className="employee-access">
-
-                        {t("customerLogin.employeeQuestion")}
-
                         <button
                             type="button"
                             onClick={() =>
                                 navigate("/login")
                             }
                         >
-                            {t("customerLogin.employeeLogin")}
+                            {/* {t("customerLogin.employeeLogin")} */}
                         </button>
 
                     </div>

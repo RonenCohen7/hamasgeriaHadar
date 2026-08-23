@@ -15,13 +15,13 @@ export function AddCustomer() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const { register, handleSubmit, formState: { isSubmitting } } = useForm<AddCustomerDto>();
+    const { register, handleSubmit, formState: { isSubmitting, errors } } = useForm<AddCustomerDto>();
 
 
     async function submit(customer: AddCustomerDto) {
         try {
-            
-            customer.phone = customer.phone ?customer.phone.replace(/\D/g,"") : null;
+
+            customer.phone = customer.phone ? customer.phone.replace(/\D/g, "") : null;
 
             const addCustomer: CustomerModel = await customerService.addCustomer(customer);
 
@@ -49,19 +49,24 @@ export function AddCustomer() {
 
                     <label>First Name</label>
                     <input type="text" {...register("firstName", { required: true })} />
+                    {errors.firstName && (<span className="field-error">{errors.firstName.message}</span>)}
 
                     <label>Last Name</label>
                     <input type="text" {...register("lastName", { required: true })} />
+                    {errors.lastName && (<span className="field-error">{errors.lastName.message}</span>)}
 
                     <label>Phone</label>
                     <input type="tel" placeholder="0526240604" maxLength={10}
-                    {...register("phone", {pattern: { value:/^05\d{10}/, message: "Enter a valid mobile number"}} )} />
+                        {...register("phone", { pattern: { value: /^05\d{8}$/, message: "Enter a valid mobile number" } })} />
+                        {errors.phone && (<span className="field-error">{errors.phone.message}</span>)}
 
                     <label>Email</label>
                     <input type="email" {...register("email", { required: true })} />
+                    {errors.email && (<span className="field-error">{errors.email.message}</span>)}
 
                     <label>Date of Birth</label>
                     <input type="date"{...register("dateOfBirth", { required: true })} />
+                    {errors.dateOfBirth && (<span className="field-error">{errors.dateOfBirth.message}</span>)}
 
                     <div className="customer-actions">
 

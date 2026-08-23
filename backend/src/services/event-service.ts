@@ -10,6 +10,9 @@ import { EventStatus } from "../models/enum";
 class EventService {
     //Get All Events
     public async getAllEvents(): Promise<EventModel[]> {
+
+        await this.syncCompletedEvents();
+
         const sql = `
             SELECT
                 e.id_event AS idEvent,
@@ -149,6 +152,8 @@ class EventService {
     // Update event:
     public async updateEvent(event: UpdateEventDto): Promise<EventModel> {
 
+        await this.syncCompletedEvents();
+
         const existingEvent = await this.getOneEvent(event.idEvent);
 
         event.eventName = sanitizeText(event.eventName);
@@ -242,7 +247,7 @@ class EventService {
 
             FROM events
 
-            WHERE event_start >= NOW()
+            WHERE COALESCE(event_start, event_start) >= NOW()
             AND event_status <> 'cancelled'
             AND is_deleted = 0
 
@@ -289,6 +294,21 @@ class EventService {
         return Number(result[0].count);
     }
 
+
+
+
+    //Complete Events
+    public async syncCompletedEvents():Promise<void>{
+
+        const sql = `
+            UPDATE events
+            SET event_status = 'completed'
+            WHERE COALESCE(event_end, event_start)  < NOW()
+            AND event_status = 'planned'
+            AND is_deleted = 0
+        `;
+        await dal.execute(sql);
+    }
 }
 
 

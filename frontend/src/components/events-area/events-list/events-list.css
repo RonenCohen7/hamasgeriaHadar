@@ -329,23 +329,37 @@
     box-shadow:
         0 4px 10px rgba(15, 23, 42, 0.14);
 }
+.event-status {
+    position: absolute;
+    top: 16px;
+    right: 12px;
 
-.status.planned {
-    background: #2563eb;
+    padding: 6px 10px;
+    border-radius: 8px;
+
+    font-size: 14px;
+    font-weight: 600;
 }
 
-.status.active {
-    background: #16a34a;
+.event-status-planned {
+    background: green !important;
+    color: white;
 }
 
-.status.completed {
-    background: #64748b;
+.event-status-active {
+    background: #ecfdf5;
+    color: #15803d;
 }
 
-.status.cancelled {
-    background: #dc2626;
+.event-status-completed {
+    background: hsl(267, 91%, 53%) !important;
+    color: #475569;
 }
 
+.event-status-cancelled {
+    background: #fef2f2;
+    color: #dc2626;
+}
 
 /* =========================================
    EVENT TEXT

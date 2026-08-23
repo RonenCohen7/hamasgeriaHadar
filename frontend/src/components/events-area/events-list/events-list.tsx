@@ -186,9 +186,9 @@ export function EventsList() {
                                 </div>
                             )}
                             <span
-                                className={t(`events.status.${event.eventStatus}`)}
+                                className={`event-status event-status-${event.eventStatus}`}
                             >
-                                {t("events.planned")}
+                                {t(`events.status.${event.eventStatus}`)}
                             </span>
 
                         </div>

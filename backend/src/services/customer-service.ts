@@ -375,55 +375,55 @@ class CustomerService {
     // FORGOT PASSWORD -STEP 3 - RESET PASSWORD
     // ============================================================
 
-        public async resetpassword(resetToken: string, newPassword: string):Promise<void>{
+    public async resetpassword(resetToken: string, newPassword: string): Promise<void> {
 
-            if(!resetToken){
-                throw new Error("Reset token is required")
-            }
+        if (!resetToken) {
+            throw new Error("Reset token is required")
+        }
 
-            if(!newPassword || newPassword.length < 6){
-                throw error("Password must contain at least 6 characters")
-            }
-
-         
-            
+        if (!newPassword || newPassword.length < 6) {
+            throw error("Password must contain at least 6 characters")
+        }
 
 
-            //verify token
-            const payload = jwt.verify(
-                resetToken,
-                process.env.JWT_SECRET!
-            ) as {
-                idAccount: number,
-                idCustomer: number,
-                purpose: string;
-            }
 
-            //Make sure token us really for password reset
-            if(payload.purpose !== "password-reset"){
-                throw new Error("Invalid reset token")
-            }
 
-            //hash new password
-            const passwordHash = await bcrypt.hash(newPassword, 10)
 
-            //update account password
-            const sql = `
+        //verify token
+        const payload = jwt.verify(
+            resetToken,
+            process.env.JWT_SECRET!
+        ) as {
+            idAccount: number,
+            idCustomer: number,
+            purpose: string;
+        }
+
+        //Make sure token us really for password reset
+        if (payload.purpose !== "password-reset") {
+            throw new Error("Invalid reset token")
+        }
+
+        //hash new password
+        const passwordHash = await bcrypt.hash(newPassword, 10)
+
+        //update account password
+        const sql = `
                 UPDATE accounts
                 SET password = ?
                 WHERE id_account = ?
                     AND account_type = 'customer'
                     AND is_active = TRUE
             `;
-            const info = await dal.execute(sql,[
-                passwordHash,
-                payload.idAccount
-            ]) as OkPacketParams
+        const info = await dal.execute(sql, [
+            passwordHash,
+            payload.idAccount
+        ]) as OkPacketParams
 
-            if(info.affectedRows === 0){
-                throw new Error("Failed to update password")
-            }
+        if (info.affectedRows === 0) {
+            throw new Error("Failed to update password")
         }
+    }
 
 
 
@@ -654,14 +654,12 @@ class CustomerService {
         }
 
 
-        // --------------------------------------------------------
-        // Password required for account
-        // Add password!: string to AddCustomerDto
-        // --------------------------------------------------------
+        // Admin-created customer receives an internal random password.
+        // The customer can later set their own password via Forgot Password.
+        const temporaryPassword =
+            `${Date.now()}-${Math.random()}-${customer.email}`;
 
-        if (!customer.password) {
-            throw new ConflictError("Customer password is required");
-        }
+        const hashedPassword = await bcrypt.hash(temporaryPassword, 12);
 
 
         // --------------------------------------------------------
@@ -711,14 +709,6 @@ class CustomerService {
                 );
             }
         }
-
-
-        // --------------------------------------------------------
-        // Password
-        // --------------------------------------------------------
-
-        const hashedPassword = await bcrypt.hash(customer.password, 12);
-
 
         // --------------------------------------------------------
         // Create Account

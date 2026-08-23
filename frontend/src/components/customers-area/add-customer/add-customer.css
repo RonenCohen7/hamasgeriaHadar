@@ -21,6 +21,17 @@
     font-weight: 800;
 }
 
+
+.field-error {
+    display: block;
+    margin-top: 4px;
+    margin-bottom: 8px;
+
+    color: #dc2626;
+    font-size: 13px;
+    font-weight: 600;
+}
+
 .AddCustomer form {
     width: 100%;
     max-width: 720px;
@@ -92,7 +103,7 @@
         0 0 0 3px rgba(8, 126, 164, 0.12);
 }
 
-.customer-field > span {
+.customer-field>span {
     min-height: 16px;
     margin-top: 5px;
 
