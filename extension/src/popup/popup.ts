@@ -15,7 +15,7 @@ const eventsTitle = document.getElementById("events-title");
 const langHeButton = document.getElementById("lang-he");
 const langEnButton = document.getElementById("lang-en");
 
-const loginButton = document.getElementById("login-button")
+
 
 
 let currentEvents: EventModel[] = [];
@@ -64,8 +64,11 @@ function renderEvents(events: EventModel[]): void {
         date.textContent = new Date(event.eventStart).toLocaleDateString("he-IL");
 
         const location = document.createElement("p");
-        location.textContent = event.eventLocation
-            ? `${i18n.t("events.location")}: ${event.eventLocation}`
+
+        const eventLocation = event.eventLocation == "Hadar Pub" ? "Hamasgeria" : event.eventLocation;
+
+        location.textContent = eventLocation
+            ? `${i18n.t("events.location")}: ${eventLocation}`
             : i18n.t("events.noLocation");
 
         const price = document.createElement("p");
@@ -77,14 +80,14 @@ function renderEvents(events: EventModel[]): void {
         orderButton.textContent = i18n.t("order.tickets");
 
         orderButton.dataset.eventId = event.idEvent.toString();
-        orderButton.addEventListener("click", ()=> {
+        orderButton.addEventListener("click", () => {
             const frontendUrl = import.meta.env.VITE_FRONTEND_URL;
             chrome.tabs.create({
                 url: `${frontendUrl}/customer-login?eventId=${event.idEvent}`
             })
-            
+
         })
- 
+
         details.append(title, date, location, price, orderButton);
         eventsContainer.appendChild(card)
 
@@ -134,6 +137,12 @@ async function loadUpcomingEvents(): Promise<void> {
         langEnButton?.classList.toggle("active", language == "he");
         langHeButton?.classList.toggle("active", language == "en");
 
+
+
+        if (appTitle) {
+            appTitle.textContent = i18n.t("app.title");
+        }
+
         if (eventsTitle) {
             eventsTitle.textContent = i18n.t("events.upcoming");
         }
@@ -144,11 +153,7 @@ async function loadUpcomingEvents(): Promise<void> {
             })
         }
 
-        if(loginButton){
-            loginButton.textContent = i18n.t("order.login");
-        }
 
-        
         renderEvents(currentEvents);
     }
 
@@ -160,11 +165,7 @@ async function loadUpcomingEvents(): Promise<void> {
         void changeLanguage("en");
     })
 
-    loginButton?.addEventListener("click", ()=> {
-        chrome.tabs.create({
-            url: `${import.meta.env.VITE_FRONTEND_URL}/customer-login`
-        })
-    })
+
 
 
 }

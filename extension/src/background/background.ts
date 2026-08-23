@@ -6,7 +6,7 @@ const ALARM_NAME = "check-new-events";
 const STORAGE_KEY = "knownEventIds"
 
 
-console.log("Hadar Pub service worker loaded");
+console.log("Hamasgeria service worker loaded");
 
 
 
@@ -63,7 +63,7 @@ async function checkForNewEvents(): Promise<void> {
                             "dist/icons/icon128.png"
                         ),
 
-                        title: "🍺 Hadar Pub - New Event 🎭",
+                        title: "🍺 Hamasgeria - New Event 🎭",
 
                         message: `${event.eventName} - ₪ ${event.ticketPrice}`,
 
@@ -79,7 +79,7 @@ async function checkForNewEvents(): Promise<void> {
         });
 
     } catch (error) {
-        console.log("Filed checking new events", error);
+        console.log("Failed checking new events", error);
 
     }
 }
@@ -87,11 +87,11 @@ async function checkForNewEvents(): Promise<void> {
 chrome.runtime.onInstalled.addListener(() => {
 
     console.log(
-        "Hadar Pub extension installed"
+        "Hamasgeria extension installed"
     );
 
     chrome.alarms.create(ALARM_NAME, {
-        periodInMinutes: 1
+        periodInMinutes: 15
     })
     void checkForNewEvents()
 });
