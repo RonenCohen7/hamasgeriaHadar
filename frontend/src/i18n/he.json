@@ -368,6 +368,7 @@
         "displayOrder": "סדר תצוגה",
         "image": "תמונה",
         "loadSuppliersError": "טעינת הספקים נכשלה",
+        "save": "שמירה",
         "success": "המוצר נוסף בהצלחה",
         "error": "הוספת המוצר נכשלה",
         "validation": {
@@ -448,6 +449,101 @@
                 "description": "גלו מנות מיוחדות מהמטבח שלנו.",
                 "alt": "השף של המסגריה"
             }
+        }
+    },
+    "supplierOrderDetails": {
+        "receiveDelivery": "קבלת אספקה",
+        "order": "הזמנה",
+        "ordered": "הוזמן",
+        "received": "התקבל",
+        "remaining": "נותר",
+        "quantityReceived": "כמות שהתקבלה",
+        "quantityDamaged": "כמות פגומה",
+        "allProductsReceived": "כל המוצרים התקבלו במלואם",
+        "confirmDelivery": "אישור קבלת אספקה",
+        "purchaseOrder": "הזמנת רכש",
+        "description": "פרטי הזמנת ספק וסטטוס אספקה",
+        "back": "חזרה",
+        "sendOrder": "שליחת הזמנה",
+        "complete": "הושלם",
+        "supplier": "ספק",
+        "orderDate": "תאריך הזמנה",
+        "expectedDelivery": "אספקה צפויה",
+        "notSpecified": "לא צוין",
+        "status": "סטטוס",
+        "totalCost": "עלות כוללת",
+        "createdBy": "נוצר על ידי",
+        "unknown": "לא ידוע",
+        "notes": "הערות"
+    },
+    "supplierOrders": {
+        "list": {
+            "pageTitle": "הזמנות ספקים",
+            "eyebrow": "ניהול הזמנות רכש",
+            "title": "הזמנות ספקים",
+            "description": "ניהול ומעקב אחר הזמנות הרכש מהספקים",
+            "newOrder": "הזמנה חדשה",
+            "order": "הזמנה",
+            "supplier": "ספק",
+            "date": "תאריך",
+            "status": "סטטוס",
+            "total": "סה״כ",
+            "actions": "פעולות",
+            "details": "פרטים",
+            "noOrders": "לא נמצאו הזמנות ספקים",
+            "errors": {
+                "loadOrders": "טעינת הזמנות הספקים נכשלה"
+            }
+        },
+        "status": {
+            "draft": "טיוטה",
+            "ordered": "הוזמנה",
+            "partially_received": "סופקה חלקית",
+            "received": "סופקה במלואה",
+            "completed": "הושלמה",
+            "cancelled": "בוטלה"
+        },
+        "edit": {
+            "eyebrow": "הזמנות ספקים",
+            "title": "עריכת הזמנת ספק",
+            "subtitle": "עדכון פרטי ההזמנה, המוצרים, הכמויות והמחירים",
+            "back": "חזרה להזמנה",
+            "loading": "טוען הזמנה...",
+            "orderDetails": "פרטי הזמנה",
+            "supplier": "ספק",
+            "selectSupplier": "בחר ספק",
+            "expectedDeliveryDate": "תאריך אספקה צפוי",
+            "notes": "הערות",
+            "notesPlaceholder": "הערות להזמנה...",
+            "products": "מוצרים בהזמנה",
+            "product": "מוצר",
+            "selectProduct": "בחר מוצר",
+            "addProduct": "הוסף מוצר",
+            "quantity": "כמות",
+            "unitCost": "עלות יחידה",
+            "remove": "הסר",
+            "cancel": "ביטול",
+            "save": "שמור שינויים",
+            "success": "ההזמנה עודכנה בהצלחה",
+            "validation": {
+                "supplierRequired": "יש לבחור ספק",
+                "productRequired": "יש לבחור מוצר"
+            },
+            "errors": {
+                "loadSuppliers": "טעינת הספקים נכשלה",
+                "loadOrder": "טעינת ההזמנה נכשלה",
+                "loadProducts": "טעינת מוצרי הספק נכשלה",
+                "noProducts": "יש להוסיף לפחות מוצר אחד להזמנה",
+                "duplicateProducts": "לא ניתן להוסיף את אותו מוצר יותר מפעם אחת",
+                "update": "עדכון ההזמנה נכשל"
+            }
+        },
+        "legend": {
+            "draft": "טיוטה",
+            "ordered": "הוזמנה",
+            "open": "הזמנה פתוחה",
+            "partial": "סופקה חלקית",
+            "received": "סופקה במלואה"
         }
     }
 }

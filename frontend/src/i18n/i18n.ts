@@ -5,7 +5,7 @@ import { initReactI18next } from "react-i18next";
 import he from "./he.json";
 import en from "./en.json";
 
-
+const savedLanguage = localStorage.getItem("language") || "he"
 
 i18n
    
@@ -19,11 +19,17 @@ i18n
                 translation: en
             }
         },
-        lng: "he",
+        lng: savedLanguage,
+
+        fallbackLng: "he",
 
         interpolation: {
             escapeValue: false
         }
-    })
+    });
+
+    document.documentElement.lang = savedLanguage;
+
+    document.documentElement.dir = savedLanguage == "he" ? "rtl" : "lft";
 
     export default i18n;

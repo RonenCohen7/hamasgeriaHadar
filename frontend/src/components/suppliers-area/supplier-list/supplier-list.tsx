@@ -1,74 +1,235 @@
 import { useEffect, useState } from "react";
-import { useTitle } from "../../utils/UseTitle";
-import "./supplier-list.css";
-import { SupplierModel } from "../../models/supplier-model";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import {
+    FaPlus,
+    FaSearch,
+    FaTruck
+} from "react-icons/fa";
+
+import "./supplier-list.css";
+
+import { useTitle } from "../../utils/UseTitle";
+
+import type { SupplierModel } from "../../models/supplier-model";
+
 import { supplierService } from "../../service/supplierService";
-import { FaPlus, FaSearch , FaTruck} from "react-icons/fa";
+
 import { SupplierCard } from "../supplier-card/supplier-card";
+
 
 export function SupplierList() {
 
+    const { t } = useTranslation();
 
-    useTitle("Suppliers")
-
-    const [supplier, setSupplier] = useState<SupplierModel[]>([]);
-    const [search, setSearch] = useState("");
+    useTitle(
+        t("suppliers.pageTitle")
+    );
 
     const navigate = useNavigate();
 
-    useEffect(()=>{
-        supplierService.getAllSuppliers()
-        .then(setSupplier)
-        .catch(console.log);
-        
-    },[]);
 
-    const filteredSuppliers = supplier.filter(supplier => supplier.supplierName.toLowerCase().includes(search.toLowerCase()));
+    const [suppliers, setSuppliers] = useState<SupplierModel[]>([]);
+
+    const [search, setSearch] = useState("");
 
 
+    // =========================
+    // Load suppliers
+    // =========================
+
+    useEffect(() => {
+
+        supplierService
+            .getAllSuppliers()
+            .then(setSuppliers)
+            .catch(err => {
+
+                console.log(err);
+
+            });
+
+    }, []);
+
+
+    // =========================
+    // Filter suppliers
+    // =========================
+
+    const filteredSuppliers =
+        suppliers.filter(supplier =>
+
+            supplier.supplierName
+                .toLowerCase()
+                .includes(
+                    search.toLowerCase()
+                )
+
+        );
+
+
+    // =========================
+    // JSX
+    // =========================
 
     return (
+
         <section className="suppliers-page">
+
+            {/* Header */}
             <header className="suppliers-header">
-                <div>
+
+                <div className="suppliers-header-content">
+
                     <span className="suppliers-eyebrow">
-                        Suppliers
+
+                        {t(
+                            "suppliers.eyebrow"
+                        )}
+
                     </span>
-                    <h1>Suppliers</h1>
-                    <p>Manage all suppliers of the pub</p>
+
+
+                    <h1>
+
+                        {t(
+                            "suppliers.title"
+                        )}
+
+                    </h1>
+
+
+                    <p>
+
+                        {t(
+                            "suppliers.description"
+                        )}
+
+                    </p>
+
                 </div>
-                <button type="button" className="add-supplier-button" onClick={()=>{
-                    navigate("/supplier/add")
-                }}>
+
+
+                <button
+                    type="button"
+                    className="add-supplier-button"
+                    onClick={() =>
+                        navigate(
+                            "/supplier/add"
+                        )
+                    }
+                >
+
                     <FaPlus />
-                    <span>Add Supplier</span>
+
+                    <span>
+
+                        {t(
+                            "suppliers.addSupplier"
+                        )}
+
+                    </span>
+
                 </button>
+
             </header>
+
+
+            {/* Toolbar */}
             <div className="suppliers-toolbar">
+
+                {/* Search */}
                 <div className="suppliers-search">
-                    <FaSearch/>
-                    <input type="search" placeholder="Search suppliers..." value={search} onChange={(e)=> setSearch(e.target.value)}/>
+
+                    <FaSearch />
+
+                    <input
+                        type="search"
+                        placeholder={t(
+                            "suppliers.searchPlaceholder"
+                        )}
+                        value={search}
+                        onChange={event =>
+                            setSearch(
+                                event.target.value
+                            )
+                        }
+                    />
+
                 </div>
+
+
+                {/* Counter */}
                 <div className="suppliers-count">
-                    <FaTruck/>
+
+                    <FaTruck />
+
                     <div>
+
                         <strong>
-                            {filteredSuppliers.length}
+
+                            {
+                                filteredSuppliers.length
+                            }
+
                         </strong>
+
                         <span>
-                            Total suppliers
+
+                            {t(
+                                "suppliers.totalSuppliers"
+                            )}
+
                         </span>
+
                     </div>
 
                 </div>
 
             </div>
 
+
+            {/* Suppliers */}
             <div className="suppliers-content">
-                {filteredSuppliers.map(supplier => (<SupplierCard key={supplier.idSupplier} supplier={supplier}/>))}
+
+                {filteredSuppliers.length > 0 ? (
+
+                    filteredSuppliers.map(
+                        supplier => (
+
+                            <SupplierCard
+                                key={
+                                    supplier.idSupplier
+                                }
+                                supplier={
+                                    supplier
+                                }
+                            />
+
+                        )
+                    )
+
+                ) : (
+
+                    <div className="suppliers-empty">
+
+                        <FaSearch />
+
+                        <p>
+
+                            {t(
+                                "suppliers.noSuppliersFound"
+                            )}
+
+                        </p>
+
+                    </div>
+
+                )}
 
             </div>
+
         </section>
+
     );
 }

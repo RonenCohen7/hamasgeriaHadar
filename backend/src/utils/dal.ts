@@ -1,4 +1,5 @@
-import mysql2, { PoolOptions, QueryError, QueryResult, SqlValue } from "mysql2";
+import mysql2, {  PoolOptions, QueryError, QueryResult } from "mysql2";
+import { PoolConnection } from "mysql2/promise";
 import { appConfig } from "./app-config";
 
 class Dal {
@@ -24,6 +25,30 @@ class Dal {
             });
 
         });
+    }
+
+
+
+
+
+    public async transaction<T>(action: (connection: PoolConnection) => Promise<T>):Promise<T> {
+
+        const connection = await this.connection.promise().getConnection();
+
+        try {
+            await connection.beginTransaction();
+
+            const result = await action(connection);
+
+            await connection.commit();
+
+            return result;
+        }catch(err){
+            await connection.rollback()
+            throw err;
+        } finally {
+            connection.release()
+        }
     }
 }
 

@@ -220,7 +220,7 @@ export function EditEvent() {
                         </option>
 
                         <option value="completed">
-                            {t("events.status.planned")}
+                            {t("events.status.completed")}
                         </option>
 
                         <option value="cancelled">

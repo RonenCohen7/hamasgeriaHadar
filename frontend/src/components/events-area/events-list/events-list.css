@@ -341,23 +341,23 @@
     font-weight: 600;
 }
 
-.event-status-planned {
-    background: green !important;
-    color: white;
+.event-status.event-status-planned {
+    background-color: green !important;
+    color: white !important;
 }
 
-.event-status-active {
-    background: #ecfdf5;
+.event-status.event-status-active {
+    background-color: #ecfdf5;
     color: #15803d;
 }
 
-.event-status-completed {
-    background: hsl(267, 91%, 53%) !important;
-    color: #475569;
+.event-status.event-status-completed {
+    background-color: #7c3aed !important;
+    color: white !important;
 }
 
-.event-status-cancelled {
-    background: #fef2f2;
+.event-status.event-status-cancelled {
+    background-color: #fef2f2;
     color: #dc2626;
 }
 

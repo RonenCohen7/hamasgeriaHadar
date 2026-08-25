@@ -397,13 +397,33 @@ export function AddProduct() {
 
                             <input
                                 type="file"
+                                accept="image/*"
+                                {...register("image", {
+                                    onChange: handleImageChange
+                                })}
                             />
+
+                            {previewUrl && (
+                                <div className="add-product-image-preview">
+                                    <img
+                                        src={previewUrl}
+                                        alt={t("addProduct.image")}
+                                        />
+                                </div>
+                            )}
 
                         </div>
 
                     </div>
 
                 </div>
+                
+                <button
+                    type="submit"
+                    className="add-product-submit-button"
+                    >
+                        {t("addProduct.save")}
+                    </button>
 
             </form>
 

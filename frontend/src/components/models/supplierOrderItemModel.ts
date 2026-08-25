@@ -1,6 +1,5 @@
 export interface SupplierOrderItemModel {
     idOrderItem: number;
-
     idOrder: number;
 
     idProduct: number;
@@ -8,6 +7,8 @@ export interface SupplierOrderItemModel {
     quantityOrdered: number;
     quantityReceived: number;
 
+    remainingQuantity?: number;
+    
     unitCost: number;
     lineTotal: number;
 
@@ -15,6 +16,8 @@ export interface SupplierOrderItemModel {
 
     productName?:string;
     catalogNumber?: string;
+    productImage?: string;
+    productImageUrl?: string | null;
 }
 
 export interface AddSupplierOrderItemModel {

@@ -26,7 +26,40 @@
     font-size: 30px;
     font-weight: 700;
 }
+.add-order-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 
+    padding: 11px 18px;
+    border: none;
+    border-radius: 10px;
+
+    background: #2563eb;
+    color: white;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.add-order-button:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
+}
+
+.add-order-button:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
 .SupplierOrderList .header button {
     padding: 11px 18px;
 
@@ -139,7 +172,123 @@
     color: white;
     transform: translateY(-1px);
 }
+/* =========================
+   ORDER STATUS
+========================= */
 
+.order-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 110px;
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* Draft */
+.status-draft {
+    background: #ffedd5;
+    color: #c2410c;
+    border: 1px solid #fdba74;
+}
+
+/* Ordered */
+.status-ordered {
+    background: #ffedd5;
+    color: #c2410c;
+    border: 1px solid #fb923c;
+}
+
+/* Partially Received */
+.status-partially-received {
+    background: #fef9c3;
+    color: #a16207;
+    border: 1px solid #fde047;
+}
+/* =========================
+   STATUS LEGEND
+========================= */
+
+.order-status-legend {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 18px;
+
+    margin: 14px 0 10px;
+    padding: 10px 14px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+
+    background: #ffffff;
+
+    box-sizing: border-box;
+}
+
+.legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    color: #475569;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.legend-dot {
+    width: 11px;
+    height: 11px;
+
+    display: inline-block;
+
+    border-radius: 50%;
+}
+
+/* Draft + Ordered */
+.legend-open {
+    background: #fb923c;
+}
+.legend-draft {
+    background: hsl(271, 96%, 61%);
+}
+/* Partially Received */
+.legend-partial {
+    background: #facc15;
+}
+
+/* Received */
+.legend-received {
+    background: #ef4444;
+}
+
+@media (max-width: 650px) {
+
+    .order-status-legend {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        gap: 10px 16px;
+    }
+}
+/* Received */
+.status-received {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fca5a5;
+}
+
+/* Unknown status */
+.status-default {
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+}
 @media (max-width: 900px) {
 
     .SupplierOrderList {

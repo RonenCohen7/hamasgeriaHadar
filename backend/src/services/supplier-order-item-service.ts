@@ -13,11 +13,13 @@ class SupplierOrderItemService {
                 soi.id_product AS idProduct,
                 soi.quantity_ordered AS quantityOrdered,
                 soi.quantity_received AS quantityReceived,
+                (soi.quantity_ordered - soi.quantity_received) AS remainingQuantity,
                 soi.unit_cost AS unitCost,
                 soi.line_total AS lineTotal,
                 soi.created_at AS createdAt,
                 p.product_name AS productName,
-                p.catalog_number AS catalogNumber
+                p.catalog_number AS catalogNumber,
+                p.image_name AS productImageUrl
             FROM supplier_order_items AS soi
             JOIN products AS p
                 ON soi.id_product = p.id_product
@@ -41,11 +43,13 @@ class SupplierOrderItemService {
             soi.id_product AS idProduct,
             soi.quantity_ordered AS quantityOrdered,
             soi.quantity_received AS quantityReceived,
+            (soi.quantity_ordered - soi.quantity_received) AS remainingQuantity,
             soi.unit_cost AS unitCost,
             soi.line_total AS lineTotal,
             soi.created_at AS createdAt,
             p.product_name AS productName,
-            p.catalog_number AS catalogNumber
+            p.catalog_number AS catalogNumber,
+            p.image_name AS productImageUrl
         FROM supplier_order_items AS soi
         JOIN products AS p
             ON soi.id_product = p.id_product
@@ -72,11 +76,13 @@ class SupplierOrderItemService {
                 soi.id_product AS idProduct,
                 soi.quantity_ordered AS quantityOrdered,
                 soi.quantity_received AS quantityReceived,
+                 (soi.quantity_ordered - soi.quantity_received) AS remainingQuantity,
                 soi.unit_cost AS unitCost,
                 soi.line_total AS lineTotal,
                 soi.created_at AS createdAt,
                 p.product_name AS productName,
-                p.catalog_number AS catalogNumber
+                p.catalog_number AS catalogNumber,
+                p.image_name AS productImageUrl
             FROM supplier_order_items AS soi
             JOIN products AS p
                 ON soi.id_product = p.id_product

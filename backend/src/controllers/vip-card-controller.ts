@@ -13,9 +13,21 @@ class VipCardController {
 
         this.router.get("/api/vip-cards", this.getAllVipCards);
 
-        this.router.get("/api/vip-cards/:id", this.getVipCardByCustomer); //edit customer
+        this.router.get("/api/vip-cards/number/:cardNumber", this.getCardByCardNumber);
 
         this.router.get("/api/vip-cards/card/:id", this.getVipCardById); //edit card
+
+
+
+        this.router.post("/api/vip-cards/:id/verify-phone", this.verifyCardPhone);
+
+        this.router.post("/api/vip-cards/:id/recharge", this.rechargeBalance);
+
+        this.router.post("/api/vip-cards/:id/charge", this.chargeBalance);
+
+        this.router.get("/api/vip-cards/:id", this.getVipCardByCustomer); //edit customer
+
+
 
         this.router.post("/api/vip-cards", this.createVipCard);
 
@@ -23,13 +35,13 @@ class VipCardController {
 
         this.router.delete("/api/vip-cards/:id", this.softDeleteVipCard);
 
-        this.router.post("/api/vip-cards/:id/recharge", this.rechargeBalance);
 
-        this.router.post("/api/vip-cards/:id/charge", this.chargeBalance);
 
-        this.router.get("/api/vip-cards/number/:cardNumber", this.getCardByCardNumber);
 
-        this.router.post("/api/vip-cards/:id/verify-phone", this.verifyCardPhone);
+
+
+
+
 
     }
 
@@ -69,7 +81,24 @@ class VipCardController {
     //Get One Card
     private async getVipCardByCustomer(request: Request, response: Response, next: NextFunction): Promise<void> {
         try {
+
+            console.log("== GET Card By Number === ");
+            console.log("params: ", request.params);
+
+            const cardNumber = String(request.params.cardNumber).trim();
+
+            console.log("cardNumber:", cardNumber);
+            console.log("typeof:", typeof cardNumber);
+            console.log("length:", cardNumber.length);
+
+            if(!cardNumber) {
+                response.status(400).json({
+                    message: "Card number is required"
+                })
+            }
+
             const idCustomer = Number(request.params.id);
+
             if (!Number.isInteger(idCustomer) || idCustomer <= 0) {
                 response.status(400).json({
                     message: "Customer id must be a positive number"
@@ -77,6 +106,9 @@ class VipCardController {
                 return;
             }
             const card = await vipCardService.getVipCardByCustomer(idCustomer);
+            
+            console.log("FOUND CARD:", card);
+
             response.json(card);
 
         } catch (err: any) {

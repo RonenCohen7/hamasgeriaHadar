@@ -45,7 +45,7 @@ export function Menu() {
     }, []);
 
 
-    console.log("Current user:", user);
+    // console.log("Current user:", user);
     const navigate = useNavigate();
 
     function logout() {

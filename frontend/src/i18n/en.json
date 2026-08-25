@@ -81,7 +81,10 @@
         "edit": {
             "management": "Event Management",
             "title": "Edit Event",
-            "backToEvents": "Back to Events"
+            "backToEvents": "Back to Events",
+            "cancel": "Cancel",
+            "saveChanges": "Save Changes",
+            "saving": "Saving..."
         },
         "details": {
             "title": "Event Details",
@@ -431,6 +434,101 @@
                 "description": "Discover special dishes from our kitchen.",
                 "alt": "Hadar Pub chef"
             }
+        }
+    },
+    "supplierOrderDetails": {
+        "receiveDelivery": "Receive Delivery",
+        "order": "Order",
+        "ordered": "Ordered",
+        "received": "Received",
+        "remaining": "Remaining",
+        "quantityReceived": "Quantity Received",
+        "quantityDamaged": "Quantity Damaged",
+        "allProductsReceived": "All products have been fully received",
+        "confirmDelivery": "Confirm Delivery",
+        "purchaseOrder": "Purchase Order",
+        "description": "Supplier order information and delivery status",
+        "back": "Back",
+        "sendOrder": "Send Order",
+        "complete": "Complete",
+        "supplier": "Supplier",
+        "orderDate": "Order Date",
+        "expectedDelivery": "Expected Delivery",
+        "notSpecified": "Not specified",
+        "status": "Status",
+        "totalCost": "Total Cost",
+        "createdBy": "Created By",
+        "unknown": "Unknown",
+        "notes": "Notes"
+    },
+    "supplierOrders": {
+        "list": {
+            "pageTitle": "Supplier Orders",
+            "eyebrow": "Purchase Order Management",
+            "title": "Supplier Orders",
+            "description": "Manage and track purchase orders from suppliers",
+            "newOrder": "New Order",
+            "order": "Order",
+            "supplier": "Supplier",
+            "date": "Date",
+            "status": "Status",
+            "total": "Total",
+            "actions": "Actions",
+            "details": "Details",
+            "noOrders": "No supplier orders found",
+            "errors": {
+                "loadOrders": "Failed to load supplier orders"
+            }
+        },
+        "status": {
+            "draft": "Draft",
+            "ordered": "Ordered",
+            "partially_received": "Partially Received",
+            "received": "Received",
+            "completed": "Completed",
+            "cancelled": "Cancelled"
+        },
+        "edit": {
+            "eyebrow": "Supplier Orders",
+            "title": "Edit Supplier Order",
+            "subtitle": "Update order details, products, quantities and prices",
+            "back": "Back to Order",
+            "loading": "Loading order...",
+            "orderDetails": "Order Details",
+            "supplier": "Supplier",
+            "selectSupplier": "Select Supplier",
+            "expectedDeliveryDate": "Expected Delivery Date",
+            "notes": "Notes",
+            "notesPlaceholder": "Order notes...",
+            "products": "Products in Order",
+            "product": "Product",
+            "selectProduct": "Select Product",
+            "addProduct": "Add Product",
+            "quantity": "Quantity",
+            "unitCost": "Unit Cost",
+            "remove": "Remove",
+            "cancel": "Cancel",
+            "save": "Save Changes",
+            "success": "Order updated successfully",
+            "validation": {
+                "supplierRequired": "Please select a supplier",
+                "productRequired": "Please select a product"
+            },
+            "errors": {
+                "loadSuppliers": "Failed to load suppliers",
+                "loadOrder": "Failed to load supplier order",
+                "loadProducts": "Failed to load supplier products",
+                "noProducts": "Please add at least one product",
+                "duplicateProducts": "The same product cannot be added more than once",
+                "update": "Failed to update supplier order"
+            }
+        },
+        "legend": {
+            "draft": "Draft",
+            "open": "Open Order",
+            "ordered": "Ordered",
+            "partial": "Partially Received",
+            "received": "Fully Received"
         }
     }
 }

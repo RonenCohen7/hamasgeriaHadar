@@ -1,216 +1,264 @@
+/* =========================================================
+   ADD PRODUCT PAGE
+========================================================= */
+
 .AddProduct {
     min-height: 100%;
-    padding: 32px 24px 100px;
+    padding: 28px 24px 80px;
     box-sizing: border-box;
-
     background: #f4f7fa;
 }
 
 .AddProduct h1 {
-    margin: 0 0 24px;
+    margin: 0 0 22px;
     text-align: center;
+
     color: #1f2937;
-    font-size: 32px;
+    font-size: 30px;
     font-weight: 700;
 }
+
+
+/* =========================================================
+   FORM
+========================================================= */
 
 .add-form {
     width: 100%;
     max-width: 720px;
+
     margin: 0 auto;
-    padding: 30px;
+    padding: 26px 30px;
+
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px 22px;
+    grid-template-columns: minmax(150px, 0.8fr) minmax(260px, 1.5fr);
+    gap: 14px 22px;
+
+    box-sizing: border-box;
+
     background: #ffffff;
     border: 1px solid #dfe7ee;
     border-radius: 18px;
-    box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08);
+
+    box-shadow:
+        0 12px 35px rgba(15, 23, 42, 0.08);
 }
-.add-form {
-    margin-bottom: 30px;
-}
-.add-form label {
-    grid-column: span 1;
-    margin-bottom: -10px;
+
+
+/* =========================================================
+   LABELS
+========================================================= */
+
+.add-form > label {
+    align-self: center;
+
+    margin: 0;
+
     color: #374151;
+
     font-size: 14px;
     font-weight: 600;
 }
 
-.add-form input,
-.add-form select {
+
+/* =========================================================
+   INPUTS / SELECT
+========================================================= */
+
+.add-form > input,
+.add-form > select {
     width: 100%;
-    height: 46px;
+    height: 44px;
+
     padding: 0 13px;
+
     box-sizing: border-box;
+
     color: #1f2937;
     background: #f9fbfc;
+
     border: 1px solid #cfdbe5;
     border-radius: 10px;
+
     outline: none;
+
     font-size: 15px;
+
     transition:
         border-color 0.2s ease,
         box-shadow 0.2s ease,
         background 0.2s ease;
 }
 
-.add-form input:focus,
-.add-form select:focus {
+.add-form > input:focus,
+.add-form > select:focus {
     background: #ffffff;
+
     border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
-.add-form input[type="file"] {
-    height: auto;
-    padding: 10px;
-    cursor: pointer;
-}
 
-.add-form input[type="file"]::file-selector-button {
-    margin-right: 12px;
-    padding: 9px 14px;
-    color: #ffffff;
-    background: #334155;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-}
+/* =========================================================
+   EXTRA FIELDS
+========================================================= */
 
-.add-form input[type="file"]::file-selector-button:hover {
-    background: #1e293b;
-}
-
-.image-preview {
+.add-form > .extra-fields-row {
     grid-column: 1 / -1;
+
     width: 100%;
-    max-width: 300px;
-    height: 230px;
-    margin: 4px auto;
-    overflow: hidden;
-    background: #ffffff;
-    border: 1px solid #d8e2ea;
-    border-radius: 14px;
-}
 
-.image-preview img {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-}
-
-.form-button {
-    grid-column: 1 / -1;
     display: flex;
-    justify-content: center;
-    gap: 14px;
-    margin-top: 12px;
-}
+    align-items: flex-start;
 
-.form-button button {
-    min-width: 140px;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 15px;
-    font-weight: 700;
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease,
-        opacity 0.2s ease;
-}
+    gap: 24px;
 
-.form-button button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.15);
-}
+    margin-top: 6px;
 
-.form-button button[type="submit"] {
-    color: #ffffff;
-    background: #16a34a;
-}
-
-.form-button button[type="button"] {
-    color: #ffffff;
-    background: #64748b;
-}
-
-.form-button button:active {
-    transform: translateY(0);
+    box-sizing: border-box;
 }
 
 
-
-.extra-fields-row {
-    display: flex;
-    align-items: end;
-    gap: 25px;
-}
-
-
+/* Featured */
 
 .extra-field {
+    min-width: 100px;
+
     display: flex;
     flex-direction: column;
+
+    gap: 10px;
+}
+
+.extra-field > label {
+    margin: 0;
+
+    color: #374151;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* Your JSX currently contains another extra-fields-row inside */
+
+.extra-fields-row > .extra-fields-row {
+    flex: 1;
+
+    display: grid;
+    grid-template-columns: minmax(110px, 160px) minmax(220px, 1fr);
+
+    align-items: start;
+
+    gap: 18px;
+}
+
+
+/* Empty helper currently present in JSX */
+
+.featured-group {
+    display: none;
+}
+
+
+/* =========================================================
+   DISPLAY ORDER
+========================================================= */
+
+.display-order-group {
+    display: flex;
+    flex-direction: column;
+
     gap: 8px;
 }
 
-.extra-field label {
+.display-order-group label {
+    margin: 0;
+
+    color: #374151;
+
+    font-size: 13px;
     font-weight: 600;
 }
+
+.display-order-group input {
+    width: 100%;
+    height: 42px;
+
+    padding: 0 12px;
+
+    box-sizing: border-box;
+
+    background: #f9fbfc;
+
+    border: 1px solid #cfdbe5;
+    border-radius: 9px;
+
+    outline: none;
+}
+
+
+/* =========================================================
+   IMAGE FIELD
+========================================================= */
 
 .image-field {
+    min-width: 0;
+    width: 100%;
+
     display: flex;
     flex-direction: column;
-    gap: 8px;
 
-    width: 220px;
+    gap: 8px;
 }
 
-.image-field label {
+.image-field > label {
     margin: 0;
+
+    color: #374151;
+
+    font-size: 13px;
     font-weight: 600;
 }
+
+
+/* File input */
 
 .image-field input[type="file"] {
     width: 100%;
-    height: 46px;
+    height: 42px;
 
-    padding: 5px 6px;
+    padding: 4px 6px;
 
-    display: flex;
-    align-items: center;
+    box-sizing: border-box;
 
     background: #f9fbfc;
     color: #64748b;
 
     border: 1px solid #cfdbe5;
-    border-radius: 10px;
+    border-radius: 9px;
 
-    font-size: 13px;
+    font-size: 12px;
 
     cursor: pointer;
 }
 
 .image-field input[type="file"]::file-selector-button {
-    height: 34px;
+    height: 32px;
 
-    margin-inline-end: 10px;
-    padding: 0 14px;
-
-    background: #066c8e;
-    color: #ffffff;
+    margin-inline-end: 8px;
+    padding: 0 12px;
 
     border: none;
     border-radius: 7px;
 
+    background: #066c8e;
+    color: #ffffff;
+
     font-family: inherit;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
 
     cursor: pointer;
@@ -229,26 +277,135 @@
 }
 
 
-/* SWITCH */
+/* =========================================================
+   IMAGE PREVIEW
+   IMPORTANT:
+   This class matches your JSX exactly:
+   add-product-image-preview
+========================================================= */
+
+.add-product-image-preview {
+    width: 110px;
+    height: 110px;
+
+    margin-top: 4px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border: 1px solid #d8e2ea;
+    border-radius: 12px;
+
+    box-shadow:
+        0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+.add-product-image-preview img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: contain;
+}
+
+
+/* =========================================================
+   SUBMIT BUTTON
+========================================================= */
+
+.add-product-submit-button {
+    grid-column: 1 / -1;
+
+    width: 100%;
+    height: 46px;
+
+    margin-top: 8px;
+    padding: 0 20px;
+
+    box-sizing: border-box;
+
+    border: none;
+    border-radius: 10px;
+
+    background: #2563eb;
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.add-product-submit-button:hover {
+    background: #1d4ed8;
+
+    box-shadow:
+        0 6px 16px rgba(37, 99, 235, 0.22);
+}
+
+.add-product-submit-button:active {
+    transform: translateY(1px);
+}
+
+.add-product-submit-button:focus {
+    outline: none;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.18);
+}
+
+.add-product-submit-button:disabled {
+    opacity: 0.6;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   FEATURED SWITCH
+========================================================= */
 
 .switch {
     position: relative;
+
     width: 52px;
     height: 28px;
+
+    flex-shrink: 0;
 }
 
 .switch input {
-    opacity: 0;
+    position: absolute;
+
     width: 0;
     height: 0;
+
+    opacity: 0;
 }
 
 .slider {
     position: absolute;
+
     inset: 0;
+
     background: #cbd5e1;
+
     border-radius: 999px;
+
     cursor: pointer;
+
     transition: 0.25s;
 }
 
@@ -263,12 +420,14 @@
     left: 3px;
     top: 3px;
 
-    background: white;
+    background: #ffffff;
+
     border-radius: 50%;
 
-    transition: 0.25s;
+    box-shadow:
+        0 2px 6px rgba(0, 0, 0, 0.18);
 
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    transition: 0.25s;
 }
 
 .switch input:checked + .slider {
@@ -280,71 +439,138 @@
 }
 
 
-/* Compact layout for laptop screens */
+/* =========================================================
+   RTL
+========================================================= */
+
+.AddProduct[dir="rtl"] .add-form {
+    direction: rtl;
+}
+
+.AddProduct[dir="rtl"] .add-form > label {
+    text-align: right;
+}
+
+.AddProduct[dir="rtl"] .extra-field,
+.AddProduct[dir="rtl"] .display-order-group,
+.AddProduct[dir="rtl"] .image-field {
+    text-align: right;
+}
+
+
+/* =========================================================
+   LAPTOP / LOWER HEIGHT
+========================================================= */
+
 @media (min-width: 701px) and (max-height: 900px) {
 
     .AddProduct {
-        min-height: 100%;
-        padding: 12px 24px 18px;
-        box-sizing: border-box;
-        overflow: hidden;
+        padding: 12px 24px 24px;
     }
 
     .AddProduct h1 {
-        margin: 0 0 10px;
+        margin-bottom: 10px;
+
         font-size: 27px;
         line-height: 1.1;
     }
 
     .add-form {
         max-width: 720px;
+
         padding: 16px 24px;
 
-        gap: 7px 22px;
+        gap: 8px 20px;
+
         border-radius: 16px;
     }
 
-    .add-form label {
-        margin-bottom: 0;
-        align-self: center;
-
+    .add-form > label {
         font-size: 13px;
-        line-height: 1;
     }
 
-    .add-form input,
-    .add-form select {
+    .add-form > input,
+    .add-form > select {
         height: 36px;
+
         padding: 0 11px;
 
         font-size: 14px;
+
         border-radius: 8px;
     }
 
-    .add-form input[type="file"] {
+    .add-form > .extra-fields-row {
+        margin-top: 2px;
+    }
+
+    .display-order-group input {
+        height: 36px;
+    }
+
+    .image-field input[type="file"] {
         height: 38px;
-        padding: 4px;
     }
 
-    .add-form input[type="file"]::file-selector-button {
-        margin-right: 8px;
-        padding: 6px 10px;
+    .image-field input[type="file"]::file-selector-button {
+        height: 28px;
+
+        padding: 0 9px;
     }
 
-    .image-preview {
-        max-width: 150px;
+    .add-product-image-preview {
+        width: 85px;
         height: 85px;
-        margin: 2px auto;
     }
 
-    .form-button {
-        margin-top: 3px;
-        gap: 10px;
-    }
+    .add-product-submit-button {
+        height: 40px;
 
-    .form-button button {
-        min-width: 125px;
-        padding: 9px 16px;
+        margin-top: 4px;
+
         font-size: 14px;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .AddProduct {
+        padding: 18px 12px 60px;
+    }
+
+    .add-form {
+        grid-template-columns: 1fr;
+
+        padding: 20px;
+
+        gap: 9px;
+    }
+
+    .add-form > label,
+    .add-form > input,
+    .add-form > select,
+    .add-form > .extra-fields-row,
+    .add-product-submit-button {
+        grid-column: 1;
+    }
+
+    .add-form > .extra-fields-row {
+        flex-direction: column;
+    }
+
+    .extra-fields-row > .extra-fields-row {
+        width: 100%;
+
+        grid-template-columns: 1fr;
+    }
+
+    .add-product-image-preview {
+        width: 100px;
+        height: 100px;
     }
 }

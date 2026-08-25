@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 
-import { Home } from "../../pages-area/home/home";
+
 import { About } from "../../pages-area/about/about";
 import { ProductList } from "../../product-area/product-list/product-list";
 import { ProductDetails } from "../../product-area/product-details/product-details";
@@ -50,6 +50,7 @@ import { ExperienceDetails } from "../../experiencs-area/experience-details/expe
 import { ExperienceEdit } from "../../experiencs-area/experience-edit/experience-edit";
 import { AddExperience } from "../../experiencs-area/add-experience/add-experience";
 import { VipReport } from "../../customers-area/vip-report/vip-report";
+import { EditSupplierOrder } from "../../suppliers-area/edit-supplier-order/edit-supplier-order";
 
 
 
@@ -96,6 +97,8 @@ export function Routing() {
             <Route path="/supplier-orders/add" element={<AuthGuard><AddSupplierOrder /></AuthGuard>} />
 
             <Route path="/supplier-orders/:id" element={<AuthGuard><SupplierOrderDetails /></AuthGuard>} />
+
+            <Route path="/supplier-orders/:id/edit" element={<AuthGuard><EditSupplierOrder /></AuthGuard>} />
 
 
 

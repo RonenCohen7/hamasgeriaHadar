@@ -228,17 +228,20 @@ class ProductService {
         }
         const existingProduct = await this.getOneProduct(product.idProduct);
         if (product.image) {
-            if (existingProduct.imageName) {
-                await fileSaver.delete(existingProduct.imageName, appConfig.productImages);
-            }
+            //1 save nae image
+            const newImageName = await fileSaver.add(
+                product.image,
+                appConfig.productImages
+            )
 
-
-            product.imageName = await fileSaver.add(product.image, appConfig.productImages);
-
+            //2 keep the new filename for db update
+            product.imageName = newImageName;
         }
         else {
             product.imageName = existingProduct.imageName;
         }
+
+        
 
 
         const sql = `
@@ -279,6 +282,17 @@ class ProductService {
 
         if (info.affectedRows === 0) {
             throw new ResourceNotFoundError(product.idProduct)
+        }
+
+
+        //Delete old image
+        if(
+            product.image && existingProduct.imageName && existingProduct.imageName !== product.imageName
+        ) {
+            await fileSaver.delete(
+                existingProduct.imageName,
+                appConfig.productImages
+            )
         }
         return product;
     }

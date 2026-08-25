@@ -272,6 +272,439 @@
     font-weight: 750;
 }
 
+/*====================================================
+            Receive Modal
+===================================================*/
+
+.edit-quantity-modal-content:has(h3) {
+    max-width: 680px;
+}
+
+/* Product receipt block */
+.edit-quantity-modal-content > div:has(h3) {
+    margin-top: 18px;
+    padding: 16px;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px 16px;
+
+    border: 1px solid #dce8f5;
+    border-radius: 13px;
+
+    background: #f8fbff;
+}
+
+/* Product name */
+.edit-quantity-modal-content > div:has(h3) h3 {
+    grid-column: 1 / -1;
+
+    margin: 0 0 4px;
+
+    color: #17324a;
+    font-size: 17px;
+}
+
+/* Ordered / Received / Remaining */
+.edit-quantity-modal-content > div:has(h3) p {
+    margin: 0;
+
+    padding: 10px;
+
+    text-align: center;
+
+    border: 1px solid #e1ebf5;
+    border-radius: 9px;
+
+    background: #ffffff;
+}
+
+/* Input labels */
+.edit-quantity-modal-content > div:has(h3) label {
+    margin-top: 6px;
+
+    color: #587084;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* Received label */
+.edit-quantity-modal-content > div:has(h3) label:nth-of-type(1) {
+    grid-column: 1;
+}
+
+/* Damaged label */
+.edit-quantity-modal-content > div:has(h3) label:nth-of-type(2) {
+    grid-column: 2;
+}
+
+/* Received input */
+.edit-quantity-modal-content > div:has(h3) input:nth-of-type(1) {
+    grid-column: 1;
+}
+
+/* Damaged input */
+.edit-quantity-modal-content > div:has(h3) input:nth-of-type(2) {
+    grid-column: 2;
+}
+
+/* Inputs */
+.edit-quantity-modal-content > div:has(h3) input {
+    min-height: 42px;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    background: #ffffff;
+}
+
+/* =========================================================
+   RECEIVE DELIVERY PANEL
+========================================================= */
+
+.supplier-order-receive-panel {
+    min-width: 0;
+    max-height: calc(100vh - 220px);
+
+    padding: 24px;
+
+    display: flex;
+    flex-direction: column;
+
+    border: 1px solid #dce8f5;
+    border-radius: 18px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 8px 22px rgba(42, 105, 180, 0.06);
+}
+
+.supplier-order-receive-panel h2 {
+    margin: 0 0 6px;
+
+    color: #174f59;
+
+    font-size: 26px;
+    line-height: 1.1;
+}
+
+.supplier-order-receive-panel > p {
+    margin: 0 0 18px;
+
+    color: #6b8092;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   RECEIVE DELIVERY ITEM
+========================================================= */
+
+.receive-delivery-item {
+    min-width: 0;
+
+    padding: 16px;
+    margin-bottom: 14px;
+
+    display: grid;
+    grid-template-columns: 82px minmax(0, 1fr);
+    gap: 14px;
+
+    border: 1px solid #dce8f5;
+    border-radius: 14px;
+
+    background: #f8fbff;
+
+    box-sizing: border-box;
+}
+
+
+/* Product image */
+
+.receive-delivery-product-image {
+    width: 82px;
+    height: 82px;
+
+    grid-row: 1 / span 2;
+
+    object-fit: contain;
+
+    padding: 6px;
+
+    border: 1px solid #d7e4f2;
+    border-radius: 12px;
+
+    background: #ffffff;
+
+    box-sizing: border-box;
+}
+
+
+/* Product name */
+
+.receive-delivery-item h3 {
+    margin: 0;
+
+    align-self: center;
+
+    color: #17324a;
+
+    font-size: 17px;
+    font-weight: 800;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   ORDER / RECEIVED / REMAINING
+========================================================= */
+
+.receive-delivery-stat {
+    grid-column: 1 / -1;
+
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.receive-delivery-stat span {
+    min-width: 0;
+
+    padding: 10px 8px;
+
+    text-align: center;
+
+    border: 1px solid #e1ebf5;
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #587084;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   RECEIVE INPUTS
+========================================================= */
+
+.receive-delivery-stat label {
+    margin-top: 4px;
+
+    color: #587084;
+
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.receive-delivery-stat input {
+    width: 100%;
+    min-width: 0;
+    min-height: 40px;
+
+    padding: 8px 10px;
+
+    border: 1px solid #c9d7e8;
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    color: #17324a;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    box-sizing: border-box;
+
+    outline: none;
+}
+
+.receive-delivery-stat input:focus {
+    border-color: #6aa8ef;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.08);
+}
+
+
+/* Labels + inputs should use two columns */
+
+.receive-delivery-stat label:nth-of-type(1),
+.receive-delivery-stat input:nth-of-type(1) {
+    grid-column: 1 / 2;
+}
+
+.receive-delivery-stat label:nth-of-type(2),
+.receive-delivery-stat input:nth-of-type(2) {
+    grid-column: 2 / 3;
+}
+
+
+/* =========================================================
+   CONFIRM BUTTON
+========================================================= */
+
+.supplier-order-receive-panel > button {
+    width: 100%;
+    min-height: 44px;
+
+    margin-top: auto;
+
+    border: none;
+    border-radius: 11px;
+
+    background: #2563eb;
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.supplier-order-receive-panel > button:hover {
+    transform: translateY(-1px);
+
+    background: #1d4ed8;
+
+    box-shadow:
+        0 8px 16px rgba(37, 99, 235, 0.18);
+}
+
+
+/* =========================================================
+   MANY PRODUCTS
+========================================================= */
+
+.supplier-order-receive-panel {
+    overflow: hidden;
+}
+
+.supplier-order-receive-panel .receive-delivery-item {
+    flex-shrink: 0;
+}
+
+/* אם יהיו הרבה מוצרים, הפאנל עצמו יגלול */
+.supplier-order-receive-panel {
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+
+    .supplier-order-receive-panel {
+        max-height: none;
+    }
+}
+
+@media (max-width: 700px) {
+
+    .receive-delivery-item {
+        grid-template-columns: 64px minmax(0, 1fr);
+    }
+
+    .receive-delivery-product-image {
+        width: 64px;
+        height: 64px;
+    }
+
+    .receive-delivery-stat {
+        grid-template-columns: 1fr;
+    }
+
+    .receive-delivery-stat label,
+    .receive-delivery-stat input {
+        grid-column: 1 !important;
+    }
+}
+
+
+
+.edit-order-button {
+    padding: 10px 18px;
+    border: 1px solid #2563eb;
+    border-radius: 10px;
+    background: white;
+    color: #2563eb;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.edit-order-button:hover {
+    background: #2563eb;
+    color: white;
+}
+/* ============================= */
+/* Supplier Order Split Workspace */
+/* ============================= */
+
+.supplier-order-workspace {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(380px, 0.8fr);
+    gap: 20px;
+    align-items: start;
+}
+
+.supplier-order-left-panel {
+    min-width: 0;
+}
+
+.supplier-order-receive-panel {
+    min-width: 0;
+    padding: 24px;
+    background: #ffffff;
+    border: 1px solid #d9e6f7;
+    border-radius: 18px;
+}
+
+@media (max-width: 1100px) {
+    .supplier-order-workspace {
+        grid-template-columns: 1fr;
+    }
+}
+/* Mobile */
+@media (max-width: 700px) {
+
+    .edit-quantity-modal-content:has(h3) {
+        max-width: 100%;
+    }
+
+    .edit-quantity-modal-content > div:has(h3) {
+        grid-template-columns: 1fr;
+    }
+
+    .edit-quantity-modal-content > div:has(h3) h3,
+    .edit-quantity-modal-content > div:has(h3) label,
+    .edit-quantity-modal-content > div:has(h3) input {
+        grid-column: 1;
+    }
+}
+
+
+
+
+
+
 
 /* =========================================================
    STATUS
@@ -567,7 +1000,17 @@
     font-weight: 800;
 }
 
+.receive-delivery-product-image {
+    width: 72px;
+    height: 72px;
 
+    object-fit: cover;
+
+    border-radius: 10px;
+    border: 1px solid #dce8f5;
+
+    background: #ffffff;
+}
 /* =========================================================
    ACTION BUTTONS
 ========================================================= */

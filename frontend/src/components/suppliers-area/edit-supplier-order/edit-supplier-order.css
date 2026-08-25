@@ -1,0 +1,402 @@
+.EditSupplierOrder {
+    width: 100%;
+    min-height: 100%;
+    padding: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background: #f5f7fa;
+    box-sizing: border-box;
+}
+
+.edit-order-form {
+    width: 100%;
+    max-width: 1050px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    padding: 28px;
+    background: #ffffff;
+    border: 1px solid #dbeafe;
+    border-radius: 20px;
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+    box-sizing: border-box;
+}
+
+/* =========================
+   Header
+========================= */
+
+.edit-order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.edit-order-eyebrow {
+    display: block;
+    margin-bottom: 6px;
+    color: #2563eb;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.edit-order-title {
+    margin: 0;
+    color: #174f59;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.edit-order-subtitle {
+    margin: 8px 0 0;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.edit-order-back-button {
+    min-height: 42px;
+    padding: 0 16px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #334155;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.edit-order-back-button:hover {
+    background: #f1f5f9;
+    transform: translateY(-1px);
+}
+
+/* =========================
+   Sections
+========================= */
+
+.edit-order-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+    border: 1px solid #dbe7f3;
+    border-radius: 16px;
+    background: #fbfdff;
+    box-sizing: border-box;
+}
+
+.edit-order-section-title {
+    margin: 0;
+    color: #174f59;
+    font-size: 21px;
+    font-weight: 700;
+}
+
+/* =========================
+   Fields
+========================= */
+
+.edit-order-field {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.edit-order-label,
+.edit-order-row-label {
+    color: #334155;
+    font-size: 13px;
+    font-weight: 650;
+}
+
+.edit-order-input,
+.edit-order-textarea {
+    width: 100%;
+    padding: 11px 13px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #172b3a;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.edit-order-input {
+    min-height: 44px;
+}
+
+.edit-order-textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.edit-order-input:focus,
+.edit-order-textarea:focus {
+    border-color: #4f8fd9;
+    box-shadow: 0 0 0 3px rgba(79, 143, 217, 0.14);
+}
+
+.edit-order-error {
+    color: #dc2626;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* =========================
+   Products Header
+========================= */
+
+.edit-order-products-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.edit-order-add-product-button {
+    min-height: 42px;
+    padding: 0 17px;
+    border: 1px solid rgba(124, 58, 237, 0.35);
+    border-radius: 10px;
+    background: #ffffff;
+    color: #2563eb;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.edit-order-add-product-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    background: #f8f7ff;
+    box-shadow: 0 10px 20px rgba(124, 58, 237, 0.15);
+}
+
+.edit-order-add-product-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* =========================
+   Product Rows
+========================= */
+
+.edit-order-items {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.edit-order-row {
+    width: 100%;
+    display: grid;
+    grid-template-columns:
+        minmax(220px, 1.5fr)
+        minmax(110px, 0.5fr)
+        minmax(130px, 0.6fr)
+        auto;
+    gap: 12px;
+    align-items: end;
+    padding: 14px;
+    border: 1px solid #dbe7f3;
+    border-radius: 14px;
+    background: #f8fbff;
+    box-sizing: border-box;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+.edit-order-row:hover {
+    transform: translateY(-1px);
+    border-color: #b8d5f6;
+    box-shadow: 0 8px 18px rgba(42, 105, 180, 0.08);
+}
+
+.edit-order-row-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.edit-order-remove-button {
+    min-height: 44px;
+    padding: 0 14px;
+    border: 1px solid rgba(220, 38, 38, 0.32);
+    border-radius: 10px;
+    background: #ffffff;
+    color: #dc2626;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: 0.2s ease;
+}
+
+.edit-order-remove-button:hover {
+    transform: translateY(-2px);
+    background: #dc2626;
+    color: #ffffff;
+    box-shadow: 0 8px 16px rgba(220, 38, 38, 0.2);
+}
+
+/* =========================
+   Actions
+========================= */
+
+.edit-order-actions {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    padding-top: 18px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.edit-order-save-button,
+.edit-order-cancel-button {
+    min-width: 135px;
+    min-height: 44px;
+    padding: 0 18px;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.edit-order-save-button {
+    border: 1px solid #2563eb;
+    background: #2563eb;
+    color: #ffffff;
+}
+
+.edit-order-save-button:hover {
+    transform: translateY(-2px);
+    background: #1d4ed8;
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.22);
+}
+
+.edit-order-cancel-button {
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    color: #475569;
+}
+
+.edit-order-cancel-button:hover {
+    transform: translateY(-2px);
+    background: #f1f5f9;
+}
+
+/* =========================
+   Loading
+========================= */
+
+.edit-order-loading {
+    margin: 40px auto;
+    padding: 20px 30px;
+    color: #174f59;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+/* =========================
+   Tablet
+========================= */
+
+@media (max-width: 850px) {
+
+    .EditSupplierOrder {
+        padding: 16px;
+    }
+
+    .edit-order-form {
+        padding: 22px;
+    }
+
+    .edit-order-row {
+        grid-template-columns:
+            minmax(180px, 1fr)
+            minmax(100px, 0.5fr)
+            minmax(110px, 0.6fr);
+    }
+
+    .edit-order-remove-button {
+        grid-column: 1 / -1;
+    }
+}
+
+/* =========================
+   Mobile
+========================= */
+
+@media (max-width: 650px) {
+
+    .EditSupplierOrder {
+        padding: 12px;
+    }
+
+    .edit-order-form {
+        padding: 17px;
+        border-radius: 16px;
+    }
+
+    .edit-order-header {
+        flex-direction: column;
+    }
+
+    .edit-order-title {
+        font-size: 25px;
+    }
+
+    .edit-order-back-button {
+        width: 100%;
+    }
+
+    .edit-order-products-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .edit-order-add-product-button {
+        width: 100%;
+    }
+
+    .edit-order-row {
+        grid-template-columns: 1fr;
+    }
+
+    .edit-order-remove-button {
+        width: 100%;
+    }
+
+    .edit-order-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .edit-order-save-button,
+    .edit-order-cancel-button {
+        width: 100%;
+    }
+}

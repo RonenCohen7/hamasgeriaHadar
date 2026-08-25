@@ -1,5 +1,5 @@
 import "./header.css";
-import "./header.css";
+
 import { useTranslation } from "react-i18next";
 
 
@@ -8,15 +8,19 @@ export function Header() {
 
     const {i18n} = useTranslation();
 
-    function toggleLanguage(){
-        const newLanguage = i18n.language == "he" ? "en" : "he";
+    async function toggleLanguage(language: "he" | "en"){
 
-            i18n.changeLanguage(newLanguage);
+        await i18n.changeLanguage(language);
 
-        document.documentElement.lang = newLanguage;
-        document.documentElement.dir = 
-            newLanguage == "he" ? "rtl" : "ltr"
+            localStorage.setItem(
+                "language",
+                language
+            );
 
+            document.documentElement.lang = language;
+
+            document.documentElement.dir = language == "he" ? "rtl" : "ltr";
+        
     }
 
 
@@ -31,7 +35,7 @@ export function Header() {
             <button
                 type="button"
                 className="language-button"
-                onClick={toggleLanguage}
+                onClick={()=>toggleLanguage(i18n.language == "he" ? "en" :"he")}
             >
                 <span>🌐</span>
                 {i18n.language == "he" ? "English" : "עברית"}

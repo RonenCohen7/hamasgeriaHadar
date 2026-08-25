@@ -389,7 +389,7 @@ export function PaymentModal(props: PaymentModalProps) {
 
                             <input
                                 type="text"
-                                placeholder="ENTER VIP Card Number"
+                                placeholder="ENTER VIP Card Number - Full Number"
                                 value={vipCardNumber}
                                 onChange={event =>
                                     setVipCardNumber(

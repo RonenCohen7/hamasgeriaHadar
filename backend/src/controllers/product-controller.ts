@@ -71,6 +71,9 @@ class ProductController {
 
             product.image = request.files?.image as UploadedFile;
 
+            console.log("FILES:", request.files);
+            console.log("IMAGE:", request.files?.image);
+
             const addProduct = await productService.addProduct(product);
 
             response.status(201).json(addProduct);
@@ -86,6 +89,8 @@ class ProductController {
     private async updateProduct(request: Request, response: Response, next: NextFunction): Promise<void> {
         try {
             console.log("=== UPDATE PRODUCT CONTROLLER HIT ===");
+
+
             const id = Number(request.params.id);
 
             if (!Number.isInteger(id) || id <= 0) {

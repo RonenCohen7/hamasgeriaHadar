@@ -32,6 +32,7 @@ export function EditProduct() {
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [categories, setCategories] = useState<ProductCategoryModel[]>([]);
     const [suppliers, setSuppliers] = useState<SupplierModel[]>([]);
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
 
 
@@ -68,6 +69,8 @@ export function EditProduct() {
         const file = event.target.files?.[0];
         if (!file) return;
 
+        setSelectedImage(file);
+
         setPreviewUrl(currentPreviewUrl => {
             if (currentPreviewUrl?.startsWith("blob:")) {
                 URL.revokeObjectURL(currentPreviewUrl);
@@ -96,13 +99,11 @@ export function EditProduct() {
             formData.isActive = product!.isActive;
             formData.imageName = product!.imageName;
 
-            const imageFiles = formData.image as unknown as FileList;
-
-            if (imageFiles?.length > 0) {
-                formData.image = imageFiles[0];
+            if(selectedImage){
+                formData.image = selectedImage;
             }
             else {
-                delete formData.image;
+                delete formData.image
             }
 
 
@@ -324,9 +325,7 @@ export function EditProduct() {
                     <input
                         type="file"
                         accept="image/*"
-                        {...register("image", {
-                            onChange: handleImageChange
-                        })}
+                        onChange={handleImageChange}
                     />
 
 

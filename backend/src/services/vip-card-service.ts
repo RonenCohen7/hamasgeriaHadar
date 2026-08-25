@@ -86,6 +86,13 @@ class VipCardService {
 
     //Get Card By Card Number
     public async getCardByCardNumber(cardNumber: string): Promise<VipCardModel> {
+
+        console.log("===== VIP CARD SEARCH =====");
+        console.log("cardNumber received:", JSON.stringify(cardNumber));
+        console.log("length:", cardNumber.length);
+        console.log("===========================");
+
+        
         const sql = `
         SELECT
             vc.id_vip_card AS idVipCard,

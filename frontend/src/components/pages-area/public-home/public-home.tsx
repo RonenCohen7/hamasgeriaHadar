@@ -12,8 +12,8 @@ import i18n from "../../../i18n/i18n";
 
 
 export function PublicHome() {
-    
-    const {t} = useTranslation();
+
+    const { t } = useTranslation();
     const isHebrew = i18n.language === "he";
 
     useTitle("HAMASGERIA");
@@ -63,41 +63,42 @@ export function PublicHome() {
                     img.style.transform =
                         `translate3d(0, ${offset}px, 0) scale(1.12)`;
                 });
-        }});
-
-useEffect(() => {
-
-    const observer = new IntersectionObserver(
-        entries => {
-
-            entries.forEach(entry => {
-
-                if (entry.isIntersecting) {
-                    entry.target.classList.add("show");
-                }
-
-            });
-
-        },
-        {
-            threshold: 0.2
         }
-    );
+    });
 
-    const images =
-        document.querySelectorAll(".reveal-image");
+    useEffect(() => {
 
-    images.forEach(image =>
-        observer.observe(image)
-    );
+        const observer = new IntersectionObserver(
+            entries => {
 
-    return () => {
-        images.forEach(image =>
-            observer.unobserve(image)
+                entries.forEach(entry => {
+
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("show");
+                    }
+
+                });
+
+            },
+            {
+                threshold: 0.2
+            }
         );
-    };
 
-}, []);
+        const images =
+            document.querySelectorAll(".reveal-image");
+
+        images.forEach(image =>
+            observer.observe(image)
+        );
+
+        return () => {
+            images.forEach(image =>
+                observer.unobserve(image)
+            );
+        };
+
+    }, []);
 
     return (
         <main className="PublicHome" dir={isHebrew ? "rtl" : "ltr"}>
@@ -120,15 +121,15 @@ useEffect(() => {
                 <div className="public-hero-content">
 
                     <span className="public-hero-badge">
-                          {t("publicHome.hero.badge")}
+                        {t("publicHome.hero.badge")}
                     </span>
 
                     <h1>
-                         {t("publicHome.hero.hamasgeria")}
+                        {t("publicHome.hero.hamasgeria")}
                     </h1>
 
                     <p>
-                       {t("publicHome.hero.description")}
+                        {t("publicHome.hero.description")}
                     </p>
 
                     <div className="public-hero-actions">
@@ -139,7 +140,7 @@ useEffect(() => {
                                 navigate("/customer-register")
                             }
                         >
-                           {t("publicHome.hero.joinNow")}
+                            {t("publicHome.hero.joinNow")}
                         </button>
 
                         <button
@@ -148,7 +149,7 @@ useEffect(() => {
                                 navigate("/customer-login")
                             }
                         >
-                           {t("publicHome.hero.customerLogin")}
+                            {t("publicHome.hero.customerLogin")}
                         </button>
 
                         <button
@@ -211,8 +212,10 @@ useEffect(() => {
                                         alt={event.eventName}
                                     />
 
-                                    <span className="event-status">
-                                        {event.eventStatus}
+                                    <span
+                                        className={`event-status event-status-${event.eventStatus}`}
+                                    >
+                                        {t(`events.status.${event.eventStatus}`)}
                                     </span>
 
                                 </div>
@@ -240,7 +243,7 @@ useEffect(() => {
 
                                         <span>
                                             📍{" "}
-                                           {t("publicHome.events.defaultLocation")}
+                                            {t("publicHome.events.defaultLocation")}
                                         </span>
 
                                         {event.maximumGuests != null && (
@@ -304,7 +307,7 @@ useEffect(() => {
                                             className="sold-out-btn"
                                             disabled
                                         >
-                                           {t("publicHome.events.soldOut")}
+                                            {t("publicHome.events.soldOut")}
                                         </button>
 
                                     ) : (
@@ -317,7 +320,7 @@ useEffect(() => {
                                                 )
                                             }
                                         >
-                                           {t("publicHome.events.loginToOrder")}
+                                            {t("publicHome.events.loginToOrder")}
                                         </button>
 
                                     )}
@@ -339,7 +342,7 @@ useEffect(() => {
 
                 <div className="benefit-card">
 
-                    <div className="benefit-icon" onClick={()=> navigate(`/customer-login`)}>
+                    <div className="benefit-icon" onClick={() => navigate(`/customer-login`)}>
                         ⭐
                     </div>
 
@@ -348,7 +351,7 @@ useEffect(() => {
                     </h3>
 
                     <p>
-                       {t("publicHome.benefits.vip.description")}
+                        {t("publicHome.benefits.vip.description")}
                     </p>
 
                 </div>
@@ -356,16 +359,16 @@ useEffect(() => {
 
                 <div className="benefit-card" >
 
-                    <div className="benefit-icon" onClick={()=> navigate(`/customer-login`)}>
+                    <div className="benefit-icon" onClick={() => navigate(`/customer-login`)}>
                         🎟️
                     </div>
 
                     <h3>
-                      {t("publicHome.benefits.events.title")}
+                        {t("publicHome.benefits.events.title")}
                     </h3>
 
                     <p>
-                      {t("publicHome.benefits.events.description")}
+                        {t("publicHome.benefits.events.description")}
                     </p>
 
                 </div>
@@ -373,7 +376,7 @@ useEffect(() => {
 
                 <div className="benefit-card">
 
-                    <div className="benefit-icon" onClick={()=> navigate(`/customer-login`)}>
+                    <div className="benefit-icon" onClick={() => navigate(`/customer-login`)}>
                         🍺
                     </div>
 
@@ -395,15 +398,15 @@ useEffect(() => {
                 <div>
 
                     <span>
-                       <span>{t("publicHome.cta.badge")}</span>
+                        <span>{t("publicHome.cta.badge")}</span>
                     </span>
 
                     <h2>
-                       {t("publicHome.cta.title")}
+                        {t("publicHome.cta.title")}
                     </h2>
 
                     <p>
-                       {t("publicHome.cta.description")}
+                        {t("publicHome.cta.description")}
                     </p>
 
                 </div>

@@ -41,8 +41,6 @@ class ProductService {
         }
 
     
-
-
         const response = await axios.put<ProductModel>(`${appConfig.productUrl}/${product.idProduct}`, formData);
         return response.data;
 
