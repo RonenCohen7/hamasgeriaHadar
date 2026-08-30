@@ -61,7 +61,7 @@ export function QuickSale() {
 
     const [phoneLast4, setPhoneLast4] = useState("");
     const [vipVerified, setVipVerified] = useState(false);
-    const [showPaymentMethod, setShowPaymentMethod] = useState(true);
+   
     const [showRechargeDialog, setShowRechargeDialog] = useState(false);
     const [missingAmount, setMissingAmount] = useState(0);
 
@@ -438,7 +438,7 @@ export function QuickSale() {
             setPhoneLast4("");
             setVipVerified(false);
 
-            setShowPaymentMethod(false)
+           
 
 
 

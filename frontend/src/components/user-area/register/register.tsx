@@ -10,10 +10,10 @@ import { UserRole } from "../../models/enum";
 export function Register() {
 
 
-    const title = useTitle("Register");
+    useTitle("Register");
     const navigate = useNavigate();
 
-    const { register, handleSubmit,reset, formState: { errors } } = useForm<RegisterUserDto>();
+    const { register, handleSubmit,reset } = useForm<RegisterUserDto>();
 
 
     async function send(user: RegisterUserDto) {

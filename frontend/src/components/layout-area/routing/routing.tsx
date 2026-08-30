@@ -51,6 +51,7 @@ import { ExperienceEdit } from "../../experiencs-area/experience-edit/experience
 import { AddExperience } from "../../experiencs-area/add-experience/add-experience";
 import { VipReport } from "../../customers-area/vip-report/vip-report";
 import { EditSupplierOrder } from "../../suppliers-area/edit-supplier-order/edit-supplier-order";
+import { TicketScanner } from "../../user-area/ticket-scanner/ticket-scanner";
 
 
 
@@ -73,7 +74,7 @@ export function Routing() {
             <Route path="/about" element={<About />} />
             <Route path="/contact-us" element={<ContactUs />} />
 
-
+            <Route path="/ticket-scanner" element={<AuthGuard><TicketScanner/></AuthGuard>}/>
             <Route path="/products" element={<AuthGuard><ProductList /></AuthGuard>} />
 
             <Route path="/products/:id" element={<AuthGuard><ProductDetails /></AuthGuard>} />

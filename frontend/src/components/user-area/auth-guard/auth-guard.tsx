@@ -1,4 +1,4 @@
-import type React from "react";
+
 import type { RootState } from "../../redux/inventory-store";
 import "./auth-guard.css";
 import { useSelector } from "react-redux";

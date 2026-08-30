@@ -5,8 +5,6 @@ import { VipCardModel } from "../../models/vip-card-model";
 import { notificationService } from "../../service/notificationService";
 import { vipCardService } from "../../service/vipCardService";
 
-import { CustomerModel } from "../../models/customer-model";
-import { customerService } from "../../service/customerService";
 import { CardTransactions } from "../card-transactions/card-transactions";
 
 import { useSelector } from "react-redux";
@@ -21,7 +19,6 @@ export function CardDetails() {
 
     const [vipCard, setVipCard] = useState<VipCardModel | null>(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [customer, setCustomer] = useState<CustomerModel | null>(null);
 
     const loggedCustomer = useSelector((stat: RootState) => stat.customerAuth.customer);
 
@@ -47,14 +44,6 @@ export function CardDetails() {
             })
             .finally(() => setIsLoading(false));
 
-
-
-
-        customerService
-            .getOneCustomer(customerId)
-            .then(setCustomer)
-            .catch(console.error)
-
     }, [idCustomer]);
 
 
@@ -63,21 +52,9 @@ export function CardDetails() {
     }
 
     if (!vipCard) {
-        // return <section className="CardDetails">
-        //     <div className="no-vip-card">
-        //         <h1>No Vip Card</h1>
-        //         <p>This customer does not have a VIP card</p>
 
-        //         <AddCard
-        //             idCustomer={Number(idCustomer)}
-        //             customerName={customer?.firstName ?? "Customer"}
-        //             onSuccess={() => window.location.reload()} />
-
-
-        //     </div>
         return <VipBenefits idCustomer={Number(idCustomer)} />
 
-        // </section>
     }
 
     return (

@@ -6,7 +6,7 @@ import { getIo } from "../utils/socket";
 import { sanitizeText } from "../utils/sanitize";
 import { EventStatus, PaymentMethod } from "../models/enum";
 import { vipCardService } from "./vip-card-service";
-
+import crypto from "crypto";
 
 
 class SaleOrderService {
@@ -518,7 +518,57 @@ class SaleOrderService {
 
         }
 
+        //Create tickets after payments
+        if(sale.idEvent && sale.ticketQuantity){
+
+            //prevent duplicate ticket
+            const existingTicketsSql = `
+                SELECT COUNT(*) AS count
+                FROM tickets
+                WHERE id_sale =?
+            `;
+            const existingTickets = await dal.execute(existingTicketsSql,[idSale]) as {count: number}[];
+
+            const existingCount = Number(existingTickets[0].count);
+
+            if(existingCount == 0){
+                for (let i =0; i< sale.ticketQuantity; i ++){
+                    const ticketNumber = 
+                        `TKT-${idSale}-${i + 1}-${Date.now()}`;
+                    
+                    const qrToken =
+                        crypto.randomBytes(32).toString("hex");
+
+                    const ticketSql = `
+                        INSERT INTO tickets (
+                            id_sale,
+                            id_event,
+                            id_customer,
+                            ticket_number,
+                            qr_token,
+                            ticket_status,
+                            ticket_source
+                        )
+                        VALUES (?,?,?,?,?,?,?)
+                    `;
+
+                    await dal.execute(ticketSql,[
+                        idSale,
+                        sale.idEvent,
+                        sale.idCustomer ?? null,
+                        ticketNumber,
+                        qrToken,
+                        "valid",
+                        "website"
+                    ])
+                }
+            }
+
+        }
+
         return await this.getOneSale(idSale);
+
+
     }
 }
 

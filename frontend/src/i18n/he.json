@@ -545,5 +545,83 @@
             "partial": "סופקה חלקית",
             "received": "סופקה במלואה"
         }
+    },
+    "ticketScanner": {
+        "pageTitle": "סריקת כרטיסים",
+        "eyebrow": "כניסה לאירוע",
+        "title": "בדיקת כרטיסים",
+        "description": "סריקה, אימות וקליטת אורחים לאירוע.",
+        "employee": "עובד",
+        "scanner": {
+            "eyebrow": "סורק QR",
+            "title": "סריקת כרטיס",
+            "description": "סרוק קוד QR או הזן את קוד הכרטיס באופן ידני.",
+            "camera": "מצלמת QR",
+            "cameraComingSoon": "סריקה באמצעות המצלמה תתווסף בשלב הבא",
+            "tokenLabel": "קוד QR",
+            "tokenPlaceholder": "סרוק או הזן את קוד הכרטיס",
+            "checking": "בודק...",
+            "checkTicket": "בדיקת כרטיס",
+            "clear": "נקה"
+        },
+        "result": {
+            "eyebrow": "פרטי הכרטיס",
+            "emptyTitle": "פרטי כרטיס",
+            "emptyDescription": "סרוק כרטיס כדי להציג את פרטי האורח, האירוע והכרטיס."
+        },
+        "sections": {
+            "guest": "פרטי האורח",
+            "event": "פרטי האירוע",
+            "ticket": "פרטי הכרטיס"
+        },
+        "fields": {
+            "guestName": "שם האורח",
+            "phone": "טלפון",
+            "email": "אימייל",
+            "event": "אירוע",
+            "eventDate": "תאריך האירוע",
+            "location": "מיקום",
+            "ticketNumber": "מספר כרטיס",
+            "orderSource": "מקור ההזמנה",
+            "saleStatus": "סטטוס הזמנה",
+            "ticketStatus": "סטטוס כרטיס",
+            "source": "מקור ההזמנה",
+            "status": "סטטוס כרטיס"
+        },
+        "status": {
+            "valid": "תקין",
+            "checked_in": "נכנס",
+            "cancelled": "בוטל",
+            "refunded": "זוכה"
+        },
+        "source": {
+            "website": "אתר",
+            "phone": "טלפון",
+            "walk_in": "רכישה במקום",
+            "other": "אחר"
+        },
+        "checkIn": {
+            "readyTitle": "הכרטיס תקין",
+            "readyDescription": "ניתן לאשר את כניסת האורח.",
+            "button": "✓ אישור כניסה",
+            "processing": "מאשר כניסה...",
+            "alreadyTitle": "האורח כבר נכנס",
+            "alreadyDescription": "כרטיס זה כבר נוצל לכניסה.",
+            "time": "זמן כניסה"
+        },
+        "invalid": {
+            "title": "לא ניתן להשתמש בכרטיס",
+            "description": "הכרטיס בוטל או זוכה ולכן לא ניתן לבצע כניסה."
+        },
+        "messages": {
+            "checkInSuccess": "כניסת האורח אושרה בהצלחה"
+        },
+        "errors": {
+            "tokenRequired": "יש להזין קוד QR",
+            "ticketNotFound": "הכרטיס לא נמצא",
+            "userNotFound": "העובד המחובר לא נמצא",
+            "alreadyCheckedIn": "הכרטיס כבר נוצל לכניסה",
+            "checkInFailed": "אישור הכניסה נכשל"
+        }
     }
 }

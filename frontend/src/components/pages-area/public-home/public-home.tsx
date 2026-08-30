@@ -63,42 +63,53 @@ export function PublicHome() {
                     img.style.transform =
                         `translate3d(0, ${offset}px, 0) scale(1.12)`;
                 });
-        }
-    });
+        };
+        updateParallax();
 
-    useEffect(() => {
-
-        const observer = new IntersectionObserver(
-            entries => {
-
-                entries.forEach(entry => {
-
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add("show");
-                    }
-
-                });
-
-            },
-            {
-                threshold: 0.2
-            }
-        );
-
-        const images =
-            document.querySelectorAll(".reveal-image");
-
-        images.forEach(image =>
-            observer.observe(image)
-        );
+        window.addEventListener("scroll", updateParallax);
 
         return () => {
-            images.forEach(image =>
-                observer.unobserve(image)
-            );
+            window.removeEventListener("scroll", updateParallax);
         };
 
     }, []);
+
+
+    // useEffect(() => {
+
+    //     const observer = new IntersectionObserver(
+    //         entries => {
+
+    //             entries.forEach(entry => {
+
+    //                 if (entry.isIntersecting) {
+    //                     entry.target.classList.add("show");
+    //                 }
+
+    //             });
+
+    //         },
+    //         {
+    //             threshold: 0.2
+    //         }
+    //     );
+
+    //     const images =
+    //         document.querySelectorAll(".reveal-image");
+
+    //     images.forEach(image =>
+    //         observer.observe(image)
+    //     );
+
+    //     return () => {
+    //         images.forEach(image =>
+    //             observer.unobserve(image)
+    //         );
+    //     };
+
+    // }, []);
+
+
 
     return (
         <main className="PublicHome" dir={isHebrew ? "rtl" : "ltr"}>

@@ -31,6 +31,7 @@ import { vipReportController } from "./controllers/vip-report-controller";
 import cookieParser from "cookie-parser";
 import { error } from "console";
 import { supplierReceiptController } from "./controllers/supplier-receipt-controller";
+import { ticketController } from "./controllers/ticket-controller";
 
 
 
@@ -104,6 +105,7 @@ class App {
             app.use(experienceController.router);
             app.use(vipReportController.router);
             app.use(supplierReceiptController.router);
+            app.use(ticketController.router);
 
             app.use(errorMiddleware.routeNotFound);
             app.use(errorMiddleware.catchAll);

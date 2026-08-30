@@ -19,7 +19,7 @@ export function Login() {
     console.log("welcomeBack:", t("login.welcomeBack"));
 
     useTitle(t("login.pageTitle"));
-    const { register, handleSubmit, reset } = useForm<LoginUserDto>();
+    const { register, handleSubmit } = useForm<LoginUserDto>();
     const navigate = useNavigate();
 
     async function send(credentials: LoginUserDto) {

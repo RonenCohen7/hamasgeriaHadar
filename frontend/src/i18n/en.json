@@ -530,5 +530,83 @@
             "partial": "Partially Received",
             "received": "Fully Received"
         }
+    },
+    "ticketScanner": {
+        "pageTitle": "Ticket Scanner",
+        "eyebrow": "EVENT ENTRY",
+        "title": "Ticket Check-In",
+        "description": "Scan, validate and check in guest tickets.",
+        "employee": "Employee",
+        "scanner": {
+            "eyebrow": "QR SCANNER",
+            "title": "Scan Ticket",
+            "description": "Scan a QR code or enter the ticket token manually.",
+            "camera": "QR Camera",
+            "cameraComingSoon": "Camera scanning will be added next",
+            "tokenLabel": "QR Token",
+            "tokenPlaceholder": "Scan or enter QR token",
+            "checking": "Checking...",
+            "checkTicket": "Check Ticket",
+            "clear": "Clear"
+        },
+        "result": {
+            "eyebrow": "TICKET DETAILS",
+            "emptyTitle": "Ticket Details",
+            "emptyDescription": "Scan a ticket to display guest, event and ticket information."
+        },
+        "sections": {
+            "guest": "Guest Details",
+            "event": "Event Details",
+            "ticket": "Ticket Information"
+        },
+        "fields": {
+            "guestName": "Guest Name",
+            "phone": "Phone",
+            "email": "Email",
+            "event": "Event",
+            "eventDate": "Event Date",
+            "location": "Location",
+            "ticketNumber": "Ticket Number",
+            "orderSource": "Order Source",
+            "saleStatus": "Sale Status",
+            "ticketStatus": "Ticket Status",
+            "source": "Order Source",
+            "status": "Ticket Status"
+        },
+        "status": {
+            "valid": "Valid",
+            "checked_in": "Checked In",
+            "cancelled": "Cancelled",
+            "refunded": "Refunded"
+        },
+        "source": {
+            "website": "Website",
+            "phone": "Phone",
+            "walk_in": "Walk In",
+            "other": "Other"
+        },
+        "checkIn": {
+            "readyTitle": "Ticket is valid",
+            "readyDescription": "The guest can be checked in.",
+            "button": "✓ Check In Guest",
+            "processing": "Checking In...",
+            "alreadyTitle": "Guest Already Checked In",
+            "alreadyDescription": "This ticket has already been used.",
+            "time": "Check-in time"
+        },
+        "invalid": {
+            "title": "Ticket Cannot Be Used",
+            "description": "This ticket is cancelled or refunded and cannot be checked in."
+        },
+        "messages": {
+            "checkInSuccess": "Guest checked in successfully"
+        },
+        "errors": {
+            "tokenRequired": "Please enter a QR token",
+            "ticketNotFound": "Ticket not found",
+            "userNotFound": "Logged employee was not found",
+            "alreadyCheckedIn": "Ticket already checked in",
+            "checkInFailed": "Failed to check in ticket"
+        }
     }
 }

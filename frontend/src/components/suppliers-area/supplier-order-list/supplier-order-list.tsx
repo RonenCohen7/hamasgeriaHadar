@@ -267,7 +267,8 @@ export function SupplierOrderList() {
                                     <td>
 
                                         <span className={`order-status ${getStatusClass(order.orderStatus)}`}>
-                                            {t(`supplierOrders.status.${order.orderStatus.toLowerCase()}`)}
+
+                                            {getStatusTranslation(order.orderStatus)}
                                         </span>
 
                                     </td>

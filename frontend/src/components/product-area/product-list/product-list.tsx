@@ -23,7 +23,6 @@ export function ProductList() {
 
     const [products, setProducts] = useState<ProductModel[]>([]);
 
-    const [updateProductId, setUpdateProductId] = useState<number | null>(null);
 
     const user = useSelector((state: RootState) => state.auth.user);
 
@@ -66,17 +65,8 @@ export function ProductList() {
                 )
             );
 
-            setUpdateProductId(data.idProduct);
-
-            window.setTimeout(() => {
-
-                setUpdateProductId(currentId =>
-                    currentId === data.idProduct
-                        ? null
-                        : currentId
-                )
-
-            }, 1500);
+         
+          
         }
 
         socketService.onInventoryUpdated(handleInventoryUpdated);

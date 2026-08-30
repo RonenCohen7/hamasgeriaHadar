@@ -37,6 +37,8 @@ class AppConfig {
 
     public readonly experiencesUrl = this.baseUrl + "experiences"
 
+    public readonly ticketsUrl = this.baseUrl + "tickets"
+
 
 }
 

@@ -8,11 +8,11 @@ import { useForm } from "react-hook-form";
 
 import { notificationService } from "../../service/notificationService";
 import { ProductCategoryModel } from "../../models/category-model";
-import { SupplierModel } from "../../models/supplier-model";
+
 import { productCategoryService } from "../../service/productCategoryService";
-import { supplierService } from "../../service/supplierService";
-import { UnitType } from "../../models/enum";
+
 import { useTranslation } from "react-i18next";
+import { UnitType } from "../../models/enum";
 
 
 
@@ -31,7 +31,7 @@ export function EditProduct() {
     const [product, setProduct] = useState<ProductModel | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [categories, setCategories] = useState<ProductCategoryModel[]>([]);
-    const [suppliers, setSuppliers] = useState<SupplierModel[]>([]);
+
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
 
@@ -48,10 +48,7 @@ export function EditProduct() {
             .catch(console.error)
 
 
-        supplierService
-            .getAllSuppliers()
-            .then(setSuppliers)
-            .catch(console.error)
+
 
         productService
             .getOneProduct(Number(id))
@@ -99,7 +96,7 @@ export function EditProduct() {
             formData.isActive = product!.isActive;
             formData.imageName = product!.imageName;
 
-            if(selectedImage){
+            if (selectedImage) {
                 formData.image = selectedImage;
             }
             else {
@@ -250,7 +247,7 @@ export function EditProduct() {
                         {...register("unitType")}
                     >
 
-                        {Object.values(UnitType).map(unit => (
+                        {(Object.values(UnitType) as string[]).map(unit => (
 
                             <option
                                 key={unit}

@@ -30,17 +30,10 @@ export function InventoryMonitor() {
 
 
 
-    const inventory = useSelector(
-        (state: RootState) => state.inventory.items
-    );
+    const inventory = useSelector((state: RootState) => state.inventory.items);
 
-    const lastUpdateFromRedux = useSelector(
-        (state: RootState) => state.inventory.lastUpdate
-    );
 
-    const updatedProductIds = useSelector(
-        (state: RootState) => state.inventory.updatedProductIds
-    );
+    const updatedProductIds = useSelector((state: RootState) => state.inventory.updatedProductIds);
 
 
     const totalProducts = inventory.length;

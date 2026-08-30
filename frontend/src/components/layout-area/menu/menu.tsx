@@ -14,18 +14,13 @@ import { useTranslation } from "react-i18next";
 
 export function Menu() {
 
-    const  { t } = useTranslation();
+    const { t } = useTranslation();
 
     const customer = useSelector((state: RootState) => state.customerAuth.customer);
     const user = useSelector((state: RootState) => state.auth.user);
 
     const role = user?.role;
-    const isAdmin = role == "admin";
-    const isManager = role == "manager";
-    const isEmployee = role == "employee";
 
-    const isCustomer = !!customer;
-    const isUser = !!user;
 
 
     const positions = [
@@ -87,12 +82,13 @@ export function Menu() {
                         <button
                             className="logout-button"
                             onClick={logout}
-                            
+
                         >
                             🚪 {t("menu.logout")}
                         </button>
 
                     </div>
+
                 )}
 
                 {/* ================= CUSTOMER ================= */}
@@ -117,12 +113,12 @@ export function Menu() {
                             </button>
                         </div>
 
-                        <NavLink to="/customer-dashboard" 
-                        className="menu-link" 
-                        data-tooltip={t("menu.dashboard")}>
+                        <NavLink to="/customer-dashboard"
+                            className="menu-link"
+                            data-tooltip={t("menu.dashboard")}>
 
-                         🎭
-                         </NavLink>
+                            🎭
+                        </NavLink>
 
                         <NavLink
                             to={`/vip-cards/customer/${customer.idCustomer}`}
@@ -136,7 +132,7 @@ export function Menu() {
                             to={`/vip-cards/${customer.idCustomer}/transactions`}
                             className="menu-link"
                             data-tooltip={t("menu.myTransactions")}
-                            
+
                         >
                             📋
                         </NavLink>)}
@@ -149,7 +145,7 @@ export function Menu() {
 
                 {user && (
                     <>
-                        <NavLink to="/" className="menu-link" data-tooltip ={t("menu.home")}>
+                        <NavLink to="/" className="menu-link" data-tooltip={t("menu.home")}>
                             <FaHome />
                         </NavLink>
 
@@ -161,9 +157,21 @@ export function Menu() {
                             >
                                 <FaWarehouse />
                             </NavLink>
+
+
+
                         )}
+                          {(role === "admin" || role === "manager") && (
+                            <NavLink
+                                to="/ticket-scanner"
+                                className="menu-link"
+                                data-tooltip={t("menu.ticketScanner")}
+                            >
+                                    🎟️
 
+                            </NavLink>
 
+                        )}
 
 
                         {(role === "admin" || role === "manager") && (
@@ -175,7 +183,7 @@ export function Menu() {
                                 🎭
                             </NavLink>
                         )}
-                             {(role === "admin" || role === "manager") && (
+                        {(role === "admin" || role === "manager") && (
                             <NavLink
                                 to="/experiences"
                                 className="menu-link"

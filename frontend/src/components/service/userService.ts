@@ -1,5 +1,5 @@
 import axios from "axios";
-import { SafeUserModel, UpdateUserDto,  type RegisterUserDto } from "../models/user-model";
+import { SafeUserModel, UpdateUserDto } from "../models/user-model";
 import { appConfig } from "../utils/app-config";
 
 

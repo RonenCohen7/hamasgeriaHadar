@@ -22,7 +22,7 @@ export function EditEvent() {
 
 
     const { register, handleSubmit, reset, formState: { isSubmitting } } = useForm<EventModel>();
-    const [event, setEvent] = useState<EventModel | null>(null);
+    
 
     const [preview, setPreview] = useState<string | null>(null);
 
@@ -38,7 +38,7 @@ export function EditEvent() {
         eventService
             .getOneEvent(eventId)
             .then(event => {
-                setEvent(event)
+               
 
                 setPreview(event.coverImageUrl);
 
