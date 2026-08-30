@@ -52,6 +52,7 @@ import { AddExperience } from "../../experiencs-area/add-experience/add-experien
 import { VipReport } from "../../customers-area/vip-report/vip-report";
 import { EditSupplierOrder } from "../../suppliers-area/edit-supplier-order/edit-supplier-order";
 import { TicketScanner } from "../../user-area/ticket-scanner/ticket-scanner";
+import { CustomerOrders } from "../../customers-area/customer-orders/customer-orders";
 
 
 
@@ -68,6 +69,8 @@ export function Routing() {
 
             <Route path="/customer-dashboard" element={<CustomerProtectedRoute><CustomerDashboard /></CustomerProtectedRoute>} />
 
+            <Route path="/customer-orders" element={<CustomerOrders />} />
+
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
 
@@ -75,6 +78,7 @@ export function Routing() {
             <Route path="/contact-us" element={<ContactUs />} />
 
             <Route path="/ticket-scanner" element={<AuthGuard><TicketScanner/></AuthGuard>}/>
+            
             <Route path="/products" element={<AuthGuard><ProductList /></AuthGuard>} />
 
             <Route path="/products/:id" element={<AuthGuard><ProductDetails /></AuthGuard>} />

@@ -19,7 +19,9 @@
         "supplierOrders": "הזמנות ספקים",
         "customers": "לקוחות",
         "about": "אודות",
-        "contactUs": "צור קשר"
+        "contactUs": "צור קשר",
+        "myOrders": "ההזמנות שלי"
+
     },
     "events": {
         "management": "ניהול אירועים",

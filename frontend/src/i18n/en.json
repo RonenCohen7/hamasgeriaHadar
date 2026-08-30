@@ -19,7 +19,8 @@
         "supplierOrders": "Supplier Orders",
         "customers": "Customers",
         "about": "About",
-        "contactUs": "Contact Us"
+        "contactUs": "Contact Us",
+        "myOrders": "My Orders"
     },
     "events": {
         "management": "Event Management",

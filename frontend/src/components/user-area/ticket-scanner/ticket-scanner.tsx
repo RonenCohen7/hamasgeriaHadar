@@ -3,10 +3,13 @@ import { useTitle } from "../../utils/UseTitle";
 import "./ticket-scanner.css";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../redux/inventory-store";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { TicketModel } from "../../models/ticket-model";
 import { dialogService } from "../../service/dialogService";
 import { ticketService } from "../../service/ticketService";
+import { Html5Qrcode } from "html5-qrcode";
+
+
 
 export function TicketScanner() {
 
@@ -26,10 +29,80 @@ export function TicketScanner() {
 
     const [isCheckingIn, setIsCheckingIn] = useState(false);
 
+    const lastScannedTokenRef = useRef<string | null>(null);
+    const scannerRef = useRef<Html5Qrcode | null>(null);
+    const [isCameraRunning, setIsCameraRunning] = useState(false);
 
-    async function searchTicket() {
 
-        const token = qrToken.trim();
+
+    useEffect(() => {
+
+        scannerRef.current = new Html5Qrcode("qr-reader");
+
+        return () => {
+            const scanner = scannerRef.current;
+            scannerRef.current = null;
+
+            if (scanner?.isScanning) {
+                scanner.stop()
+                    .then(() => scanner.clear())
+                    .catch(() => {});
+            } else {
+                scanner?.clear();
+            }
+        };
+
+    }, []);
+
+
+    async function startCamera() {
+        const scanner = scannerRef.current;
+
+        if (!scanner || scanner.isScanning) return;
+
+        try {
+            await scanner.start(
+                { facingMode: "environment" },
+                {
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 }
+                },
+                (decodedText) => {
+                    if (lastScannedTokenRef.current === decodedText) return;
+
+                    lastScannedTokenRef.current = decodedText;
+                    setQrToken(decodedText);
+                    searchTicket(decodedText);
+                },
+                () => {}
+            );
+
+            setIsCameraRunning(true);
+
+        } catch (error) {
+            console.error("Failed starting QR camera:", error);
+        }
+    }
+
+
+    async function stopCamera() {
+        const scanner = scannerRef.current;
+
+        if (!scanner?.isScanning) return;
+
+        try {
+            await scanner.stop();
+            setIsCameraRunning(false);
+        } catch (error) {
+            console.error("Failed stopping QR camera:", error);
+        }
+    }
+
+
+
+    async function searchTicket(scannedToken?: string) {
+
+        const token = (scannedToken ?? qrToken).trim();
 
         if (!token) {
 
@@ -122,6 +195,8 @@ export function TicketScanner() {
         setQrToken("");
 
         setTicket(null);
+
+        lastScannedTokenRef.current = null;
     }
 
     function getTicketStatusText(status: TicketModel["ticketStatus"]): string {
@@ -224,7 +299,7 @@ export function TicketScanner() {
                     </div>
 
 
-                    <div className="ticket-camera-placeholder">
+                    {/* <div className="ticket-camera-placeholder">
 
                         <div className="ticket-camera-frame">
 
@@ -247,8 +322,32 @@ export function TicketScanner() {
 
                         </div>
 
-                    </div>
+                    </div> */}
+                    <div className="ticket-camera-section">
+                        <div className="ticket-camera-view">
+                            <div id="qr-reader"></div>
+                        </div>
 
+                        <div className="ticket-camera-actions">
+                            {!isCameraRunning ? (
+                                <button
+                                    type="button"
+                                    className="ticket-camera-start-button"
+                                    onClick={startCamera}
+                                >
+                                    📷 {isHebrew ? "הפעל מצלמה" : "Start Camera"}
+                                </button>
+                            ) : (
+                                <button
+                                    type="button"
+                                    className="ticket-camera-stop-button"
+                                    onClick={stopCamera}
+                                >
+                                    ⏹ {isHebrew ? "עצור מצלמה" : "Stop Camera"}
+                                </button>
+                            )}
+                        </div>
+                    </div>
 
 
                     <div className="ticket-token-area">
@@ -283,7 +382,7 @@ export function TicketScanner() {
                             <button
                                 type="button"
                                 className="ticket-search-button"
-                                onClick={searchTicket}
+                                onClick={() => searchTicket()}
                                 disabled={isLoading}
                             >
                                 {isLoading

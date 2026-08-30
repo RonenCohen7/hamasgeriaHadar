@@ -75,6 +75,72 @@
 
 
 /* ================= MAIN LAYOUT ================= */
+/* ================= CAMERA CONTROLS ================= */
+.ticket-camera-section {
+    margin: 20px 0;
+    padding: 16px;
+    border: 1px solid #dce7ef;
+    border-radius: 18px;
+    background: #f8fbfd;
+}
+
+.ticket-camera-view {
+    width: 100%;
+    max-width: 460px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 16px;
+    background: #0b0f12;
+}
+
+#qr-reader {
+    width: 100%;
+    min-height: 260px;
+    border: none !important;
+    background: #0b0f12;
+}
+
+#qr-reader video {
+    display: block;
+    width: 100% !important;
+    max-height: 340px;
+    object-fit: cover;
+}
+
+.ticket-camera-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 14px;
+}
+
+.ticket-camera-start-button,
+.ticket-camera-stop-button {
+    min-width: 180px;
+    min-height: 46px;
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.ticket-camera-start-button {
+    border: none;
+    background: #153d57;
+    color: #ffffff;
+}
+
+.ticket-camera-stop-button {
+    border: 1px solid #d6e0e8;
+    background: #f5f8fb;
+    color: #455d70;
+}
+
+.ticket-camera-start-button:hover,
+.ticket-camera-stop-button:hover {
+    transform: translateY(-1px);
+}
 
 .ticket-scanner-content {
     display: grid;
@@ -108,88 +174,6 @@
     color: #718395;
 
     line-height: 1.5;
-}
-
-
-/* ================= CAMERA ================= */
-
-.ticket-camera-placeholder {
-    margin: 24px 0;
-}
-
-.ticket-camera-frame {
-    position: relative;
-
-    min-height: 280px;
-
-    border: 1px dashed #b9cada;
-    border-radius: 18px;
-
-    display: flex;
-    flex-direction: column;
-
-    justify-content: center;
-    align-items: center;
-
-    gap: 8px;
-
-    text-align: center;
-
-    background: #f9fbfd;
-}
-
-.ticket-camera-icon {
-    font-size: 48px;
-}
-
-.ticket-camera-frame strong {
-    font-size: 18px;
-}
-
-.ticket-camera-frame > span {
-    color: #7b8c9b;
-    font-size: 14px;
-}
-
-.scanner-corner {
-    position: absolute;
-
-    width: 35px;
-    height: 35px;
-
-    border-color: #1594bd;
-}
-
-.corner-top-left {
-    top: 18px;
-    left: 18px;
-
-    border-top: 3px solid;
-    border-left: 3px solid;
-}
-
-.corner-top-right {
-    top: 18px;
-    right: 18px;
-
-    border-top: 3px solid;
-    border-right: 3px solid;
-}
-
-.corner-bottom-left {
-    bottom: 18px;
-    left: 18px;
-
-    border-bottom: 3px solid;
-    border-left: 3px solid;
-}
-
-.corner-bottom-right {
-    right: 18px;
-    bottom: 18px;
-
-    border-right: 3px solid;
-    border-bottom: 3px solid;
 }
 
 
@@ -438,10 +422,6 @@
     overflow-wrap: anywhere;
 }
 
-
-
-
-
 /* ================= CHECK IN ================= */
 
 .ticket-checkin-area {
@@ -608,10 +588,6 @@
         border-radius: 16px;
     }
 
-    .ticket-camera-frame {
-        min-height: 220px;
-    }
-
     .ticket-scanner-actions {
         grid-template-columns: 1fr;
     }
@@ -645,6 +621,23 @@
         min-height: 300px;
     }
 
+    .ticket-camera-section {
+        padding: 12px;
+    }
+
+    .ticket-camera-view {
+        max-width: none;
+    }
+
+    #qr-reader {
+        min-height: 220px;
+    }
+
+    .ticket-camera-start-button,
+    .ticket-camera-stop-button {
+        width: 100%;
+    }
+
 }
 
 
@@ -664,8 +657,5 @@
         padding: 14px;
     }
 
-    .ticket-camera-frame {
-        min-height: 190px;
-    }
 
 }

@@ -137,6 +137,15 @@ export function Menu() {
                             📋
                         </NavLink>)}
 
+                            {customer?.hasVipCard && (<NavLink
+                            to={`/customer-orders`}
+                            className="menu-link"
+                            data-tooltip={t("menu.myOrders")}
+
+                        >
+                            🎫
+                        </NavLink>)}
+
 
                     </>
                 )}

@@ -7,6 +7,7 @@ export interface TicketModel {
 
     ticketNumber: string;
     qrToken: string;
+    qrCodeDataUrl?: string | null;
 
     ticketStatus: "valid" | "checked_in" | "cancelled" | "refunded";
     ticketSource: "website" | "phone" | "walk_in" | "other";
