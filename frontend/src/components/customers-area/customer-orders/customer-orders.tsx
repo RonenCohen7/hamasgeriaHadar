@@ -6,19 +6,63 @@ import type { RootState } from "../../redux/inventory-store";
 import { useEffect, useState } from "react";
 
 import { ticketService } from "../../service/ticketService";
-import { Navigate } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import type { TicketModel } from "../../models/ticket-model";
+import { CustomerModel } from "../../models/customer-model";
+import { customerService } from "../../service/customerService";
 
 export function CustomerOrders() {
+
+    const { customerId } = useParams<{ customerId: string }>();
 
 
     const { t, i18n } = useTranslation();
 
     const isHebrew = i18n.language === "he";
 
-    useTitle(isHebrew ? "ההזמנות שלי" : "My Orders");
+
+    const [selectedCustomer, setSelectedCustomer] = useState<CustomerModel | null>(null);
 
     const customer = useSelector((state: RootState) => state.customerAuth.customer);
+
+    const routeCustomerId = customerId ? Number(customerId) : undefined;
+
+    const effectiveCustomerId = routeCustomerId ?? customer?.idCustomer;
+
+    const isManagerView = Boolean(routeCustomerId);
+
+
+
+
+    useEffect(() => {
+
+        if (!isManagerView || !effectiveCustomerId) {
+            return;
+        }
+
+        async function loadCustomers() {
+            try {
+                const result =
+                    await customerService.getOneCustomer(Number(effectiveCustomerId))
+
+                setSelectedCustomer(result);
+
+            } catch (err) {
+                console.error(
+                    "Failed to load customer details", err
+                );
+            }
+        }
+
+        loadCustomers();
+    }, [isManagerView, effectiveCustomerId]);
+
+
+    useTitle(
+        isManagerView
+            ? (isHebrew ? "הזמנות הלקוח" : "Customer Orders")
+            : (isHebrew ? "ההזמנות שלי" : "My Orders")
+    )
 
     console.log("Logged customer:", customer);
     console.log("Customer ID:", customer?.idCustomer);
@@ -31,12 +75,13 @@ export function CustomerOrders() {
 
     useEffect(() => {
 
+        if (!effectiveCustomerId) {
+            return;
+        }
+
+        const idCustomer = effectiveCustomerId;
+
         async function loadTickets() {
-
-            if (!customer?.idCustomer) {
-
-                return;
-            }
 
             try {
 
@@ -46,7 +91,7 @@ export function CustomerOrders() {
 
                 const result =
                     await ticketService.getCustomerTickets(
-                        customer.idCustomer
+                        idCustomer
                     );
 
                 setTickets(result);
@@ -68,16 +113,16 @@ export function CustomerOrders() {
         }
         loadTickets();
 
-    }, [customer?.idCustomer, isHebrew]);
+    }, [effectiveCustomerId, isHebrew]);
 
 
-    if (!customer) {
+    if (!effectiveCustomerId) {
         return (
             <Navigate
                 to="/customer-login"
                 replace
             />
-        );
+        )
     }
 
     return (
@@ -94,15 +139,41 @@ export function CustomerOrders() {
                 </span>
 
                 <h1>
-                    {isHebrew
-                        ? "ההזמנות שלי"
-                        : "My Orders"}
+                    {isManagerView
+                        ? (
+                            <>
+                                {isHebrew
+                                    ? "הזמנות הלקוח"
+                                    : "Customer Orders"}
+
+                                {selectedCustomer && (
+                                    <>
+                                        {" — "}
+                                        {selectedCustomer.firstName}{" "}
+                                        {selectedCustomer.lastName}
+                                    </>
+                                )}
+                            </>
+                        )
+                        : (
+                            isHebrew
+                                ? "ההזמנות שלי"
+                                : "My Orders"
+                        )}
                 </h1>
 
                 <p>
-                    {isHebrew
-                        ? "כאן ניתן לראות את כל הכרטיסים שהזמנת לאירועים"
-                        : "View all the tickets you ordered for upcoming events. "}
+                    {isManagerView
+                        ? (
+                            isHebrew
+                                ? "כל הכרטיסים וההזמנות של הלקוח"
+                                : "All tickets and orders for this customer."
+                        )
+                        : (
+                            isHebrew
+                                ? "כאן ניתן לראות את כל הכרטיסים שהזמנת לאירועים"
+                                : "View all the tickets you ordered for upcoming events."
+                        )}
                 </p>
 
             </header>

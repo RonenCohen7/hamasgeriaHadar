@@ -63,13 +63,17 @@ export function Routing() {
 
             <Route path="/customer-login" element={<CustomerLogin />} />
 
-            <Route path="/customer-forgot-password" element={<ForgotPassword/>}/>
+            <Route path="/customer-forgot-password" element={<ForgotPassword />} />
 
             <Route path="/customer-register" element={<CustomerRegister />} />
 
             <Route path="/customer-dashboard" element={<CustomerProtectedRoute><CustomerDashboard /></CustomerProtectedRoute>} />
-
+            
+            <Route path="/customer-orders/:customerId" element={<CustomerOrders />} />
+            
             <Route path="/customer-orders" element={<CustomerOrders />} />
+
+
 
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
@@ -77,8 +81,8 @@ export function Routing() {
             <Route path="/about" element={<About />} />
             <Route path="/contact-us" element={<ContactUs />} />
 
-            <Route path="/ticket-scanner" element={<AuthGuard><TicketScanner/></AuthGuard>}/>
-            
+            <Route path="/ticket-scanner" element={<AuthGuard><TicketScanner /></AuthGuard>} />
+
             <Route path="/products" element={<AuthGuard><ProductList /></AuthGuard>} />
 
             <Route path="/products/:id" element={<AuthGuard><ProductDetails /></AuthGuard>} />
@@ -116,11 +120,11 @@ export function Routing() {
 
             <Route path="/inventory-count" element={<AuthGuard><InventoryCount /></AuthGuard>} />
 
-            <Route path="/events/order/:idEvent" element={<EventOrder/>}/>
+            <Route path="/events/order/:idEvent" element={<EventOrder />} />
 
 
             {/* <Route path="/events/payment/:idSale" element={<EventPayment/>}/> */}
-        
+
 
             <Route path="/customers" element={<AuthGuard><CustomerCrud /></AuthGuard>}>
 
@@ -158,16 +162,16 @@ export function Routing() {
             <Route path="/events/media/:idEvent" element={<EventMedia />} />
 
 
-            <Route path="/experiences/" element={<ExperienceList/>}/>
-            <Route path="/experiences/:type" element={<ExperienceList/>}/>
+            <Route path="/experiences/" element={<ExperienceList />} />
+            <Route path="/experiences/:type" element={<ExperienceList />} />
 
-            <Route path="/experience/:id" element={<ExperienceDetails/>}/>
+            <Route path="/experience/:id" element={<ExperienceDetails />} />
 
-            <Route path="/experiences/edit/:id" element={<ExperienceEdit/>}/>
+            <Route path="/experiences/edit/:id" element={<ExperienceEdit />} />
 
-            <Route path="/experiences/add" element={<AddExperience/>}/>
+            <Route path="/experiences/add" element={<AddExperience />} />
 
-            <Route path="/customers/vip-report" element={<VipReport/>}/>
+            <Route path="/customers/vip-report" element={<VipReport />} />
 
 
 

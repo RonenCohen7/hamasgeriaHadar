@@ -5,12 +5,14 @@ import "./customer-card.css";
 
 import {
     FaBirthdayCake,
+    FaCarSide,
     FaEdit,
     FaEnvelope,
     FaPhone,
     FaStar,
     FaTrash
 } from "react-icons/fa";
+import { FaShop } from "react-icons/fa6";
 
 
 
@@ -113,6 +115,14 @@ export function CustomerCard({ customer, onDelete }: CustomerCardProps) {
                 >
                     <FaEdit />
                     <span>Edit</span>
+                </button>
+                   <button type="button"
+
+                    className="customer-edit-button"
+                    onClick={() => { navigate(`/customer-orders/${customer.idCustomer}`)}}
+                >
+                    <FaShop />
+                    <span>Orders</span>
                 </button>
 
                 <button
