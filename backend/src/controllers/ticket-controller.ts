@@ -16,6 +16,8 @@ class TicketController {
 
         this.router.patch("/api/tickets/qr/:qrToken/check-in", this.checkInTicket);
 
+        this.router.get("/api/events/:id/attendance", this.getEventAttendance);
+
     }
 
 
@@ -102,7 +104,7 @@ class TicketController {
             response.json(ticket);
 
 
-        } catch (err:any) {
+        } catch (err: any) {
 
             if (err.message === "Ticket already checked in") {
                 response.status(409).json({
@@ -114,6 +116,33 @@ class TicketController {
         }
     }
 
-}
 
+
+
+
+    //Get Event attendance report
+    private async getEventAttendance(request: Request, response: Response, next: NextFunction): Promise<void> {
+        try {
+
+            console.log("GET EVENT ATTENDANCE ROUTE HIT");
+
+            const eventId = Number(request.params.id);
+
+            if (!Number.isInteger(eventId) || eventId <= 0) {
+                response.status(400).json({
+                    message: "Event Id Must Be a positive Number. "
+                });
+                return
+            }
+
+            const attendance = await ticketService.getEventAttendance(eventId);
+
+            response.json(attendance);
+
+
+        } catch (err: any) {
+            next(err)
+        }
+    }
+}
 export const ticketController = new TicketController();

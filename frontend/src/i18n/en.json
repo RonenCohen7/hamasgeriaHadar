@@ -33,8 +33,8 @@
         "completed": "Completed",
         "expectedGuests": "Expected Guests",
         "searchPlaceholder": "Search event...",
-        "regularPrice": "Regular",
-        "vipPrice": "VIP",
+        "regularPrice": "Regular Price",
+        "vipPrice": "VIP Price",
         "detailsForm": "Details",
         "editForm": "Edit",
         "media": "Media",
@@ -45,6 +45,7 @@
         "cancel": "Cancel",
         "deleteSuccess": "Event deleted successfully",
         "deleteError": "Failed to delete event",
+        "attendanceButton": "Attendance",
         "add": {
             "management": "Event Management",
             "title": "Add Event",
@@ -104,15 +105,29 @@
         "time": "Time",
         "location": "Location",
         "availablePlaces": "Available Places",
-        "regularPrice": "Regular Price",
         "freeEntry": "Free Entry",
-        "vipPrice": "VIP Price",
         "imageUnavailable": "Event image unavailable",
         "gallery": "Event Gallery",
         "photosVideos": "Photos & Videos",
         "item": "item",
         "items": "items",
-        "cover": "Cover"
+        "cover": "Cover",
+        "attendance": {
+            "title": "Attendance Report",
+            "eventAttendance": "Event Attendance",
+            "description": "Guests who checked in to this event",
+            "checkedIn": "Checked In",
+            "noGuests": "No guests checked in yet",
+            "noGuestsDescription": "Guests will appear here after their ticket QR code is scanned",
+            "customer": "Customer",
+            "phone": "Phone",
+            "ticket": "Ticket",
+            "checkInTime": "Check-In Time",
+            "checkedInBy": "Checked In By",
+            "back": "Back",
+            "loading": "Loading attendance...",
+            "loadError": "Failed to load attendance report"
+        }
     },
     "publicHome": {
         "hero": {

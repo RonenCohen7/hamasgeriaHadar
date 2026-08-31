@@ -2,6 +2,7 @@
 import axios from "axios";
 import type { TicketModel } from "../models/ticket-model";
 import { appConfig } from "../utils/app-config";
+import type { AttendanceModel } from "../models/attendance-model";
 
 
 class TicketService {
@@ -37,6 +38,22 @@ class TicketService {
         return response.data;
     }
 
+
+    //Get Event attendance
+    public async getEventAttendance(eventId: number):Promise<AttendanceModel[]>{
+
+      
+        const response = await axios.get<AttendanceModel[]>(
+            `${appConfig.eventsUrl}/${eventId}/attendance`
+        )
+
+        return response.data;
+    
+        
+    }
+
+
+    
 
 
 }

@@ -21,7 +21,6 @@
         "about": "אודות",
         "contactUs": "צור קשר",
         "myOrders": "ההזמנות שלי"
-
     },
     "events": {
         "management": "ניהול אירועים",
@@ -46,6 +45,7 @@
         "cancel": "ביטול",
         "deleteSuccess": "האירוע נמחק בהצלחה",
         "deleteError": "מחיקת האירוע נכשלה",
+        "attendanceButton": "נוכחות",
         "add": {
             "management": "ניהול אירועים",
             "title": "הוספת אירוע",
@@ -120,6 +120,22 @@
             "item": "פריט",
             "items": "פריטים",
             "cover": "תמונת שער"
+        },
+        "attendance": {
+            "title": "דוח נוכחות",
+            "eventAttendance": "נוכחות באירוע",
+            "description": "אורחים שביצעו כניסה לאירוע",
+            "checkedIn": "נכנסו",
+            "noGuests": "עדיין לא נכנסו אורחים",
+            "noGuestsDescription": "האורחים יופיעו כאן לאחר סריקת קוד ה-QR של הכרטיס",
+            "customer": "לקוח",
+            "phone": "טלפון",
+            "ticket": "כרטיס",
+            "checkInTime": "שעת כניסה",
+            "checkedInBy": "נסרק על ידי",
+            "back": "חזרה",
+            "loading": "טוען דוח נוכחות...",
+            "loadError": "טעינת דוח הנוכחות נכשלה"
         }
     },
     "publicHome": {

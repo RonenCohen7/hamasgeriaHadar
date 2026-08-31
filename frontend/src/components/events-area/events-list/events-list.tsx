@@ -272,6 +272,15 @@ export function EventsList() {
                                 🖼 {t("events.media")}
                             </button>
 
+                            <button
+                                type="button"
+                                onClick={() =>
+                                    navigate(`/events/${event.idEvent}/attendance`)
+                                }
+                            >
+                                👥 {t("events.attendanceButton")}
+                            </button>
+
 
                             <button
                                 type="button"

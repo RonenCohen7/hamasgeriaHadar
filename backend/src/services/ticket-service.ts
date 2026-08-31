@@ -3,6 +3,7 @@ import { ResourceNotFoundError } from "../models/client-errors";
 import { TicketModel } from "../models/ticket-model";
 import { dal } from "../utils/dal";
 import QRCode from "qrcode";
+import { AttendanceModel } from "../models/attendance-model";
 
 class TicketService {
 
@@ -160,6 +161,49 @@ class TicketService {
         )
 
         return await this.getTicketByToken(qrToken);
+    }
+
+
+
+
+    //Get Event attendance report
+    public async getEventAttendance(idEvent: number):Promise<AttendanceModel[]>{
+
+        const sql = `
+            SELECT
+                t.id_ticket AS idTicket,
+                t.id_event AS idEvent,
+                t.id_customer AS idCustomer,
+
+                t.ticket_number AS ticketNumber,
+                t.ticket_source AS ticketSource,
+
+                t.checked_in_at AS checkedInAt,
+                t.checked_in_by AS checkedInBy,
+
+                c.first_name AS customerFirstName,
+                c.last_name AS customerLastName,
+                c.phone AS customerPhone,
+                c.email AS customerEmail,
+
+                u.first_name AS employeeFirstName,
+                u.last_name AS employeeLastName
+            
+            FROM tickets AS t
+
+            LEFT JOIN customers AS c
+                ON t.id_customer = c.id_customer
+
+            LEFT JOIN users AS u
+                ON t.checked_in_by = u.id_user
+
+            WHERE t.id_event = ?
+            AND t.ticket_status = 'checked_in'
+
+            ORDER BY t.checked_in_at ASC
+        `;
+
+        return await dal.execute(sql,[idEvent]) as AttendanceModel[];
     }
 }
 

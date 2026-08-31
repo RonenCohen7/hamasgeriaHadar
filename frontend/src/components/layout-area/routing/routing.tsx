@@ -53,6 +53,7 @@ import { VipReport } from "../../customers-area/vip-report/vip-report";
 import { EditSupplierOrder } from "../../suppliers-area/edit-supplier-order/edit-supplier-order";
 import { TicketScanner } from "../../user-area/ticket-scanner/ticket-scanner";
 import { CustomerOrders } from "../../customers-area/customer-orders/customer-orders";
+import { Attendance } from "../../events-area/attendance/attendance";
 
 
 
@@ -73,6 +74,7 @@ export function Routing() {
             
             <Route path="/customer-orders" element={<CustomerOrders />} />
 
+           
 
 
             <Route path="login" element={<Login />} />
@@ -121,6 +123,9 @@ export function Routing() {
             <Route path="/inventory-count" element={<AuthGuard><InventoryCount /></AuthGuard>} />
 
             <Route path="/events/order/:idEvent" element={<EventOrder />} />
+
+             <Route path="events/:idEvent/attendance" element={<AuthGuard><Attendance /></AuthGuard>}/>
+
 
 
             {/* <Route path="/events/payment/:idSale" element={<EventPayment/>}/> */}
