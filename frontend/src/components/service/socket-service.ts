@@ -21,10 +21,10 @@ class SocketService {
     private listenersRegistered = false
 
     public constructor() {
-        this.socket = io(appConfig.baseMediaUrl), {
+        this.socket = io(appConfig.baseMediaUrl, {
             autoConnect: false,
             transports: ["websocket", "polling"]
-        };
+        });
     }
 
     public connect(): void {
@@ -44,7 +44,7 @@ class SocketService {
             });
             this.listenersRegistered = true;
         }
-        if(this.socket.connected){
+        if(!this.socket.connected){
             this.socket.connect();
         }
     }
@@ -59,7 +59,7 @@ class SocketService {
     }
 
     public offInventoryUpdated(callback:(data:InventoryUpdatedData)=> void):void {
-        this.socket.off("inventory-updated", callback);
+        this.socket.off("inventory-update", callback);
     }
 
 
