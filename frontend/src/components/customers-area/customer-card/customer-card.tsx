@@ -5,7 +5,6 @@ import "./customer-card.css";
 
 import {
     FaBirthdayCake,
-    FaCarSide,
     FaEdit,
     FaEnvelope,
     FaPhone,

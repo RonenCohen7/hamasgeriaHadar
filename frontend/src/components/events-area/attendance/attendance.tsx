@@ -8,7 +8,7 @@ import { EventModel } from "../../models/event-model";
 import type { AttendanceModel } from "../../models/attendance-model";
 import { ticketService } from "../../service/ticketService";
 import { eventService } from "../../service/eventService";
-import { utils } from "xlsx";
+
 
 export function Attendance() {
 

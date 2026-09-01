@@ -16,7 +16,7 @@ export function CustomerOrders() {
     const { customerId } = useParams<{ customerId: string }>();
 
 
-    const { t, i18n } = useTranslation();
+    const { i18n } = useTranslation();
 
     const isHebrew = i18n.language === "he";
 
@@ -69,7 +69,7 @@ export function CustomerOrders() {
 
     const [tickets, setTickets] = useState<TicketModel[]>([]);
 
-    const [isLoading, setIsLoading] = useState(true);
+    const [, setIsLoading] = useState(true);
 
     const [error, setError] = useState("");
 

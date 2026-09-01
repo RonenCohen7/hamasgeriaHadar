@@ -209,15 +209,7 @@ export function TicketScanner() {
     }
 
 
-    function getTicketSourceText(source: TicketModel["ticketSource"]): string {
-
-        return t(
-            `ticket Scanner Source ${source}`,
-            {
-                defaultValue: source
-            }
-        )
-    }
+ 
 
 
     function formatDate(date: string): string {
