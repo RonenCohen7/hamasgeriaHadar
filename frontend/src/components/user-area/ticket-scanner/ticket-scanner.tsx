@@ -53,6 +53,7 @@ export function TicketScanner() {
 
 
     async function startCamera() {
+
         let scanner = scannerRef.current;
 
         if (!scanner)
@@ -67,6 +68,55 @@ export function TicketScanner() {
             }
         if (scanner.isScanning) return;
 
+        try {
+
+            const cameras = await Html5Qrcode.getCameras();
+
+            console.log("Available cameras: ", cameras);
+
+            if (!cameras || cameras.length == 0) {
+                dialogService.error(
+                    "Camera Error", "No Camera was found"
+                )
+                return;
+            }
+
+            //Prefer rear camera on phone
+            const preferredCamera = cameras.find(camera =>
+                /back|rear|environment/i.test(camera.label)
+            ) ?? cameras[0]
+
+            console.log("using camera", preferredCamera);
+
+            await scanner.start(
+                preferredCamera.id,
+                {
+                    fps: 10,
+                    qrbox: {
+                        width: 250,
+                        height: 250
+                    }
+                },
+                (decodedText) => {
+                    if (
+                        lastScannedTokenRef.current == decodedText
+                    ) return;
+
+                    lastScannedTokenRef.current = decodedText;
+
+                    setQrToken(decodedText);
+
+                    searchTicket(decodedText);
+                },
+                () => { }
+            );
+            setIsCameraRunning(true)
+
+            } catch(error) {
+             console.error("Failed starting QR camera",
+                 error)
+            };
+            setIsCameraRunning(false);
     }
 
 
