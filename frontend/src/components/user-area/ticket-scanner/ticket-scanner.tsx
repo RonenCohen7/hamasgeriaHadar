@@ -36,9 +36,6 @@ export function TicketScanner() {
 
 
     useEffect(() => {
-
-        scannerRef.current = new Html5Qrcode("qr-reader");
-
         return () => {
             const scanner = scannerRef.current;
             scannerRef.current = null;
@@ -46,7 +43,7 @@ export function TicketScanner() {
             if (scanner?.isScanning) {
                 scanner.stop()
                     .then(() => scanner.clear())
-                    .catch(() => {});
+                    .catch(() => { });
             } else {
                 scanner?.clear();
             }
@@ -56,33 +53,22 @@ export function TicketScanner() {
 
 
     async function startCamera() {
-        const scanner = scannerRef.current;
+        let scanner = scannerRef.current;
 
-        if (!scanner || scanner.isScanning) return;
+        if (!scanner)
 
-        try {
-            await scanner.start(
-                { facingMode: "environment" },
-                {
-                    fps: 10,
-                    qrbox: { width: 250, height: 250 }
-                },
-                (decodedText) => {
-                    if (lastScannedTokenRef.current === decodedText) return;
+            try {
+                scanner = new Html5Qrcode("qr-reader");
+                scannerRef.current = scanner;
 
-                    lastScannedTokenRef.current = decodedText;
-                    setQrToken(decodedText);
-                    searchTicket(decodedText);
-                },
-                () => {}
-            );
+            } catch (error) {
+                console.error("Failed starting QR camera:", error);
+                return;
+            }
+        if (scanner.isScanning) return;
 
-            setIsCameraRunning(true);
-
-        } catch (error) {
-            console.error("Failed starting QR camera:", error);
-        }
     }
+
 
 
     async function stopCamera() {
@@ -209,7 +195,7 @@ export function TicketScanner() {
     }
 
 
- 
+
 
 
     function formatDate(date: string): string {
