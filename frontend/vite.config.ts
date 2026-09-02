@@ -21,13 +21,13 @@ export default defineConfig({
                 deadCodeInjection: false,
 
                 debugProtection: false,
-                disableConsoleOutput: true,
+                disableConsoleOutput: false,
 
                 identifierNamesGenerator: 'hexadecimal',
 
                 renameGlobals: false,
 
-                selfDefending: true,
+                selfDefending: false,
 
                 stringArray: true,
                 stringArrayEncoding: ['base64'],
