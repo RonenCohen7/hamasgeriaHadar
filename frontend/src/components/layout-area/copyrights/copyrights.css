@@ -1,24 +1,45 @@
 .copyrights {
-    height: 100%;
-
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    gap: 10px;
 
-    padding: 0 20px;
+    min-height: 44px;
+    padding: 10px 16px;
 
-   
-    border-top: 1px solid rgba(148, 163, 184, 0.12);
+    font-size: 0.9rem;
+    color: #5f6368;
+    background: #f8f8f8;
 
-    color: #64748b;
-    font-size: 12px;
+    border-top: 1px solid #e5e5e5;
+    text-align: center;
+    flex-wrap: wrap;
 }
 
-.copyrights p {
-    margin: 0;
+.copyrights a {
+    color: #1f3b5c;
+    text-decoration: none;
+    font-weight: 600;
 }
 
-.copyrights p::before {
-    content: "🍺";
-    margin-right: 8px;
+.copyrights a:hover {
+    text-decoration: underline;
+}
+
+.developer-credit::after {
+    content: "•";
+    margin: 0 8px;
+    color: #aaa;
+}
+
+@media (max-width: 600px) {
+    .copyrights {
+        flex-direction: column;
+        gap: 4px;
+        padding: 8px 12px;
+    }
+
+    .developer-credit::after {
+        display: none;
+    }
 }
