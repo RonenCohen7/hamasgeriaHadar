@@ -44,7 +44,7 @@ class MakeService {
                         ? `${customer.firstName} ${customer.lastName}`
                         : "",
                     email: customer?.email ?? "",
-                    phon: customer?.phone ?? "",
+                    phone: customer?.phone ?? "",
                     items: sale.eventName 
                         ? `${sale.eventName} X ${sale.ticketQuantity ?? 1}`
                         : "",
