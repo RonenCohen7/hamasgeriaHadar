@@ -1,7 +1,8 @@
 import axios from "axios";
-import { AddSaleOrderModel, SaleOrderModel } from "../models/sale-order-model";
+
 import { appConfig } from "../utils/app-config";
 import type { PurchaseEventTicketsModel } from "../models/event-model";
+import { SaleOrderModel, type AddSaleOrderModel } from "../models/sale-order-model";
 
 
 
@@ -27,7 +28,6 @@ class SaleOrderService {
 
     
 
-
     //sale ticket
     public async purchaseEventTickets(order: PurchaseEventTicketsModel):Promise<SaleOrderModel>{
 
@@ -49,6 +49,33 @@ class SaleOrderService {
 
     }
 
+
+    //Customer report Bit Transfer 
+    public async reportPayment(idSale:number):Promise<SaleOrderModel>{
+
+        const response = await axios.patch<SaleOrderModel>(
+            `${appConfig.salesUrl}/${idSale}/report-payment`
+        );
+        return response.data
+    }
+
+    //Admin/Manager confirm report Bit payment
+    public async confirmBitPayment(idSale:number):Promise<SaleOrderModel>{
+
+        const response = await axios.patch<SaleOrderModel>(
+            `${appConfig.adminSalesUrl}a/${idSale}/confirm-payment`
+        )
+        return response.data;
+    }
+
+    //Admin/Manager update sale status
+    public async updateSaleStatus(idSale:number, status:string):Promise<SaleOrderModel>{
+        const response = await axios.patch<SaleOrderModel>(
+            `${appConfig.adminSalesUrl}/${idSale}/status`,
+            { status }
+        )
+        return response.data;
+    }
     
 }
 

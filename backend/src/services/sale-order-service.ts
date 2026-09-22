@@ -4,10 +4,10 @@ import { AddSaleOrderDto, PurchaseEventTicketsDto, SaleOrderModel } from "../mod
 import { dal } from "../utils/dal";
 import { getIo } from "../utils/socket";
 import { sanitizeText } from "../utils/sanitize";
-import { EventStatus, PaymentMethod } from "../models/enum";
+import { EventStatus, PaymentMethod, SaleStatus } from "../models/enum";
 import { vipCardService } from "./vip-card-service";
 import crypto from "crypto";
-
+import { makeService } from "./make-service";
 
 class SaleOrderService {
 
@@ -20,7 +20,12 @@ class SaleOrderService {
                 so.sale_number As saleNumber,
                 so.id_event AS idEvent,
                 so.created_by AS createdBy,
-                so.customer_name AS customerName,
+                
+                COALESCE(
+                NULLIF(so.customer_name, ''),
+                CONCAT(c.first_name, ' ', c.last_name)
+                        ) AS customerName,
+
                 so.sale_date AS saleDate,
                 so.sale_status AS saleStatus,
                 
@@ -46,7 +51,10 @@ class SaleOrderService {
 
             JOIN users AS u
                 ON so.created_by = u.id_user
-
+            
+            LEFT JOIN customers AS c
+                ON so.id_customer = c.id_customer
+            
             ORDER BY so.sale_date DESC
         `;
         const sales = await dal.execute(sql) as SaleOrderModel[];
@@ -67,7 +75,12 @@ class SaleOrderService {
                 so.ticket_unit_price AS ticketUnitPrice,
                 so.id_event AS idEvent,
                 so.created_by AS createdBy,
-                so.customer_name AS customerName,
+            
+                COALESCE(
+                    NULLIF(so.customer_name, ''),
+                    CONCAT(c.first_name, ' ', c.last_name)
+                    ) AS customerName,
+
                 so.sale_date AS saleDate,
                 so.sale_status AS saleStatus,
                 
@@ -94,6 +107,9 @@ class SaleOrderService {
 
             JOIN users AS u
                 ON so.created_by = u.id_user
+
+            LEFT JOIN customers AS c
+                ON so.id_customer = c.id_customer
 
             WHERE so.id_sale = ?
         `;
@@ -441,7 +457,31 @@ class SaleOrderService {
 
     }
 
+    // Report Bit payment - waiting for admin confirmation
+    public async reportPayment(idSale: number): Promise<SaleOrderModel> {
 
+        const sale = await this.getOneSale(idSale);
+
+        if (sale.saleStatus !== "open") {
+            throw new Error("Sale is not open");
+        }
+
+        const sql = `
+        UPDATE sales_orders
+        SET
+            sale_status = ?,
+            payment_method = ?
+        WHERE id_sale = ?
+    `;
+
+        await dal.execute(sql, [
+            "payment_reported",
+            PaymentMethod.Bit,
+            idSale
+        ]);
+
+        return await this.getOneSale(idSale);
+    }
 
 
     //Complete Pay Sale
@@ -454,10 +494,13 @@ class SaleOrderService {
         }
 
 
-
         //Prevent double payment
         if (sale.saleStatus == "paid") {
             return sale
+        }
+
+        if (paymentMethod === PaymentMethod.Bit && sale.saleStatus !== "payment_reported") {
+            throw new Error("Bit payment has not been reported yet")
         }
 
 
@@ -519,7 +562,7 @@ class SaleOrderService {
         }
 
         //Create tickets after payments
-        if(sale.idEvent && sale.ticketQuantity){
+        if (sale.idEvent && sale.ticketQuantity) {
 
             //prevent duplicate ticket
             const existingTicketsSql = `
@@ -527,15 +570,15 @@ class SaleOrderService {
                 FROM tickets
                 WHERE id_sale =?
             `;
-            const existingTickets = await dal.execute(existingTicketsSql,[idSale]) as {count: number}[];
+            const existingTickets = await dal.execute(existingTicketsSql, [idSale]) as { count: number }[];
 
             const existingCount = Number(existingTickets[0].count);
 
-            if(existingCount == 0){
-                for (let i =0; i< sale.ticketQuantity; i ++){
-                    const ticketNumber = 
+            if (existingCount == 0) {
+                for (let i = 0; i < sale.ticketQuantity; i++) {
+                    const ticketNumber =
                         `TKT-${idSale}-${i + 1}-${Date.now()}`;
-                    
+
                     const qrToken =
                         crypto.randomBytes(32).toString("hex");
 
@@ -552,7 +595,7 @@ class SaleOrderService {
                         VALUES (?,?,?,?,?,?,?)
                     `;
 
-                    await dal.execute(ticketSql,[
+                    await dal.execute(ticketSql, [
                         idSale,
                         sale.idEvent,
                         sale.idCustomer ?? null,
@@ -566,10 +609,154 @@ class SaleOrderService {
 
         }
 
-        return await this.getOneSale(idSale);
+        const completedSale = await this.getOneSale(idSale)
 
+        try {
+            await makeService.sendNewOrder(completedSale)
+        } catch (err) {
+            console.log("Failed to send paid order to Make", err)
+        }
 
+        return completedSale
     }
+
+        //Update Sale Status
+    public async updateSaleStatus(
+        idSale: number,
+        newStatus: SaleStatus
+    ): Promise<SaleOrderModel> {
+
+        await dal.transaction(async (connection) => {
+
+            // Get sale and lock it during the transaction.
+            const [saleRows]: any = await connection.query(`
+                SELECT
+                    id_sale,
+                    id_event,
+                    sale_status,
+                    ticket_quantity
+                FROM sales_orders
+                WHERE id_sale = ?
+                FOR UPDATE
+            `, [idSale]);
+
+            const sale = saleRows[0];
+
+            if (!sale) {
+                throw new ResourceNotFoundError(idSale);
+            }
+
+            const currentStatus = sale.sale_status as SaleStatus;
+
+            // Bit payment must be confirmed through completePayment.
+            if (
+                currentStatus === SaleStatus.PaymentReported &&
+                newStatus === SaleStatus.Paid
+            ) {
+                throw new Error(
+                    "Bit payment must be confirmed through the payment confirmation flow"
+                );
+            }
+
+            // Do not manually move an unpaid sale to paid.
+            if (
+                currentStatus === SaleStatus.Open &&
+                newStatus === SaleStatus.Paid
+            ) {
+                throw new Error(
+                    "Payment must be completed through the payment flow"
+                );
+            }
+
+            // Cancelled and refunded sales are final.
+            // Restoring them requires a dedicated restore flow
+            // because tickets and expected_guests were already updated.
+            if (
+                currentStatus === SaleStatus.Cancelled ||
+                currentStatus === SaleStatus.Refunded
+            ) {
+                // Same status - nothing to change.
+                if (currentStatus === newStatus) {
+                    return;
+                }
+
+                throw new Error(
+                    "Cancelled or refunded sale cannot be reopened"
+                );
+            }
+
+            const allowedStatuses: SaleStatus[] = [
+                SaleStatus.Open,
+                SaleStatus.Cancelled,
+                SaleStatus.Refunded
+            ];
+
+            if (!allowedStatuses.includes(newStatus)) {
+                throw new Error("Invalid sale status");
+            }
+
+            const wasPaid =
+                currentStatus === SaleStatus.Paid;
+
+            const isCancellation =
+                newStatus === SaleStatus.Cancelled ||
+                newStatus === SaleStatus.Refunded;
+
+            // A paid event order is being cancelled/refunded.
+            if (
+                wasPaid &&
+                isCancellation &&
+                sale.id_event &&
+                sale.ticket_quantity
+            ) {
+
+                const ticketStatus =
+                    newStatus === SaleStatus.Refunded
+                        ? "refunded"
+                        : "cancelled";
+
+                // Cancel/refund all active tickets belonging to this sale.
+                await connection.query(`
+                    UPDATE tickets
+                    SET ticket_status = ?
+                    WHERE id_sale = ?
+                      AND ticket_status IN ('valid', 'checked_in')
+                `, [
+                    ticketStatus,
+                    idSale
+                ]);
+
+                // Remove guests that were added when payment was completed.
+                await connection.query(`
+                    UPDATE events
+                    SET expected_guests =
+                        GREATEST(
+                            COALESCE(expected_guests, 0) - ?,
+                            0
+                        )
+                    WHERE id_event = ?
+                      AND is_deleted = 0
+                `, [
+                    sale.ticket_quantity,
+                    sale.id_event
+                ]);
+            }
+
+            // Update sale status.
+            await connection.query(`
+                UPDATE sales_orders
+                SET sale_status = ?
+                WHERE id_sale = ?
+            `, [
+                newStatus,
+                idSale
+            ]);
+        });
+
+        return await this.getOneSale(idSale);
+    }
+ 
+
 }
 
 export const saleOrderService = new SaleOrderService();

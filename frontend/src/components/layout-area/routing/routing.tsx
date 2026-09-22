@@ -55,6 +55,9 @@ import { TicketScanner } from "../../user-area/ticket-scanner/ticket-scanner";
 import { CustomerOrders } from "../../customers-area/customer-orders/customer-orders";
 import { Attendance } from "../../events-area/attendance/attendance";
 import { WhatsappConnect } from "../../whatsapp-area/whatsapp-connect/whatsapp-connect";
+import { AdminOrders } from "../../sales-area/admin-orders/admin-orders";
+import { AdminOrderDetails } from "../../sales-area/admin-order-details/admin-order-details";
+
 
 
 
@@ -74,6 +77,10 @@ export function Routing() {
             <Route path="/customer-orders/:customerId" element={<CustomerOrders />} />
 
             <Route path="/customer-orders" element={<CustomerOrders />} />
+
+            <Route path="/admin/orders" element={<AuthGuard><AdminOrders/></AuthGuard>}/>
+
+            <Route path="/admin/orders/:id" element={<AuthGuard><AdminOrderDetails/></AuthGuard>}/>
 
 
 

@@ -44,6 +44,11 @@ class AppConfig {
 
 
 
+    //Make App for googleSheet 
+    public readonly makeNewOrderWebhookUrl = process.env.MAKE_NEW_ORDER_WEBHOOK_URL
+
+
+
 
 }
 

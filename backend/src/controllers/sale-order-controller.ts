@@ -1,6 +1,10 @@
 import express, { Request, Response, NextFunction } from "express"
 import { saleOrderService } from "../services/sale-order-service";
 import { AddSaleOrderDto } from "../models/sale-order-model";
+import { verifyToken } from "../middleware/verify-token";
+import { allowRoles } from "../middleware/role-middleware";
+import { PaymentMethod, SaleStatus } from "../models/enum";
+
 
 
 class SaleOrderController {
@@ -17,7 +21,13 @@ class SaleOrderController {
 
         this.router.post("/api/sales/events-tickets", this.purchaseEventTickets);
 
+        this.router.patch("/api/sales/:id/report-payment", this.reportPayment);
+
         this.router.patch("/api/sales/:id/payment", this.completePayment);
+
+        this.router.patch("/api/admin/sales/:id/confirm-payment", verifyToken, allowRoles("admin", 'manager'), this.confirmBitPayment);
+
+        this.router.patch("/api/admin/sales/:id/status", verifyToken, allowRoles("admin", "manager"), this.updateSaleStatus);
     }
 
 
@@ -84,6 +94,21 @@ class SaleOrderController {
     }
 
 
+    // Report Bit payment
+    private async reportPayment(request: Request, response: Response, next: NextFunction): Promise<void> {
+
+        try {
+            const idSale = Number(request.params.id);
+
+            const sale = await saleOrderService.reportPayment(idSale);
+
+            response.json(sale);
+        }
+        catch (err: any) {
+            next(err);
+        }
+    }
+
     //Complete Payment Sal
     private async completePayment(request: Request, response: Response, next: NextFunction): Promise<void> {
 
@@ -92,12 +117,71 @@ class SaleOrderController {
 
             const { paymentMethod, idVipCard } = request.body;
 
-            const sale = await saleOrderService.completePayment(idSale, paymentMethod,idVipCard);
+            if (paymentMethod === PaymentMethod.Bit) {
+                response.status(403).json({
+                    message: "Bit payment requires manager confirmation"
+                });
+                return;
+            }
+
+            const sale = await saleOrderService.completePayment(idSale, paymentMethod, idVipCard);
 
             response.json(sale);
 
 
         } catch (err: any) {
+            next(err)
+        }
+    }
+
+
+    // Admin/Manager confirms reported Bit payment
+    private async confirmBitPayment(request: Request, response: Response, next: NextFunction): Promise<void> {
+        try {
+            const idSale = Number(request.params.id);
+
+            const sale = await saleOrderService.completePayment(
+                idSale,
+                PaymentMethod.Bit,
+                null
+            );
+
+            response.json(sale);
+        }
+        catch (err: any) {
+            next(err);
+        }
+    }
+
+    //Admin update Status Payment
+    private async updateSaleStatus(request:Request, response:Response, next:NextFunction):Promise<void>{
+        try {
+
+            const idSale = Number(request.params.id);
+
+            const {status} = request.body;
+
+            if(!Number.isInteger(idSale) || idSale <= 0){
+                response.status(400).json({
+                    message:"Invalid sale ID"
+                })
+                return;
+            }
+
+            if(!Object.values(SaleStatus).includes(status as SaleStatus)){
+                response.status(400).json({
+                    message:"Invalid sale status"
+                })
+                return;
+            }
+
+            const sale = await saleOrderService.updateSaleStatus(
+                idSale,
+                status as SaleStatus
+            )
+            response.json(sale)
+
+        }catch(err: any){
             next(err)
         }
     }

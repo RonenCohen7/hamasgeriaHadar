@@ -4,7 +4,7 @@ import { AddSaleOrderItemDto } from "./sale-order-item-model";
 export class SaleOrderModel {
     idSale!: number;
     saleNumber!: string;
-
+    eventName!: string | null;
     idEvent!: number | null;
     idCustomer!: number | null;
     idVipCard!: number | null;
@@ -38,6 +38,7 @@ export class SaleOrderModel {
 export class AddSaleOrderDto {
     saleNumber!: string;
     idEvent?: number | null;
+    eventName!: string | null;
     idCustomer?: number | null;
     idVipCard?: number | null;
 
@@ -78,6 +79,5 @@ export class PurchaseEventTicketsDto {
 
 
 export class SaleOrderDetailsModel extends SaleOrderModel {
-    eventName!: string | null;
     createdByName!: string;
 }

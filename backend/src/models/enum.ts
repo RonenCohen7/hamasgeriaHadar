@@ -16,7 +16,7 @@ export enum UnitType {
 
 
 export enum SupplierOrderStatus {
-    Draft ="draft",
+    Draft = "draft",
     Ordered = "ordered",
     PartiallyReceived = "partially_received",
     Received = "received",
@@ -31,7 +31,8 @@ export enum EventStatus {
 }
 
 export enum SaleStatus {
-    Open ="open",
+    Open = "open",
+    PaymentReported = "payment_reported",
     Paid = "paid",
     Cancelled = "cancelled",
     Refunded = "refunded"
@@ -45,7 +46,7 @@ export enum PaymentMethod {
     PayBox = "pay_box",
     VIPCard = "vip_card",
     Other = "other"
-    
+
 }
 
 

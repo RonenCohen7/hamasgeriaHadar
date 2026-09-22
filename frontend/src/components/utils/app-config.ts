@@ -15,6 +15,8 @@ class AppConfig {
 
     public readonly salesUrl = this.baseUrl + "sales";
 
+    public readonly adminSalesUrl = this.baseUrl + "admin/sales";
+
     public readonly inventoryUrl = this.baseUrl + "inventory/live"
 
     public readonly usersUrl = this.baseUrl + "users/";

@@ -137,7 +137,7 @@ export function Menu() {
                             📋
                         </NavLink>)}
 
-                            {customer?.hasVipCard && (<NavLink
+                        {customer?.hasVipCard && (<NavLink
                             to={`/customer-orders`}
                             className="menu-link"
                             data-tooltip={t("menu.myOrders")}
@@ -167,16 +167,25 @@ export function Menu() {
                                 <FaWarehouse />
                             </NavLink>
 
-
-
                         )}
-                          {(role === "admin" || role === "manager") && (
+                        {(role === "admin" || role === "manager") && (
+                            <NavLink to="/admin/orders"
+                                className="menu-link"
+                                title={t("menu.adminOrders")}
+                                data-tooltip={t("menu.adminOrders")}
+                            >
+                                📋
+                            </NavLink>
+                        )}
+
+
+                        {(role === "admin" || role === "manager") && (
                             <NavLink
                                 to="/ticket-scanner"
                                 className="menu-link"
                                 data-tooltip={t("menu.ticketScanner")}
                             >
-                                    🎟️
+                                🎟️
 
                             </NavLink>
 

@@ -10,6 +10,9 @@ import { vipCardService } from "../../service/vipCardService";
 import { dialogService } from "../../service/dialogService";
 import { useNavigate } from "react-router-dom";
 
+import qr_pay from "../../../assets/images/qr_pay.png";
+import { saleOrderService } from "../../service/sale-order-service";
+
 
 
 interface PaymentModalProps {
@@ -166,6 +169,27 @@ export function PaymentModal(props: PaymentModalProps) {
             return;
         }
 
+
+        //BIT
+        if (paymentMethod === PaymentMethod.Bit) {
+
+            const confirmed = await dialogService.bitPayment(
+                totalAmount,
+                qr_pay,
+                {
+                    title: "Payment via Bit",
+                    transfer: "Please transfer the order amount using Bit",
+                    details: "",
+                    instructions: 'After completing the transfer, click "Payment Transferred"',
+                    confirm: "Payment Transferred",
+                    cancel: "Cancel"
+                }
+            );
+
+            if (!confirmed) return;
+            await saleOrderService.reportPayment(saleId);
+        }
+
         if (paymentMethod === PaymentMethod.VIPCard) {
 
             if (!selectedVipCard) {
@@ -191,8 +215,8 @@ export function PaymentModal(props: PaymentModalProps) {
 
                 onClose()
 
-                navigate(`/vip-cards/${selectedVipCard.idVipCard}/recharge`,{
-                    state : {
+                navigate(`/vip-cards/${selectedVipCard.idVipCard}/recharge`, {
+                    state: {
                         returnTo: window.location.pathname,
                         idSale: saleId,
                         idVipCard: selectedVipCard.idVipCard,
