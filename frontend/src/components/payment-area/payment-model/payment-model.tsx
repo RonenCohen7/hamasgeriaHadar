@@ -187,7 +187,15 @@ export function PaymentModal(props: PaymentModalProps) {
             );
 
             if (!confirmed) return;
+
             await saleOrderService.reportPayment(saleId);
+
+            await dialogService.success(
+                "✓",
+                "Payment reported successfully. Waiting for manager approval."
+            )
+            onClose();
+            return
         }
 
         if (paymentMethod === PaymentMethod.VIPCard) {
