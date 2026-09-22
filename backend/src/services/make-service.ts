@@ -40,6 +40,7 @@ class MakeService {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
+                    environment: process.env.ENVIRONMENT ?? "development",
                     orderId: sale.idSale,
                     date: sale.createdAt,
                     customer: customer 
