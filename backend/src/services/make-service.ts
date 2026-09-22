@@ -30,6 +30,8 @@ class MakeService {
 
         const customer = customers[0]
 
+        console.log(`Sending order ${sale.idSale} to Make...`);
+
         const response = await fetch(
             appConfig.makeNewOrderWebhookUrl,
             {
@@ -58,6 +60,8 @@ class MakeService {
         if(!response.ok) {
             throw new Error(`Make webhook failed: ${response.status}`)
         }
+
+        console.log(`Make webhook success for order ${sale.idSale}, status: ${response.status}`);
     }
 }
 
