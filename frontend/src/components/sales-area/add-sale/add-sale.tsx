@@ -70,8 +70,8 @@ export function AddSale() {
                 return
             }
             setIsSaving(true);
+            
             const sale: AddSaleOrderModel = {
-                idEvent: null,
                 discountAmount,
                 notes: "Sale created from POS",
                 items
