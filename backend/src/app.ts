@@ -32,6 +32,7 @@ import cookieParser from "cookie-parser";
 import { error } from "console";
 import { supplierReceiptController } from "./controllers/supplier-receipt-controller";
 import { ticketController } from "./controllers/ticket-controller";
+import { whatsappController } from "./controllers/whatsapp-controller";
 
 
 
@@ -106,6 +107,7 @@ class App {
             app.use(vipReportController.router);
             app.use(supplierReceiptController.router);
             app.use(ticketController.router);
+            app.use(whatsappController.router);
 
             app.use(errorMiddleware.routeNotFound);
             app.use(errorMiddleware.catchAll);

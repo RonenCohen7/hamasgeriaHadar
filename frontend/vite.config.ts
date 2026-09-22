@@ -1,14 +1,18 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+
 import obfuscatorPluginModule from 'vite-plugin-javascript-obfuscator'
 
 const obfuscatorPlugin =
     'default' in obfuscatorPluginModule
         ? obfuscatorPluginModule.default
         : obfuscatorPluginModule
+
 export default defineConfig({
     plugins: [
         react(),
+
+      
 
         obfuscatorPlugin({
             apply: 'build',
@@ -38,4 +42,21 @@ export default defineConfig({
             },
         }),
     ],
+server: {
+    host: '0.0.0.0',
+  
+    proxy: {
+        '/api': {
+            target: 'http://localhost:4000',
+            changeOrigin: true,
+            secure: false,
+        },
+        '/uploads': {
+            target: 'http://localhost:4000',
+            changeOrigin: true,
+            secure: false,
+        },
+    },
+},
+
 })

@@ -54,6 +54,7 @@ import { EditSupplierOrder } from "../../suppliers-area/edit-supplier-order/edit
 import { TicketScanner } from "../../user-area/ticket-scanner/ticket-scanner";
 import { CustomerOrders } from "../../customers-area/customer-orders/customer-orders";
 import { Attendance } from "../../events-area/attendance/attendance";
+import { WhatsappConnect } from "../../whatsapp-area/whatsapp-connect/whatsapp-connect";
 
 
 
@@ -69,12 +70,12 @@ export function Routing() {
             <Route path="/customer-register" element={<CustomerRegister />} />
 
             <Route path="/customer-dashboard" element={<CustomerProtectedRoute><CustomerDashboard /></CustomerProtectedRoute>} />
-            
+
             <Route path="/customer-orders/:customerId" element={<CustomerOrders />} />
-            
+
             <Route path="/customer-orders" element={<CustomerOrders />} />
 
-           
+
 
 
             <Route path="login" element={<Login />} />
@@ -124,7 +125,7 @@ export function Routing() {
 
             <Route path="/events/order/:idEvent" element={<EventOrder />} />
 
-             <Route path="events/:idEvent/attendance" element={<AuthGuard><Attendance /></AuthGuard>}/>
+            <Route path="events/:idEvent/attendance" element={<AuthGuard><Attendance /></AuthGuard>} />
 
 
 
@@ -180,7 +181,7 @@ export function Routing() {
 
 
 
-
+            <Route path="/whatsapp-connect" element={<WhatsappConnect />} />
 
             <Route path="*" element={<h2>Page Not Found</h2>} />
         </Routes>
