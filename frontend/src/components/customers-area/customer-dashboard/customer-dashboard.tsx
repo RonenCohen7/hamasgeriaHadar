@@ -7,7 +7,7 @@ import { EventModel } from "../../models/event-model";
 import { useTitle } from "../../utils/UseTitle";
 import { eventService } from "../../service/eventService";
 import { useTranslation } from "react-i18next";
-
+import chefImage from "../../../assets/images/vip-chef.jpg";
 import pubDrinks from "../../../assets/images/pubDrinks.jpg";
 
 
@@ -438,7 +438,7 @@ export function CustomerDashboard() {
                     >
 
                         <img
-                            src="/src/assets/images/vip-chef.jpg"
+                            src={chefImage}
                             alt={t("customerDashboard.experiences.chef.alt")}
                         />
 
