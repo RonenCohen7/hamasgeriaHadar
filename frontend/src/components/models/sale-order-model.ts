@@ -52,7 +52,7 @@ export class AddSaleOrderModel {
 
     customerName?: string | null;
 
-    paymentMethod!: PaymentMethod;
+    paymentMethod?: PaymentMethod;
 
     discountAmount?: number;
 
