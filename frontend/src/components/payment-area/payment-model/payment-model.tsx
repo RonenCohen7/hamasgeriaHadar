@@ -41,7 +41,7 @@ export function PaymentModal(props: PaymentModalProps) {
     const navigate = useNavigate();
 
     const [paymentMethod, setPaymentMethod] =
-        useState<PaymentMethod>(PaymentMethod.Cash);
+        useState<PaymentMethod>(PaymentMethod.Bit);
 
     const [receivedAmount, setReceivedAmount] =
         useState(totalAmount.toFixed(2));
