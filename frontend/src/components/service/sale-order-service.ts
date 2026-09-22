@@ -63,7 +63,7 @@ class SaleOrderService {
     public async confirmBitPayment(idSale:number):Promise<SaleOrderModel>{
 
         const response = await axios.patch<SaleOrderModel>(
-            `${appConfig.adminSalesUrl}a/${idSale}/confirm-payment`
+            `${appConfig.adminSalesUrl}/${idSale}/confirm-payment`
         )
         return response.data;
     }
