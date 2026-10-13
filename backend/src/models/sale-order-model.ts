@@ -5,7 +5,7 @@ export class SaleOrderModel {
     idSale!: number;
     saleNumber!: string;
     eventName!: string | null;
-    idEvent!: number | null;
+    idEvent?: number | null;
     idCustomer!: number | null;
     idVipCard!: number | null;
 
