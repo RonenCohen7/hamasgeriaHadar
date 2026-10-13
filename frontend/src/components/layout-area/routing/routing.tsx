@@ -18,6 +18,7 @@ import { InventoryMonitor } from "../../inventory-area/inventory-monitor/invento
 import { InventoryCount } from "../../sales-area/inventory-count/inventory-count";
 import { ContactUs } from "../../pages-area/contact-us/contact-us";
 import { Login } from "../../user-area/login/login";
+import { EmployeeForgotPassword } from "../../user-area/forgot-password/employee-forgot-password";
 import { Register } from "../../user-area/register/register";
 
 import { AuthGuard } from "../../user-area/auth-guard/auth-guard";
@@ -86,6 +87,7 @@ export function Routing() {
 
 
             <Route path="login" element={<Login />} />
+            <Route path="forgot-password" element={<EmployeeForgotPassword />} />
             <Route path="register" element={<Register />} />
 
             <Route path="/about" element={<About />} />

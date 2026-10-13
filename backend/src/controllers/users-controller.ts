@@ -6,7 +6,8 @@ import express, {
 
 import { LoginUserDto, RegisterUserDto, UpdatedUserDto } from "../models/user-model";
 import { userService } from "../services/users-service";
-import { authLimiter } from "../middleware/rate-limit-middleware";
+import { authLimiter, passwordResetLimiter } from "../middleware/rate-limit-middleware";
+import { employeePasswordResetService } from "../services/employee-password-reset-service";
 import { verify } from "jsonwebtoken";
 import { allowRoles } from "../middleware/role-middleware";
 import { verifyToken } from "../middleware/verify-token";
@@ -23,6 +24,10 @@ class UserController {
 
         this.router.post("/api/users/register", this.registerUser);
         this.router.post("/api/users/login", this.login);
+
+        this.router.post("/api/users/forgot-password/request-code", passwordResetLimiter, this.requestResetCode);
+        this.router.post("/api/users/forgot-password/verify-code", passwordResetLimiter, this.verifyResetCode);
+        this.router.patch("/api/users/forgot-password/reset", passwordResetLimiter, this.resetPassword);
 
 
         this.router.get("/api/users", verifyToken, allowRoles("admin"), this.getAllUsers);
@@ -76,6 +81,49 @@ class UserController {
         }
     }
 
+
+
+    //Forgot Password - Step 1 - Send code to email
+    private async requestResetCode(request: Request, response: Response, next: NextFunction): Promise<void> {
+        try {
+            await employeePasswordResetService.requestCode(request.body.email);
+
+            response.json({ message: "Code sent" });
+
+        } catch (err) {
+            next(err)
+        }
+    }
+
+
+    //Forgot Password - Step 2 - Verify code
+    private async verifyResetCode(request: Request, response: Response, next: NextFunction): Promise<void> {
+        try {
+            const { email, code } = request.body;
+
+            const resetToken = employeePasswordResetService.verifyCode(email, code);
+
+            response.json({ resetToken });
+
+        } catch (err) {
+            next(err)
+        }
+    }
+
+
+    //Forgot Password - Step 3 - Set new password
+    private async resetPassword(request: Request, response: Response, next: NextFunction): Promise<void> {
+        try {
+            const { resetToken, newPassword } = request.body;
+
+            await employeePasswordResetService.resetPassword(resetToken, newPassword);
+
+            response.json({ message: "Password updated successfully" });
+
+        } catch (err) {
+            next(err)
+        }
+    }
 
 
     //Get All Users

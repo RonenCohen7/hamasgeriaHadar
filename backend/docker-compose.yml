@@ -41,7 +41,7 @@ services:
         condition: service_healthy
 
     environment:
-      ENVIRONMENT: production
+      ENVIRONMENT: ${ENVIRONMENT}
       PORT: 4000
 
       MYSQL_HOST: mysql
@@ -57,6 +57,15 @@ services:
       BASE_EXPERIENCE_IMAGE_URL: ${BASE_EXPERIENCE_IMAGE_URL}
 
       WHATSAPP_VERIFY_TOKEN: ${WHATSAPP_VERIFY_TOKEN}
+
+      MAKE_NEW_ORDER_WEBHOOK_URL: ${MAKE_NEW_ORDER_WEBHOOK_URL}
+
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-465}
+      SMTP_SECURE: ${SMTP_SECURE:-true}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASS: ${SMTP_PASS:-}
+      MAIL_FROM: ${MAIL_FROM:-}
 
      
 

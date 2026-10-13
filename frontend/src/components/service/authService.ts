@@ -27,6 +27,24 @@ class AuthService {
         return response.data;
     }
 
+    //Forgot Password - Step 1
+    public async requestPasswordResetCode(email: string): Promise<void> {
+        await axios.post(appConfig.usersUrl + "forgot-password/request-code", { email });
+    }
+
+    //Forgot Password - Step 2
+    public async verifyPasswordResetCode(email: string, code: string): Promise<string> {
+        const response = await axios.post<{ resetToken: string }>(
+            appConfig.usersUrl + "forgot-password/verify-code", { email, code }
+        );
+        return response.data.resetToken;
+    }
+
+    //Forgot Password - Step 3
+    public async resetPassword(resetToken: string, newPassword: string): Promise<void> {
+        await axios.patch(appConfig.usersUrl + "forgot-password/reset", { resetToken, newPassword });
+    }
+
     //Logout
     public logout():void {
         store.dispatch(logout());

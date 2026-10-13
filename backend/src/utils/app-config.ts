@@ -48,6 +48,20 @@ class AppConfig {
     public readonly makeNewOrderWebhookUrl = process.env.MAKE_NEW_ORDER_WEBHOOK_URL
 
 
+    //Email (SMTP) - Resend: host smtp.resend.com, port 465, user "resend", pass = API key
+    public readonly smtpHost = process.env.SMTP_HOST;
+
+    public readonly smtpPort = Number(process.env.SMTP_PORT || 465);
+
+    public readonly smtpSecure = process.env.SMTP_SECURE !== "false";
+
+    public readonly smtpUser = process.env.SMTP_USER;
+
+    public readonly smtpPass = process.env.SMTP_PASS;
+
+    public readonly mailFrom = process.env.MAIL_FROM;
+
+
 
 
 }

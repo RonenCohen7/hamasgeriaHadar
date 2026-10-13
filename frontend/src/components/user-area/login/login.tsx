@@ -68,6 +68,12 @@ export function Login() {
                     </button>
 
                     <div className="register-link">
+                        <Link to="/forgot-password">
+                            {t("login.forgotPassword")}
+                        </Link>
+                    </div>
+
+                    <div className="register-link">
                         <span>{t("login.noAccount")}</span>
                         <Link to="/register">
                             {t("login.createAccount")}
