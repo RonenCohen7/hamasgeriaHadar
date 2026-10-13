@@ -8,6 +8,7 @@ import { eventService } from "../../service/eventService";
 import { EventModel } from "../../models/event-model";
 import pubDrinks from "../../../assets/images/pubDrinks.jpg";
 import { useTranslation } from "react-i18next";
+import { appConfig } from "../../utils/app-config";
 import i18n from "../../../i18n/i18n";
 
 
@@ -201,7 +202,7 @@ export function PublicHome() {
                     {events.map(event => {
 
                         const availablePlaces =
-                            event.maximumGuests != null
+                            appConfig.showEventCapacity && event.maximumGuests != null
                                 ? Math.max(
                                     event.maximumGuests -
                                     (event.expectedGuests ?? 0),
@@ -257,7 +258,13 @@ export function PublicHome() {
                                             {t("publicHome.events.defaultLocation")}
                                         </span>
 
-                                        {event.maximumGuests != null && (
+                                        {event.doorsOpen && (
+                                            <span>
+                                                🚪 {t("events.doorsOpen")}: {event.doorsOpen}
+                                            </span>
+                                        )}
+
+                                        {appConfig.showEventCapacity && event.maximumGuests != null && (
 
                                             <span>
                                                 👥{" "}

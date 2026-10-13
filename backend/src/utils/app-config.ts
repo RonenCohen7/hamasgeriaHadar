@@ -48,6 +48,10 @@ class AppConfig {
     public readonly makeNewOrderWebhookUrl = process.env.MAKE_NEW_ORDER_WEBHOOK_URL
 
 
+    //Event capacity (maximum_guests) is kept in the DB but only enforced when enabled
+    public readonly enforceEventCapacity = process.env.ENFORCE_EVENT_CAPACITY === "true";
+
+
     //Email (SMTP) - Resend: host smtp.resend.com, port 465, user "resend", pass = API key
     public readonly smtpHost = process.env.SMTP_HOST;
 

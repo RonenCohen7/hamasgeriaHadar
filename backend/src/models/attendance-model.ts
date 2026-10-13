@@ -6,6 +6,7 @@ export interface AttendanceModel {
 
     ticketNumber: string;
     ticketSource: string;
+    needsComfortChair: number;
 
     checkedInAt: string
     checkedInBy: number | null

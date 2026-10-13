@@ -42,6 +42,26 @@
     border-radius: 8px;
 }
 
+.ticket-comfort-chairs {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px 15px;
+    background: #f5f8fb;
+    border-radius: 10px;
+}
+
+.ticket-comfort-chairs small {
+    color: #667085;
+}
+
+.ticket-comfort-chair-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
 .ticket-order-total {
     display: flex;
     justify-content: space-between;

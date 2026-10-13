@@ -11,6 +11,7 @@ export class SaleOrderModel {
 
     ticketQuantity!: number | null;
     ticketUnitPrice!: number | null;
+    comfortChairs!: number;
 
 
     createdBy!: number;
@@ -71,6 +72,7 @@ export class PurchaseEventTicketsDto {
     idCustomer!: number;
     eventName!: string | null
     quantity!: number;
+    comfortChairs?: number;
 
     paymentMethod!: PaymentMethod;
     idVipCard!: number | null;

@@ -43,8 +43,11 @@ class EventService {
         formData.append("eventDescription", event.eventDescription ?? "");
         formData.append("eventStart", event.eventStart);
         formData.append("eventEnd", event.eventEnd);
+        formData.append("doorsOpen", event.doorsOpen ?? "");
         formData.append("eventLocation", event.eventLocation ?? "");
-        formData.append("maximumGuests", String(event.maximumGuests ?? ""));
+        if (appConfig.showEventCapacity) {
+            formData.append("maximumGuests", String(event.maximumGuests ?? ""));
+        }
         formData.append("expectedGuests", String(event.expectedGuests ?? ""));
         formData.append("ticketPrice", String(event.ticketPrice ?? 0));
 
@@ -71,8 +74,11 @@ class EventService {
         formData.append("eventDescription", event.eventDescription ?? "");
         formData.append("eventStart", event.eventStart);
         formData.append("eventEnd", event.eventEnd);
+        formData.append("doorsOpen", event.doorsOpen ?? "");
         formData.append("eventLocation", event.eventLocation ?? "");
-        formData.append("maximumGuests", String(event.maximumGuests ?? ""));
+        if (appConfig.showEventCapacity) {
+            formData.append("maximumGuests", String(event.maximumGuests ?? ""));
+        }
         formData.append("expectedGuests", String(event.expectedGuests ?? ""));
         formData.append("ticketPrice", String(event.ticketPrice ?? 0));
 

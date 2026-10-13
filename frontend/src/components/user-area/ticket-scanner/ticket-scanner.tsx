@@ -482,6 +482,12 @@ export function TicketScanner() {
                                         {ticket.ticketNumber}
 
                                     </p>
+
+                                    {Boolean(ticket.needsComfortChair) && (
+                                        <p className="ticket-comfort-chair-badge">
+                                            ♿ {t("ticketScanner.comfortChair")}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <span

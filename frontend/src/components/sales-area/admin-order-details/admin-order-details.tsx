@@ -223,6 +223,21 @@ export function AdminOrderDetails() {
                     </div>
 
 
+                    {Number(sale.comfortChairs ?? 0) > 0 && (
+                        <div>
+
+                            <span className="detail-label">
+                                {t("events.comfortChairs")}
+                            </span>
+
+                            <strong>
+                                ♿ {sale.comfortChairs}
+                            </strong>
+
+                        </div>
+                    )}
+
+
                     {/* Ticket price */}
 
                     <div>

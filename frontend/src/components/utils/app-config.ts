@@ -3,6 +3,9 @@ class AppConfig {
     public baseUrl = import.meta.env.VITE_API_URL;
     public baseMediaUrl = import.meta.env.VITE_MEDIA_URL;
 
+    // Must match ENFORCE_EVENT_CAPACITY on the backend
+    public readonly showEventCapacity = import.meta.env.VITE_SHOW_EVENT_CAPACITY === "true";
+
     public readonly productUrl = this.baseUrl + "products";
 
     public readonly productCategoriesUrl = this.baseUrl + "categories";

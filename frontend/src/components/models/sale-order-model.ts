@@ -38,6 +38,7 @@ export class SaleOrderModel {
     // Event ticket order
     ticketQuantity?: number | null;
     ticketUnitPrice?: number | null;
+    comfortChairs?: number;
 }
 
 

@@ -7,6 +7,7 @@ import { eventService } from "../../service/eventService";
 import { notificationService } from "../../service/notificationService";
 import { dialogService } from "../../service/dialogService";
 import { useTranslation } from "react-i18next";
+import { appConfig } from "../../utils/app-config";
 
 export function EventsList() {
 
@@ -210,15 +211,28 @@ export function EventsList() {
                                 ).toLocaleString()}
                             </span>
 
+                            {event.doorsOpen && (
+                                <span>
+                                    🚪 {t("events.doorsOpen")}: {event.doorsOpen}
+                                </span>
+                            )}
+
                             <span>
                                 📍 {event.eventLocation}
                             </span>
 
                             <span>
-                                👥 {event.expectedGuests ?? 0}
-                                {" / "}
-                                {event.maximumGuests ?? 0}
+                                🎟️ {t("events.ticketsSold")}: {event.expectedGuests ?? 0}
+                                {appConfig.showEventCapacity && event.maximumGuests != null && (
+                                    <> / {event.maximumGuests}</>
+                                )}
                             </span>
+
+                            {Number(event.comfortChairs ?? 0) > 0 && (
+                                <span className="event-comfort-chairs">
+                                    ♿ {t("events.comfortChairs")}: {event.comfortChairs}
+                                </span>
+                            )}
 
                             <span>
                                 💰 ₪{event.ticketPrice}

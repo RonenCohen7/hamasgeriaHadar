@@ -130,7 +130,8 @@
             "startRequired": "יש להזין תאריך התחלה",
             "success": "האירוע נוסף בהצלחה",
             "error": "הוספת האירוע נכשלה",
-            "vipPrice": "מחיר VIP"
+            "vipPrice": "מחיר VIP",
+            "doorsOpen": "פתיחת דלתות"
         },
         "edit": {
             "management": "ניהול אירועים",
@@ -194,7 +195,10 @@
             "back": "חזרה",
             "loading": "טוען דוח נוכחות...",
             "loadError": "טעינת דוח הנוכחות נכשלה"
-        }
+        },
+        "doorsOpen": "פתיחת דלתות",
+        "ticketsSold": "כרטיסים שנמכרו",
+        "comfortChairs": "כסאות נוחות"
     },
     "publicHome": {
         "hero": {
@@ -730,6 +734,12 @@
             "userNotFound": "העובד המחובר לא נמצא",
             "alreadyCheckedIn": "הכרטיס כבר נוצל לכניסה",
             "checkInFailed": "אישור הכניסה נכשל"
-        }
+        },
+        "comfortChair": "נדרש כסא נוחות"
+    },
+    "eventOrder": {
+        "comfortChairTitle": "כסא נוחות",
+        "comfortChairHint": "סמנו כרטיס עבור אורח נכה או מבוגר - נדאג לכסא נוח",
+        "ticketNumber": "כרטיס {{number}}"
     }
 }

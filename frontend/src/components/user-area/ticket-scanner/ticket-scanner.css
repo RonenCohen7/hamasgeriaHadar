@@ -347,6 +347,19 @@
     overflow-wrap: anywhere;
 }
 
+.ticket-comfort-chair-badge {
+    display: inline-block;
+    margin: 8px 0 0;
+    padding: 4px 10px;
+
+    background: #fff4e5;
+    color: #b54708;
+    border-radius: 999px;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
 
 /* ================= STATUS ================= */
 

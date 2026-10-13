@@ -8,6 +8,18 @@ import { imageService } from "./image-service";
 import { EventStatus } from "../models/enum";
 
 class EventService {
+
+    private toTimeOrNull(value: unknown): string | null {
+        const text = String(value ?? "").trim();
+        return /^\d{2}:\d{2}(:\d{2})?$/.test(text) ? text : null;
+    }
+
+    private toIntOrNull(value: unknown): number | null {
+        if (value === null || value === undefined || String(value).trim() === "") return null;
+        const number = Number(value);
+        return Number.isInteger(number) && number >= 0 ? number : null;
+    }
+
     //Get All Events
     public async getAllEvents(): Promise<EventModel[]> {
 
@@ -28,10 +40,18 @@ class EventService {
 
                 e.event_start AS eventStart,
                 e.event_end As eventEnd,
+                TIME_FORMAT(e.doors_open, '%H:%i') AS doorsOpen,
                 e.event_location AS eventLocation,
                 e.maximum_guests AS maximumGuests,
                 e.expected_guests AS expectedGuests,
                 e.actual_guests AS actualGuests,
+                (
+                    SELECT COUNT(*)
+                    FROM tickets AS t
+                    WHERE t.id_event = e.id_event
+                    AND t.needs_comfort_chair = 1
+                    AND t.ticket_status IN ('valid', 'checked_in')
+                ) AS comfortChairs,
                 e.ticket_price AS ticketPrice,
                 e.vip_price AS vipPrice,
                 e.event_status AS eventStatus,
@@ -71,6 +91,7 @@ class EventService {
 
                 e.event_start AS eventStart,
                 e.event_end AS eventEnd,
+                TIME_FORMAT(e.doors_open, '%H:%i') AS doorsOpen,
                 e.event_location AS eventLocation,
                 e.maximum_guests AS maximumGuests,
                 e.expected_guests AS expectedGuests,
@@ -118,6 +139,7 @@ class EventService {
                 cover_image,
                 event_start,
                 event_end,
+                doors_open,
                 event_location,
                 maximum_guests,
                 expected_guests,
@@ -127,7 +149,7 @@ class EventService {
                 event_status,
                 created_by
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `
         const values = [
             event.eventName,
@@ -135,8 +157,9 @@ class EventService {
             event.coverImage ?? null,
             event.eventStart,
             event.eventEnd ?? null,
+            this.toTimeOrNull(event.doorsOpen),
             event.eventLocation ?? null,
-            event.maximumGuests ?? null,
+            this.toIntOrNull(event.maximumGuests),
             event.expectedGuests ?? null,
             event.actualGuests ?? null,
             event.ticketPrice ?? 0,
@@ -180,6 +203,7 @@ class EventService {
             cover_image = ?,
             event_start = ?,
             event_end = ?,
+            doors_open = ?,
             event_location = ?,
             maximum_guests = ?,
             expected_guests = ?,
@@ -196,8 +220,11 @@ class EventService {
             coverImage,
             event.eventStart ?? null,
             event.eventEnd ?? null,
+            this.toTimeOrNull(event.doorsOpen),
             event.eventLocation ?? null,
-            event.maximumGuests ?? null,
+            event.maximumGuests === undefined
+                ? existingEvent.maximumGuests
+                : this.toIntOrNull(event.maximumGuests),
             event.expectedGuests ?? null,
             event.ticketPrice ?? 0,
             vipPrice,
@@ -234,6 +261,7 @@ class EventService {
 
                 event_start AS eventStart,
                 event_end AS eventEnd,
+                TIME_FORMAT(doors_open, '%H:%i') AS doorsOpen,
                 event_location AS eventLocation,
                 maximum_guests AS maximumGuests,
                 expected_guests AS expectedGuests,

@@ -10,11 +10,13 @@ export class EventModel {
 
     eventStart!: string;
     eventEnd!: string;
+    doorsOpen!: string | null;
     eventLocation!: string | null;
 
     maximumGuests!: number | null;
     expectedGuests!: number | null;
     actualGuests!: number | null;
+    comfortChairs?: number;
 
     ticketPrice!: number;
     vipPrice!: number | null;
@@ -31,5 +33,6 @@ export interface PurchaseEventTicketsModel {
     idEvent: number;
     idCustomer: number;
     quantity: number;
+    comfortChairs?: number;
     idVipCard?: number | null;
 }

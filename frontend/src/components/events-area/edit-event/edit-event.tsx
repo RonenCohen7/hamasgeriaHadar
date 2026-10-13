@@ -9,6 +9,7 @@ import { eventService } from "../../service/eventService";
 import { notificationService } from "../../service/notificationService";
 import { useTitle } from "../../utils/UseTitle";
 import { useTranslation } from "react-i18next";
+import { appConfig } from "../../utils/app-config";
 
 
 export function EditEvent() {
@@ -196,6 +197,16 @@ export function EditEvent() {
 
 
                 <div className="edit-event-field">
+                    <label>{t("events.add.doorsOpen")}</label>
+
+                    <input
+                        type="time"
+                        {...register("doorsOpen")}
+                    />
+                </div>
+
+
+                <div className="edit-event-field">
                     <label>{t("events.add.location")}</label>
 
                     <input
@@ -230,17 +241,19 @@ export function EditEvent() {
                 </div>
 
 
-                <div className="edit-event-field">
-                    <label>{t("events.add.maximumGuests")}</label>
+                {appConfig.showEventCapacity && (
+                    <div className="edit-event-field">
+                        <label>{t("events.add.maximumGuests")}</label>
 
-                    <input
-                        type="number"
-                        min="0"
-                        {...register("maximumGuests", {
-                            valueAsNumber: true
-                        })}
-                    />
-                </div>
+                        <input
+                            type="number"
+                            min="0"
+                            {...register("maximumGuests", {
+                                valueAsNumber: true
+                            })}
+                        />
+                    </div>
+                )}
 
 
                 <div className="edit-event-field">

@@ -1,5 +1,6 @@
 import { OkPacketParams } from "mysql2";
-import { ResourceNotFoundError } from "../models/client-errors";
+import { ResourceNotFoundError, ValidationError } from "../models/client-errors";
+import { appConfig } from "../utils/app-config";
 import { AddSaleOrderDto, PurchaseEventTicketsDto, SaleOrderModel } from "../models/sale-order-model";
 import { dal } from "../utils/dal";
 import { getIo } from "../utils/socket";
@@ -73,6 +74,7 @@ class SaleOrderService {
                 so.id_vip_card AS idVipCard,
                 so.ticket_quantity AS ticketQuantity,
                 so.ticket_unit_price AS ticketUnitPrice,
+                so.comfort_chairs AS comfortChairs,
                 so.id_event AS idEvent,
                 so.created_by AS createdBy,
             
@@ -329,6 +331,12 @@ class SaleOrderService {
             throw new Error("Ticket quantity must be  greater then zero")
         }
 
+        const comfortChairs = Number(order.comfortChairs ?? 0);
+
+        if (!Number.isInteger(comfortChairs) || comfortChairs < 0 || comfortChairs > order.quantity) {
+            throw new ValidationError("Comfort chairs must be between 0 and the ticket quantity");
+        }
+
 
 
         const eventSql = `
@@ -366,14 +374,13 @@ class SaleOrderService {
             throw new Error("This Event has been cancelled")
         }
 
-        const maximumGuests = Number(event.maximumGuests ?? 0);
+        if (appConfig.enforceEventCapacity && event.maximumGuests != null) {
 
-        const expectedGuests = Number(event.expectedGuests ?? 0);
+            const availablePlaces = Number(event.maximumGuests) - Number(event.expectedGuests ?? 0);
 
-        const availablePlaces = maximumGuests - expectedGuests;
-
-        if (order.quantity > availablePlaces) {
-            throw new Error(`Only ${availablePlaces} places are available for this event`)
+            if (order.quantity > availablePlaces) {
+                throw new Error(`Only ${availablePlaces} places are available for this event`)
+            }
         }
 
 
@@ -420,6 +427,7 @@ class SaleOrderService {
                 id_vip_card,
                 ticket_quantity,
                 ticket_unit_price,
+                comfort_chairs,
                 created_by,
                 sale_status,
                 payment_method,
@@ -428,7 +436,7 @@ class SaleOrderService {
                 total_amount,
                 notes
             )
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         `;
 
         const saleValues = [
@@ -438,6 +446,7 @@ class SaleOrderService {
             order.idVipCard ?? null,
             order.quantity,
             ticketUnitPrice,
+            comfortChairs,
             createdBy,
             "open",
             order.paymentMethod ?? null,
@@ -590,9 +599,10 @@ class SaleOrderService {
                             ticket_number,
                             qr_token,
                             ticket_status,
-                            ticket_source
+                            ticket_source,
+                            needs_comfort_chair
                         )
-                        VALUES (?,?,?,?,?,?,?)
+                        VALUES (?,?,?,?,?,?,?,?)
                     `;
 
                     await dal.execute(ticketSql, [
@@ -602,7 +612,8 @@ class SaleOrderService {
                         ticketNumber,
                         qrToken,
                         "valid",
-                        "website"
+                        "website",
+                        i < Number(sale.comfortChairs ?? 0)
                     ])
                 }
             }

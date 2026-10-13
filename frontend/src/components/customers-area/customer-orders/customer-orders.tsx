@@ -181,11 +181,15 @@ export function CustomerOrders() {
 
             <div className="customer-orders-grid">
 
-                {tickets.map(ticket => (
+                {tickets.map(ticket => {
+
+                    const showComfortChair = Boolean(ticket.needsComfortChair);
+
+                    return (
 
                     <article
                         key={ticket.idTicket}
-                        className="customer-order-card"
+                        className={`customer-order-card${showComfortChair ? " customer-order-card-comfort" : ""}`}
                     >
 
                         <div className="customer-order-header">
@@ -200,11 +204,26 @@ export function CustomerOrders() {
                                 </h2>
                             </div>
 
-                            <span
-                                className={`customer-order-status customer-order-status-${ticket.ticketStatus}`}
-                            >
-                                {ticket.ticketStatus}
-                            </span>
+                            <div className="customer-order-badges">
+
+                                {showComfortChair && (
+                                    <span
+                                        className="customer-order-comfort-chair"
+                                        title={isManagerView
+                                            ? (isHebrew ? "נדרש כסא נוחות" : "Comfort chair required")
+                                            : (isHebrew ? "הוזמן כסא נוחות" : "Comfort chair reserved")}
+                                    >
+                                        ♿
+                                    </span>
+                                )}
+
+                                <span
+                                    className={`customer-order-status customer-order-status-${ticket.ticketStatus}`}
+                                >
+                                    {ticket.ticketStatus}
+                                </span>
+
+                            </div>
 
                         </div>
 
@@ -308,7 +327,8 @@ export function CustomerOrders() {
 
                     </article>
 
-                ))}
+                    );
+                })}
 
             </div>
 

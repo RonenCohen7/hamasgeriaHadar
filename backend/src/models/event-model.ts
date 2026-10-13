@@ -13,12 +13,14 @@ export class EventModel {
 
     eventStart!: Date;
     eventEnd!: Date;
+    doorsOpen!: string | null;
 
     eventLocation!: string | null;
     maximumGuests!: number | null;
     
     expectedGuests!: number | null;
     actualGuests!: number | null;
+    comfortChairs?: number;
     
     ticketPrice!: number;
     vipPrice!:number | null
@@ -41,6 +43,7 @@ export class AddEventDto {
     createdBy?: number;
     eventStart!: Date;
     eventEnd!: Date;
+    doorsOpen?: string | null;
     eventLocation?: string;
     eventStatus?: string;
     actualGuests?: number | null;
@@ -66,6 +69,7 @@ export class UpdateEventDto {
 
     eventStart?: string;
     eventEnd?: string;
+    doorsOpen?: string | null;
     eventLocation?: string;
 
     maximumGuests?: number;

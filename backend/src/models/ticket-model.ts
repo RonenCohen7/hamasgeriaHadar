@@ -12,6 +12,7 @@ export interface TicketModel {
     
     ticketStatus: "valid" | "checked_in" | "cancelled" | "refunded";
     ticketSource: "website" | "phone" | "walk_in" | "other"
+    needsComfortChair: number;
 
     checkedInAt: string | null;
 

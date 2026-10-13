@@ -200,7 +200,7 @@ export function EventDetails() {
     // =========================================
 
     const availablePlaces =
-        event.maximumGuests != null
+        appConfig.showEventCapacity && event.maximumGuests != null
             ? Math.max(
                 event.maximumGuests -
                 (event.expectedGuests ?? 0),
@@ -352,6 +352,32 @@ export function EventDetails() {
                                 </div>
 
                             </div>
+
+
+
+                            {event.doorsOpen && (
+
+                                <div className="event-info-row">
+
+                                    <span className="event-info-icon">
+                                        🚪
+                                    </span>
+
+                                    <div>
+
+                                        <small>
+                                            {t("events.doorsOpen")}
+                                        </small>
+
+                                        <strong>
+                                            {event.doorsOpen}
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+                            )}
 
 
 

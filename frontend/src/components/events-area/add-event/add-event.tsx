@@ -6,6 +6,7 @@ import { notificationService } from "../../service/notificationService";
 import { eventService } from "../../service/eventService";
 import { EventModel } from "../../models/event-model";
 import { useTranslation } from "react-i18next";
+import { appConfig } from "../../utils/app-config";
 
 
 
@@ -20,6 +21,7 @@ export function AddEvent() {
     const [eventDescription, setEventDescription] = useState("");
     const [eventStart, setEventStart] = useState("");
     const [eventEnd, setEventEnd] = useState("");
+    const [doorsOpen, setDoorsOpen] = useState("");
     const [eventLocation, setEventLocation] = useState("");
     const [maximumGuests, setMaximumGuests] = useState("");
     const [exceptedGuests, setExceptedGuests] = useState("");
@@ -68,6 +70,8 @@ export function AddEvent() {
 
             event.eventStart = eventStart;
             event.eventEnd = eventEnd;
+
+            event.doorsOpen = doorsOpen || null;
 
             event.eventLocation = eventLocation?.trim() || null;
 
@@ -161,6 +165,15 @@ export function AddEvent() {
                 </div>
 
                 <div className="form-group">
+                    <label>{t("events.add.doorsOpen")}</label>
+                    <input
+                        type="time"
+                        value={doorsOpen}
+                        onChange={e => setDoorsOpen(e.target.value)}
+                    />
+                </div>
+
+                <div className="form-group">
                     <label>{t("events.add.location")}</label>
                     <input
                         type="text"
@@ -170,15 +183,17 @@ export function AddEvent() {
                     />
                 </div>
                 <div className="form-row">
-                    <div className="form-group">
-                        <label>{t("events.add.maximumGuests")}</label>
-                        <input
-                            type="number"
-                            min="0"
-                            value={maximumGuests}
-                            onChange={e => setMaximumGuests(e.target.value)}
-                        />
-                    </div>
+                    {appConfig.showEventCapacity && (
+                        <div className="form-group">
+                            <label>{t("events.add.maximumGuests")}</label>
+                            <input
+                                type="number"
+                                min="0"
+                                value={maximumGuests}
+                                onChange={e => setMaximumGuests(e.target.value)}
+                            />
+                        </div>
+                    )}
 
                     <div className="form-group">
                         <label>{t("events.add.expectedGuests")}</label>

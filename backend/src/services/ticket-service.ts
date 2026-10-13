@@ -21,6 +21,7 @@ class TicketService {
                 t.qr_token AS qrToken,
                 t.ticket_status AS ticketStatus,
                 t.ticket_source AS ticketSource,
+                t.needs_comfort_chair = 1 AS needsComfortChair,
                 t.checked_in_at AS checkedInAt,
 
                 e.event_name AS eventName,
@@ -69,6 +70,7 @@ class TicketService {
                 t.qr_token AS qrToken,
                 t.ticket_status AS ticketStatus,
                 t.ticket_source AS ticketSource,
+                t.needs_comfort_chair = 1 AS needsComfortChair,
                 t.checked_in_at AS checkedInAt,
 
                 c.first_name AS customerFirstName,
@@ -177,6 +179,7 @@ class TicketService {
 
                 t.ticket_number AS ticketNumber,
                 t.ticket_source AS ticketSource,
+                t.needs_comfort_chair = 1 AS needsComfortChair,
 
                 t.checked_in_at AS checkedInAt,
                 t.checked_in_by AS checkedInBy,

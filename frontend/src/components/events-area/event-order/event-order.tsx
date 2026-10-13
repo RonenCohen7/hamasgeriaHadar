@@ -15,11 +15,14 @@ import { dialogService } from "../../service/dialogService";
 import { PaymentMethod } from "../../models/enum";
 import type { VipCardModel } from "../../models/vip-card-model";
 import { PaymentModal } from "../../payment-area/payment-model/payment-model";
+import { appConfig } from "../../utils/app-config";
+import { useTranslation } from "react-i18next";
 
 
 export function EventOrder() {
 
     useTitle("Event Order")
+    const { t } = useTranslation();
     const navigate = useNavigate()
 
     const location = useLocation();
@@ -31,6 +34,7 @@ export function EventOrder() {
 
     const [event, setEvent] = useState<EventModel | null>(null);
     const [quantity, setQuantity] = useState(1);
+    const [comfortChairFlags, setComfortChairFlags] = useState<boolean[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const [isPaymentOpen, setIsPaymentOpen] = useState(false);
@@ -93,12 +97,24 @@ export function EventOrder() {
         return null
     }
 
-    const availablePlaces = event.maximumGuests != null ? Math.max(
+    const availablePlaces = appConfig.showEventCapacity && event.maximumGuests != null ? Math.max(
         event.maximumGuests - (event.expectedGuests ?? 0), 0) : null
 
     const unitPrice = Number(event.ticketPrice);
 
     const total = unitPrice * quantity;
+
+    const ticketIndexes = Array.from({ length: Math.max(quantity, 0) }, (_, index) => index);
+
+    const comfortChairs = ticketIndexes.filter(index => comfortChairFlags[index]).length;
+
+    function toggleComfortChair(index: number, checked: boolean) {
+        setComfortChairFlags(flags => {
+            const nextFlags = [...flags];
+            nextFlags[index] = checked;
+            return nextFlags;
+        });
+    }
 
 
 
@@ -133,6 +149,7 @@ export function EventOrder() {
                     idEvent: event.idEvent,
                     idCustomer: customer.idCustomer,
                     quantity,
+                    comfortChairs,
                     idVipCard: null
                 });
 
@@ -235,6 +252,24 @@ export function EventOrder() {
                         <p>
                             Available places: {availablePlaces}
                         </p>
+                    )}
+
+                    {ticketIndexes.length > 0 && (
+                        <div className="ticket-comfort-chairs">
+                            <span>♿ {t("eventOrder.comfortChairTitle")}</span>
+                            <small>{t("eventOrder.comfortChairHint")}</small>
+
+                            {ticketIndexes.map(index => (
+                                <label key={index} className="ticket-comfort-chair-row">
+                                    <input
+                                        type="checkbox"
+                                        checked={Boolean(comfortChairFlags[index])}
+                                        onChange={e => toggleComfortChair(index, e.target.checked)}
+                                    />
+                                    {t("eventOrder.ticketNumber", { number: index + 1 })}
+                                </label>
+                            ))}
+                        </div>
                     )}
 
                     <div className="ticket-order-total">

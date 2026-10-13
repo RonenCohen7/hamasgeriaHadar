@@ -173,6 +173,7 @@ export function Attendance() {
                                 <th>{t("events.attendance.customer")}</th>
                                 <th>{t("events.attendance.phone")}</th>
                                 <th>{t("events.attendance.ticket")}</th>
+                                <th>{t("events.comfortChairs")}</th>
                                 <th>{t("events.attendance.checkInTime")}</th>
                                 <th>{t("events.attendance.checkedInBy")}</th>
                             </tr>
@@ -192,6 +193,9 @@ export function Attendance() {
                                     </td>
                                     <td>
                                         {item.ticketNumber}
+                                    </td>
+                                    <td>
+                                        {item.needsComfortChair ? "♿" : "-"}
                                     </td>
                                     <td>
                                         {item.checkedInAt ? new Date(item.checkedInAt).toLocaleString("he-IL") : "-"}

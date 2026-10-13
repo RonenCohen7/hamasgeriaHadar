@@ -83,6 +83,29 @@
     font-size: 1.5rem;
 }
 
+.customer-order-card-comfort {
+    border: 1.5px solid #2f80ed;
+}
+
+.customer-order-badges {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.customer-order-comfort-chair {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #e8f1fd;
+    color: #2f80ed;
+    font-size: 1.05rem;
+}
+
 .customer-order-status {
     flex-shrink: 0;
     padding: 7px 12px;
